@@ -29,8 +29,13 @@ export const data = {
 
 //Total Expenses: $25,000.00 //[12, 20, 3, 5, 2, 3, 8] "Expenses summary"
 export function DoughnutChart({name, dataArr, titleChart, titleTotal, titleAmount, lebelArr}) {
+  
+  const randColors1 =   ["#138d75", "#ec7063", "#FFC300", "#bb8fce", "#c0392b", "#aab7b8",  "#5dade2", "#e67e22", ];
+  const randColors2 =   ["#5dade2", "#e67e22", "#FFC300", "#bb8fce", "#c0392b","#138d75", "#ec7063", "#aab7b8",  "#af7ac5",  ];
+  const randomColors = name === "PAYABLES"? randColors1 : randColors2;
+  
   const backgroundColor = name === "INCOME"? colArrIncome.slice(0, dataArr?.length) : 
-  name === "RECEIVABLES" || name === "PAYABLES"? generateRandomColor(dataArr?.length) : colArr.slice(0, dataArr?.length);
+  name === "RECEIVABLES" || name === "PAYABLES"? randomColors : colArr.slice(0, dataArr?.length);
   const data = {
     labels: lebelArr,
     datasets: [

@@ -12,4 +12,4 @@ function ErrorFallback({ error, resetErrorBoundary }) {
   );
 }
 
-export { ErrorFallback, ErrorBoundary };
+//export { ErrorFallback, ErrorBoundary };

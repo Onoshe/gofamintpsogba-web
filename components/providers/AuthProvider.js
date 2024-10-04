@@ -22,7 +22,7 @@ const AuthProvider = ({children}) => {
   )
 }
 
-export default AuthProvider;
+//export default AuthProvider;
 
 
 /*

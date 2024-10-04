@@ -11,13 +11,15 @@ import { usePathname, useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import HeaderNotification from './HeaderNotification';
 import EffectFetchData from './dataManager/EffectFetchData';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 //import { usePathname, useRouter } from 'next/navigation';
 /* eslint-disable @next/next/no-img-element */
 
 
-const Header = () => {
+const Header = ({ssUser}) => {
   const {pageIsOpen, activePage, isOpen, coy, dispatchCoy, dispatchActivePage, dispatchIsOpen, dynamicPage, showLoadingNavPage, dispatchShowLoadingNavPage} = useStoreHeader((state) => state);
-  const { data: session, status } = useSession(); //{status:'', data:{session:''}}; //useSession();
+  //const { data: session, status } = useSession(); //{status:'', data:{session:''}}; //useSession();
+  const { signIn, signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
   const [userDropdown, setUserDropdown] = React.useState(false);
   const [scrollPos] = useOnScroll();
   const pathname = usePathname();
@@ -53,7 +55,8 @@ const Header = () => {
     if(!coy || coy === ""){
       if(session?.user?.companyId){
         coyId = session.user.companyId.toLowerCase();
-        dispatchCoy(coyId);
+        //Causing multiple rendering. Disable for now: 4-Oct
+        //dispatchCoy(coyId);
       }
     }
 
@@ -64,11 +67,17 @@ const Header = () => {
 
     const currentActivePage = navs?.find((dt)=> "/"+coyId+"/"+dt.name == "/"+coyId+"/"+domainAndPage[1]);
     const dashboardPage = "/"+coyId === pathname;
-    
+
+    //console.log(currentActivePage, activePage)
+    //Causing multiple rendering on scroll
     if(dashboardPage){
-      dispatchActivePage({name:'dashboard', title:"Dashboard"});
+      if(activePage.name !=='dashboard'){
+        //dispatchActivePage({name:'dashboard', title:"Dashboard"});
+      }
     }else if(currentActivePage?.name){
-      dispatchActivePage({name:currentActivePage.name, title:currentActivePage.title});
+      if(activePage.name !== currentActivePage.name){
+       //dispatchActivePage({name:currentActivePage.name, title:currentActivePage.title});
+      }
     }
     //console.log([coyId, coy])
   },[coy, session]);
@@ -78,7 +87,7 @@ const Header = () => {
    //{`${scrollPos.scrollY> scrollThreshold? 'fixed' : ''}
   return (
     <div className={`fixed w-full z-50`} onClick={handleDropdown}>
-        <EffectFetchData domain={coy} session={session}/>
+        <EffectFetchData session={session}/>
         <div data-theme="aqua" 
           className='py-2 z-50 px-3 flex items-center justify-between'
          >

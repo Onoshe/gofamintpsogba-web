@@ -36,15 +36,11 @@ export const loginHandler = async({e, loadingBtn, setLoadingBtn, signIn, form, d
             userName:form.userName
             });
         //const result = "";
+        //console.log(result)
         if(result.ok){
-            // Redirect to the homepage or dashboard
-            //window.location.href = '/dashboard';
-            //setLoadingBtn({loading:false})
             const domain = form?.userName?.split("@")[0]?.toLowerCase();
             dispatchCoy(domain);
-            dispatchActivePage({name:'', title:"Dashboard"});
-            //await getClientData(domain).then((res)=> console.log(res));
-            //console.log(result, domain)
+            //dispatchActivePage({name:'', title:"Dashboard"});
             if(domain !== "admin"){
                 await runDispatchClientData({domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails})
                 .then(()=> goToPage("/"+domain))
@@ -52,7 +48,7 @@ export const loginHandler = async({e, loadingBtn, setLoadingBtn, signIn, form, d
                 goToPage("/"+domain)
             }
         }else{
-            const msgs = result.error.split("|");
+            const msgs = result.msg.split("|");
             setAlert({...alert, msgTitle:msgs[0], msg:msgs[1], type:'error', show:true});
             
             const domain = form?.userName?.split("@")[0]?.toLowerCase();

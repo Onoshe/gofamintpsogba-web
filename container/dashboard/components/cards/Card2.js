@@ -6,7 +6,8 @@ import { generateRandomColor } from '../charts/ChartCard';
 
 export const Card2 = ({title1, title2, subTitle1, subTitle2, subTitle3, subTitle4, amount1, amount2, amount3, amount4}) => {
 
-    const randomColors = generateRandomColor(4);
+    let randomColors =  ["blue", "red", "green", "pink", "teal", "gold", "purple", "green"];
+   
     
   return (
            

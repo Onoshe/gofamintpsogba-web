@@ -18,11 +18,12 @@ import useLocalStorage from '@/lib/hooks/useLocalStorage';
 //import { generateGenLedger } from '../reportsModule/generalLedger/_IndexGenerateGenLedger';
 //import { GrResources } from "react-icons/gr";
 
-const SideDrawer = ({closeDrawer, params}) => {
+const SideDrawer = ({closeDrawer, ssUser, params}) => {
   const router = useRouter();
   const [localStorageValue, setLocalStorageValue] = useLocalStorage("FASTRECORD", {});
   const {activePage, dispatchActivePage, dispatchIsOpen, showSidebarTitle, coy,  dispatchCoy, dispatchPageLoading} = useStoreHeader((state) => state);
   const pathname = usePathname();
+  //const { signIn, signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
   
   //const currentActivePage = navs?.find((dt)=> "/"+coy+"/"+dt.name == pathname);
   const pathnameSplits = pathname.split('/');

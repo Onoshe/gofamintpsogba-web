@@ -18,10 +18,11 @@ import { Card3 } from './components/cards/Card3';
 import { handleExportStatement } from '../company/components/utils/handleExportStatement';
 import { handleExportReceipt } from '../company/components/utils/handleExportReceipt';
 import { useRouter } from 'next/navigation';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
 
-const DashboardIndex = () => {
+const DashboardIndex = ({ssUser}) => {
   const reportDate = getStartAndEndDate();
   const router = useRouter();
   const incomeExpRef = useRef(null);
@@ -30,9 +31,10 @@ const DashboardIndex = () => {
   const {coaStructure, transactions, transactionsDetails,controlAcctsCode, chartOfAccounts, customers, vendors, products, runDispatchClientDataCall, clientAccount,  dispatchReportDate} = useStoreTransactions((state) => state);
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
   let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
-  const {processedLedgers, customersLedger, vendorsLedger, productsLedger} = ledgers;
-  const { data: session, status } = useSession(); //{user:{companyId:'', email:''}}; 
-  const user = session?.user;
+  //const {processedLedgers, customersLedger, vendorsLedger, productsLedger} = ledgers;
+  //const { data: session, status } = useSession(); //{user:{companyId:'', email:''}}; 
+  const { session, user, userRendering, status} = useAuthCustom(ssUser);
+  //const user = session?.user;
   const [listOfAccounts, setListOfAccounts] = useState(false);
   const [reportDateAnal, setReportDateAnal] = useState(reportDateAnalDef);
 

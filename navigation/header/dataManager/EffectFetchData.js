@@ -9,15 +9,16 @@ import { getRequest } from '@/lib/apiRequest/getRequest';
 
 
 
-const EffectFetchData = ({domain, session}) => {
+const EffectFetchData = ({ session}) => {
     const {coaStructure, transactions, clientsDataCall, transReady, clientAccount, dispatchClientAccount, dispatchTransReady, dispatchCOAStructure,  dispatchProducts, dispatchChartOfAccounts, 
           dispatchCustomers, dispatchVendors, dispatchTransactions, dispatchTransactionsDetails} = useStoreTransactions((state) => state);
     const {settings, dispatchSettings, fetchSettingsCall, dispatchFetchSettingsCall, dispatchUser, dispatchUsers, refreshSettingsCount, dispatchSubscriptions, 
       dispatchActivityLog, generalSettings, client_Admin, clientData, dispatchGeneralSettings, dispatchClientAdmin, dispatchClientData} = useStoreHeader((state) => state);
-    const dataUrl =  getDataUrl(domain);
+  
     
+  const domain = session?.user?.companyId;
+  console.log(session, domain);
 
-  //console.log(session.user)
     const firstDataFetch = async()=>{
       //console.log('Fetching data')
       await getClientData(domain)
@@ -94,6 +95,7 @@ const EffectFetchData = ({domain, session}) => {
   }
 
 
+  /*
   useEffect(()=>{
     //Fetch data on mount. UseEffect error will occur for a new client without data
     //It should check if basic data is not fetched.coaStructure data is a basic data
@@ -127,7 +129,38 @@ const EffectFetchData = ({domain, session}) => {
     if(domain && !clientAccount.companyName){
       fetchAndDispatchClientAccount(domain, dispatchClientAccount)
     }
-   },[domain, clientAccount]);
+   },[domain, clientAccount]);*/
+
+
+   useEffect(()=>{
+    //Fetch on mount
+    if(domain){
+      fetchAndDispatchClientAccount(domain, dispatchClientAccount);
+      fetchBasicData();
+      fetchSettings();
+      firstDataFetch();
+    }
+   },[]);
+
+   useEffect(()=>{
+    //Subsequent fetch data call on the function: runDispatchClientData
+    if(domain && clientsDataCall ){
+      runDispatchClientData({fetchedData:{}, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails});
+    }
+   },[clientsDataCall]);
+
+   useEffect(()=>{
+    //Subsequent fetch on function call dispatchRefreshSettingsCount
+    if(domain && refreshSettingsCount ){
+      fetchSettings();
+    }
+   },[refreshSettingsCount]);
+
+   useEffect(()=>{
+    if(domain && fetchSettingsCall){
+      fetchSettings();
+    }
+  },[fetchSettingsCall]);
 
   return (
     <div>

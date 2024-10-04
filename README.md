@@ -54,8 +54,32 @@ npm install file-saver
 npm install next-auth
 npm install axios
 npm install cookie
-
+npm i react-draggable
+npm i react-chartjs-2
 
 
 ## RUN
 npm run dev
+
+
+# ..........................  GIT .............................
+
+# git add → git commit → git push
+
+Here's a brief explanation:
+* git add: Stage changes (files) to be committed.
+* git commit: Commit staged changes with a meaningful message.
+* git push: Push committed changes to a remote repository.
+
+
+**Best practice:**
+
+*   Use `git status` to review changes before staging.
+*   Use `git diff` to review changes before committing.
+*   Write descriptive commit messages.
+*   Use `git log` to review commit history.
+
+* git remote -v
+
+Would you like more Git guidance or best practices?
+

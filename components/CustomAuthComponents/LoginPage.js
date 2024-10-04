@@ -11,17 +11,17 @@ export default function LoginPageCustom({ssUser}) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn, signOut, user, status} = useAuthCustom();
-  let userObj = ssUser;
-  let userSession = "SS";
+  const { signIn, signOut, user, userRendering, status} = useAuthCustom(ssUser);
+  let userObj = user;
+  let userSession = userRendering;
   const router = useRouter();
 
 
-  if(status == "logout" || status == "authenticated"){
+  if(status == "logout" || status == "authenticated" || status == "sign_in_attempt" || status == "sign_in_error"){
     //Siderside user, ssUser will not update upon logout or login except when page is refreshed. But is session is available, ssUser will always be on
     //Switch to user upon logout || if authenticated  
-     userObj = user;
-     userSession = "Hook";
+    // userObj = user;
+    // userSession = "Hook";
   }
 
 
@@ -85,3 +85,37 @@ export default function LoginPageCustom({ssUser}) {
     </div>
   );
 }
+
+
+/*  HOME PAGE
+import LoginPageCustom from "@/components/CustomAuthComponents/LoginPage";
+import { getUserSession } from "@/lib/authActions/getUserSession";
+import Image from "next/image";
+
+
+export default function Home() {
+  
+  const user = getUserSession();
+  //console.log("User Data- "+user);
+
+  return (
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+        <Image
+          className="dark:invert"
+          src="https://nextjs.org/icons/next.svg"
+          alt="Next.js logo"
+          width={180}
+          height={38}
+          priority
+        />
+        
+
+        <LoginPageCustom ssUser={user}/>
+      </main>
+     
+    </div>
+  );
+}
+
+*/

@@ -16,7 +16,7 @@ import LoadingModal from '@/components/modal/LoadingModal';
 import { forgotPasswordHandler } from './utils/forgotPasswordHandler';
 import { resetPasswordHandler } from './utils/resetPasswordHandler';
 //import { signIn } from 'next-auth/client';
-import { useSession, signIn, signOut } from "next-auth/react"
+//import { useSession, signIn, signOut } from "next-auth/react"
 import useStoreHeader from '@/context/storeHeader';
 import PageLoading from '@/loadingPage/PageLoading';
 import {runDispatchClientData } from '@/navigation/header/dataManager/getClientData';
@@ -24,9 +24,9 @@ import useStoreTransactions from '@/context/storeTransactions';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 import { loginHandler } from './utils/loginHandler';
 import ChangePassword from './changepassword/ChangePassword';
+import { useAuthCustom } from "@/lib/hooks/useAuthCustom";
 
-
-const IndexHome = () => {
+const IndexHome = ({ssUser}) => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -42,9 +42,10 @@ const IndexHome = () => {
     const [modalAlertCall, setModalAlertCall] = useState({showModal:false, act:''});
     const [loadingBtn, setLoadingBtn] = useState({btn:false, loading:false});
     
-    const { data: session, status } = useSession(); //{status:'', data:{seeeion:''}}; //useSession();
-   
+    //const { data: session, status } = useSession(); //{status:'', data:{seeeion:''}}; //useSession();
+    const { signIn, signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
 
+    console.log(session)
     const handleForgotPassword = async ()=>{
         forgotPasswordHandler(form, setAlert, setModalAlert, setModalAlertCall);
     }
@@ -147,9 +148,6 @@ const IndexHome = () => {
     }
   },[status]);
 
-   if (status === "loading") {
-    //return <div className={'text-red-700 text-2xl'}>Loading...</div>;
-  }
   if (!session) {
     console.log("You are not authenticated")
     //return <p>You are not authenticated.</p>;
@@ -162,7 +160,7 @@ const IndexHome = () => {
   return (
     <>
         <div data-theme="light" className='bg-white'>
-                <HomeHeader/>
+                <HomeHeader session={session}/>
                 <PageLoading/>
                 <br/>
                 <div className="mt-[60px] flex flex-1 overflow-y-auto p-5 flex-col lg:flex-row gap-16">
