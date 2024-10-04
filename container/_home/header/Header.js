@@ -1,21 +1,21 @@
 'use client';
 import FastRecordLogo from '@/appLogo/FastRecord'
-import { useSession, signOut } from 'next-auth/react';
 import React from 'react'
-import { MdOutlineLogout } from 'react-icons/md';
 import HeaderUser from './HeaderUser';
 import { useRouter } from 'next/navigation';
 import useStoreHeader from '@/context/storeHeader';
+
+
 
 const HomeHeader = ({session}) => {
   //const { data: session, status } = useSession();
   const [userDropdown, setUserDropdown] = React.useState(false);
   const router = useRouter(); 
-  const {coy } = useStoreHeader((state) => state);
+  const {coy, dispatchCoy } = useStoreHeader((state) => state);
   
   //console.log(coy)
   const handleLogout =()=>{
-    signOut();
+    signOut({dispatchCoy});
      //console.log(session)
    }
    const handleBackToDashboard =()=>{

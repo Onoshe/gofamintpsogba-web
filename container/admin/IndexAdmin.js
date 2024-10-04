@@ -7,7 +7,7 @@ import useStoreHome from '@/context/storeHome';
 
 
 const IndexAdmin = ({ssUser}) => {
-  const {tabsArrHome, activeTabHome, dispatchActiveTabHome} = useStoreHome((state) => state);
+  const {tabsArrHome, activeTabHome, dispatchActiveTabHome, dispatchCoy} = useStoreHome((state) => state);
   const handleSelectedTab =(i, tab, hide)=>{
     dispatchActiveTabHome({index:i, tab, hideDropdown:hide})
   }
@@ -26,6 +26,7 @@ const IndexAdmin = ({ssUser}) => {
       handleSelectedTab={handleSelectedTab}
       handleHideDropdown={handleHideDropdown}
       ssUser={ssUser}
+      dispatchCoy={dispatchCoy}
       >
       <IndexDashboard/>
     </Layout>

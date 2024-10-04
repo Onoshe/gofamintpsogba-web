@@ -8,7 +8,6 @@ import useStoreCompany from '@/context/storeCompany.js';
 import useOnScroll from '@/lib/hooks/useOnScroll';
 import User from './User';
 import { usePathname, useRouter } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
 import HeaderNotification from './HeaderNotification';
 import EffectFetchData from './dataManager/EffectFetchData';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
@@ -19,7 +18,7 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 const Header = ({ssUser}) => {
   const {pageIsOpen, activePage, isOpen, coy, dispatchCoy, dispatchActivePage, dispatchIsOpen, dynamicPage, showLoadingNavPage, dispatchShowLoadingNavPage} = useStoreHeader((state) => state);
   //const { data: session, status } = useSession(); //{status:'', data:{session:''}}; //useSession();
-  const { signIn, signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
+  const {  signOut, session, user, status} = useAuthCustom(ssUser);
   const [userDropdown, setUserDropdown] = React.useState(false);
   const [scrollPos] = useOnScroll();
   const pathname = usePathname();
@@ -34,7 +33,7 @@ const Header = ({ssUser}) => {
     if(userDropdown) setUserDropdown(false)
   }
   const handleLogout =()=>{
-    signOut({ callbackUrl: '/' });
+    signOut({dispatchCoy});
      //console.log(session)
    }
 
@@ -55,8 +54,8 @@ const Header = ({ssUser}) => {
     if(!coy || coy === ""){
       if(session?.user?.companyId){
         coyId = session.user.companyId.toLowerCase();
-        //Causing multiple rendering. Disable for now: 4-Oct
-        //dispatchCoy(coyId);
+        //Causing multiple rendering?. Disable for now: 4-Oct
+        dispatchCoy(coyId);
       }
     }
 
@@ -115,7 +114,7 @@ const Header = ({ssUser}) => {
           </div>
           <p className='font-bold hidden smc:block text-lg md:text-xl text-white'>{activePage?.title}</p>
           <div className={`${session?.user? '' : 'hidden'} flex flex-row gap-2`}>
-              <HeaderNotification newNotice="New Message"/>
+              {/*<HeaderNotification newNotice="New Message"/>*/}
               <User userInit={userInit}
                 userEmail={session?.user?.userId}
                 userRole={`${session?.user?.role}`}

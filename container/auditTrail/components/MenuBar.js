@@ -10,6 +10,7 @@ import { AiOutlineHistory } from 'react-icons/ai';
 import { GrTransaction } from 'react-icons/gr';
 
 
+
 const MenuBarBar = ({handleReportNav, handleExportToExcel, viewTransId, handleDetailReport, reportName, reportRows, reportRowKeys, 
     reportHeader, showBar, pdfData, pdfHeader, user, toastNotify, dateForm, setDateForm, handleActivityToggle, 
     handleMonthlySummaryToggle, headerRowsColsArr, companyLogoFile}) => {

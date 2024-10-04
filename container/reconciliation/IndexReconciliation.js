@@ -4,7 +4,6 @@ import { getLinksAdmin } from '@/lib/apiRequest/urlLinks';
 import useStoreTransactions from '@/context/storeTransactions';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSession } from 'next-auth/react';
 import useStoreHeader from '@/context/storeHeader';
 import ReconciliationSelect from './components/ReconciliationSelect';
 import useStoreRecordTransaction from '@/context/storeRecordTransaction';
@@ -25,6 +24,7 @@ import { extractKeysFomObject } from '../reports/_IndexReports';
 import { handleExport2Pdf } from './utils/handleExport2Pdf';
 import { getSlug } from '@/lib/string/getSlug';
 import { handleSaveReport } from './utils/handleSaveReport';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
 const keys = ['transactionDate', 'description', 'transactionNo', 'debit', 'credit'];
@@ -33,9 +33,8 @@ const keyTitles = {transactionDate:{name:'transactionDate', title:'Date'}, descr
         checkbox:{name:'checkbox', title:''}, debit:{name:'debit', title:'Debit'}, credit:{name:'credit', title:'Credit'},};
 
 
-const IndexReconciliation = ({}) => {
-    const { data: session, status } = useSession();
-    const user = session?.user;  
+const IndexReconciliation = ({ssUser}) => {
+    const { session, user,  status} = useAuthCustom(ssUser);
     const [form, setForm] = React.useState({dateFrom:'', dateTo:'', stmtClosingBalance:''});
     const [formOthers, setFormOthers] = React.useState({new:{description:'', amount:''}, forms:[]});
     const reportDate = form.dateFrom && form.dateTo? {startDate:form.dateFrom, endDate:form.dateTo} : getStartAndEndDate("THISMONTH");

@@ -8,16 +8,15 @@ import { handleClickRow, handleDeleteProduct } from './utils/handleTableActions'
 import { initStateCreateByUpload, reducerCreateByUpload } from './reducers/reducerCreateByUpload';
 import CreateProductByUpload from './component/CreateProductByUpload';
 import Header from './component/Header';
-import { useSession } from 'next-auth/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import ToolsBar from './component/ToolsBar';
 import { handleSubmitMultiple } from './utils/handleSubmitMultiple';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
-const Products = () => {
-  const { data: session, status } = useSession();
-  const user = session?.user;
+const Products = ({ssUser}) => {
+  const { session, user,  status} = useAuthCustom(ssUser);
   const {products, dispatchProducts, runDispatchClientDataCall,} = useStoreTransactions((state) => state);
   const [stateCreate, dispatchCreate] = useReducer(reducerCreateByUpload, initStateCreateByUpload);
   const [showBlind, setShowBlind] = React.useState(false);

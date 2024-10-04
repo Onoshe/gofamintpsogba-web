@@ -1,9 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
-import useStoreHome from '@/context/storeHome';
-import { ClientsCard, ClientsTablesCard, ExistingUsers, ExistingUsersCard, GeneralTablesCard } from '@/container/admin/pages/dashboard/cards/DashboardCards';
-
 import BackgroundCard from './components/reusableComponents/BackgroundCard';
 import Image from 'next/image';
 import { BsUpload } from 'react-icons/bs';
@@ -13,7 +9,6 @@ import useStoreTransactions from '@/context/storeTransactions';
 import { CompanyLogoUpload } from './components/CompanyLogoUpload';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSession } from 'next-auth/react';
 import useStoreHeader from '@/context/storeHeader';
 import DashboardCard from './components/reusableComponents/DashboardCard';
 import TransactionLock from './components/homeComponents/TransactionLock';
@@ -23,14 +18,14 @@ import AuditedYearLock from './components/homeComponents/AuditedYearLock';
 import PostingLock from './components/homeComponents/PostingLock';
 import SubscriptionsHistory from './components/homeComponents/SubscriptionsHistory';
 import { handleExportReceipt } from './components/utils/handleExportReceipt';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 //import { AccessCard } from './cards/DashboardAccess';
 
 
 
 
-const IndexCompany = ({}) => {
-    const { data: session, status } = useSession();
-    const user = session?.user;
+const IndexCompany = ({ssUser}) => {
+    const { session, user,  status} = useAuthCustom(ssUser);
     const {usersAccountUrl, clientsDataUrl, accessDataUrl, dbTablesUrl, accessUrl} = getLinksAdmin();
     const {settings, dispatchRefreshSettingsCount,  subscriptions,  dispatchSubscriptions,
         client_Admin, clientData, generalSettings, quickrecordsLogo,} = useStoreHeader((state) => state);

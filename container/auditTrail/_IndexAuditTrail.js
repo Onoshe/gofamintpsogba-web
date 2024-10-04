@@ -1,7 +1,6 @@
 'use client'
-import React, {useState, useEffect} from 'react'
+import React, {Suspense, useState, useEffect} from 'react'
 import useStoreReports from '@/context/storeReports';
-import { useSession } from 'next-auth/react';
 import useStoreTransactions from '@/context/storeTransactions';
 import { LedgersManager } from '@/container/reports/utils/ledgers/ledgersManger';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -18,10 +17,11 @@ import useStoreHeader from '@/context/storeHeader';
 import { getCompanyLogo } from '../company/components/utils/getSubscriptionHistory';
 import DynamicPageDisplay from './components/dynamicPageDisplay/DynamicPageDisplay';
 import { sortArrayByDate } from '@/lib/sort/sortArrayByDate';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
 
-const IndexAuditTrail = () => {
+const IndexAuditTrail = ({ssUser}) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const viewTransId = searchParams.get('q');
@@ -30,20 +30,19 @@ const IndexAuditTrail = () => {
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
   let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
   const processedLedgers = ledgers.processedLedgers;
-  const { data: session, status } = useSession(); //{user:{companyId:'', email:''}}; 
-  const user = session?.user;
+  //const { data: session, status } = useSession(); //{user:{companyId:'', email:''}}; 
+  const { session, user,  status} = useAuthCustom(ssUser);
   const {settings, activityLog} = useStoreHeader((state) => state);
   const {  dispatchSelectedTranFromList,} = useStoreReports((state) => state);
    let [emptyPath, domainNm, reports, reportName] = pathname?.split("/");
    if(reportName?.includes("=")){ const reportNameSplit = splitByFirstChar(reportName, '='); reportName = reportNameSplit[0]; }
   const companyId = session?.user?.companyId;
-  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName,transProcessor,  viewTransId, transactionsDetails, user, activityLog, dateForm:reportDate});
+  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName, transProcessor,  viewTransId, transactionsDetails, user, activityLog, dateForm:reportDate});
   const docHeader = moreDocHeader?.length? [[clientAccount?.companyName], [title], [date],  ...moreDocHeader] : [[clientAccount?.companyName], [title], [date], ['']];
   const companyLogoFile = getCompanyLogo(settings);
 
- 
-   
-    
+  //console.log(viewTransId, transactionsDetails, user,)
+
   const setDateFormHandler =(dt)=>{
     dispatchReportDate({...dt, defaultDate:false});
   }
@@ -83,8 +82,6 @@ const IndexAuditTrail = () => {
   //  console.log(rows)
   return (
     <div>          
-      
-          
         <MenuBarBar
           showBar={showReport}
           handleReportNav={handleReportNav}
@@ -116,7 +113,7 @@ const IndexAuditTrail = () => {
          
         </div>
         <div className={`${showReport? '' : 'hidden'}`}>
-          <>
+          <Suspense>
             <DynamicPageDisplay
               pathname={pathname}
               processedLedgers={processedLedgers}
@@ -136,7 +133,7 @@ const IndexAuditTrail = () => {
               subTitle={subTitle}
             />
              
-            </>
+            </Suspense>
           
         </div>
         <ToastContainer

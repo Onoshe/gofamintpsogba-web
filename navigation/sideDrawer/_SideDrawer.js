@@ -40,8 +40,7 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
   };
 
 
-  //console.log(pathname, coy)
-/*
+  /*
   React.useEffect(()=>{
     if(coy){
       if(!pathname.includes(coy))

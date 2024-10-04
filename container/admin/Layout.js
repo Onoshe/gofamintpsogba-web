@@ -5,19 +5,18 @@ import TabsApp from './components/header/tab/TabsApp';
 import Drawer from './components/header/sidedrawer/Drawer';
 import { usePathname, useRouter } from 'next/navigation';
 import useStoreHome from '@/context/storeHome';
-import { useSession, signOut } from 'next-auth/react';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
 
 //Used to wrapp IndexAdmin
 
-const Layout = ({children, tabsArr, activeTab, handleSelectedTab, handleHideDropdown, ssUser}) => {
+const Layout = ({children, tabsArr, activeTab, handleSelectedTab, handleHideDropdown, ssUser, dispatchCoy}) => {
   const {pages, selectedPage, dispatchSelectedPage} = useStoreHome((state) => state);
   const [hideDrawer, setHideDrawer] = useState(true);
   const [adminPage, setAdminPage] = useState(false);
   //const { data: session, status } = useSession();
-  const { signIn, signOut, session, user,  status} = useAuthCustom(ssUser);
+  const { signOut, session, user,  status} = useAuthCustom(ssUser);
 
   const activePage = usePathname();
   const tabContStyle = `z-50 mt-[80px] fixed`;
@@ -31,7 +30,7 @@ const Layout = ({children, tabsArr, activeTab, handleSelectedTab, handleHideDrop
   const handleSelectedPage=(selPage)=>{
     dispatchSelectedPage(selPage);
     if(selPage?.name === "LOGOUT"){
-      signOut({ callbackUrl: '/' });
+      signOut({dispatchCoy});
     }
   }
   

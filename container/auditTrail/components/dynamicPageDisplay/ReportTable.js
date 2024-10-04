@@ -5,11 +5,8 @@ const ReportTable = ({
     clickableHeader, onClickHeader, clickableRow, onClickRow, clickableRowNo, onClickRowNo, clickableRowCellKeys,
     clickableRowCell, onClickRowCell,  classNameTable,  classNameHeaderTR, classNameRowsTR}) => {
 
-      //clickableRowCellKeys - From IndexReport: {clickables} = getDisplayReport({})
-      //clickableRowCell - From IndexReport: {clickables} = getDisplayReport({})
+
     const handleClickableCell =(row, i, key, id)=>{
-        //console.log(row, i, key, id, clickableRowCellKeys)
-        //Previous- if(clickableRowCell && clickableRowCellKeys?.includes(key)){
         if(clickableRowCellKeys?.includes(key)){
             onClickRowCell({key, row, i})
         }else if(clickableRowCellKeys === "ALL"){

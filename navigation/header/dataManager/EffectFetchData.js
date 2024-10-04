@@ -17,7 +17,7 @@ const EffectFetchData = ({ session}) => {
   
     
   const domain = session?.user?.companyId;
-  console.log(session, domain);
+
 
     const firstDataFetch = async()=>{
       //console.log('Fetching data')

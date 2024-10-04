@@ -13,7 +13,6 @@ import { handleUpdateUserProfile } from './utils/handleUpdateUserProfile';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 /* eslint-disable @next/next/no-img-element */
-import { useSession } from 'next-auth/react';
 import { handleUpdateUserPassword } from './utils/handleUpdateUserPassword';
 import { handleEditUserRole } from './utils/handleEditUserRole';
 import { handleAddNewUser } from './utils/handleAddNewUser';
@@ -22,12 +21,15 @@ import { ResetUserPassword } from './components/ResetUserPassword';
 import { handleResetUserPassword } from './utils/handleResetUserPassword';
 import { getPlanLimit } from './utils/getPlanLimit';
 import { capitalizeFirstCharOnly } from '@/lib/capitalize/capitalizeString';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+
+
 
 const updateFormAddUserDef ={firstname:"", lastname:"", title:"", email:"", 
   phoneNo:"", role:"", password:"", userId1:'', userId2:'', showUserId:false, defaultUserId:true};
 
-const IndexProfile = () => {
-  const { data: session, status } = useSession(); 
+const IndexProfile = ({ssUser}) => {
+  const { session,  status} = useAuthCustom(ssUser); 
   const {user, users, subscriptions, client_Admin, clientData, generalSettings, quickrecordsLogo, dispatchFetchSettingsCall} = useStoreHeader((state) => state);
   const {online,  dispatchUser} = {online:true, user:{}, dispatchUser:()=>console.log(12)};
   const [changePassword, setChangePassword] = React.useState(false);

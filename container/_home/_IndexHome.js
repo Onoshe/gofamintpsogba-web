@@ -42,7 +42,7 @@ const IndexHome = ({ssUser}) => {
     const [loadingBtn, setLoadingBtn] = useState({btn:false, loading:false});
     
     //const { data: session, status } = useSession(); //{status:'', data:{seeeion:''}}; //useSession();
-    const { signIn, signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
+    const { signIn, signOut, session, user, status} = useAuthCustom(ssUser);
 
     //console.log(session)
     const handleForgotPassword = async ()=>{
@@ -138,22 +138,22 @@ const IndexHome = ({ssUser}) => {
   React.useEffect(()=>{
     if(status === "authenticated"){
         postActivity(session.user, activities.LOGIN, "User login");
+
+        const domain = session?.user?.companyId;
+        if(domain){
+            goToPage("/"+domain);
+            dispatchActivePage({name:'', title:"Dashboard"});
+        }
     }
+    
   },[status]);
 
-  if (!session) {
-    console.log("You are not authenticated")
-    //return <p>You are not authenticated.</p>;
-  }
-  if (status === "authenticated") {
-   // goToPage("/"+domain+"/dashboard")
-    console.log("You are now authenticated")
-  }
+ 
 
   return (
     <>
         <div data-theme="light" className='bg-white'>
-                <HomeHeader session={session}/>
+                <HomeHeader session={session} signOut={signOut}/>
                 <PageLoading/>
                 <br/>
                 <div className="mt-[60px] flex flex-1 overflow-y-auto p-5 flex-col lg:flex-row gap-16">

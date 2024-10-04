@@ -7,17 +7,16 @@ import React from 'react';
 import useStoreTransactions from '@/context/storeTransactions';
 import { validateAndFormatPersonalAcct } from '@/lib/validation/validatePersonalAcctUpload';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
-import { useSession } from 'next-auth/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { handleSubmit } from '../customers/utils/handleSubmit';
 import { handleClickRow } from '../customers/utils/handleTableActions';
 import { handleSubmitMultiAccts } from '../customers/utils/handleSubmitMultiAccts';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
-const Vendors = () => {
-  const { data: session, status } = useSession();
-  const user = session?.user;
+const Vendors = ({ssUser}) => {
+  const { session, user,  status} = useAuthCustom(ssUser);
   const {vendors, dispatchVendors, runDispatchClientDataCall} = useStoreTransactions((state) => state);
   const [activeTab, setActiveTab] = React.useState('DISPLAY');
   const [editForm, setEditForm] = React.useState(false);

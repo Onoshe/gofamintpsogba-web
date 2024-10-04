@@ -5,7 +5,6 @@ import useStoreTransactions from '@/context/storeTransactions';
 import { mapChartOfAccount } from '@/lib/transactionsManager/mapChartOfAccount';
 import { mapPersonalAccounts } from '@/lib/transactionsManager/mapPersonalAccounts';
 import { mapProducts } from '@/lib/transactionsManager/mapProducts';
-import { useSession } from 'next-auth/react';
 import { LedgersManager } from '../reports/utils/ledgers/ledgersManger';
 import useStoreRecordTransaction from '@/context/storeRecordTransaction';
 import { handleDeleteTransaction } from '../postTransaction/components/utils/handleDeleteTransaction';
@@ -14,12 +13,12 @@ import PostingGuide from '@/components/guide/PostingGuide';
 import { getStartAndEndDate } from '@/lib/dummyData/getStartAndEndDate';
 import { useRouter } from 'next/navigation';
 import CashAndBankBalances from '../postTransaction/components/balancesComponent/CashAndbankBalances';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
 
-const IndexPostProduct = () => {
-  const { data: session, status } = useSession();
-  const user = session?.user;
+const IndexPostProduct = ({ssUser}) => {
+  const { session, user,  status} = useAuthCustom(ssUser);
   const router = useRouter();
   const dateForm = getStartAndEndDate();
   const {coaStructure,customers, vendors, chartOfAccounts, controlAcctsCode, products, transactions, transactionsDetails, runDispatchClientDataCall} = useStoreTransactions((state) => state);

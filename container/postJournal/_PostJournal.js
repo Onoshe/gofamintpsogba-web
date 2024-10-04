@@ -6,7 +6,6 @@ import useStoreTransactions from '@/context/storeTransactions';
 import { mapChartOfAccount } from '@/lib/transactionsManager/mapChartOfAccount';
 import { mapPersonalAccounts } from '@/lib/transactionsManager/mapPersonalAccounts';
 import { mapProducts } from '@/lib/transactionsManager/mapProducts';
-import { useSession } from 'next-auth/react';
 import useStoreRecordTransaction from '@/context/storeRecordTransaction';
 import { useRouter } from 'next/navigation';
 import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
@@ -15,11 +14,11 @@ import { ToastContainer } from 'react-toastify';
 import { toastNotify } from '@/container/postTransaction/components/utils/toastNotify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LedgersManager } from '../reports/utils/ledgers/ledgersManger';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
-const IndexPostJournal = () => {
-  const { data: session, status } = useSession();
-  const user = session?.user;
+const IndexPostJournal = ({ssUser}) => {
+  const { session, user,  status} = useAuthCustom(ssUser);
   const router = useRouter();
   const {coaStructure,customers, vendors, transactions, transactionsDetails, chartOfAccounts, controlAcctsCode, products, runDispatchClientDataCall, reportDate,} = useStoreTransactions((state) => state);
   const {recordTransaction, dispatchTranSheetMultiEntryReset, tranSheetJournals, dispatchTranSheetJournals} = useStoreRecordTransaction((state) => state);  

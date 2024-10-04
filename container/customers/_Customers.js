@@ -12,13 +12,12 @@ import { validateAndFormatPersonalAcct } from '@/lib/validation/validatePersonal
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSession } from 'next-auth/react';
 import { handleSubmitMultiAccts } from './utils/handleSubmitMultiAccts';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
-const Customers = () => {
-  const { data: session, status } = useSession();
-  const user = session?.user;
+const Customers = ({ssUser}) => {
+  const { session, user,  status} = useAuthCustom(ssUser);
   const {customers, dispatchCustomers, runDispatchClientDataCall} = useStoreTransactions((state) => state);
   const [activeTab, setActiveTab] = React.useState('DISPLAY');
   const [editForm, setEditForm] = React.useState(false);

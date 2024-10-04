@@ -7,17 +7,16 @@ import useStoreTransactions from '@/context/storeTransactions';
 import { mapChartOfAccount } from '@/lib/transactionsManager/mapChartOfAccount';
 import { mapPersonalAccounts } from '@/lib/transactionsManager/mapPersonalAccounts';
 import { mapProducts } from '@/lib/transactionsManager/mapProducts';
-import { useSession } from 'next-auth/react';
 import useStoreRecordTransaction from '@/context/storeRecordTransaction';
 import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import { handleDeleteTransaction } from './components/utils/handleDeleteTransaction';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
-const IndexPostTransaction = () => {
-  const { data: session, status } = useSession();
-  const user = session?.user;
+const IndexPostTransaction = ({ssUser}) => {
+  const { session, user,  status} = useAuthCustom(ssUser);
   const router = useRouter();
   const {coaStructure,customers, vendors, chartOfAccounts, transactions, transactionsDetails, reportDate, controlAcctsCode, products, runDispatchClientDataCall} = useStoreTransactions((state) => state);
   const {recordTransaction, tranSheetTwoEntry, dispatchTranSheetTwoEntry, tranSheetMultiEntry, dispatchTranSheetMultiEntry, 

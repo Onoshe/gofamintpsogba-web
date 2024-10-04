@@ -44,7 +44,7 @@ export default function LoginPageCustom({ssUser}) {
   };
 
   const logoutHandler = async ()=>{
-    await signOut();
+    await signOut({dispatchCoy});
   }
 
   return (

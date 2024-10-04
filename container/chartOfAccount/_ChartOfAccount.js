@@ -10,18 +10,17 @@ import CreateChartOfAccountByUpload from './component/CreateChartOfAccountByUplo
 import { initStateCreateByUpload,  reducerCreateByUpload} from './reducers/reducerCreateByUpload';
 import { sortArrayByKey } from '@/lib/sort/sortArrayByKey';
 import { mapChartOfAccountForDisplay } from '@/lib/transactionsManager/mapChartOfAccountForDisplay';
-import { useSession } from 'next-auth/react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import { handleDelete } from './utils/handleDelete';
 import ToolsBar from './component/ToolsBar';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
 
-const ChartOfAccount = () => {
-  const { data: session, status } = useSession();
-  const user = session?.user;
+const ChartOfAccount = ({ssUser}) => {
+  const { session, user,  status} = useAuthCustom(ssUser);
   const {coaStructure,runDispatchClientDataCall, chartOfAccounts, dispatchChartOfAccounts} = useStoreTransactions((state) => state);
   const [stateCreate, dispatchCreate] = useReducer(reducerCreateByUpload, initStateCreateByUpload);
   const [showBlind, setShowBlind] = React.useState(false);
