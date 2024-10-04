@@ -1,17 +1,28 @@
 'use client'
 // pages/login.js
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //import { useAuth } from "../hooks/useAuth";
 import { useAuthCustom } from "@/lib/hooks/useAuthCustom";
 import { useRouter } from "next/navigation";
 
-export default function LoginPageCustom() {
+
+export default function LoginPageCustom({ssUser}) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn, signOut, user } = useAuthCustom();
+  const { signIn, signOut, user, status} = useAuthCustom();
+  let userObj = ssUser;
+  let userSession = "SS";
   const router = useRouter();
+
+
+  if(status == "logout" || status == "authenticated"){
+    //Siderside user, ssUser will not update upon logout or login except when page is refreshed. But is session is available, ssUser will always be on
+    //Switch to user upon logout || if authenticated  
+     userObj = user;
+     userSession = "Hook";
+  }
 
 
   const handleLogin = async (e) => {
@@ -38,9 +49,10 @@ export default function LoginPageCustom() {
 
   return (
     <div style={{ maxWidth: "400px", margin: "auto", padding: "1rem", border: "1px solid #ddd", borderRadius: "5px" }}>
-      <div>
-        {user?.id? <p className="text-green-500">Online: <span>{user.name}</span></p> : 
+      <div className="flex flex-row gap-2">
+        {userObj?.id? <p className="text-green-500">Online: <span>{userObj.name}</span></p> : 
           <p className="text-red-500">Offline</p>}
+          <span className="mx-2 text-cyan-400">{userSession}</span>
       </div>
       <form onSubmit={handleLogin}>
         <div style={{ marginBottom: "1rem" }}>
