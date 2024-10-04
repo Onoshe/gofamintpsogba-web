@@ -5,11 +5,20 @@ import InputLabel from '../components/InputLabel';
 import InputLabel2 from '../components/InputLabel2';
 import Link from 'next/link';
 import iconsPath from '../components/iconsPath/iconsPath';
+import { useSearchParams } from 'next/navigation';
 
 
-const ResetPassword = ({viewPwd, handleViewPwd, resetPwdInfo, goToPage,handleResetPassword, form, handleOnChange,goBack, resendOpt, handleResendOpt, showBlind, setShowBlind}) => {
-  
-       
+const ResetPassword = ({viewPwd, handleViewPwd, resetPwdInfo, goToPage, form, handleOnChange,goBack, resendOpt, handleResendOpt, showBlind, 
+    setShowBlind, setAlert, setModalAlert, setModalAlertCall, resetPasswordHandler}) => {
+    const searchParams = useSearchParams();
+
+    const handleResetPassword =()=>{
+        const userId = searchParams.get('u');
+        if(userId){
+            resetPasswordHandler({...form, userName:userId}, setAlert, setModalAlert, setModalAlertCall);
+        }else{setAlert({msgTitle:'Username retrieval failed!', msg:'Go back and try again!', type:'error', show:true})}
+    }
+
     React.useEffect(()=>{
         if(showBlind){setShowBlind({show:false})}
     },[]);

@@ -1,12 +1,12 @@
 'use client'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, Suspense} from 'react'
 import HomeHeader from './header/Header'
 import Login from './login/Login';
 import CardTopText from './components/CardTopText';
 import RegisterDemoAccount from './registerDemoAccount/RegisterDemoAccount';
 import ForgotPassword from './forgotpassword/ForgotPassword';
 import ResetPassword from './resetpassword/ResetPassword';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter} from 'next/navigation';
 import ToastAlert from '@/components/toast/ToastAlert';
 import useStoreHome from '@/context/storeHome';
 import { registerHandler } from './utils/registerHandler';
@@ -28,7 +28,6 @@ import { useAuthCustom } from "@/lib/hooks/useAuthCustom";
 
 const IndexHome = ({ssUser}) => {
     const pathname = usePathname();
-    const searchParams = useSearchParams();
     const router = useRouter();
     const {form, dispatchForm, dispatchResetForm, resetPwdInfo, dispatchResetPwdInfo} = useStoreHome((state) => state);
     const {dispatchActivePage, dispatchCoy, dispatchPageLoading } = useStoreHeader((state) => state);
@@ -45,7 +44,7 @@ const IndexHome = ({ssUser}) => {
     //const { data: session, status } = useSession(); //{status:'', data:{seeeion:''}}; //useSession();
     const { signIn, signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
 
-    console.log(session)
+    //console.log(session)
     const handleForgotPassword = async ()=>{
         forgotPasswordHandler(form, setAlert, setModalAlert, setModalAlertCall);
     }
@@ -61,12 +60,6 @@ const IndexHome = ({ssUser}) => {
         setViewPwd(!viewPwd);
     };
 
-    const handleResetPassword =()=>{
-        const userId = searchParams.get('u');
-        if(userId){
-            resetPasswordHandler({...form, userName:userId}, setAlert, setModalAlert, setModalAlertCall);
-        }else{setAlert({msgTitle:'Username retrieval failed!', msg:'Go back and try again!', type:'error', show:true})}
-    }
     const handleOnChange =(e)=>{
         const {value, name} = e.target;
         dispatchForm({...form, [name]: value});
@@ -212,26 +205,30 @@ const IndexHome = ({ssUser}) => {
                             </>
                         }
                         {pathname === "/reset-password" && 
-                            <>
+                            <Suspense>
                                 <ResetPassword
-                                viewPwd={viewPwd}
-                                handleViewPwd={handleViewPwd}
-                                form={form}
-                                handleOnChange={handleOnChange}
-                                goToPage={goToPage}
-                                enterBtn={enterBtn}
-                                resendOpt={resendOpt}
-                                handleResendOpt={handleResendOpt}
-                                goBack={()=>router.back()}
-                                showBlind={showBlind.show} 
-                                setShowBlind={setShowBlind}
-                                handleResetPassword={handleResetPassword}
-                                resetPwdInfo={resetPwdInfo}
+                                    viewPwd={viewPwd}
+                                    handleViewPwd={handleViewPwd}
+                                    form={form}
+                                    handleOnChange={handleOnChange}
+                                    goToPage={goToPage}
+                                    enterBtn={enterBtn}
+                                    resendOpt={resendOpt}
+                                    handleResendOpt={handleResendOpt}
+                                    goBack={()=>router.back()}
+                                    showBlind={showBlind.show} 
+                                    setShowBlind={setShowBlind}
+                                    resetPwdInfo={resetPwdInfo}
+                                    resetPasswordHandler={resetPasswordHandler}
+                                    
+                                    setModalAlert={setModalAlert}
+                                    setModalAlertCall={setModalAlertCall}
+                                    setAlert={setAlert}
                             />
-                            </>
+                            </Suspense>
                         }
                         {pathname === "/change-password" && 
-                            <>
+                            <Suspense>
                                 <ChangePassword
                                 viewPwd={viewPwd}
                                 handleViewPwd={handleViewPwd}
@@ -244,9 +241,13 @@ const IndexHome = ({ssUser}) => {
                                 goBack={()=>router.back()}
                                 showBlind={showBlind.show} 
                                 setShowBlind={setShowBlind}
-                                handleResetPassword={handleResetPassword}
+                                //handleResetPassword={handleResetPassword}
+                                resetPasswordHandler={resetPasswordHandler}
+                                setModalAlert={setModalAlert}
+                                setModalAlertCall={setModalAlertCall}
+                                setAlert={setAlert}
                             />
-                            </>
+                            </Suspense>
                         }
                         {pathname === "/login-new-user" && 
                              <>
