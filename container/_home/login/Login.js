@@ -17,7 +17,7 @@ const Login = ({viewPwd, handleViewPwd, form,loading, handleOnChange, handleLogi
             title="Login"
             details="Use your credentials to login into account"
         >  
-         <div className='flex flex-col gap-3 w-full'>
+         <form className='flex flex-col gap-3 w-full' onSubmit={handleLogin}>
                 <InputLabel
                     form={form}
                     handleOnChange={handleOnChange}
@@ -45,16 +45,16 @@ const Login = ({viewPwd, handleViewPwd, form,loading, handleOnChange, handleLogi
              
                 <div className='flex w-full flex-col md:flex-row items-center mt-6 space-y-5 md:space-y-0'>
                     
-                    <div className='bg-[#FFA900] hover:bg-[#fbc049]  active:bg-[#af9259] w-full items-center justify-center py-3 px-5 rounded-md cursor-pointer flex flex-1 mr-2 font-bold'
-                        onClick={handleLogin}>
+                    <button className='bg-[#FFA900] hover:bg-[#fbc049]  active:bg-[#af9259] w-full items-center justify-center py-3 px-5 rounded-md cursor-pointer flex flex-1 mr-2 font-bold'
+                        type="submit">
                      {loading && <span className="loading loading-spinner text-info mr-6"></span>}
                      <span>{loading? 'Loading' : 'Login'}</span>
-                    </div>
+                    </button>
                     <Link href={"/forgot-password"} onClick={()=>setShowBlind({show:true})}>
                         <p className='flex flex-1 text-white cursor-pointer hover:text-blue-100 active:text-blue-200 whitespace-nowrap'>Forgot Password ?</p>
                     </Link>
                 </div>
-            </div>
+            </form>
             <div className='hidden'>
                 <p className='mt-5 w-full justify-center items-center flex text-white font-bold'>or</p>
                 <div className='w-full justify-center flex items-center text-white mt-10 mb-5'>

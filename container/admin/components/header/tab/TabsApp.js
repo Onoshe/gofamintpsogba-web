@@ -1,7 +1,6 @@
 
 import React from 'react';
 import Tabs from './Tabs';
-import { BsFillGearFill } from 'react-icons/bs';
 
 
 const TabsApp = ({activePage,tabContStyle, selected, handleSelected, tabsArr, activeTab,handleHideDropdown, pages}) => {

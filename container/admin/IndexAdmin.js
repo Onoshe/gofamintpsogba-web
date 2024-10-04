@@ -3,11 +3,10 @@ import React, {useState, useEffect} from 'react'
 import Layout from './Layout';
 import IndexDashboard from './pages/dashboard/IndexDashboard';
 import useStoreHome from '@/context/storeHome';
-import AdminLogin from './login/AdminLogin';
 
 
 
-const IndexAdmin = () => {
+const IndexAdmin = ({ssUser}) => {
   const {tabsArrHome, activeTabHome, dispatchActiveTabHome} = useStoreHome((state) => state);
   const handleSelectedTab =(i, tab, hide)=>{
     dispatchActiveTabHome({index:i, tab, hideDropdown:hide})
@@ -26,6 +25,7 @@ const IndexAdmin = () => {
       activeTab={activeTabHome}
       handleSelectedTab={handleSelectedTab}
       handleHideDropdown={handleHideDropdown}
+      ssUser={ssUser}
       >
       <IndexDashboard/>
     </Layout>

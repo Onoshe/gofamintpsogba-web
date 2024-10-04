@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react'
 import BackgroundCard from '@/container/admin/components/reusableComponents/BackgroundCard';
 import TextInput from '@/container/admin/components/reusableComponents/TextInput';
 import ToastAlert from '@/components/toast/ToastAlert';
-import { handleCreateClient } from '@/container/admin/utils/handleCreateClient';
-import DashboardCard from '@/container/admin/components/reusableComponents/DashboardCard';
 import RadioBtn from '@/container/admin/components/reusableComponents/RadioBtn';
-import ModalAlert from '@/components/modal/ModalAlert';
 import Selections from '@/container/admin/components/reusableComponents/Selections';
 import { handleAccess } from '@/container/admin/utils/handleAccess';
 import TextInputPasscode from '@/container/admin/components/reusableComponents/TextInputPasscode';

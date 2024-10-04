@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import BackgroundCard from '@/container/admin/components/reusableComponents/BackgroundCard';
 import ToastAlert from '@/components/toast/ToastAlert';
-import { handleManageClient } from '@/container/admin/utils/handleManageClient';
-import { postRequest } from '@/lib/apiRequest/postRequest';
 import { handleSqlQuery } from '@/container/admin/utils/handleSqlQuery';
+
 
 
 

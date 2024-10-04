@@ -1,18 +1,16 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { handleCreateUser } from '@/container/admin/utils/handleCreateUser';
 import TextInputPasscode from '@/container/admin/components/reusableComponents/TextInputPasscode';
 import TextInputPassword from '@/container/admin/components/reusableComponents/TextInputPassword';
 
 
 
-const AdminLogin = ({clientsData, handleRevalidate, setAdmin}) => {
+const AdminLogin = ({setAdmin}) => {
     const [form, setForm] = useState({userName:'', passcode:'', passcodeSlug:''})
-    const [alert, setAlert] = useState({msgTitle:'', msg:'',type:'', show:false});
     let clientsFmt = [];
     clientsFmt = [{value:'', title: '--- Select Client ---', name:'SELECT',  }, ...clientsFmt];
 
-    //console.log(form);
+
 
    const handleOnChange =(e)=>{
         const {name, value} = e.target;

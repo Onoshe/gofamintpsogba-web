@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react'
-import DashboardCard from '../../components/reusableComponents/DashboardCard'
 import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
 import ManageClients from './tabs/ManageClients';
 import useStoreHome from '@/context/storeHome';

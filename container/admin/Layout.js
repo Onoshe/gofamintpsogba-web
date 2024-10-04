@@ -2,22 +2,23 @@
 import React, {useState, useEffect} from 'react'
 import Header from './components/header/Header';
 import TabsApp from './components/header/tab/TabsApp';
-import Sidebar from './components/header/sidedrawer/Sidebar';
 import Drawer from './components/header/sidedrawer/Drawer';
-import { IoMdHome } from 'react-icons/io';
 import { usePathname, useRouter } from 'next/navigation';
 import useStoreHome from '@/context/storeHome';
 import { useSession, signOut } from 'next-auth/react';
-import PageLoading from '@/loadingPage/PageLoading';
-import PageLoadingInnerControl from '@/loadingPage/PageLoadingInnerControl';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
 
-const Layout = ({children, tabsArr, activeTab, handleSelectedTab, handleHideDropdown}) => {
+//Used to wrapp IndexAdmin
+
+const Layout = ({children, tabsArr, activeTab, handleSelectedTab, handleHideDropdown, ssUser}) => {
   const {pages, selectedPage, dispatchSelectedPage} = useStoreHome((state) => state);
   const [hideDrawer, setHideDrawer] = useState(true);
   const [adminPage, setAdminPage] = useState(false);
-  const { data: session, status } = useSession();
+  //const { data: session, status } = useSession();
+  const { signIn, signOut, session, user,  status} = useAuthCustom(ssUser);
+
   const activePage = usePathname();
   const tabContStyle = `z-50 mt-[80px] fixed`;
   const router = useRouter();
