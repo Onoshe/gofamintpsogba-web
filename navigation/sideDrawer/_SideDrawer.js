@@ -12,6 +12,7 @@ import {GrMoney, GrResources} from 'react-icons/gr';
 import { BsGraphUpArrow, BsJournalPlus, BsFillPersonVcardFill, BsGearFill, BsCart} from 'react-icons/bs';
 import useStoreCompany from '@/context/storeCompany';
 import useLocalStorage from '@/lib/hooks/useLocalStorage';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 //import ZEffectFetchData from './ZEffectFetchData';
 //import ZEffectReportGeneral from '../reports/ZEffectReportGeneral';
 //import { generateTB } from '../reportsModule/trialBalance/_generateTBIndex';
@@ -23,7 +24,7 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
   const [localStorageValue, setLocalStorageValue] = useLocalStorage("FASTRECORD", {});
   const {activePage, dispatchActivePage, dispatchIsOpen, showSidebarTitle, coy,  dispatchCoy, dispatchPageLoading} = useStoreHeader((state) => state);
   const pathname = usePathname();
-  //const { signIn, signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
+  const { signIn, signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
   
   //const currentActivePage = navs?.find((dt)=> "/"+coy+"/"+dt.name == pathname);
   const pathnameSplits = pathname.split('/');
@@ -33,9 +34,9 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
   const isDashboardPage = "/"+coy === pathname;
 
   const handleLogout =()=>{
-    dispatchCoy("");
     dispatchActivePage({name:"", title:'Dashboard'});
     setLocalStorageValue({});
+    signOut({dispatchCoy});
     router.push('/');
   };
 

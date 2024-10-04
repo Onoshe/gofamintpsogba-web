@@ -1,8 +1,7 @@
 'use client'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, Suspense} from 'react'
 import IndexHeaderTabs from './components/headerTab/_IndexHeaderTabs'
 import useStoreReports from '@/context/storeReports';
-import { useSession } from 'next-auth/react';
 import DynamicPageDisplay from './components/dynamicPageDisplay/DynamicPageDisplay';
 import useStoreTransactions from '@/context/storeTransactions';
 import { LedgersManager } from './utils/ledgers/ledgersManger';
@@ -25,12 +24,13 @@ import EditDeleteTransaction from './components/editDeleteTransaction/EditDelete
 import { handleClickCellNav } from './utils/others/handleClickCellNav';
 import useStoreHeader from '@/context/storeHeader';
 import { getCompanyLogo } from '../company/components/utils/getSubscriptionHistory';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
 
 const searchLeadgers = ['general-ledger-accounts','customers-ledger-accounts','vendors-ledger-accounts','products-ledger-accounts'];
 
-const IndexReports = () => {
+const IndexReports = ({ssUser}) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const viewTransId = searchParams.get('q');
@@ -42,8 +42,7 @@ const IndexReports = () => {
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
   let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
   const processedLedgers = ledgers.processedLedgers;
-  const { data: session, status } = useSession(); //{user:{companyId:'', email:''}}; 
-  const user = session?.user;
+  const { session, user, status} = useAuthCustom(ssUser); 
   const {recordTransaction, tranSheetTwoEntry,  tranSheetMultiEntry, tranSheetJournals, tranSheetProducts, 
     dispatchRecordTransaction, dispatchTranSheetTwoEntry, dispatchTranSheetMultiEntry, dispatchTranSheetJournals, dispatchTranSheetProducts,
     dispatchProductPageActiveTab} = useStoreRecordTransaction((state) => state);  
@@ -214,31 +213,31 @@ const IndexReports = () => {
             setSelTab={dispatchSelTab}
             currentReport={currentReport}
           />
-          
-        <MenuBarBar
-          showBar={showReport}
-          handleReportNav={handleReportNav}
-          handleExportToExcel={excelExportHandler}
-          handleDetailReport={handleDetailReport}
-          reportName={reportName}
-          reportRows={rows}
-          reportRowKeys={rowKeysShow}
-          reportHeader={rowHeaders}
-          pdfData={pdfData}
-          pdfHeader={docHeader}
-          user={user}
-          toastNotify={toastNotify}
-          dateForm={reportDate}
-          setDateForm={setDateFormHandler}
-          headerRowsColsArr={headerRowsColsArr}
-          ledgerCode={ledgerCode}
-          monthlyQuery={monthlyQuery}
-          viewTransId={viewTransId}
-          handleMonthlySummaryToggle={handleMonthlySummaryToggle}
-          companyLogoFile={companyLogoFile}
-          handleRefresh={handleRefresh}
-        />
-
+          <Suspense>   
+            <MenuBarBar
+              showBar={showReport}
+              handleReportNav={handleReportNav}
+              handleExportToExcel={excelExportHandler}
+              handleDetailReport={handleDetailReport}
+              reportName={reportName}
+              reportRows={rows}
+              reportRowKeys={rowKeysShow}
+              reportHeader={rowHeaders}
+              pdfData={pdfData}
+              pdfHeader={docHeader}
+              user={user}
+              toastNotify={toastNotify}
+              dateForm={reportDate}
+              setDateForm={setDateFormHandler}
+              headerRowsColsArr={headerRowsColsArr}
+              ledgerCode={ledgerCode}
+              monthlyQuery={monthlyQuery}
+              viewTransId={viewTransId}
+              handleMonthlySummaryToggle={handleMonthlySummaryToggle}
+              companyLogoFile={companyLogoFile}
+              handleRefresh={handleRefresh}
+            />
+        </Suspense>
         <div className={`flex justify-center items-center h-[50vh] ${showReport? 'hidden' : ''}`}>
           <Spinner 
             showSpinner={true} 
@@ -261,7 +260,7 @@ const IndexReports = () => {
               isReportPage={isReportPage}
               ledgerTitle={ledgerTitle}
           />
-          :<>
+          :<Suspense>
             <p className='px-3 pt-1 text-gray-600'><span className='underline'>Display Tab: </span> <span className=' text-blue-700'>{currentReportTab}</span></p>
             <DynamicPageDisplay
               pathname={pathname}
@@ -294,7 +293,7 @@ const IndexReports = () => {
                 runDispatchClientDataCall={runDispatchClientDataCall}
                 router={router}
                 />
-            </>
+            </Suspense>
             }
           
         </div>
