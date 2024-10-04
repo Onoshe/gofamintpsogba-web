@@ -1,0 +1,5 @@
+id,userId,fullName,email,companyDomain,activity,activityDescription,activityDate,createdAt,inactive,deleted
+2,DEMO@sunday.adegboye,"Sunday Adegboye",ozitechstudio@gmail.com,demo,LOGIN,"User login",2024-09-14T20:28:52.151Z,2024-09-14T20:28:52.151Z,0,0
+3,DEMO@sunday.adegboye,"Sunday Adegboye",ozitechstudio@gmail.com,demo,LOGIN,"User login",2024-09-15T22:24:42.595Z,2024-09-15T22:24:42.595Z,0,0
+4,DEMO@sunday.adegboye,"Sunday Adegboye",ozitechstudio@gmail.com,demo,LOGIN,"User login",2024-09-16T10:32:19.483Z,2024-09-16T10:32:19.483Z,0,0
+5,DEMO@sunday.adegboye,"Sunday Adegboye",ozitechstudio@gmail.com,demo,DOWNLOAD,"Balance Sheet report exported to pdf",2024-09-16T22:11:08.101Z,2024-09-16T22:11:08.101Z,0,0

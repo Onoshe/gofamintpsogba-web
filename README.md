@@ -34,3 +34,28 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+## Installations
+npm install bcryptjs
+npm i jspdf-autotable
+npm i react-toastify
+npm i xlsx
+npm i -D daisyui@latest  
+npm i uuid
+npm i zustand
+npm install  dotenv
+npm install chart.js
+npm install jsonwebtoken
+npm install react-draggable
+npm install react-icons
+npm install swr nodemailer
+npm install file-saver
+npm install next-auth
+npm install axios
+npm install cookie
+
+
+
+## RUN
+npm run dev

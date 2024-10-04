@@ -1,0 +1,33 @@
+RewriteEngine On
+#Redirect every other request with extension or file NOT included in the below to routes.php
+#RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.webp|\.gif|\.jpeg|\.zip|\.css|\.svg|\.js|\.pdf|\.pdf|generatePdf\.php)$
+#RewriteRule (.*) routes.php [QSA,L]
+
+#Redirect every other request with extension or file NOT included in the below to routes.php
+#RewriteCond %{REQUEST_URI}  !(\.png|\.jpg|\.webp|\.gif|\.jpeg|\.zip|\.css|\.svg|\.js|\.pdf|\.pdf|generatePdf\.php)$
+#RewriteRule (.*) server.php [QSA,L]
+
+
+<IfModule mod_rewrite.c>
+    #RewriteCond %{HTTP_HOST} !expressjs-server\.gofamintpsogba\.org$ [NC]
+    #RewriteRule ^ https://expressjs-server.gofamintpsogba.org [R=301,L]
+    # Block direct access to files with specific extensions
+    
+    <FilesMatch "\.(jpg|jpeg|png|gif)$">
+       # Order Deny,Allow
+       # Deny from all
+    </FilesMatch>
+    
+    #Deny access to .env 
+    <FilesMatch "^\.env$">
+       # Order Deny,Allow
+       # Deny from all
+    </FilesMatch>
+    
+     #Disable file listing in the directory
+     #https://www.veerotech.net/kb/how-to-disable-directory-listing-unsing-htaccess/
+     Options All -Indexes
+    
+    #With the above restrictions, images will now only be access from images_server.php
+    
+</IfModule>
