@@ -7,7 +7,7 @@ import useStoreHeader from '@/context/storeHeader';
 
 
 
-const HomeHeader = ({session}) => {
+const HomeHeader = ({session, signOut}) => {
   //const { data: session, status } = useSession();
   const [userDropdown, setUserDropdown] = React.useState(false);
   const router = useRouter(); 
@@ -25,7 +25,7 @@ const HomeHeader = ({session}) => {
   return (
     <div className="text-white text-center bg-white fixed w-full top-0">
         <div data-theme="aqua" 
-          className='py-2 z-50 px-3 flex items-center justify-between'
+          className='py-2 z-50 px-3 flex items-center justify-between h-[80px]'
          >
             <div className='flex flex-col w-fit'
               >

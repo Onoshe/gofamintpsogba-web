@@ -8,7 +8,7 @@ const useStoreHeader = create((set) => ({
     isOpen:false, //Side drawer
     pageLoading:false,
     showSidebarTitle:true,
-    showNotificationBar:true,
+    showNotificationBar:false,
     settings:[],
     subscriptions:[],
     refreshSettingsCount:0,

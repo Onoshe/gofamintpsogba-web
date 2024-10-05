@@ -24,7 +24,7 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
   const [localStorageValue, setLocalStorageValue] = useLocalStorage("FASTRECORD", {});
   const {activePage, dispatchActivePage, dispatchIsOpen, showSidebarTitle, coy,  dispatchCoy, dispatchPageLoading} = useStoreHeader((state) => state);
   const pathname = usePathname();
-  const { signIn, signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
+  const {signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
   
   //const currentActivePage = navs?.find((dt)=> "/"+coy+"/"+dt.name == pathname);
   const pathnameSplits = pathname.split('/');

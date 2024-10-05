@@ -56,6 +56,7 @@ npm install axios
 npm install cookie
 npm i react-draggable
 npm i react-chartjs-2
+npm i xlsx-js-style;
 
 
 ## RUN

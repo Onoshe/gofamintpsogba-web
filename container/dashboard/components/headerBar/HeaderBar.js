@@ -23,9 +23,9 @@ const HeaderBar = ({chartOfAccounts,handleSelAccount, listOfAccounts, setListOfA
 
   return (
     <div className='bg-white'>
-        <div className='flex justify-between px-4'>
-            <p className='text-blue-500 font-bold'>Dashboard</p>
-            <div className='flex-row gap-3 py-2 hidden smc:flex'>
+        <div className='justify-between px-4 hidden bg-white smc:flex'>
+            <p className='text-blue-500 font-bold invisible'>Dashboard</p>
+            <div className='flex-row gap-3 py-2 flex'>
                 <div className='flex flex-row active:bg-blue-50 cursor-pointer hover:shadow-lg items-center border shadow-md border-gray-300 w-fit px-2 py-[3px] text-[12px] rounded-sm'
                  onClick={goToReportPage}>
                     <MdOutlineReport/><p>Reports</p><IoMdArrowRoundForward/>
@@ -43,6 +43,7 @@ const HeaderBar = ({chartOfAccounts,handleSelAccount, listOfAccounts, setListOfA
                 products={products}
                 />
             <div className='flex flex-row  text-blue-600  hover:tooltip-open tooltip tooltip-top' data-tip={'Report date'}>
+                <p className="px-2">Report as at </p>
                 <input type='date' className='bg-blue-400  rounded-sm px-1 border border-white cursor-pointer text-white w-fit'
                     onChange={onChangeReportDate} value={reportDate}/>
                 

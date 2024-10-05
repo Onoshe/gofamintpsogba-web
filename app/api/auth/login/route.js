@@ -7,15 +7,6 @@ import { findUser } from "@/lib/authActions/findUser";
 //import { cookies } from 'next/headers';
 
 
-const users = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john@gmail.com",
-    password: "$2a$10$YGNSJ4ho7uGhNJU8bG1mG.PrmIMJHrQHe47Etp7XBvhC9LwCAB8qK", // bcrypt hash of "abc123"
-  },
-];
-
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 1 week in seconds
 
 // JWT secret and expiration settings
@@ -30,7 +21,7 @@ export const POST = async (req, res) => {
     // Find the user by email
     //let user = users.find((user) => user.email === email);
     const user = await findUser({userName, password});
-
+    
     if (!user?.id) {
       return new Response(JSON.stringify({ok:false, msg: user.msg }), { status: 401 })
     }

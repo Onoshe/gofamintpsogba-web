@@ -6,7 +6,7 @@ import { useAuthCustom } from "@/lib/hooks/useAuthCustom";
 import { useRouter } from "next/navigation";
 
 
-export default function LoginPageCustom({ssUser}) {
+function LoginPageCustom({ssUser}) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

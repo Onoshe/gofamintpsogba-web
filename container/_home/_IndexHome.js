@@ -15,8 +15,6 @@ import LoginNewUser from './loginNewUser/LoginNewUser';
 import LoadingModal from '@/components/modal/LoadingModal';
 import { forgotPasswordHandler } from './utils/forgotPasswordHandler';
 import { resetPasswordHandler } from './utils/resetPasswordHandler';
-//import { signIn } from 'next-auth/client';
-//import { useSession, signIn, signOut } from "next-auth/react"
 import useStoreHeader from '@/context/storeHeader';
 import PageLoading from '@/loadingPage/PageLoading';
 import {runDispatchClientData } from '@/navigation/header/dataManager/getClientData';

@@ -1,4 +1,0 @@
-id,companyName,companyDomain,address,email,description,deleted,contactPersonFirstName,contactPersonLastName,contactPersonPhoneNo,contactPersonTitle,businessType,yearEnd,packagePlan,registeredDate,subscriptionExpirationDate,inactive,updatedAt,createdAt
-1,"Ozitech Studio Technology Admin",ADMIN,,ozitechstudio@gmail.com,"Admin for Technology company",0,,,,,,31-December,PREMIUM,2024-06-30,2024-06-29,0,,
-4,"Ted Consult Ltd","TED CONSULT LTD","Plot 205, Alfred Rewane Road, Ikoyi",ted@tedconsult.com,"2022 Children Day Celebration",0,Sunday,Ted,+012359836355,Mr,"Ted Consult Ltd",,Pro,2024-09-14T14:30:57.080Z,2024-09-14T14:30:57.080Z,1,2024-09-14T14:30:57.080Z,2024-09-14T14:30:57.080Z
-55,"Quickrecords Demo",DEMO,"Plot 205, Alfred Rewane Road, Ikoyi",feedback@quickrecords.com,"Technology business",0,Adams,Ben,+012359836355,Mr,IT,,Pro,2024-09-14T20:10:26.519Z,2024-09-14T20:10:26.519Z,1,2024-09-14T20:10:26.519Z,2024-09-14T20:10:26.519Z

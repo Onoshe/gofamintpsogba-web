@@ -107,7 +107,7 @@ const DashboardIndex = ({ssUser}) => {
         </div>
         <br/><br/><br/>
         <div >
-            <div className='mt-16'>
+            <div className='mt-8 hidden'>
                 <GenerateFDummyData chartOfAccounts={chartOfAccounts} customers={customers} vendors={vendors}/>
                 <div className='flex flex-row flex-wrap gap-3 p-3'>
                     <button className='btn btn-accent btn-sm' onClick={()=>handlePrint(1)}>Print Receipt</button>
