@@ -24,16 +24,29 @@ const FastRecordLogo = ({className, width, height, dynamicPage, activePage, goTo
       <div 
         //onClick={goToDashboardPage}
         >
-        <Image src="/countingXpressLogo.png" 
+        <Image src="/QuickRecordsLogo.png" 
             alt="Placeholder Image"
             //sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             priority={true}
             width={width? width : 100}
-            height={height? height : 40} 
-            className={`object-cover ${className}`}
+            height={30} 
+            className={`object-cover `}
         />
       </div>
   )
 }
 
-export default FastRecordLogo
+export default FastRecordLogo;
+
+
+/*
+
+<Image src="/QuickRecordsLogo2.png" 
+    alt="Placeholder Image"
+    //sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    priority={true}
+    width={width? width : 100}
+    height={30} 
+    className={`object-cover ${className}`}
+/>
+*/

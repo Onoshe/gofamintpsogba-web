@@ -15,7 +15,7 @@ const geistMono = localFont({
 
 export const metadata = {
   title: "QuickRecords App",
-  description: "your on-the-go solution for financial records",
+  description: "...simplifying your financial records",
 };
 
 

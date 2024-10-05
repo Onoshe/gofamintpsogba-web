@@ -22,7 +22,7 @@ const Header = ({handleMenu, pages, activePage,activeTab, handleSelectedPage, us
                       width={150} height={40}
                       className={'py-2 pl-3 flex bg-[aliceblue]'}
                   />
-                <p className='text-[12px] text-[yellow] italic flex'>your on-the-go solution for financial records</p>
+                <p className='text-[12px] text-[yellow] italic flex'>...simplifying your financial records</p>
               </div>
             </div>
             <div className='flex flex-col '>

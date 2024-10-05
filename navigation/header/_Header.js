@@ -108,7 +108,7 @@ const Header = ({ssUser}) => {
                     dispatchActivePage={dispatchActivePage}
                     dispatchShowLoadingNavPage={dispatchShowLoadingNavPage}
                 />
-              <p className='text-[10px] md:text-[12px] text-[yellow] italic hidden sm:flex'>your on-the-go solution for financial records</p>
+              <p className='text-[10px] md:text-[12px] text-[yellow] italic hidden sm:flex'>...simplifying your financial records</p>
             </div>
             
           </div>

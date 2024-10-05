@@ -15,7 +15,7 @@ const Drawer = ({hideDrawer, setHideDrawer, pages, activePage, handleSelectedPag
                 width={150} height={40}
                 className={'py-2 pl-3 flex bg-[aliceblue]'}
             />
-          <p className='text-[12px] text-gray-900 font-bold italic flex'>your on-the-go solution for financial records</p>
+          <p className='text-[12px] text-gray-900 font-bold italic flex'>...simplifying your financial records</p>
         </div>
         <Contents 
             pages={pages} 

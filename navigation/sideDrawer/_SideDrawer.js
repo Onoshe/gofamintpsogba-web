@@ -82,7 +82,7 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
                 height={50}
                 className={' p-2 bg-sky-300 mt-3 lg:hidden'}
               />
-              <p className='text-[10px] mb-[5px] text-[yellow] lg:hidden'>your on-the-go solution for financial records</p>
+              <p className='text-[10px] mb-[5px] text-[yellow] lg:hidden'>...simplifying your financial records</p>
           </div>
           <div className={``}>
             <div className='pb-5 px-2 mt-3 h-[80vh] overflow-y-auto'>

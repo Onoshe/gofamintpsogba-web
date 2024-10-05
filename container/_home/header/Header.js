@@ -34,7 +34,7 @@ const HomeHeader = ({session, signOut}) => {
                     className={'py-2 pl-3 hidden sm:flex bg-[aliceblue]'}
                     dynamicPage={"/"}
                 />
-              <p className='text-[10px] md:text-[12px] text-[yellow] italic hidden sm:flex'>your on-the-go solution for financial records</p>
+              <p className='text-[10px] md:text-[12px] text-[yellow] italic hidden sm:flex'>...simplifying your financial records</p>
             </div>
             <div className={`flex flex-col items-end ${session?.user?.userId && coy? '' : 'hidden'}`}>
               <HeaderUser 

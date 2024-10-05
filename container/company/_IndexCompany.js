@@ -19,6 +19,7 @@ import PostingLock from './components/homeComponents/PostingLock';
 import SubscriptionsHistory from './components/homeComponents/SubscriptionsHistory';
 import { handleExportReceipt } from './components/utils/handleExportReceipt';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import convertImageToBase64 from '@/lib/image/convertImageToBase64';
 //import { AccessCard } from './cards/DashboardAccess';
 
 
@@ -30,7 +31,8 @@ const IndexCompany = ({ssUser}) => {
     const {settings, dispatchRefreshSettingsCount,  subscriptions,  dispatchSubscriptions,
         client_Admin, clientData, generalSettings, quickrecordsLogo,} = useStoreHeader((state) => state);
     const {clientAccount, } = useStoreTransactions((state) => state);    
-    const [base64Image, setBase64Image] = React.useState(''); 
+    const [base64Image, setBase64Image] = React.useState('');
+    const [appB64Image, setAppBase64Image] = React.useState(''); 
     const subcriptionHistory = getSubscriptionHistory({subscriptions});
 
     let quickRecordsLogo = "";
@@ -38,6 +40,18 @@ const IndexCompany = ({ssUser}) => {
         quickRecordsLogo = generalSettings.find((dt)=>dt.slug === "quickrecords-logo")?.largeText1;
     }
     //console.log(generalSettings);
+
+    useEffect(()=>{
+        const imageUrl = 'https://media.istockphoto.com/id/1496615469/photo/serene-latin-woman-enjoy-sunset-with-gratitude.jpg?s=612x612&w=is&k=20&c=hrdwKW5CMjVXlB_k39AnXHb-_Bm4epQPXRRTxhCDQpc=';
+            convertImageToBase64("/QuickRecordsLogo.png")
+                .then(base64String => {
+                setAppBase64Image(base64String)
+                })
+                .catch(error => {
+                console.error(error);
+            });
+    },[]);
+  
 
 
     let coyLogo = "";
@@ -71,6 +85,14 @@ const IndexCompany = ({ssUser}) => {
                    <p className=''><span className='font-bold'>{subcriptionHistory?.lastSub?.active?'ACTIVE':'EXPIRED'} <span>({subcriptionHistory?.lastSub?.subscriptionType})</span></span></p> 
                    <p>Due date: {subcriptionHistory?.lastSub?.subDueDateStr}</p>
                 </div>
+                <Image
+                        //src={coyLogo}
+                        src={`data:image/png;base64,${appB64Image}`}
+                        width={100}
+                        height={100}
+                        alt='Company logo'
+                        className='hidden  flex-1 w-full bg-red-50 max-h-[100px] max-w-[150px] mb-5'
+                    />
                 <UpperDashboard 
                     base64Image={base64Image}
                     setBase64Image={setBase64Image}
@@ -108,7 +130,7 @@ const IndexCompany = ({ssUser}) => {
             generalSettings={generalSettings}
             client_Admin={client_Admin}
             clientData={clientData}
-            quickRecordsLogo={quickRecordsLogo}
+            quickRecordsLogo={`data:image/png;base64,${appB64Image}`}
         />
         <ToastContainer 
           position="top-right"

@@ -3,8 +3,9 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 
-export const handleExportReceipt =({quickRecordsLogo, paid='paid', pdfData})=>{
-   const reportName = "Payment Receipt";
+export const handleExportReceipt =({quickRecordsLogo, paid='PAID', pdfData})=>{
+  //const paid = "PAID"; //"PAID", "NOT PAID", "PRO FORMA";   
+  const reportName = "Payment Receipt";
 
     const doc = new jsPDF({
       orientation: 'portrait', //Deafult is 'portrait' Other is 'landscape',
@@ -17,15 +18,29 @@ export const handleExportReceipt =({quickRecordsLogo, paid='paid', pdfData})=>{
 
     // Add the image to the PDF
     if(quickRecordsLogo){ // Parameters: image data, format, x, y, width, height
-      doc.addImage(quickRecordsLogo, 'JPEG', 10, 10, 40, 40)
+      doc.addImage(quickRecordsLogo, 'JPEG', 10, 10, 55, 25)
     }; 
 
 
    //Add PAID Watermark
-   const fntSz = paid? 36 : 32;
-   const fillColor = paid? "#7ee332" : "red";
-   const textX = paid? 170 : 165;
-   const textY = paid? 15 : 10;
+   const isPaid = paid?.toUpperCase() === "PAID";
+   const isProForma = paid?.toUpperCase()?.includes("PRO");
+   const isNotPaid = isPaid? false : isProForma? false : true;
+
+   const type = isPaid? "isPaid": isProForma? "isProForma" : "isNotPaid"
+   const invoiceStyle = {
+    fntSz:{isPaid:36, isNotPaid:32, isProForma:28, },
+    fillColor:{isPaid:"#7ee332", isNotPaid:"red", isProForma:"silver", },
+    textX:{isPaid:170, isNotPaid:165, isProForma:163, },
+    textY:{isPaid:15, isNotPaid:10, isProForma:7, },
+    paidText:{isPaid:"PAID", isNotPaid:"NOT PAID", isProForma:"PRO FORMA", },
+   };
+   const paidText = invoiceStyle.paidText[type];
+
+   const fntSz = invoiceStyle.fntSz[type];
+   const fillColor = invoiceStyle.fillColor[type];
+   const textX = invoiceStyle.textX[type];
+   const textY = invoiceStyle.textY[type];
 
    let context = doc.context2d;
     context.fillStyle = fillColor;
@@ -38,7 +53,7 @@ export const handleExportReceipt =({quickRecordsLogo, paid='paid', pdfData})=>{
     doc.setFont("helvetica", "bold");
     doc.setFontSize(fntSz);
     doc.setTextColor("white");
-    doc.text(paid? "PAID" : "NOT PAID", textX, textY, null, -45);
+    doc.text(paidText, textX, textY, null, -45);
     
 
     doc.setFont("normal", "italic");
@@ -150,4 +165,44 @@ var base64Img = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/x
     [{content:'Invoice No: #12345-'+pageHeight, styles:bStyle}],
     [{content:'PDF generated date: '+new Date().toLocaleDateString(), styles:bStyle}],
 ],
+*/
+
+/*
+  JSPDF LIVE DEMO / PLAYGROUND
+  
+  https://raw.githack.com/MrRio/jsPDF/master/index.html
+
+
+  var doc = new jsPDF();
+doc.setFontSize(22);
+doc.text("This is a title", 20, 20);
+
+
+var doc = new jsPDF();
+
+doc.setFontSize(40);
+doc.text("Octonyan loves jsPDF", 35, 25);
+
+   const fntSz = 28;
+   const fillColor = "silver";
+   const textX = 163
+   const textY =  7;
+   
+    let context = doc.context2d;
+    context.fillStyle = fillColor;
+    context.translate(100, -75)
+    context.rotate(Math.PI/4)
+    context.rect(80, 0, 150, 20, "FD");
+    //context.stroke();
+    context.fill();
+    
+    
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(fntSz);
+    doc.setTextColor("white");
+    
+    doc.text("PRO FORMA", textX, textY, null, -45);
+    
+    
+
 */

@@ -38,12 +38,12 @@ const pdfData = {};
         pdfData.invoiceNo = sub.invoiceNo;
         pdfData.paymentRef = sub.paymentRef;
         pdfData.date = sub.subscriptionDate;
-        pdfData.itemDesc1 = "Plan: "+sub.subscriptionType;
-        pdfData.itemDesc2 = "One year subscription for plan for "+sub.subscriptionType;
+        pdfData.itemDesc1 = sub.subDesciption1;
+        pdfData.itemDesc2 = sub.subDesciption2;
         pdfData.itemAmount2 = "N"+formatToCurrency(parseFloat(sub.subscriptionAmount));
         pdfData.itemSubTotal = "N"+formatToCurrency(parseFloat(sub.subscriptionAmount));
         pdfData.itemTotal = "N"+formatToCurrency(parseFloat(sub.subscriptionAmount));
-    handleExportReceipt({quickRecordsLogo, paid:"PAID", pdfData});
+    handleExportReceipt({quickRecordsLogo, paid:sub.subPaymentStatus, pdfData});
    }
  }
 
@@ -52,7 +52,7 @@ const pdfData = {};
         <div className='flex flex-col self-start px-3 bg-white p-3 max-h-[60vh] overflow-auto'>
             {subHistory?.length? 
             <ReportTable
-                rowKeys={["subscriptionDate", "paymentRef", "subscriptionType", "description", "expiredDate", "status", "subscriptionAmount",  "export"]}
+                rowKeys={["subscriptionDate", "paymentRef", "subscriptionType", "description", "expiredDate", "status", "subPaymentStatus", "subscriptionAmount",  "export"]}
                 header={headers}
                 rows={subHistory}
                 onClickRowCell={handleClickRowCell}
@@ -68,7 +68,8 @@ export default SubscriptionsHistory;
 
 var exportClassName = "shadow-lg active:bg-cyan-100 cursor-pointer bg-[#a3f8f6] hover:bg-[#6af9f6] p-1 px-2 rounded";
 var headers = [{name:"subscriptionDate", title:"Date"}, {name:"paymentRef", title:"Payment Ref"}, {name:"description", title:"Description"}, {name:"expiredDate", title:"Expiration date"},
-    {name:"subscriptionAmount", title:"Amount"}, {name:"subscriptionType", title:"Plan"}, {name:"export", title:"Export Pdf"}, {name:"status", title:"Status"}];
+    {name:"subscriptionAmount", title:"Amount"}, {name:"subscriptionType", title:"Plan"}, {name:"export", title:"Export Pdf"}, {name:"status", title:"Status"},
+    {name:"subPaymentStatus", title:"Payment"}];
 
 /********** SET EXPIRATION DATE
  * if(subHistory?.length){
@@ -86,4 +87,9 @@ var headers = [{name:"subscriptionDate", title:"Date"}, {name:"paymentRef", titl
         return {...dt, subDateStr, subDueDateStr, active}
     });
 }
+
+
+ALTER TABLE _subscriptions ADD subDescription1 VARCHAR(255);
+ALTER TABLE _subscriptions ADD subDescription2 VARCHAR(255);
+ALTER TABLE _subscriptions ADD subStatus VARCHAR(255);
  */
