@@ -9,7 +9,6 @@ import HeaderBar from './components/headerBar/HeaderBar';
 import GenerateFDummyData from './components/dataGenerator/GenerateFDummyData';
 import useStoreTransactions from '@/context/storeTransactions';
 import { LedgersManager } from '../reports/utils/ledgers/ledgersManger';
-import { useSession } from 'next-auth/react';
 import { getStartAndEndDate } from '@/lib/dummyData/getStartAndEndDate';
 import { generatePandLChartData } from './utils/generatePAndLChartData';
 import { formatToCurrency } from '@/lib/currency';
@@ -30,7 +29,7 @@ const DashboardIndex = ({ssUser}) => {
 
   const {coaStructure, transactions, transactionsDetails,controlAcctsCode, chartOfAccounts, customers, vendors, products, runDispatchClientDataCall, clientAccount,  dispatchReportDate} = useStoreTransactions((state) => state);
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
-  let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
+  //let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
   //const {processedLedgers, customersLedger, vendorsLedger, productsLedger} = ledgers;
   //const { data: session, status } = useSession(); //{user:{companyId:'', email:''}}; 
   const { session, user, userRendering, status} = useAuthCustom(ssUser);
@@ -38,7 +37,7 @@ const DashboardIndex = ({ssUser}) => {
   const [listOfAccounts, setListOfAccounts] = useState(false);
   const [reportDateAnal, setReportDateAnal] = useState(reportDateAnalDef);
 
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  //const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const {showNotificationBar,settings, dispatchShowNotificationBar} = useStoreHeader((state) => state);
    
   const startDate = `${new Date(reportDateAnal)?.getFullYear()}-01-01`;
@@ -105,8 +104,8 @@ const DashboardIndex = ({ssUser}) => {
                 products={products}
             />
         </div>
-        <br/><br/><br/>
-        <div >
+        {/*<br/><br/><br/> */}
+        <div className="smc:pt-[50px]">
             <div className='mt-8 hidden'>
                 <GenerateFDummyData chartOfAccounts={chartOfAccounts} customers={customers} vendors={vendors}/>
                 <div className='flex flex-row flex-wrap gap-3 p-3'>
@@ -116,10 +115,10 @@ const DashboardIndex = ({ssUser}) => {
             </div>
             <div className='w-full'>
                 <div className='flex flex-col mt-3 gap-5 p-3'>
-                <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-5'>
-                    <p className='text-teal-800 font-bold'>Profit or Loss Summary Report for the period ending {periodEnd}</p>
+                <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-5 pt-[30px]'>
+                    <p className='text-teal-800 font-bold text-center'>Profit or Loss Summary Report for the period ending {periodEnd}</p>
                 </div>
-                    <div className='flex flex-row justify-around flex-wrap '>
+                    <div className='flex flex-row justify-around flex-wrap gap-4'>
                         <Card3  
                                 title="Income & Expenses Total for the Period"
                                 title1="Income Total"
@@ -162,7 +161,7 @@ const DashboardIndex = ({ssUser}) => {
                 </div>
                 
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-5'>
-                    <p className='text-teal-800 font-bold'>Balance Sheet Summary Report as at {periodEnd}</p>
+                    <p className='text-teal-800 font-bold text-center'>Balance Sheet Summary Report as at {periodEnd}</p>
                 </div>
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-3'>
                     <Card1

@@ -24,7 +24,7 @@ const FastRecordLogo = ({className, width, height, dynamicPage, activePage, goTo
       <div 
         //onClick={goToDashboardPage}
         >
-        <Image src="/QuickRecordsLogo.png" 
+        <Image src="/QuickRecordsLogoNew.png" 
             alt="Placeholder Image"
             //sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             priority={true}

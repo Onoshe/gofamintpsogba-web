@@ -68,41 +68,28 @@ export const insertQueryRecon =(form, name, reportSlug) =>{
 
 
 
-export const updateQueryRecon =(form, user) =>{
-  const {id,
-    productName,
-    productCode, 
-    description,
-    category,
-    newCategory,
-    //inactive,
-    createdBy, 
-    createdAt, 
-    updatedBy 
+export const updateQueryRecon =(form, fetchedForm) =>{
+  const {
+    user, reportDetails, reportKeys, rows
   } = form;
 
+  const reportStr = JSON.stringify({reportDetails, reportKeys, rows});
   const vals = [ 
-    productName,
-    productCode, 
-    description,
-    category? category : newCategory,
-    //inactive || '0', //INSERT=> INSERT new Chart of account 
-    //deleted || '0', 
-    createdBy || user.userId, 
-    updatedBy || user.userId,
-    createdAt || dateFmtISO(),  
+    "Updated report by "+user.userId+ " on "+dateFmtISO(),
+    new Date().toISOString().split("T")[0],
+    reportStr,
+    user.userId, 
     dateFmtISO()];
-
-
+    
   let body = {
     act: "UPDATE",
     whereField:"id",
-    whereValue:id,
+    whereValue:fetchedForm.id,
     whereType: "INT",
     table:user.companyId+"_reconciliation",
-    fields:fieldsArr,
+    fields:[`description`,  `reconDate`, `text1`, `updatedBy`, `updatedAt`],
     values :vals,
-    types:typesArr
+    types:[ "VARCHAR", "VARCHAR", "TEXT", "VARCHAR", "VARCHAR"]
   };
 
   return {body, url:urlPatch}

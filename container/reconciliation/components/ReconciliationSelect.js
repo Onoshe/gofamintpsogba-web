@@ -8,13 +8,15 @@ import { getReconDataForDisplay } from '../getReconDataForDisplay';
 import { formatToCurrency } from '@/lib/currency';
 import { getReconReportData } from '../getReconReportData';
 import { handleExcelExport } from '@/container/reports/utils/others/handleExcelExport';
+import { BsList } from 'react-icons/bs';
+import SavedReports from './SavedReports';
 
 
 
 const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts, notify,  chartOfAccountSelection, processedLedgers,
     reconAccount, setReconAccount, reconLedger, setReconLedger, reconDataForDislay,handleShowReconOthersCont,
      selAcctCode, setSelAcctCode, ledger, formOthers, reportData,  keys, keyTitles,reconOthers,
-     setFormOthers, setReconOthers,resetCalculation,displayReport,setDisplayReport
+     setFormOthers, setReconOthers,resetCalculation,displayReport,setDisplayReport, data
 }) => {
      
     //const ledger = getDummyLedger(form);
@@ -25,6 +27,7 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
      const {transCount, transCountDrChk, transCountCrChk,
         closingStmtBal,closingCBBal, chequeOut, chequeInTran,reconTotal, errorAdj, stmtClPlusRecon,} = reconDataForDislay;
     const [toggleChecked, setToggleChecked] = React.useState(false);
+    const [reportCont, setReportCont] = React.useState({show:false});
     
     
      const handleOnChange =(e)=>{
@@ -56,6 +59,9 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
         });
         resetCalculation();
     };
+    const handleSavedReports = ()=>{
+        setReportCont({...reportCont, show:!reportCont.show});
+    }
 
     React.useEffect(() => {
         if (selAcctCode) {
@@ -123,8 +129,15 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
                     onChange={handleOnChangeSelectAcct}
                     value={selAcctCode || '--- Select Bank ----'}
                 />
-                <div className='flex flex-col items-end mb-3'>
-                    <p className='text-blue-800 font-[600]'>Account Reconciliation</p>
+                <div className='relative flex flex-col items-end mb-3'>
+                    <div className="flex flex-row justify-between w-full">
+                        <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Save Reports'}>
+                            <BsList size={24} className='text-[navy] hover:bg-blue-100 shadow-md rounded-lg tooltip-open tooltip-top tooltip cursor-pointer hover:text-blue-500 active:text-blue-300 rotate-180' 
+                            onClick={handleSavedReports}
+                            />
+                        </div>
+                        <p className='text-blue-800 font-[600]'>Account Reconciliation</p>
+                    </div>
                     <div className='flex flex-row flex-wrap items-center gap-2 mt-4 text-gray-700'>
                         <div className='flex flex-row items-center gap-1'>
                             <p>From</p>
@@ -139,6 +152,9 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
                     </div>
                 </div>
             </div>
+            <SavedReports reportCont={reportCont} setReportCont={setReportCont}
+                data={data}
+            />
             <div className='flex flex-col gap-1 md:flex-row justify-between bg-white md:m-2 text-blue-800 py-3'>
                 <div className='px-3 flex flex-col gap-1 text-[13px]'>
                     <div className='flex flex-row'>

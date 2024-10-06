@@ -22,7 +22,7 @@ const HeaderBar = ({chartOfAccounts,handleSelAccount, listOfAccounts, setListOfA
     }
 
   return (
-    <div className='bg-white'>
+    <div className='bg-white -mt-[11px] smc:mt-0'>
         <div className='justify-between px-4 hidden bg-white smc:flex'>
             <p className='text-blue-500 font-bold invisible'>Dashboard</p>
             <div className='flex-row gap-3 py-2 flex'>

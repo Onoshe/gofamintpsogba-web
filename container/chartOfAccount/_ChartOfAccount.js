@@ -30,7 +30,7 @@ const ChartOfAccount = ({ssUser}) => {
   const [createType, setCreateType] = React.useState('MANUAL');
   const [showConfirm, setShowConfirm] = React.useState(false);
   sortArrayByKey(chartOfAccounts, 'accountCode');
-
+  
   //console.log(stateCreate);
 
   const notify = (type, msg) => toast[type](msg, {
@@ -92,6 +92,7 @@ const ChartOfAccount = ({ssUser}) => {
       e.preventDefault();
       handleSubmit({formInput, setInfoMsg, user, coaStructure, chartOfAccounts, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})
   }
+
   return (
       <div className=''>
           <CreateChartOfAccount showBlind={showBlind} handleClose={()=>handleShowBlind(false)}

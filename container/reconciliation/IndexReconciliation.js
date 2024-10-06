@@ -1,13 +1,10 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { getLinksAdmin } from '@/lib/apiRequest/urlLinks';
 import useStoreTransactions from '@/context/storeTransactions';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useStoreHeader from '@/context/storeHeader';
 import ReconciliationSelect from './components/ReconciliationSelect';
-import useStoreRecordTransaction from '@/context/storeRecordTransaction';
-import { mapPersonalAccounts } from '@/lib/transactionsManager/mapPersonalAccounts';
 import { mapChartOfAccount } from '@/lib/transactionsManager/mapChartOfAccount';
 import { mapProducts } from '@/lib/transactionsManager/mapProducts';
 import { LedgersManager } from '../reports/utils/ledgers/ledgersManger';
@@ -25,6 +22,9 @@ import { handleExport2Pdf } from './utils/handleExport2Pdf';
 import { getSlug } from '@/lib/string/getSlug';
 import { handleSaveReport } from './utils/handleSaveReport';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
+import { getLinkFetchTable, getLinksAdmin } from '@/lib/apiRequest/urlLinks';
+import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
 
 
 const keys = ['transactionDate', 'description', 'transactionNo', 'debit', 'credit'];
@@ -55,9 +55,12 @@ const IndexReconciliation = ({ssUser}) => {
     const chartOfAccountSelection = mapChartOfAccount(chartOfAccounts, coaStructure);
     //const [reportData, setReportData] = React.useState({show:true, data:[]});
     const [reconOthers, setReconOthers] = React.useState({show:false, amount:0, diff:0, add:0, less:0});
-     
+    const tableUrl = getLinkFetchTable({table:"demo"+"_reconciliation"});
+     const {data} = useSWRFetcher(tableUrl); 
+
     const [selAcctCode, setSelAcctCode] = React.useState("");
-    const [resetOthers, setResetOthers] = React.useState(0); 
+    const [resetOthers, setResetOthers] = React.useState(0);
+    const [showConfirm, setShowConfirm] = React.useState({show:false}); 
     const ledgerAccts = processedLedgers[selAcctCode];
     const ledger = ledgerAccts?.trans || [];
     
@@ -87,7 +90,7 @@ const IndexReconciliation = ({ssUser}) => {
     
 
   
-    const handleReconReport =(type)=>{
+    const handleReconReport = async (type)=>{
     if(reportData?.reportDetails){
         const {title, ledgerName, ledgerCode, accountTitle, asAt, companyName} = reportData.reportDetails;
         let data =  reportData.rows.map(obj => reportData.reportKeys.map(key => obj[key] || "" ));
@@ -108,7 +111,8 @@ const IndexReconciliation = ({ssUser}) => {
           if(!displayReport.name){
             notify("error", "Please, enter the report name")
           }else{
-            handleSaveReport({form:reportData, name:displayReport.name, notify, dispatchRefreshSettingsCount});
+           const res = await handleSaveReport({form:reportData, name:displayReport.name, notify, dispatchRefreshSettingsCount});
+           if(res?.exist){handleConfirm("SHOW_CONFIRM"); }
           }
         }else if(type=== "EXCEL"){
           handleExcelExport(excelData)
@@ -125,6 +129,13 @@ const IndexReconciliation = ({ssUser}) => {
     }  
   }
 
+  const handleConfirm = async (act)=>{
+    if(act === "SHOW_CONFIRM"){setShowConfirm({show:true});}
+    if(act === "CANCEL"){setShowConfirm({show:false});}
+    if(act === "CONTINUE"){
+      await handleSaveReport({form:reportData, name:displayReport.name, notify, dispatchRefreshSettingsCount, REPLACE:true, setShowConfirm});
+    }
+}
   //console.log(clientAccount, ledgerAccts)
   React.useEffect(()=>{
     //let reportDate = getStartAndEndDate();
@@ -188,12 +199,12 @@ const IndexReconciliation = ({ssUser}) => {
   }
 
   return (
-    <div className='px-4 py-2 flex  flex-col'>
+    <div className='flex  flex-col'>
         
           <ReconReportTable
               displayReport={displayReport}
               setDisplayReport={setDisplayReport}
-              classNameTable={"overflow-x-auto overflow-y-auto max-h-[calc(100vh_-_230px)]"}
+              classNameTable={"overflow-x-auto overflow-y-auto max-h-[calc(100vh_-_230px)]99"}
               header={headerArr}
               rowKeys={['desc', 'descSub', 'tranNo', 'amount']}
               rows={reportData?.rows}
@@ -204,7 +215,7 @@ const IndexReconciliation = ({ssUser}) => {
               handleReconReport={handleReconReport}
               pinRow
             />
-        <div className={`${displayReport.show? 'hidden' :''}`}>
+        <div className={`${displayReport.show? 'hidden' :''} px-4 py-2`}>
           <ReconciliationSelect
             form={form}
             setForm={setForm}
@@ -233,6 +244,7 @@ const IndexReconciliation = ({ssUser}) => {
             resetCalculation={resetCalculation}
             displayReport={displayReport}
             setDisplayReport={setDisplayReport}
+            data={data}
           />
             {reconOthers.show? <ReconOthersEntry
               formOthers={formOthers}
@@ -253,6 +265,14 @@ const IndexReconciliation = ({ssUser}) => {
             draggable
             pauseOnHover
           />
+          <ConfirmAlert showBlind={showConfirm.show}
+             title={"You already have Reconciliation Saved with the same Name"}
+             msg="Do you want to replace it?"
+             handleCancel={()=>handleConfirm("CANCEL")}
+             handleContinue={()=>handleConfirm("CONTINUE")}
+             confirmBtnName="Replace"
+           />
+           <br/><br/>
     </div>
   )
 }

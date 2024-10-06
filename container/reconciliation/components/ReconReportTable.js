@@ -12,9 +12,9 @@ const ReconReportTable = ({
             setDisplayReport({...displayReport, name:e.target.value})
     }
   return (
-    <div className={`${displayReport.show? '' :'hidden'} w-full flex-col justify-center items-center p-3 pt-0 text-gray-600
+    <div className={`${displayReport.show? '' :'hidden'} w-full flex-col justify-center items-center pt-0 text-gray-600
         `}>
-    <div className="bg-gray-200 relative p-3 text-blue-800 text-sm flex flex-row flex-wrap items-center justify-between">
+    <div className="fixed w-full bg-gray-200 z-50  p-3 text-blue-800 text-sm flex flex-row flex-wrap items-center justify-between">
         <GrClose className="absolute top-1 right-4 text-[18px] cursor-pointer text-red-600 hover:text-red-700 active:text-red-500"
           onClick={()=>setDisplayReport({...displayReport, show:false})}/>
         <div className="flex flex-col w-full max-w-[350px]">
@@ -43,7 +43,7 @@ const ReconReportTable = ({
             </div>
         </div>
     </div>
-    <div className="">
+    <div className="px-4 py-2 mt-12">
         <div className={`mb-3`}>
             <p className='text-center'>{reportDetails?.companyName}</p>
             <p className='text-center'>{reportDetails?.title}</p>

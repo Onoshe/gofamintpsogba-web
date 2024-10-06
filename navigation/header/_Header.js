@@ -11,6 +11,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import HeaderNotification from './HeaderNotification';
 import EffectFetchData from './dataManager/EffectFetchData';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import NetworkError from '@/components/Errors/NetworkError';
+import useOnline from '@/lib/hooks/useOnline';
+import PageLoading from '@/loadingPage/PageLoading';
 //import { usePathname, useRouter } from 'next/navigation';
 /* eslint-disable @next/next/no-img-element */
 
@@ -24,11 +27,13 @@ const Header = ({ssUser}) => {
   const pathname = usePathname();
   const router = useRouter();
   const companyId = session?.user?.companyId;
+  const isOnline = useOnline();
+  
   //const pathname = usePathname();
 
   let userInit = 'NA';
   
-
+  
   const handleDropdown =()=>{
     if(userDropdown) setUserDropdown(false)
   }
@@ -82,6 +87,11 @@ const Header = ({ssUser}) => {
   },[coy, session]);
 
 
+  if(!isOnline && status === "authenticated"){
+    //return <NetworkError show={true}/>
+  }
+
+  //console.log(status)
 
    //{`${scrollPos.scrollY> scrollThreshold? 'fixed' : ''}
   return (

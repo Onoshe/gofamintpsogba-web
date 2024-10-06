@@ -23,6 +23,8 @@ import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 import { loginHandler } from './utils/loginHandler';
 import ChangePassword from './changepassword/ChangePassword';
 import { useAuthCustom } from "@/lib/hooks/useAuthCustom";
+import useOnline from '@/lib/hooks/useOnline';
+import NetworkError from '@/components/Errors/NetworkError';
 
 const IndexHome = ({ssUser}) => {
     const pathname = usePathname();
@@ -38,11 +40,13 @@ const IndexHome = ({ssUser}) => {
     const [modalAlert, setModalAlert] = useState({msgTitle:'', msg:'',type:'', show:false});
     const [modalAlertCall, setModalAlertCall] = useState({showModal:false, act:''});
     const [loadingBtn, setLoadingBtn] = useState({btn:false, loading:false});
-    
+    const isOnline = useOnline();
+
+
     //const { data: session, status } = useSession(); //{status:'', data:{seeeion:''}}; //useSession();
     const { signIn, signOut, session, user, status} = useAuthCustom(ssUser);
 
-    //console.log(session)
+
     const handleForgotPassword = async ()=>{
         forgotPasswordHandler(form, setAlert, setModalAlert, setModalAlertCall);
     }
@@ -146,7 +150,10 @@ const IndexHome = ({ssUser}) => {
     
   },[status]);
 
- 
+  
+  if(!isOnline){
+    //return <NetworkError/>
+  }
 
   return (
     <>
