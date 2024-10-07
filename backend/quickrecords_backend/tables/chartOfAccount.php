@@ -4,7 +4,7 @@ function createChartOfAccount ($tableName, $refTableName){
     return "CREATE TABLE IF NOT EXISTS $tableName (
             id INT(11) NOT NULL AUTO_INCREMENT,
             accountName	VARCHAR(512),
-            accountCode	INT,
+            accountCode	VARCHAR(50),
             description VARCHAR(512),
             typeCode	INT,
             accountType	VARCHAR(512),

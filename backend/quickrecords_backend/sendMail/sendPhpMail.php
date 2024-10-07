@@ -1,7 +1,6 @@
 <?php
 
-  function sendPhpHtmlMail($mailObj){ 
-        $mail = $mailObj['mail'];
+  function sendPhpHtmlMail($mail, $mailObj){ 
         $mailFrom = $mailObj['mailFrom'];
         $mailTo = $mailObj['mailTo'];
         $mailSubject = $mailObj['mailSubject'];

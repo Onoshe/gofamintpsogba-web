@@ -54,7 +54,7 @@ export function validateTransactionsMultiProductSale(form, controlAcctsCode, act
             };
         }
         //Validate subCode
-        const acct = chartOfAccounts.find((dt)=> parseInt(dt.accountCode) == parseInt(accountCodeCr));
+        const acct = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeCr);
         if([parseInt(receivables), parseInt(payables), parseInt(inventoryControl)].includes(parseInt(acct.typeCode)) && !subCodeCr){
           return {
             error: true,
@@ -78,7 +78,7 @@ export function validateTransactionsMultiProductSale(form, controlAcctsCode, act
       }
 
         //Validate subCode
-        const acct = chartOfAccounts.find((dt)=> parseInt(dt.accountCode) == parseInt(accountCodeDr));
+        const acct = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeDr);
         if([parseInt(receivables), parseInt(payables), parseInt(inventoryControl)].includes(parseInt(acct.typeCode)) && !subCodeDr){
           return {
             error: true,

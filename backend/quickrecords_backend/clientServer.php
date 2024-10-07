@@ -1,19 +1,33 @@
-<?php    
+<?php   
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        
+        /* HTTP_ORIGIN SHOWING " "
         // List of allowed origins
         $allowed_origins = [
             'http://localhost:3000',
             'http://example.com',
-            'http://another-example.com'
+            'http://another-example.com',
+            'https://quick-records.vercel.app'
         ];
-        // Get the origin of the request
+
+        // Get the origin of the incoming request
         $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-        // Check if the origin is in the allowed list
+
+        // Check if the origin is in the allowed origins list
         if (in_array($origin, $allowed_origins)) {
+            // Set CORS headers to allow the origin
             header("Access-Control-Allow-Origin: $origin");
-        }
-        // Set additional headers
-        header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+            header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
+            header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        } else {
+            // Optionally, you can send a 403 Forbidden response if the origin is not allowed
+            header("HTTP/1.1 403 Forbidden");
+            exit;
+        }*/
+
+         
 
         // Read the JSON data from the POST request
         $reqMethod = $_SERVER['REQUEST_METHOD'];

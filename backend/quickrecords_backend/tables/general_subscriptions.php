@@ -12,6 +12,9 @@ function subscriptions (){
             paymentRef          VARCHAR(255),
             invoiceNo          VARCHAR(255),
             expiredDate          VARCHAR(255),
+            subDescription1     VARCHAR(255),
+            subDescription2     VARCHAR(255),
+            subPaymentStatus    VARCHAR(255),
             description	      VARCHAR(800),
             deleted INT(1) NOT NULL DEFAULT 0,
             receivingBank	VARCHAR(255),
@@ -23,12 +26,12 @@ function subscriptions (){
 };
 
 $queriesDemo = `
-INSERT INTO _subscriptions(companyId, companyDomain, subscriptionDate, expiredDate, subscriptionAmount, subscriptionType, description, receivingBank,  invoiceNo, paymentRef) 
-    VALUES ('DEMO', 'DEMO', '2022-02-28', '2023-02-27', '100000','Pro', 'First subscription', 'GTbank', '1000234', '10349070087676');
-INSERT INTO _subscriptions(companyId, companyDomain, subscriptionDate, expiredDate, subscriptionAmount, subscriptionType, description, receivingBank,  invoiceNo, paymentRef) 
-    VALUES ('DEMO', 'DEMO', '2023-02-28', '2024-02-27', '100000','Pro', 'Second subscription', 'GTbank', '1000234', '10349070087676');
-INSERT INTO _subscriptions(companyId, companyDomain, subscriptionDate, expiredDate, subscriptionAmount, subscriptionType, description, receivingBank,  invoiceNo, paymentRef) 
-    VALUES ('DEMO', 'DEMO', '2024-02-28', '2025-02-27', '100000','Pro', 'Second subscription', 'GTbank', '1000234', '10349070087676');
+INSERT INTO _subscriptions(companyId, companyDomain, subscriptionDate, expiredDate, subscriptionAmount, subscriptionType, description, receivingBank,  invoiceNo, paymentRef, subDescription1, subDescription1, subPaymentStatus) 
+    VALUES ('DEMO', 'DEMO', '2022-02-28', '2023-02-27', '100000','Pro', 'First subscription', 'GTbank', '1000234', '10349070087676', 'Plan: QuickRecords Pro', 'One year subscription plan for QuickRecords Pro');
+INSERT INTO _subscriptions(companyId, companyDomain, subscriptionDate, expiredDate, subscriptionAmount, subscriptionType, description, receivingBank,  invoiceNo, paymentRef, subDescription1, subDescription1, subPaymentStatus) 
+    VALUES ('DEMO', 'DEMO', '2023-02-28', '2024-02-27', '100000','Pro', 'Second subscription', 'GTbank', '1000234', '10349070087676', 'Plan: QuickRecords Pro', 'One year subscription plan for QuickRecords Pro');
+INSERT INTO _subscriptions(companyId, companyDomain, subscriptionDate, expiredDate, subscriptionAmount, subscriptionType, description, receivingBank,  invoiceNo, paymentRef, subDescription1, subDescription1, subPaymentStatus) 
+    VALUES ('DEMO', 'DEMO', '2024-02-28', '2025-02-27', '100000','Pro', 'Second subscription', 'GTbank', '1000234', '10349070087676', 'Plan: QuickRecords Pro', 'One year subscription plan for QuickRecords Pro');
 `;
 
 //VARCHAR(255) COMMENT 'This can be Payment, Receipt, Journal, etc',

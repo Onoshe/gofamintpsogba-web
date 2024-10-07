@@ -46,7 +46,7 @@ const IndexPostTransaction = ({ssUser}) => {
     //Note that this checker will give false if receivablesControlAccount is credited or payableControlAccount is debited
     let isControlAcct = false;
     if(transSheet[idx][entryAcct]){
-      const acct = chartOfAccounts.find((dt)=> parseInt(dt.accountCode) == parseInt(transSheet[idx][entryAcct]));
+      const acct = chartOfAccounts.find((dt)=> dt.accountCode == transSheet[idx][entryAcct]);
       isControlAcct = controlAcctsCode[contAct] == acct?.typeCode;
    }
    return isControlAcct

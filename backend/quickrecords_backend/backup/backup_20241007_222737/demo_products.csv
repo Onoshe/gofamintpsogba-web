@@ -1,0 +1,11 @@
+id,productName,productCode,description,category,inactive,deleted,createdBy,createdAt,updatedBy,updatedAt
+1,"Carbonated drinks",CAD0001,"Varities of Carbonated drinks",Grocery,0,0,DEMO,,DEMO,
+2,Wine,WIN0001,"Non achoholic America Red Wine",Grocery,0,0,DEMO,,DEMO,
+3,"Body cream",BDC0001,"Body cream",Grocery,0,0,DEMO,,DEMO,
+4,"TV Shelf",TVS0001,"TV Black Shelf ",Furnitures,0,0,DEMO,,DEMO,
+5,"Center Table",CNT0001,"Simple Center Table",Furnitures,0,0,DEMO,,DEMO,
+6,"Office Chair",OFC0001,"Victory R Swivel Office Chair",Furnitures,0,0,DEMO,,DEMO,
+7,"Executive Office Chair",OFC0002,"Victory L Swivel Office Chair",Furnitures,0,0,DEMO,,DEMO,
+8,"Dry Iron",DRI0001,"60 Leaves Exercise Book -Stock",Appliances,0,0,DEMO,,DEMO,
+9,Blender,BLE0001,"2.5 Litres Blender",Appliances,0,0,DEMO,,DEMO,
+10,"Electric Kettle",ELK0001,"Electric Kettle",Appliances,0,0,DEMO,,DEMO,

@@ -25,6 +25,7 @@ import { handleClickCellNav } from './utils/others/handleClickCellNav';
 import useStoreHeader from '@/context/storeHeader';
 import { getCompanyLogo } from '../company/components/utils/getSubscriptionHistory';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import useWindowDimensions from '@/lib/hooks/useWindowDimensions';
 
 
 
@@ -59,10 +60,10 @@ const IndexReports = ({ssUser}) => {
   const docHeader = moreDocHeader?.length? [[clientAccount?.companyName], [title], [date],  ...moreDocHeader] : [[clientAccount?.companyName], [title], [date], ['']];
   const currentReportTab = getCurrentReportName(reportName);
   const companyLogoFile = getCompanyLogo(settings);
-
+  const windowDimen = useWindowDimensions();  
   
 // console.log(chartOfAccounts);
-   // console.log(rowHeaders)
+  // console.log(windowDimen)
   const handleReport =(report)=>{
       console.log(report);
   }
@@ -279,6 +280,7 @@ const IndexReports = ({ssUser}) => {
               viewTransId={viewTransId}
               transactionsDetails={transactionsDetails}
               subTitle={subTitle}
+              windowDimen={windowDimen}
             />
               <EditDeleteTransaction 
                 selectedTranFromList={selectedTranFromList}

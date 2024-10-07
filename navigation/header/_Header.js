@@ -91,9 +91,23 @@ const Header = ({ssUser}) => {
     //return <NetworkError show={true}/>
   }
 
-  //console.log(status)
+  React.useEffect(()=>{
+    //Return to Home if companyId on url is not the session.user.companyId or NOT in allowedPaths
+    const companyIdUrl = pathname?.split("/")[1];
+    //console.log(companyIdUrl !== session.user.companyId || !allowedPaths.includes(pathname))
+    if(session?.user?.companyId && companyIdUrl){
+      const allowedPaths = ["/register", "/forgot-password", "/change-password", "/reset-password", "login-new=user"];
+      if(!allowedPaths.includes(pathname)){
+        if(companyIdUrl !== session.user.companyId){
+           router.push("/");
+           handleLogout()
+          //console.log(companyIdUrl, session.user.companyId)
+        }
+      }
+    }
+  },[pathname, session])
 
-   //{`${scrollPos.scrollY> scrollThreshold? 'fixed' : ''}
+  
   return (
     <div className={`fixed w-full z-50`} onClick={handleDropdown}>
         <EffectFetchData session={session}/>

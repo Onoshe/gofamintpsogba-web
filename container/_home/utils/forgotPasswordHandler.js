@@ -5,7 +5,8 @@ import { postRequest } from "@/lib/apiRequest/postRequest";
 import { dateFmtISO } from "@/lib/date/dateFormats";
 import { getUniqueRandomNumbers } from "@/lib/radomNos/getRandomNumbers";
 import { getExpirationTime } from "@/lib/time/getTime";
-import { getLinkForgotPassword, getLinkPostUser } from "@/lib/apiRequest/urlLinks";
+import { getLinkClientServer, getLinkForgotPassword, getLinkPostUser } from "@/lib/apiRequest/urlLinks";
+import getOTPEmailBody from "@/components/htmlEmail/otpEmail";
 
 
 
@@ -21,8 +22,21 @@ const  forgotPasswordHandler = async (form, setAlert, setModalAlert, setModalAle
         if(user?.data?.length){
                 //console.log(user)
                 if(user.data[0].email == form.email || user.data[0]?.recoveryEmail == form.email){
-                    const {url, body} = updateResetPassword(user.data[0], domain);
+                    const {url, body, resetCode} = updateResetPassword(user.data[0], domain);
                     //return console.log(body)
+                    const mailHtml = getOTPEmailBody({OTP:resetCode, name:"Dear "+form.email, subject:"Password Reset Code"});
+                    const sendMailLink = getLinkClientServer().dev;
+                    const mailBody = {
+                        route:"SENDMAIL",
+                        mailObj:{
+                            mailTo:form.email,
+                            mailFrom:"no-reply@quickrecords.gofamintpsogba.org",
+                            mailSubject:"OTP Authentication",
+                            mailBody:mailHtml
+                        }
+                    };
+                    console.log(sendMailLink, mailBody)
+                    await postRequest(sendMailLink, mailBody).then((res)=> console.log(res));
                     await postRequest(url, body)
                     .then((res)=> {
                         //setAlert({...alert, msgTitle:'OTP sent successfully!', msg:'Check your inbox or spam messages for the code', type:'success', show:true});
@@ -56,7 +70,7 @@ function updateResetPassword(user, domain){
         "whereValue":user?.id, 
         "whereType":"INT"
       };
-    return {url:urlLink, body}
+    return {url:urlLink, body, resetCode}
 }   
 
 

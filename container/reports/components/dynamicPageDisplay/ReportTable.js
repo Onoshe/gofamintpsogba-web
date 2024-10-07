@@ -3,7 +3,7 @@ import { formatToCurrency } from "@/lib/currency";
 const ReportTable = ({
     header=[], rows=[], rowKeys=[], pinRow, pinCol, style,
     clickableHeader, onClickHeader, clickableRow, onClickRow, clickableRowNo, onClickRowNo, clickableRowCellKeys,
-    clickableRowCell, onClickRowCell,  classNameTable,  classNameHeaderTR, classNameRowsTR}) => {
+    clickableRowCell, onClickRowCell,  classNameTable,  classNameHeaderTR, classNameRowsTR, windowDimen}) => {
 
       //clickableRowCellKeys - From IndexReport: {clickables} = getDisplayReport({})
       //clickableRowCell - From IndexReport: {clickables} = getDisplayReport({})
@@ -22,7 +22,7 @@ const ReportTable = ({
         data-theme="pastel" >
         <table className={`table table-sm table-zebra ${pinRow? 'table-pin-rows' :''} ${pinCol? 'table-pin-cols' :''}`}>
             <thead className="">
-                <tr className={`text-[14px] ${classNameHeaderTR}`}>
+                <tr className={`${classNameHeaderTR}`}>
                     <td className={'py-6'}>{''}</td> 
                     {rowKeys?.map((key, i)=>{
                         const dt = header?.find((e)=> e.name === key);
@@ -40,7 +40,8 @@ const ReportTable = ({
                 {rows?.map((row, i)=>{
                     //console.log(row)
                     return(
-                        <tr key={`${i}td`} className={`${classNameRowsTR} ${row?.rowStyle}`}>
+                        <tr key={`${i}td`} className={`${classNameRowsTR} ${row?.rowStyle}`}
+                            style={{fontSize:windowDimen?.width < 500? '12px' : '14px',}}>
                             <td className={``}>{i+1}</td>
                             {
                                rowKeys?.map((key, id)=>{

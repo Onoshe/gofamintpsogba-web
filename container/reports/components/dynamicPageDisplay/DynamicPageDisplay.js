@@ -6,7 +6,7 @@ import React, {useState, useEffect} from 'react';
 
 
 
-const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, clickables, handleClickCell, companyName, reportName, reportDate, viewTransId, subTitle, transactionsDetails, toastNotify }) => {
+const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, clickables, handleClickCell, companyName, reportName, reportDate, viewTransId, subTitle, windowDimen, transactionsDetails, toastNotify }) => {
    let rowsForDisplay = rows;
 
 
@@ -30,7 +30,7 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
 
 //w-[calc(100% - 200px)]
   return (
-    <div className='flex w-full flex-col justify-center items-center p-3 pt-0 mx-4 text-gray-600'>
+    <div className='pt-5 flex w-full flex-col text-sm smc:text-base justify-center items-center p-3  mx-4 text-gray-600'>
       <div className={`mb-3`}>
         <p className='text-center'>{companyName}</p>
         <p className='text-center'>{currentReportTitle}</p>
@@ -51,6 +51,7 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
                 //clickableRowCell={clickables?.length}
                 clickableRowCellKeys ={clickables?.length? clickables : clickables === "ALL"? "ALL" : []} //['name']
                 onClickRowCell={handleClickCell}
+                windowDimen={windowDimen}
                 pinRow
               />
        </div>

@@ -1,12 +1,13 @@
 import { capitalizeFirstCharOnly } from "@/lib/capitalize/capitalizeString";
-import { MdOutlineBalance,  MdAccountBalance, MdSwitchAccount } from "react-icons/md";
+import { BsFillCartPlusFill } from "react-icons/bs";
+import { MdOutlineBalance,  MdAccountBalance, MdSwitchAccount, MdAccountBox, MdInventory, MdOutlineAccountBalanceWallet } from "react-icons/md";
 
 
 
-const ACCOUNTANT = {name: 'ACCOUNTANT', title:'Accountant', shortTitle:'Acct', tabName:'Accountant', icon: <MdOutlineBalance/>};
-const CUSTOMERS = {name: 'CUSTOMERS', title:'Customers', shortTitle:'Customers', tabName:'Customers', icon: <MdOutlineBalance/>};
-const VENDORS = {name: 'VENDORS', title:'Vendors', shortTitle:'Vendors', tabName:'Vendors', icon: <MdOutlineBalance/>};
-const PRODUCTS = {name: 'PRODUCTS', title:'Products', shortTitle:'Products', tabName:'Products', icon: <MdOutlineBalance/>};
+const ACCOUNTANT = {name: 'ACCOUNTANT', title:'Accountant', shortTitle:'Acct', tabName:'Accountant', icon: <MdAccountBox />};
+const CUSTOMERS = {name: 'CUSTOMERS', title:'Customers', shortTitle:'Customers', tabName:'Customers', icon: <BsFillCartPlusFill/>};
+const VENDORS = {name: 'VENDORS', title:'Vendors', shortTitle:'Vendors', tabName:'Vendors', icon: <MdOutlineAccountBalanceWallet/>};
+const PRODUCTS = {name: 'PRODUCTS', title:'Products', shortTitle:'Products', tabName:'Products', icon: <MdInventory/>};
 
 const schemas = {
   ACCOUNTANT: {...ACCOUNTANT},

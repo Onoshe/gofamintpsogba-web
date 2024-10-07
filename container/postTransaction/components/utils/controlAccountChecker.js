@@ -9,7 +9,7 @@ export function controlAcctChecker(transSheet, chartOfAccounts, controlAcctsCode
     for (let i = 0; i < transSheet.length; i++) {
       const tranSht = transSheet[i];
       chartOfAccounts.find((dt)=> {
-        if(parseInt(dt.accountCode) == parseInt(tranSht.accountCode)){ 
+        if(dt.accountCode == tranSht.accountCode){ 
            if(controlAcctsCode.receivables == dt.typeCode && tranSht.debitCredit == 1){
              revControl = {isControlAcct:true, controlAcct:'Receivable', type:'REC', i}
            }else if(controlAcctsCode.payables ==dt.typeCode && tranSht.debitCredit == 2){
@@ -31,14 +31,14 @@ export function controlAcctChecker(transSheet, chartOfAccounts, controlAcctsCode
       const {accountCodeCr, accountCodeDr} = transSheet;
       chartOfAccounts.find((dt)=> {
         if(activeTab === "TAB1"){
-          if(parseInt(dt.accountCode) == parseInt(accountCodeCr)){ 
+          if(dt.accountCode == accountCodeCr){ 
             if(controlAcctsCode.payables ==dt.typeCode){
               controlRes = {show:true, type:'Payable', conType:"PAY"}
             }
           }
         }else if(activeTab === "TAB2"){
           //TAB2- Sales.  Only true if accountCodeDr is controlAccount
-          if(parseInt(dt.accountCode) == parseInt(accountCodeDr)){ 
+          if(dt.accountCode == accountCodeDr){ 
             if(controlAcctsCode.receivables ==dt.typeCode){
               controlRes = {show:true, type:'Receivable', conType:"REC"}
             }
@@ -46,12 +46,12 @@ export function controlAcctChecker(transSheet, chartOfAccounts, controlAcctsCode
             //controlResRec = {show:false, type:'Receivable', conType:""}
           }
         }else{
-          if(parseInt(dt.accountCode) == parseInt(accountCodeDr)){ 
+          if(dt.accountCode == accountCodeDr){ 
             if(controlAcctsCode.receivables ==dt.typeCode){
               controlResRec = {show:true, type:'Receivable', conType:"REC"}
             }
           }
-          if(parseInt(dt.accountCode) == parseInt(accountCodeCr)){ 
+          if(dt.accountCode == accountCodeCr){ 
             if(controlAcctsCode.payables ==dt.typeCode){
               controlResPay = {show:true, type:'Payable', conType:"PAY"}
             }
@@ -74,12 +74,12 @@ export function controlAcctChecker(transSheet, chartOfAccounts, controlAcctsCode
     if(postingType === "TWOENTRY"){
         chartOfAccounts.find((dt)=> {
           //Search for the chartOfAccount. If found, check if 
-          if(parseInt(dt.accountCode) == parseInt(transSheet.debitAccount)){ 
+          if(dt.accountCode == transSheet.debitAccount){ 
               // typeCode is a receivable controlAccount.
             if(controlAcctsCode.receivables == dt.typeCode){
               controlRes = {isTrue: true, controlAcct:'Receivable'}
             }
-          }else if(parseInt(dt.accountCode) == parseInt(transSheet.creditAccount)){ 
+          }else if(dt.accountCode == transSheet.creditAccount){ 
             // typeCode is a payable controlAccount.
           if(controlAcctsCode.payables == dt.typeCode){
             controlRes = {isTrue: true, controlAcct:'Payable'}

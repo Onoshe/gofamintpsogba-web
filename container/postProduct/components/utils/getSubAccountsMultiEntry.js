@@ -6,7 +6,7 @@ function getSubAccountsMultiEntry(accountCode, chartOfAccounts, personalAccts, p
    //console.log(personalAccts)
    //return
    if(parseInt(accountCode)){
-        const coa = chartOfAccounts?.find(dt=> parseInt(dt.accountCode) === parseInt(accountCode));
+        const coa = chartOfAccounts?.find(dt=> dt.accountCode == accountCode);
         //console.log(coa)
         if(coa?.accountCode){
             const {typeName} = coa;

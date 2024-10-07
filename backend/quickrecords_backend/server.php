@@ -1,23 +1,7 @@
 <?php  
          header("Access-Control-Allow-Origin: *");
          header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
-         header("Access-Control-Allow-Headers: Content-Type, Authorization");                   
-
-        // List of allowed origins
-        $allowed_origins = [
-            'http://localhost:3000',
-            'http://example.com',
-            'http://another-example.com'
-        ];
-        // Get the origin of the request
-        $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-        // Check if the origin is in the allowed list
-        if (in_array($origin, $allowed_origins)) {
-            header("Access-Control-Allow-Origin: $origin");
-        }
-        // Set additional headers
-        header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+         header("Access-Control-Allow-Headers: Content-Type, Authorization");        
 
         // Handle preflight requests
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {

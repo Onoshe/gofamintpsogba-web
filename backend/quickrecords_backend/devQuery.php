@@ -1,24 +1,8 @@
 <?php
-         header("Access-Control-Allow-Origin: *");
-         header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
-         header("Access-Control-Allow-Headers: Content-Type, Authorization");                   
-
-        // List of allowed origins
-        $allowed_origins = [
-            'http://localhost:3000',
-            'http://example.com',
-            'http://another-example.com'
-        ];
-        // Get the origin of the request
-        $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-        // Check if the origin is in the allowed list
-        if (in_array($origin, $allowed_origins)) {
-            header("Access-Control-Allow-Origin: $origin");
-        }
-        // Set additional headers
-        header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
+          header("Access-Control-Allow-Origin: *");
+          header("Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS");
+          header("Access-Control-Allow-Headers: Content-Type, Authorization");
+          
         // Handle preflight requests
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
             http_response_code(204);
@@ -45,6 +29,14 @@
         $postData = file_get_contents('php://input');
         $decodedData = json_decode($postData, true);
 
+
+
+        $routes = [
+            'BACKUP_SENDMAIL' => 'devQuery/backupAndSendMail.php',
+             'SENDMAIL' => 'devQuery/sendMail.php'
+        ];
+
+
     if ($method === 'POST') {
         if(isset($decodedData['act']) && $decodedData['act'] === "BACKUP_DB"){
             //Backup database
@@ -57,35 +49,28 @@
             require_once 'backup/backupDb_csv.php';
             backup_mysql_to_csv($servername, $hostname, $password, $dbname, $mail);
             //backupDatabase($servername, $hostname, $password, $dbname, $backup_dir);
-        }if(isset($decodedData['sendMail']) && $decodedData['sendMail'] === "TEST"){
+        }else if(isset($decodedData['route'])){
+            if(array_key_exists($decodedData['route'], $routes)){
+                $route = $routes[$decodedData['route']];
+                
+                require_once 'sendMail/configs.php';
+                $username_mail = getenv('USERNAME_PHPMAIL');
+                $password_mail = getenv('PASSWORD_PHPMAIL');
+                $mail = getMailConfigs($username_mail, $password_mail);
+                
+                 require_once __DIR__ . '/' . $route;
+            }else{
+                echo json_encode(array('ok' => false, 'msg' => "Route not recognised"));
+            }            
+            
+
+        }else if(isset($decodedData['sendMail']) && $decodedData['sendMail'] === "TEST"){
             require_once 'sendMail/configs.php';
             $username_mail = getenv('USERNAME_PHPMAIL');
             $password_mail = getenv('PASSWORD_PHPMAIL');
             $mail = getMailConfigs($username_mail, $password_mail);
 
-
-            require_once 'backup/emailBackupFile.php';
-            $backup_root_dir = 'backup';
-             //Zip the latest file and email
-            $zipFile =  zip_latest_backup_folder($backup_root_dir);
-            if ($zipFile['ok']) {
-                $res = email_backup($zipFile['zipFile'], $mail);
-                
-                if($res['ok']){
-                    // Delete the ZIP file
-                    $zipedFile = $zipFile['zipFile'];
-                    if (unlink($zipedFile)) {
-                        echo json_encode(array('ok' => true, 'msg' => "Mail sent with zip file- $zipedFile deleted"));
-                    } else {
-                        echo json_encode(array('ok' => true, 'msg' => "Mail sent but unable to delete zip file- $zipedFile"));
-                    }
-                }else{
-                    echo json_encode(array('ok' => false, 'msg' => $res['msg']));
-                }
-                 
-            }else{
-                echo json_encode(array('ok' => $zipFile['ok'], 'msg' => $zipFile['msg']));
-            }
+            
 
         }else{
             //$sql = $_POST['query'];

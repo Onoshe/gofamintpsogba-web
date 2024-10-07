@@ -67,7 +67,7 @@ export function validateTransactionsProductPurchaseAndAdj(form, controlAcctsCode
             };
         }
         //Validate subCode
-        const acct = chartOfAccounts.find((dt)=> parseInt(dt.accountCode) == parseInt(accountCodeCr));
+        const acct = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeCr);
         if([parseInt(receivables), parseInt(payables), parseInt(inventoryControl)].includes(parseInt(acct.typeCode)) && !subCodeCr){
           return {
             error: true,
@@ -94,7 +94,7 @@ export function validateTransactionsProductPurchaseAndAdj(form, controlAcctsCode
       if(activeTab === "TAB3") {
 
         //Validate subCode if accountCode is a control account
-        const acctDr = chartOfAccounts.find((dt)=> parseInt(dt.accountCode) == parseInt(accountCodeDr));
+        const acctDr = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeDr);
         if(controlAcctsArr.includes(parseInt(acctDr.typeCode)) && !subCodeDr){
           return {
             error: true,
@@ -107,7 +107,7 @@ export function validateTransactionsProductPurchaseAndAdj(form, controlAcctsCode
         }
         
 
-        const acctCr = chartOfAccounts.find((dt)=> parseInt(dt.accountCode) == parseInt(accountCodeCr));
+        const acctCr = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeCr);
         if(controlAcctsArr.includes(parseInt(acctCr.typeCode)) && !subCodeCr){
           return {
             error: true,
