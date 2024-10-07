@@ -1,4 +1,4 @@
-import { getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
+import { getLinkDeleteTran, getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
 import { dateFmtISO } from "@/lib/date/dateFormats";
 
 
@@ -94,3 +94,18 @@ export const updateQueryRecon =(form, fetchedForm) =>{
 
   return {body, url:urlPatch}
 }   
+
+export const deleteQueryRecon =(fetchedForm, user) =>{
+  const urlDelete = getLinkDeleteTran();
+    
+  let body = {
+    act: "DELETE",
+    whereField:"id",
+    whereValue:fetchedForm.id,
+    whereType: "INT",
+    table:user.companyId+"_reconciliation",
+  };
+
+  return {body, url:urlDelete}
+}
+

@@ -16,7 +16,8 @@ import SavedReports from './SavedReports';
 const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts, notify,  chartOfAccountSelection, processedLedgers,
     reconAccount, setReconAccount, reconLedger, setReconLedger, reconDataForDislay,handleShowReconOthersCont,
      selAcctCode, setSelAcctCode, ledger, formOthers, reportData,  keys, keyTitles,reconOthers,
-     setFormOthers, setReconOthers,resetCalculation,displayReport,setDisplayReport, data
+     setFormOthers, setReconOthers,resetCalculation,displayReport,setDisplayReport, data,
+     savedReportView, setSavedReportView, user, mutate
 }) => {
      
     //const ledger = getDummyLedger(form);
@@ -153,7 +154,9 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
                 </div>
             </div>
             <SavedReports reportCont={reportCont} setReportCont={setReportCont}
-                data={data}
+                data={data} savedReportView={savedReportView} setSavedReportView={setSavedReportView}
+                displayReport={displayReport} setDisplayReport={setDisplayReport}
+                user={user} mutate={mutate} notify={notify}
             />
             <div className='flex flex-col gap-1 md:flex-row justify-between bg-white md:m-2 text-blue-800 py-3'>
                 <div className='px-3 flex flex-col gap-1 text-[13px]'>

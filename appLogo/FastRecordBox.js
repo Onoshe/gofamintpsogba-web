@@ -10,7 +10,7 @@ const FastRecordBox = ({className, width, height,}) => {
       <div
         className='animate-spin'
         >
-        <Image src="/fastRecordBox.png" alt="FastRecord Logo"
+        <Image src="/QuickRecordsLogoTN.png" alt="FastRecord Logo"
             width={width? width : 100}
             height={height? height : 40} 
             priority={true}

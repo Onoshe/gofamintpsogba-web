@@ -38,14 +38,11 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
   
   //console.log(transSheet)
   const handleSubmit = async ()=>{
-    //return console.log(clientsDataCall);
-    //runDispatchClientDataCall();
-    //return;
     if(checkedBtn === "BYENTRY"){
         setUploading(true);
         const transSheetForm = transSheet?.map((form)=>{ //Purpose?
-          const drAcct = chartOfAccounts?.find((dt)=> parseInt(dt.accountCode) == parseInt(form.debitAccount));
-          const crAcct = chartOfAccounts?.find((dt)=> parseInt(dt.accountCode) == parseInt(form.creditAccount));
+          const drAcct = chartOfAccounts?.find((dt)=> dt.accountCode == form.debitAccount);
+          const crAcct = chartOfAccounts?.find((dt)=> dt.accountCode == form.creditAccount);
           
           if(![controlAcctsCode.receivables, controlAcctsCode.payables].includes(parseInt(drAcct?.typeCode))){
             form.debitSub = ""; 

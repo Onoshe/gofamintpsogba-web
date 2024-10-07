@@ -56,14 +56,16 @@ const IndexReconciliation = ({ssUser}) => {
     //const [reportData, setReportData] = React.useState({show:true, data:[]});
     const [reconOthers, setReconOthers] = React.useState({show:false, amount:0, diff:0, add:0, less:0});
     const tableUrl = getLinkFetchTable({table:"demo"+"_reconciliation"});
-     const {data} = useSWRFetcher(tableUrl); 
+     const {data, mutate} = useSWRFetcher(tableUrl); 
 
     const [selAcctCode, setSelAcctCode] = React.useState("");
     const [resetOthers, setResetOthers] = React.useState(0);
     const [showConfirm, setShowConfirm] = React.useState({show:false}); 
+    const [savedReportView, setSavedReportView] = React.useState({show:false}); 
     const ledgerAccts = processedLedgers[selAcctCode];
     const ledger = ledgerAccts?.trans || [];
     
+   
     let reportDetails = {};
     if(form.dateFrom && form.dateTo && ledgerAccts?.name){
      const reportDt = getLongMonth(form.dateTo)?.fullMonth;
@@ -71,10 +73,15 @@ const IndexReconciliation = ({ssUser}) => {
         title:"Bank Reconciliation", accountTitle:ledgerAccts.accountCode+" "+ledgerAccts.name,
       };
     }
+    reportDetails = savedReportView.show? savedReportView.report.reportDetails : reportDetails;
+
+
     let reportData = {};
     if(user?.lastname){
      reportData = getReconReportData({...reconDataForDislay}, {forms:formOthers.forms, diff:reconOthers.diff, add:reconOthers.add, less:reconOthers.less}, reportDetails, user);
     }
+    reportData = savedReportView.show? savedReportView.report : reportData; 
+    
     const notify = (type, msg) => toast[type](msg, {
         position: "top-right",
         autoClose: 5000,
@@ -112,7 +119,9 @@ const IndexReconciliation = ({ssUser}) => {
             notify("error", "Please, enter the report name")
           }else{
            const res = await handleSaveReport({form:reportData, name:displayReport.name, notify, dispatchRefreshSettingsCount});
-           if(res?.exist){handleConfirm("SHOW_CONFIRM"); }
+           if(res?.exist){handleConfirm("SHOW_CONFIRM"); }else{
+              mutate();
+           }
           }
         }else if(type=== "EXCEL"){
           handleExcelExport(excelData)
@@ -205,7 +214,7 @@ const IndexReconciliation = ({ssUser}) => {
               displayReport={displayReport}
               setDisplayReport={setDisplayReport}
               classNameTable={"overflow-x-auto overflow-y-auto max-h-[calc(100vh_-_230px)]99"}
-              header={headerArr}
+              header={[{name:'desc', title:''}, {name:'descSub', title:''}, {name:'amount', title:'Amount'}, {name:'tranNo', title:''}]}
               rowKeys={['desc', 'descSub', 'tranNo', 'amount']}
               rows={reportData?.rows}
               classNameHeaderTR="bg-blue-50" 
@@ -213,6 +222,8 @@ const IndexReconciliation = ({ssUser}) => {
               clickableHeader={false}
               reportDetails={reportDetails}
               handleReconReport={handleReconReport}
+              savedReportView={savedReportView}
+              setSavedReportView={setSavedReportView}
               pinRow
             />
         <div className={`${displayReport.show? 'hidden' :''} px-4 py-2`}>
@@ -245,6 +256,10 @@ const IndexReconciliation = ({ssUser}) => {
             displayReport={displayReport}
             setDisplayReport={setDisplayReport}
             data={data}
+            savedReportView={savedReportView}
+            setSavedReportView={setSavedReportView}
+            user={user}
+            mutate={mutate}
           />
             {reconOthers.show? <ReconOthersEntry
               formOthers={formOthers}
@@ -277,13 +292,7 @@ const IndexReconciliation = ({ssUser}) => {
   )
 }
 
-var headerArr =[
-  //{className:'bg-blue-50 py-5', title:''},
-  {name:'desc', title:''},
-  {name:'descSub', title:''},
-  {name:'amount', title:'Amount'},
-  {name:'tranNo', title:''},
-]
+var headerArr =[{name:'desc', title:''}, {name:'descSub', title:''}, {name:'amount', title:'Amount'}, {name:'tranNo', title:''},]
 
 
 

@@ -22,7 +22,7 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
     return (
     <PageBlind showBlind={showBlind}>
         <div className={`w-full justify-center items-center flex flex-col`}>
-            <div className='w-full max-w-[700px] justify-center flex flex-col bg-white shadow-lg text-gray-900'>
+            <div className='w-full max-w-[600px] justify-center flex flex-col bg-white shadow-lg text-gray-900'>
                 <div className='bg-[aliceblue] w-full  border-b border-gray-100 flex flex-row items-center justify-between p-2 md:p-6'>
                     <p className='font-bold text-blue-500'>Create Account</p>
                     <MdClose size={32} className='text-red-700 hover:text-[red] active:text-red-200 cursor-pointer'
@@ -75,10 +75,10 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
                         <TextInput
                             labelName="Account Code*"
                             classNameLabel={'whitespace-nowrap w-[120px] text-red-600 mr-2'}
-                            type="number"
+                            type="text"
                             name="accountCode"
-                            placeholder="Digits- maximum length of 7"
-                            maxlength="7"
+                            placeholder="Digits- maximum length of 15"
+                            maxlength="15"
                             value={formInput.accountCode}
                             required
                             onChange={(e)=>handleFormInput(e)}
@@ -94,13 +94,20 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
                             onChange={(e)=>handleFormInput(e)}
                         />
                         <Checkbox 
-                            classNameCont={'smc:ml-[124px]'}
+                            classNameCont={'smc:ml-[124px] hidden'}
                             labelName="Add to the watchlist on my dashboard"
                             name="addToDashboard"
                             checked={formInput.addToDashboard}
                             onChange={()=>handleFormInput({target:{name:"addToDashboard", value:!formInput.addToDashboard}})}
                             />
+                        <div className="text-[12px] -mt-3 -mb-5">
+                            <p class="font-[500]">Valid Account Code:</p>
+                            <p>* Any of 0 - 9, A - Z, a - z, hyphen and no space</p>
+                            <p>* Must not begin with zero or hyphen</p>
+                            <p>* Minimum length of 5 and maximum length of 15 </p>
+                        </div>
                     </div>
+                    
                     <div 
                         className={`flex flex-row gap-2 smc:ml-[150px] ${infoMsg?.error? 'text-red-600' :'text-green-800'}`} >
                        {infoMsg?.error && <BiSolidError size={23} />} <p>{infoMsg?.msg}</p>

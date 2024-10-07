@@ -18,7 +18,7 @@ const fieldsArr =[
 ];
 const typesArr = [
   "VARCHAR",
-  "INT",
+  "VARCHAR",
   "VARCHAR",
   "INT",
   "VARCHAR",

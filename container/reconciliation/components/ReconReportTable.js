@@ -6,20 +6,25 @@ import { GrClose } from "react-icons/gr";
 const ReconReportTable = ({
     header=[], rows=[], rowKeys=[], pinRow, pinCol, reportDetails,
     clickableHeader, onClickHeader, clickableRow, onClickRow,   classNameTable,  classNameHeaderTR, classNameRowsTR,
-    displayReport, setDisplayReport, handleReconReport, exportReport}) => {
+    displayReport, setDisplayReport, handleReconReport, savedReportView, setSavedReportView}) => {
 
     const handleOnChange =(e)=>{
             setDisplayReport({...displayReport, name:e.target.value})
+    }
+    const handleCloseReport =()=>{
+        setSavedReportView({show:false})
+        setDisplayReport({...displayReport, show:false})
     }
   return (
     <div className={`${displayReport.show? '' :'hidden'} w-full flex-col justify-center items-center pt-0 text-gray-600
         `}>
     <div className="fixed w-full bg-gray-200 z-50  p-3 text-blue-800 text-sm flex flex-row flex-wrap items-center justify-between">
         <GrClose className="absolute top-1 right-4 text-[18px] cursor-pointer text-red-600 hover:text-red-700 active:text-red-500"
-          onClick={()=>setDisplayReport({...displayReport, show:false})}/>
+          onClick={handleCloseReport}/>
         <div className="flex flex-col w-full max-w-[350px]">
             <p>Report Name</p>
-            <div className="flex flex-row items-center gap-2">
+            {!savedReportView?.show?
+                <div className="flex flex-row items-center gap-2">
                 <input className='min-w-[100px] flex-1 bg-white py-[4px] px-2 border border-blue-400'
                                 name="reportName"  placeholder='Report name' value={displayReport.name}  onChange={handleOnChange} required/>
 
@@ -29,7 +34,10 @@ const ReconReportTable = ({
                     />
                 </div>
             </div>
-
+            :<div>
+                <p className="text-teal-600 font-[600]">{savedReportView.reportRaw.name}</p>
+            </div>
+            }
         </div>
         <div className="flex gap-4 mt-7">
             <div className='hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Excel'}>

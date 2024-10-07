@@ -7,6 +7,7 @@ import { coaCreateQuery, coaQuery, coaUpdateQuery } from './coaQuery';
 import { getRequest } from '@/lib/apiRequest/getRequest';
 import { patchRequest } from '@/lib/apiRequest/patchRequest';
 import { getLinkCOA } from '@/lib/apiRequest/urlLinks';
+import { validateCOACode } from '@/lib/validation/validateCOACode';
 
 
 
@@ -14,12 +15,15 @@ const handleSubmit = async ({ formInput, setInfoMsg, user, coaStructure, chartOf
 
   //return console.log(formInput)
    const validateFieldVal = validateInputs({type:'FIELDVALUE', form:formInput, test:{reqFields:['typeCode', 'accountName', 'accountCode']}});
+
+   const codeOk = validateCOACode(formInput.accountCode);
+    if(!codeOk) return setInfoMsg({msg:"Invalid Account Code!", error:true});
+
+
    if(!validateFieldVal.error){
     const validateAcctCode = validateInputs({form:chartOfAccounts, type:'VALUEEXIST', test:{key:'accountCode', value:formInput.accountCode}});
-    const accountCodeStr = formInput.accountCode.toString();
-    if(accountCodeStr[0] === "0"){
-      return setInfoMsg({msg:"Account Code cannot start with zero!", error:true})
-    } 
+    //const accountCodeStr = formInput.accountCode.toString();
+    
     const {accountCode, accountName, addToDashboard, description, accountType, typeCode, createdBy, updatedBy} = formInput;
         const acctStructure = coaStructure?.find((dt)=> parseInt(dt.code) === parseInt(typeCode));
         let form = { 
@@ -38,7 +42,7 @@ const handleSubmit = async ({ formInput, setInfoMsg, user, coaStructure, chartOf
           //delete:<BiTrash size={22} className='text-red-700 cursor-pointer hover:text-[red]'/>, 
         }
 
-    if(formInput.editAcct){
+    if(formInput.editAcct){ //Edit
       const {url, body} = coaUpdateQuery(form, user, "chartofaccount");
             //return console.log(body)
             const urlLink = getLinkCOA({user, accountCode});
@@ -73,7 +77,7 @@ const handleSubmit = async ({ formInput, setInfoMsg, user, coaStructure, chartOf
               })
             }
 
-    }else{
+    }else{ //Create
       if(!validateAcctCode.error){
         const urlLink = getLinkCOA({user, accountCode});
         const acct = await getRequest(urlLink).then((res)=> res);
@@ -82,6 +86,7 @@ const handleSubmit = async ({ formInput, setInfoMsg, user, coaStructure, chartOf
             handleInfoMsg('error', "Account with account code'"+accountCode+"' already exist");
          }else{
             const {url, body} = coaCreateQuery(form, user, "chartofaccount");
+            //return console.log(url, body)
             await postRequest(url, body).then((res)=> {
               if(res?.ok){
                 setFormInput({}); 
