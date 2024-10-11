@@ -78,6 +78,7 @@ const CreateProductByUpload = ({stateCreate, dispatchCreate, handleCreateMultiPr
             <MdDownload size={22} className=''/> Sample File
           </div>
        </div>
+       
        <div className='m-4'>
         {!table?.show?
               <CreatePersonalAccountByUpload

@@ -158,7 +158,7 @@ const handleTransView =(act)=>{
         </div>
         {checkedBtn === "BYENTRY" && <>
            <div className={`flex-row flex gap-2 flex-wrap`}>
-            <div className={`py-4 px-8 pb-0  flex-row gap-2 flex `}>
+            <div className={`py-4 px-8 pb-0  flex-row gap-2 hidden sm:flex `}>
                 <input type='checkbox' className='size-4 cursor-pointer checkbox checkbox-success' checked={showBankBalances} onChange={handleOnChangeShowBankBal}/>
                 <p className='text-blue-800'>Show Bank balances</p>
             </div>

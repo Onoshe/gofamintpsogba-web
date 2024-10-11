@@ -56,7 +56,7 @@ const CreateClient = ({clientsData, handleRevalidate}) => {
     <div className='p-4 w-full'>
         <div className='flex flex-col w-full'>
                 <BackgroundCard
-                    title={'New Client Details'}
+                    title={"New Client Details (Database Tables will also be created authomaticatlly)"}
                     style={'flex flex-col gap-3 mr-5 h-fit mb-5'}
                 >
                     <p className='text-blue-700'></p>
@@ -128,6 +128,7 @@ const CreateClient = ({clientsData, handleRevalidate}) => {
                             label = "Auto Create Client database Tables"
                             onChangeHandler={handleOnChange}
                             titleSub="Client account will be created together with all the reuired tables.Table - 'coastructure' will also be populated."
+                            contStyle={'hidden'}
                             //disable={disableTables}
                         />
                          <TextInputPasscode

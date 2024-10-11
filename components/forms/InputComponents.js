@@ -129,7 +129,8 @@ const TextAreaInputComponent = ({title, required, name, value, onChange, pholder
         <div className={`flex flex-row   text-sm md:text-base justify-between  ${noWidth? noWidth : 'sm:min-w-[350px] md:min-w-[400px] max-w-[450px]'} ${contStyle}`}>
             
             <div className={`border-b-2 shadow-sm px-3 pb-2 ${titleStyle}`}>
-                Group
+                Group <span className='text-[red] font-bold'>{required? '*' : ''}</span>
+                <p className="text-[10px] ml-5">Default is GENERAL</p>
              </div>
             <div className={`flex flex-col justify-end`}>
               <div className='flex flex-row gap-3 '>

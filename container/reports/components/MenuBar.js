@@ -36,7 +36,8 @@ const handleOnChangeDate =(e)=>{
     setDateFormPrelim({...dateFormPrelim, [name]:value})
     //setDateForm({...dateForm, [name]:value})
 }
-const handleCustomDate =()=>{
+const handleCustomDate =(e)=>{
+    e.preventDefault();
     if(dateFormPrelim?.startDate || dateFormPrelim?.endDate){
         const startDateTime = new Date(dateFormPrelim.startDate).getTime();
         const endDateTime = new Date(dateFormPrelim.endDate).getTime();
@@ -45,7 +46,8 @@ const handleCustomDate =()=>{
         const monthsOver12 =  monthsDiffMoreThan12(dateFormPrelim.startDate, dateFormPrelim.endDate);
         //console.log(dateFormPrelim.startDate+"-"+startDateValid, dateFormPrelim.endDate+"-"+endDateValid, daysOver365 )
         if(startDateValid && endDateValid){
-            if(startDateTime < endDateTime){
+            //console.log(startDateTime, endDateTime, startDateTime < endDateTime, startDateTime - endDateTime)
+            if(startDateTime - endDateTime < 1){
                 if(monthsOver12){
                     toastNotify('error', 'Maximum custom dates should not be more than year')
                 }else{
@@ -55,6 +57,7 @@ const handleCustomDate =()=>{
             }else{toastNotify('error', 'End date cannot be earlier than the start date.')}
         }else{toastNotify('error', startDateValid? 'Invalid date entered in End date' : 'Invalid date entered in Start date')}
 
+        setShowDate(false)
     }else{toastNotify('error', 'Please, set the date range')}
 }
   let hideDateComponent = false;
@@ -132,17 +135,23 @@ export default MenuBarBar;
 
 
 const DateComp =({handleSelDate, showDate, dateForm, hideComponent, customDate, handleOnChange, setShowDate, handleCustomDate})=>{
+    
+    const toggleShowDate =()=>{
+        setShowDate(!showDate)
+    }
     return(
-        <div className={`hover:tooltip-open tooltip tooltip-top ${hideComponent? 'hidden':''}`} data-tip={'Set date'}
-          onMouseEnter={()=>setShowDate(true)}
-          onMouseLeave={()=>setShowDate(false)}
+        <div className={`hover:tooltip-open relative tooltip tooltip-top ${hideComponent? 'hidden':''}`} data-tip={'Set date'}
+          //onMouseEnter={()=>setShowDate(true)}
+          //onMouseLeave={()=>setShowDate(false)}
           >
             <MdDateRange className='text-[24px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
-             />
+             onClick={toggleShowDate}/>
             <>
-                <div className={`z-50 fixed left-2 sm:left-auto sm:absolute pb-2 text-[12px] md:text-[12px] border border-blue-600 rounded-md bg-blue-50 shadow-lg ${showDate? '' :'hidden'}`}>
+                <div className={`z-50 fixed  left-2 sm:left-auto sm:absolute pb-2 text-[12px] md:text-[12px] border border-blue-600 rounded-md bg-blue-50 shadow-lg ${showDate? '' :'hidden'}`}>
             
                     <p className="text-center bg-blue-500 font-bold text-white p-2 mb-2">Select Date</p>
+                    <MdClose size={22} className="absolute right-3 top-1 cursor-pointer text-red-200 hover:text-red-500"
+                        onClick={toggleShowDate}/>
                     <div className="flex flex-col">
                         {dropdownList?.map((dt, i)=>{
                             return(
@@ -153,7 +162,8 @@ const DateComp =({handleSelDate, showDate, dateForm, hideComponent, customDate, 
                                 </div>
                             )
                         })}
-                        <div className='flex flex-col bg-gray-200 pb-2 mx-1 rounded-md'>
+                        <form className='flex flex-col bg-gray-200 pb-2 mx-1 rounded-md'
+                            onSubmit={handleCustomDate}>
                            <p className={`text-gray-600 text-left py-1 pl-5 font-[500]`}>Set date range</p>
                             <div className='flex flex-row items-center'>
                                 <div className={`text-gray-600 text-left pl-5 cursor-pointer`}>
@@ -174,10 +184,10 @@ const DateComp =({handleSelDate, showDate, dateForm, hideComponent, customDate, 
                                       //max={customDate.endDate.max}
                                       onChange={handleOnChange}/>
                                 </div>
-                                <p className='bg-teal-600 -mb-1 hover:bg-teal-700 active:bg-teal-600 text-white font-bold m-2 py-1 px-2 rounded-md cursor-pointer'
-                                 onClick={handleCustomDate}>Go</p>
+                                <input className='bg-teal-600 -mb-1 hover:bg-teal-700 active:bg-teal-600 text-white font-bold m-2 py-1 px-2 rounded-md cursor-pointer'
+                                 type="submit" value="Go"/>
                             </div>
-                        </div>
+                        </form>
                 </div>
                 </div>
             </>

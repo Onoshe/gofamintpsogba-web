@@ -60,9 +60,9 @@ const ManageClients = ({clientsData, handleRevalidate, clientTables}) => {
 
 
    useEffect(()=>{
-    const createTables = ['COASTRUCTURE', 'CHARTOFACCOUNT', 'CUSTOMERS', 'VENDORS', 'PRODUCTS', 'TRANSACTIONSDETAILS', 'TRANSACTIONS', 'ACTIVITYLOG', 'USERSACCOUNT','SETTINGS'];
+    const createTables = ['COASTRUCTURE', 'CHARTOFACCOUNT', 'CUSTOMERS', 'VENDORS', 'PRODUCTS', 'TRANSACTIONSDETAILS', 'TRANSACTIONS', 'ACTIVITYLOG', 'USERSACCOUNT','SETTINGS', 'RECONCILIATION'];
     const insertTables = ['COASTRUCTURE', 'CHARTOFACCOUNT', 'CUSTOMERS', 'VENDORS', 'PRODUCTS', ];
-    const dropTables = ['COASTRUCTURE', 'CHARTOFACCOUNT', 'CUSTOMERS', 'VENDORS', 'PRODUCTS', 'TRANSACTIONSDETAILS', 'TRANSACTIONS', 'ACTIVITYLOG', 'USERSACCOUNT', 'SETTINGS'];
+    const dropTables = ['COASTRUCTURE', 'CHARTOFACCOUNT', 'CUSTOMERS', 'VENDORS', 'PRODUCTS', 'TRANSACTIONSDETAILS', 'TRANSACTIONS', 'ACTIVITYLOG', 'USERSACCOUNT', 'SETTINGS', 'RECONCILIATION'];
     if(form.actType === "CREATE"){
         const tables = createTables.map((el)=> {return {title:el}});
         setCheckboxData(tables);

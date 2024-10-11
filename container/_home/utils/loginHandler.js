@@ -18,43 +18,59 @@ export const loginHandler = async({e, loadingBtn, setLoadingBtn, signIn, form, d
     setLoadingBtn({loading:true});
     
     const findUserRes = await findLoginUser(form);
-    
-    //******* Verify if defaultPassword. Default password occur when a new user is added or when there is a reset of password**************
-    if(findUserRes.ok && parseInt(findUserRes.defaultSecret)){
-        setAlert({msgTitle:'Password reset has been initiated on your account', msg:'You will be redirected to password reset page to change your password.', type:'error', show:true});
-        handleSendOTP(findUserRes)
-        setTimeout(()=>{
-            dispatchResetPwdInfo({msg:'Password change code sent to '+findUserRes.email, style:'text-[cyan]', title:"Change Password", 
-                id:findUserRes.id, userName:findUserRes.userId, email:findUserRes.email,});
-            goToPage('/reset-password?u='+findUserRes.userId);
-        }, 8000)
-    }else{
-        const result = await signIn('credentials', { //Check lib.authAction for the code
-            redirect: false,
-            email:form.email,
-            password:form.password,
-            userName:form.userName
-            });
-        //const result = "";
-        //console.log(result)
-        if(result.ok){
-            const domain = form?.userName?.split("@")[0]?.toLowerCase();
-            dispatchCoy(domain);
-            dispatchActivePage({name:'', title:"Dashboard"});
-            if(domain !== "admin"){
-                await runDispatchClientData({domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails})
-                .then(()=> goToPage("/"+domain))
-            }else{
-                goToPage("/"+domain)
+    //******* Verify if defaultPassword || nonActive. Default password occur when a new user is added or when there is a reset of password**************
+    if(findUserRes.ok){
+        if(parseInt(findUserRes.defaultSecret) || parseInt(findUserRes.nonActive) || parseInt(findUserRes.resetPassword)){
+            if(parseInt(findUserRes.defaultSecret)){
+                setAlert({msgTitle:'Password reset has been initiated on your account', msg:'You will be redirected to password reset page to change your password.', type:'error', show:true});
+                handleSendOTP(findUserRes) // defaultSecret changed to 0 and resetPassword set to 1
+                setTimeout(()=>{
+                    dispatchResetPwdInfo({msg:'Password change code sent to '+findUserRes.email, style:'text-[cyan]', title:"Change Default Password", 
+                        id:findUserRes.id, userName:findUserRes.userId, email:findUserRes.email,});
+                    goToPage('/reset-password?u='+findUserRes.userId);
+                }, 8000)
+            }else if(parseInt(findUserRes.resetPassword)){
+                setAlert({msgTitle:'Change Password initiated on your account', msg:'You are been redirected to the page', type:'info', show:true});
+                setTimeout(()=>{
+                    dispatchResetPwdInfo({msg:'Password change code sent to '+findUserRes.email, style:'text-[cyan]', title:"Change Password", 
+                        id:findUserRes.id, userName:findUserRes.userId, email:findUserRes.email,});
+                    goToPage('/reset-password?u='+findUserRes.userId);
+                }, 3000)
+                setLoadingBtn({loading:false}); 
+            }else if(parseInt(findUserRes.nonActive)){
+                setAlert({msgTitle:'Account de-activated!', msg:'Please contact your Admin to activate your account', type:'error', show:true});
+                setLoadingBtn({loading:false}); 
             }
         }else{
-            const msgs = result.msg.split("|");
-            setAlert({...alert, msgTitle:msgs[0], msg:msgs[1], type:'error', show:true});
-            
-            const domain = form?.userName?.split("@")[0]?.toLowerCase();
-            postActivity({userId:form?.userName, firstname:form?.userName, lastname:'', email:form?.email, companyId:domain}, activities.LOGIN_ATTEMPT, "User login attempted")
-            setLoadingBtn({loading:false});
+            const result = await signIn('credentials', { //Check lib.authAction for the code
+                redirect: false,
+                email:form.email,
+                password:form.password,
+                userName:form.userName
+                });
+            if(result.ok){
+                const domain = form?.userName?.split("@")[0]?.toLowerCase();
+                dispatchCoy(domain);
+                dispatchActivePage({name:'', title:"Dashboard"});
+                if(domain !== "admin"){
+                    await runDispatchClientData({domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails})
+                    .then(()=> goToPage("/"+domain))
+                }else{
+                    goToPage("/"+domain)
+                }
+            }else{
+                const msgs = result.msg.split("|");
+                setAlert({...alert, msgTitle:msgs[0], msg:msgs[1], type:'error', show:true});
+                
+                const domain = form?.userName?.split("@")[0]?.toLowerCase();
+                postActivity({userId:form?.userName, firstname:form?.userName, lastname:'', email:form?.email, companyId:domain}, activities.LOGIN_ATTEMPT, "User login attempted")
+                setLoadingBtn({loading:false});
+            }
         }
+    }else{
+        
+        setAlert({msgTitle:'Login error', msg:'', type:'error', show:true});
+        setLoadingBtn({loading:false});
     }
 }
 

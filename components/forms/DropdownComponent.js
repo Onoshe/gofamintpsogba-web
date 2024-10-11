@@ -114,6 +114,20 @@ export const CustomDropdownComponent = ({options, selectedOption, setSelectedOpt
     setIsOpen(false);
   };
 
+  React.useEffect(() => {
+    const handleDocumentClick = (event) => {
+      if (!event.target.closest('.dropdown-custom')) {
+         setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+    },[]);
+
 
     React.useEffect(() => {
       if (isOpen) {

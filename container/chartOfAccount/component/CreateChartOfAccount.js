@@ -102,8 +102,8 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
                             />
                         <div className="text-[12px] -mt-3 -mb-5">
                             <p class="font-[500]">Valid Account Code:</p>
-                            <p>* Any of 0 - 9, A - Z, a - z, hyphen and no space</p>
-                            <p>* Must not begin with zero or hyphen</p>
+                            <p>* Any of 0 - 9, A - Z, a - z, and hyphen and no space</p>
+                            <p>* Can only begin with any of the digits from 1 - 9</p>
                             <p>* Minimum length of 5 and maximum length of 15 </p>
                         </div>
                     </div>

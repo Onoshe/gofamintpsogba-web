@@ -1,4 +1,4 @@
-import { getLinkClientServer, getLinkPostAccess, getLinkPostClient, getLinkPostUser, getLinkUsersAccount } from "@/lib/apiRequest/urlLinks";
+import { getLinkClientServer, getLinkPostAccess, getLinkPostClient, getLinkPostTrans, getLinkPostUser, getLinkUsersAccount } from "@/lib/apiRequest/urlLinks";
 import { dateFmtISO } from "@/lib/date/dateFormats";
 import * as bcrypt from "bcryptjs";
 
@@ -77,11 +77,11 @@ const createClientQuery =(form, act) =>{
   const urlClt = getLinkClientServer().server;
   const {companyName, companyDomain, address, email, contactPersonFirstName, contactPersonLastName, contactPersonPhoneNo,
           contactPersonTitle, businessType, packagePlan, } = form;
-  
+  const companyDomainStr = companyDomain.trim().toLowerCase();
   let body = {
     act:act? act : "INSERT",
     table:'_clients',
-    domain:companyDomain?.toLowerCase(),
+    domain:companyDomainStr,
     fields:[
       "companyName", 
       "companyDomain",
@@ -94,15 +94,15 @@ const createClientQuery =(form, act) =>{
       "contactPersonTitle", 
       "businessType", 
       "packagePlan",
-      "registeredDate", 
-      "subscriptionExpirationDate",  
+      "yearEnd",
+      "registeredDate",   
       "updatedAt", 
       "createdAt", 
       "description"
     ],
     values :[[
       companyName, 
-      companyDomain?.toUpperCase(),
+      companyDomainStr,
       '1', 
       address, 
       email, 
@@ -112,7 +112,7 @@ const createClientQuery =(form, act) =>{
       contactPersonTitle,
       businessType, 
       packagePlan, 
-      dateFmtISO(), 
+      "31-December", 
       dateFmtISO(),  
       dateFmtISO(), 
       dateFmtISO(), 
@@ -138,7 +138,75 @@ const createClientQuery =(form, act) =>{
     ]
   };
   return {body, url:act? urlClt : url}
-}   
+}
+
+
+export const createClientAccountQuery =(form, act) =>{
+  const url = getLinkPostTrans();
+  const {companyName, companyDomain, address, email, contactPersonFirstName, contactPersonLastName, contactPersonPhoneNo,
+          contactPersonTitle, businessType, packagePlan, } = form;
+  const companyDomainStr = companyDomain.trim().toLowerCase();
+  let body = {
+    act:act,
+    table:'_clients',
+    domain:companyDomainStr,
+    fields:[
+      "companyName", 
+      "companyDomain",
+      "inactive", 
+      "address", 
+      "email", 
+      "contactPersonFirstName",
+      "contactPersonLastName",  
+      "contactPersonPhoneNo", 
+      "contactPersonTitle", 
+      "businessType", 
+      "packagePlan",
+      "yearEnd",
+      "registeredDate",   
+      "updatedAt", 
+      "createdAt", 
+      "description"
+    ],
+    values :[[
+      companyName, 
+      companyDomainStr.toUpperCase(),
+      '1', 
+      address, 
+      email, 
+      contactPersonFirstName, 
+      contactPersonLastName,
+      contactPersonPhoneNo, 
+      contactPersonTitle,
+      businessType, 
+      packagePlan, 
+      "31-December", 
+      dateFmtISO(),  
+      dateFmtISO(), 
+      dateFmtISO(), 
+      form?.description || 'NULL', 
+      ]],
+    types:[
+      "VARCHAR",
+      "VARCHAR",
+      "INT",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR",
+      "VARCHAR"
+    ]
+  };
+  return {body, url:url.post}
+}
 
 
 const createUserQuery = async (form) =>{

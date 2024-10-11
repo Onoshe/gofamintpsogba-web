@@ -4,6 +4,7 @@ import { getHeadersTitle } from "../ledgers/getHeaders";
 
 export const keysTB = ['accountCode', 'name', 'debit', 'credit', ];
 export const keysGL = ['transactionDate', 'description', 'accountCodeSub', 'transactionNo', 'documentNo', 'voucher', 'offsetAccountCode', 'offsetAccountName', 'reference', 'debit', 'credit', 'balance'];
+export const keysGLMain = ['transactionDate', 'accountCode', 'description', 'transactionNo', 'documentNo', 'voucher', 'offsetAccountCode', 'offsetAccountName', 'reference', 'debit', 'credit', 'balance'];
 export const keysGLProducts = ['transactionDate', 'description', 'transactionNo', 'documentNo', 'quantity',  'reference', 'debit', 'credit', 'balance'];
 export const keysPersonalAcct =  ['title', 'accountCode', 'lastname', 'firstname', 'phoneNo', 'email', 'position','accountGroup', 'formNo', 'companyName', 'companyPhoneNo', 'companyAddress', 'companyEmail', 'registeredDate'];
 export const keysProductsAcct =  ['productCode', 'productName', 'description', 'category'];
@@ -30,7 +31,8 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
             tableHeaderFSize:8,
         };
         const rowsTb = transProcessor.getTrialBalance(dateForm).values;
-        //console.log(rowsTb)
+        //console.log(rowsTb);
+
         const date = "Report as at "+new Date().toDateString(); //For personal account list and balances
        // console.log(transProcessor.getGeneralLedgers());
         //clickables:['edit', 'view']  clickables,
@@ -44,12 +46,13 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
                         clickables:"ALL", pdfData}
                 break;
             case 'general-ledger':
-                pdfData.reportRowKeys = keysGL;
+                pdfData.reportRowKeys = keysGLMain;
                 pdfData.noFmtCols = [10,11,12];
-                pdfData.tableColsWch = [20, 40, "", "", "", "", "", "", "", "", "", ""];
+                pdfData.tableColsWch = [20, 17, 40, "", "", "", "", "", "", "", "", "", ""];
                 let rowsGl = transProcessor.getGeneralLedgers(dateForm);
+                rowsGl = rowsGl.filter((row)=> row.transactionDate !== "TOTAL");
                 //rowsGl = transaction.classNameTD = 'hover:text-[blue] cursor-pointer';
-                result = {name:reportName, title:"General Ledger", rowKeysShow:keysGL, rowHeaders:getHeadersTitle(keysGL), rows:rowsGl, clickables:discAndTranNo, pdfData}
+                result = {name:reportName, title:"General Ledger", rowKeysShow:keysGLMain, rowHeaders:getHeadersTitle(keysGLMain), rows:rowsGl, clickables:discAndTranNo, pdfData}
                 break;
             case 'personal-ledgers-customers':
                 pdfData.reportRowKeys = keysGL;

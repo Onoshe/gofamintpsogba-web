@@ -17,6 +17,7 @@ if(subHistory?.length){
     })
 }
 
+//console.log(client_Admin)
 const pdfData = {};
   if(clientData?.companyName && client_Admin?.companyName){
     pdfData.invoiceName = clientData.companyName;
@@ -38,11 +39,12 @@ const pdfData = {};
         pdfData.invoiceNo = sub.invoiceNo;
         pdfData.paymentRef = sub.paymentRef;
         pdfData.date = sub.subscriptionDate;
-        pdfData.itemDesc1 = sub.subDesciption1;
-        pdfData.itemDesc2 = sub.subDesciption2;
+        pdfData.itemDesc1 = sub.subDescription1;
+        pdfData.itemDesc2 = sub.subDescription2;
         pdfData.itemAmount2 = "N"+formatToCurrency(parseFloat(sub.subscriptionAmount));
         pdfData.itemSubTotal = "N"+formatToCurrency(parseFloat(sub.subscriptionAmount));
         pdfData.itemTotal = "N"+formatToCurrency(parseFloat(sub.subscriptionAmount));
+
     handleExportReceipt({quickRecordsLogo, paid:sub.subPaymentStatus, pdfData});
    }
  }

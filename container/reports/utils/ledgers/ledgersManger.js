@@ -5,6 +5,7 @@ import { createAndAppendOpeningBalAndRetEarnings } from "./createAndAppendOpenin
 import { MdMoreHoriz, MdMoreVert } from "react-icons/md";
 import { getRecordedTransactionsCall} from "./getRecordedTransactionsCall";
 import { setProductsOpeningQtyBalances } from "./setProductsOpeningQtyBalances";
+import { getReceiptsAndPayment, getReceiptsAndPaymentsCall } from "./getReceiptsAndPaymentsCall";
 
 //trans: transactions; transactions:transactionsDetails
 export class LedgersManager {
@@ -53,7 +54,7 @@ export class LedgersManager {
        * Note that the transactions in the trans do not have opening balances at this state. This is set be the function- createAndAppendOpeningBalAndRetEarnings()
        * The createAndAppendOpeningBalAndRetEarnings function uses the openingBal that is here to create openingBal row on the trans array
        */
-
+  
       for (let transaction of this.transactions) { //......... start of transactions interation..........
         let accountCode = transaction.accountCode;
         let accountCodeSub = transaction.accountCodeSub;
@@ -61,6 +62,7 @@ export class LedgersManager {
         const transDate = transaction.transactionDate;
         const transDateTime = new Date(transDate).getTime();
         const entryType = transaction.entryType;
+        //let retainedEarningsCode = this.chartOfAccounts?.find((dt)=> dt.typeCode == controlAcctsCode.retainedEarnings)?.accountCode;
 
         // Process General Ledgers
         if (!processedLedgers[accountCode]) {
@@ -96,6 +98,7 @@ export class LedgersManager {
                 processedLedgers[accountCode].closingBalCr += parseFloat(transaction.amount);
               }
           }
+          
           // Include transactions within the date range in trans array
           if (transDateTime >= startDateTime && transDateTime <= endDateTime) {
             processedLedgers[accountCode].trans.push(transaction);
@@ -139,7 +142,7 @@ export class LedgersManager {
           default:
             continue;
         }
-  
+        
         if (!subLedger[accountCodeSub]) {
             subLedger[accountCodeSub] = {
               name: accountName,
@@ -202,7 +205,7 @@ export class LedgersManager {
         }
         
       }//......................end of transactions interation...................
-        
+     
 
       //createAndAppendOpeningBalAndRetEarnings({coaStructure, chartOfAccounts, controlAcctsCode, ledgers, startDate, accountType});
         createAndAppendOpeningBalAndRetEarnings({ledgers:processedLedgers, coaStructure:this.coaStructure, chartOfAccounts:this.chartOfAccountsBase, controlAcctsCode:this.controlAcctsCode, startDate,  accountType:"GENLED"});
@@ -257,6 +260,10 @@ export class LedgersManager {
          }else{sectionLedgers.balanceSheet[ledgerCode] = ledger}
       }
       return sectionLedgers
+    }
+    getReceiptsAndPayment(dateForm){
+      const dateFormNew = dateForm? dateForm : getStartAndEndDate();
+      return getReceiptsAndPaymentsCall(this.transactions, dateFormNew, this.coaStructure);
     }
     getRecordedTransactions(dateForm){
       const dateFormNew = dateForm? dateForm : getStartAndEndDate();

@@ -6,6 +6,7 @@ import { getLedgersAndPersonalAcctsForDisplay } from "./reportUtils/getLedgersAn
 import { getRecordedTransactionsForDisplay } from "./reportUtils/getRecordedTransactionsForDisplay";
 import { getAgingReport } from "./others/generateAging";
 import { getProductsValuation } from "./reportUtils/getProductsValuation";
+import { getReceiptsAndPaymentsForDisplay } from "./reportUtils/getReceiptsAndPaymentsForDisplay";
 
 
 export const getDisplayReport =({reportName, pathname, transProcessor, customers, vendors, products, coaStructure, viewTransId, transactionsDetails, ledgerCode, monthlyQuery, 
@@ -34,6 +35,8 @@ export const getDisplayReport =({reportName, pathname, transProcessor, customers
 
     }else if (['fs'].includes(reportName.split('-')[0])){ 
         result = getFinancialStatementForDisplay({reportName,  transProcessor, coaStructure, dateForm, user});
+    }else if (reportName === "receipts-and-payments"){ 
+        result = getReceiptsAndPaymentsForDisplay(({dateForm, reportName,  transProcessor, query:viewTransId}));
     }else if (reportName === "recorded-transactions"){ 
         result = getRecordedTransactionsForDisplay(({dateForm, reportName,  transProcessor, query:viewTransId}));
         //console.log(result)

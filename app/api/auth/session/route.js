@@ -4,13 +4,7 @@ import cookie from "cookie";
 import jwt from "jsonwebtoken";
 
 
-const users = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john.doe@example.com",
-    },
-  ];
+
   // JWT secret
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 

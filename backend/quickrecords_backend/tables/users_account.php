@@ -37,14 +37,15 @@ function createUsersAccount ($tableName){
 
 // admin_usersaccount || demo_usersaccount
 //This account is for demo users. TABLE AND DATA TO BE CREATED FOR NEW DATABASE
+function insertAdminData (){
+    return "INSERT INTO admin_usersaccount (userId, companyId, companyDomain, firstname, lastname, email, secret) VALUES
+	('ADMIN@sunday.adegboye', 1, 'ADMIN', 'Sunday', 'Adegboye', 'ozitechstudio@gmail.com', 'abcd1234'),
+    ('DEMO@sunday.adegboye', 2, 'DEMO', 'Sunday', 'Adegboye', 'ozitechstudio@gmail.com', 'abcd1234')";
+};
+
 function insertDemoData (){
     return "INSERT INTO demo_usersaccount (userId, companyId, companyDomain, firstname, lastname, email, secret) VALUES
 	('ADMIN@sunday.adegboye', 1, 'ADMIN', 'Sunday', 'Adegboye', 'ozitechstudio@gmail.com', 'abcd1234'),
     ('DEMO@sunday.adegboye', 2, 'DEMO', 'Sunday', 'Adegboye', 'ozitechstudio@gmail.com', 'abcd1234')";
 };
 
-function insertAdminData (){
-    return "INSERT INTO admin_usersaccount (userId, companyId, companyDomain, firstname, lastname, email, secret) VALUES
-	('ADMIN@sunday.adegboye', 1, 'ADMIN', 'Sunday', 'Adegboye', 'ozitechstudio@gmail.com', 'abcd1234'),
-    ('DEMO@sunday.adegboye', 2, 'DEMO', 'Sunday', 'Adegboye', 'ozitechstudio@gmail.com', 'abcd1234')";
-};

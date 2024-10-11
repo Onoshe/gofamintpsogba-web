@@ -22,7 +22,6 @@ const CreatePersonalAccount = ({ handleUpload, useUploadedForm, setUploadedForm,
     const [selectedOption, setSelectedOption] = React.useState({});
     const [group, setGroup] = React.useState("NEW");
     
-    console.log(formData)
     const handleGetFileExtension=()=>{
       return getFileExtension(file);
     }
@@ -36,12 +35,12 @@ const CreatePersonalAccount = ({ handleUpload, useUploadedForm, setUploadedForm,
     const personalAcctGroups =  accountGroups?.length? accountGroups : []; //[{ value: 'SUPPLIERS', label: 'SUPPLIERS' }];
    
   const  readData = async (file)=>{
+      //Read and display the data
       await readSpreadSheetFile(file).then((res)=>{
         const rows = aoaToObj(res);
-        //console.log(res)
         const rowKeys = Object.keys(rows[0]);
         const header = rowKeys.map((key)=> { return {title:key}});
-        handleDispatchPost('setTable', {show:true, rows, rowKeys, header})
+       handleDispatchPost('setTable', {show:true, rows, rowKeys, header})
       })
     } 
     

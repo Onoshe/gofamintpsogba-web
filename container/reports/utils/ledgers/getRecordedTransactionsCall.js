@@ -1,7 +1,10 @@
 import { sortArrayByKey } from "@/lib/sort/sortArrayByKey";
 
+
 export const getRecordedTransactionsCall =(transactions, dateForm, coaStructure)=>{
 
+  //getReceiptsAndPayment(transactions, dateForm, coaStructure);
+  //console.log(transactions)
     //return
     const transWithinDate = [];
     let recordedTransObj = {};

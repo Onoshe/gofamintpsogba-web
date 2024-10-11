@@ -13,7 +13,8 @@ const ChangePassword = ({viewPwd, handleViewPwd, goToPage, form, handleOnChange,
     
     const searchParams = useSearchParams();
 
-    const handleResetPassword =()=>{
+    const handleResetPassword =(e)=>{
+        e.preventDefault();
         const userId = searchParams.get('u');
         if(userId){
             resetPasswordHandler({...form, userName:userId}, setAlert, setModalAlert, setModalAlertCall);
@@ -31,7 +32,7 @@ const ChangePassword = ({viewPwd, handleViewPwd, goToPage, form, handleOnChange,
             title="Change Password"
             details="Enter your new password and the OPT that was sent to you. Check your inbox or spam messages for the OPT"
         >  
-         <div className='flex flex-col gap-3 w-full'>
+         <form className='flex flex-col gap-3 w-full' onSubmit={handleResetPassword}>
                 {resendOpt && <p className='bg-green-200 py-3 px-8 text-center rounded-md text-green-700'>OTP has been re-sent successfully</p>}
                 <InputLabel2
                     form={form}
@@ -63,27 +64,26 @@ const ChangePassword = ({viewPwd, handleViewPwd, goToPage, form, handleOnChange,
                 onClick={handleResendOpt}>Resend</span></p>
              
                 <div className='flex w-full flex-col sm:flex-row md:flex-row items-center mt-6 space-y-5 md:space-y-0'>
-                    <p className='bg-[#FFA900] hover:bg-[#fbc049]  active:bg-[#af9259] w-full items-center justify-center py-3 px-5 rounded-md cursor-pointer flex flex-1 mr-2 font-bold'
-                          onClick={handleResetPassword}>
-                            Reset password
-                    </p>
+                    <input className='bg-[#FFA900] hover:bg-[#fbc049]  active:bg-[#af9259] w-full items-center justify-center py-3 px-5 rounded-md cursor-pointer flex flex-1 mr-2 font-bold'
+                           value="Reset password" type="submit"/>
+                    
                     <Link href={"/"} className='flex-1 pl-3' onClick={()=>setShowBlind({show:true})}>
                         <p className='flex text-white w-fit cursor-pointer hover:text-blue-100 active:text-blue-200 whitespace-nowrap'
                             onClick={goBack}>Go back</p>
                     </Link>
                 </div>
-            </div>
+            </form>
             <div className='hidden'>
                 <p className='mt-5 w-full justify-center items-center flex text-white font-bold'>or</p>
                 <div className='w-full justify-center flex items-center text-white mt-10 mb-5'>
                     <p className='cursor-pointer bg-white py-3 px-8 rounded-md hover:bg-blue-100 active:bg-blue-200 text-gray-600'>Sign in with Google</p>
                 </div>
             </div>
-            <Link href={"/"} onClick={()=>setShowBlind({show:true})}>
+            <div onClick={()=>setShowBlind({show:true})}>
                 <div className='w-full justify-center flex items-center text-white mt-10 mb-5'>
-                    <p>Already have an account? <span className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'>Login</span></p>
+                    <div>Already have an account? <Link href={"/"} className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'>Login</Link></div>
                 </div>
-            </Link>
+            </div>
         </Card>
     </div>
   )

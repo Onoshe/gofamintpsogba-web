@@ -10,8 +10,6 @@ import { CompanyLogoUpload } from './components/CompanyLogoUpload';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useStoreHeader from '@/context/storeHeader';
-import DashboardCard from './components/reusableComponents/DashboardCard';
-import TransactionLock from './components/homeComponents/TransactionLock';
 import UpperDashboard from './components/homeComponents/UpperDashboard';
 import { getSubscriptionHistory } from './components/utils/getSubscriptionHistory';
 import AuditedYearLock from './components/homeComponents/AuditedYearLock';

@@ -20,13 +20,12 @@ export const getUploadSampleFile =()=>{
     const dataGuide = [
         ["Upload Sample Guide"],
         [""],
-
         ["1. The data file must have the following columns as the header: type,  title,  accountCode,  firstname,  lastname,  othernames,  dob,  email,  phoneNo,  accountGroup, residentialAddress,  formNo,  position,  nextContactPersonName,  nextContactPersonPhoneNo,  nextContactPersonEmail,  companyName,  companyEmail,  companyPhoneNo,  businessType,  region,  country,  state,  zip,  registeredDate,  info"],
         ["2. The header must be the first row in the data file and must not be changed."],
         ["3. The 'type' is the type of client, either Company or Individual"],
         ["4. The 'title' should either be Mr, Mrs or Miss"],
         ["5. The 'dob' column is the date of birth. The format is yyyy-mm-dd. Eg, 1994-05-07. Please note that you may need to set your excel number format to 'text' for it to accept this format."],
-        ["6. AccountGroup is used to group or categorise the various personal accounts"]
+        ["6. AccountGroup is used to group or categorise the various personal accounts"],
         ["7. The 'registeredDate' is the date when the client account was created. The date format should also be yyyy-mm-dd."],
         ["8. The maximum characters for account accountCode is 7. E.g, 0000001 or 1234567"],
         ["9. All the columns for client can be filled, but the minumum required columns for any client are:  type,  title,  accountCode,  firstname,  lastname"],

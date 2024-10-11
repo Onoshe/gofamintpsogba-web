@@ -1,5 +1,4 @@
 import * as bcrypt from "bcryptjs";
-import { validateInputs } from "./validateInputs";
 import { getRequest } from "@/lib/apiRequest/getRequest";
 import { postRequest } from "@/lib/apiRequest/postRequest";
 import { dateFmtISO } from "@/lib/date/dateFormats";
@@ -50,4 +49,4 @@ function updateResetPassword(user, domain){
 
 
 
-export {resendOtpHandler}
+//export {resendOtpHandler}

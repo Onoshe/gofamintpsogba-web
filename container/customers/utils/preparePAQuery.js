@@ -84,7 +84,7 @@ export const preparePAQuery =(form, user, personalAcct) =>{
         othernames, 
         dob, 
         email,
-        form?.accountGroup?.toUpperCase() || null, 
+        form?.accountGroup?.toUpperCase() || "GENERAL", 
         phoneNo, 
         residentialAddress, 
         formNo, 

@@ -61,11 +61,11 @@ const Login = ({viewPwd, handleViewPwd, form,loading, handleOnChange, handleLogi
                     <p className='cursor-pointer bg-white py-3 px-8 rounded-md hover:bg-blue-100 active:bg-blue-200 text-gray-600'>Sign in with Google</p>
                 </div>
             </div>
-            <Link href={"/register"} onClick={()=>setShowBlind({show:true})}>
+            <div onClick={()=>setShowBlind({show:true})}>
                 <div className='w-full justify-center flex items-center text-white mt-10 mb-5'>
-                    <p>{"Don't have an account? "} <span className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'>Register</span></p>
+                    <div>{"Don't have an account? "} <Link href={"/register"} className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'>Register</Link></div>
                 </div>
-            </Link>
+            </div>
         </Card>
     </div>
   )

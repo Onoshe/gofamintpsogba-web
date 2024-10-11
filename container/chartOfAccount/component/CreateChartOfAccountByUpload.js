@@ -17,6 +17,7 @@ import { getUploadSampleFile } from '../utils/getUploadSampleFile';
 const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccounts, coaStructure,user, runDispatchClientDataCall, handleInfoMsg, setShowBlind,}) => {
     const {isDropped, isDragging, selected,  uploadedData, resetFileUploadCount, closeTable, file, infoMsg, table} = stateCreate;
     const [postError, setPostError] = useState({msg:'', error:false});
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleUpload =()=>{
     }
@@ -29,8 +30,10 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
       return getFileExtension(file);
     }
 
-    const handleSubmit =()=>{
-      handleSubmitUpload({formInput:table.rows, setInfoMsg:setPostError, coaStructure, dispatchCreate,user, runDispatchClientDataCall, handleInfoMsg, setShowBlind})
+    const handleSubmit = ()=>{
+      setIsLoading(true);
+      handleSubmitUpload({formInput:table.rows, setInfoMsg:setPostError, coaStructure, dispatchCreate,user, runDispatchClientDataCall, handleInfoMsg, 
+        setShowBlind, setIsLoading})
     }
     
     React.useEffect(()=>{
@@ -134,7 +137,7 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
           
           <div className='fixed bottom-0 bg-blue-50 w-full mt-100'>
               <div className='flex flex-row gap-4 p-4 '>
-                    <input type='submit' className="btn btn-info px-10" value="Create" 
+                    <input type='submit' className={`btn  px-10  ${isLoading? 'btn-disabled' : 'btn-info'}`} value="Create" 
                       onClick={handleSubmit}/>                
               </div>
           </div> 

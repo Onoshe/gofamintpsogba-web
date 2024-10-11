@@ -29,6 +29,7 @@ const accountant = [
   //{name:'transactions-listing', title:'Transactions-listing', mainReport:'TRANSLISTING', reportGroup:'Accountant'},
   {name:'fs-income-statement', title:'Income Statement', mainReport:'INCOMESTATEMENT', reportGroup:'Accountant'},
   {name:'fs-balance-sheet', title:'Balance Sheet', mainReport:'BALANCESHEET', reportGroup:'Accountant'},
+  {name:'receipts-and-payments', title:'Receipts & Payments', mainReport:'RECEIPTSANDPAYMENTS', reportGroup:'Accountant'},
   {name:'recorded-transactions', title:'Recorded Transactions', mainReport:'RECORDEDTRANSACTIONS', reportGroup:'Accountant'},
   //{name:'fs-balance-sheet-details', title:'Balance Sheet', mainReport:'BALANCESHEETDETAILS'},
   

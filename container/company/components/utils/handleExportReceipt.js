@@ -21,7 +21,6 @@ export const handleExportReceipt =({quickRecordsLogo, paid='PAID', pdfData})=>{
       doc.addImage(quickRecordsLogo, 'JPEG', 10, 10, 55, 25)
     }; 
 
-
    //Add PAID Watermark
    const isPaid = paid?.toUpperCase() === "PAID";
    const isProForma = paid?.toUpperCase()?.includes("PRO");
@@ -59,7 +58,7 @@ export const handleExportReceipt =({quickRecordsLogo, paid='PAID', pdfData})=>{
     doc.setFont("normal", "italic");
     doc.setFontSize(11);
     doc.setTextColor("dodgerblue");
-    doc.text(pdfData.logoText, 15, 54, null);
+    doc.text(pdfData.logoText, 15, 45, null);
 
     doc.autoTable({
         theme: 'plain', // Removes all stripes and borders

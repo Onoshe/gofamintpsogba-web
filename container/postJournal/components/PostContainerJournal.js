@@ -16,8 +16,8 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
   recordTransaction, dispatchTranSheetMultiEntryReset, router, transSheet, setTransSheet, postError, setPostError, toastNotify}) => {
   //const [transSheet, setTransSheet] = useState([{debitCredit:1, date:"", reference:''}, {debitCredit:2}]);
   const [netAmount, setNetAmount] = useState('Total');
-  const [showTransView, setShowTransView] = useState(true);
-  const [showBankBalances, setShowBankBalances] = useState(true);
+  const [showTransView, setShowTransView] = useState(false);
+  const [showBankBalances, setShowBankBalances] = useState(false);
   const [selectedDueDate, setSelectedDueDate] = React.useState({value:30, label:'Select'});
 
   //console.log(recordTransaction)
@@ -112,7 +112,7 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
   return (
     <>
     <div className={`flex-row flex gap-2 flex-wrap bg-gray-200 mx-3 pb-2`}>
-      <div className={`py-4 px-8 pb-0  flex-row gap-2 flex `}>
+      <div className={`py-4 px-8 pb-0  flex-row gap-2 hidden sm:flex `}>
           <input type='checkbox' className='size-4 cursor-pointer checkbox checkbox-success' checked={showBankBalances} onChange={()=>setShowBankBalances(!showBankBalances)}/>
           <p className='text-blue-800'>Show Bank balances</p>
       </div>
@@ -132,8 +132,8 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
     <div className={`px-9 pb-2 flex flex-row text-red-800 ${recordTransaction?.editTran? '' : 'hidden'}`}>
           <p className='font-bold'>Edit:  <span className='pl-2'>Transaction {recordTransaction?.editDetails?.transactionNo}; Reference: {recordTransaction?.editDetails?.reference}</span></p>
     </div>
-    <div className='py-4 flex items-center justify-center pr-6'>
-        <div className='shadow-lg px-3 overflow-y-auto m-6 mt-0 xl:w-fit'>
+    <div className='py-4 flex items-center justify-center'>
+        <div className='shadow-lg overflow-y-auto m-3 px-2 mt-0 xl:w-fit'>
             <TransactionRow hideTitle={false}
               handleAddRemoveRow={handleAddRemoveRow}
               index={0}

@@ -15,7 +15,11 @@ export const handleCreateClient = async (form, alert, setAlert, handleRevalidate
     const requiredFlds = [
         'companyName', 'companyDomain', 'address', 'email', 'contactPersonFirstName', 'contactPersonLastName', 
         'contactPersonPhoneNo', 'businessType', 'packagePlan', 'passcode', 'passcodeSlug'];
-
+    
+    if(form.companyDomain.split(" ").length > 1){
+        setAlert({...alert, msg:'Company domain cannot have a space!', type:'error', show:true});
+        return isError
+    } 
     const requiredEmpty = getEmptyField (form, requiredFlds);
     if(requiredEmpty){
             setAlert({...alert, msg:'Please enter '+requiredEmpty+". All fields are required!", type:'error', show:true});
@@ -25,20 +29,12 @@ export const handleCreateClient = async (form, alert, setAlert, handleRevalidate
             if(!passcodeRes?.ok){
                 setAlert({...alert, msgTitle:'Incorrect passcode', msg:'', type:'error', show:true});
             }else{
-                const {url, body} = createClientQuery(form, "INSERT_NEW_CLIENT"); //"INSERT_NEW_CLIENT"
-                //console.log(url, body)
-                
-                //const urlLink = getLinkAdminCreateClient({form}); 
-                //const user = await getRequest(urlLink).then((res)=> res);
-                
+                const {url, body} = createClientQuery(form, "INSERT_NEW_CLIENT"); 
                 const user =  await postRequest(url, body).then((res)=> res);
-                //console.log(body, form, user)
-                //return isError
-
-
                 if(user?.data?.length){
                     setAlert({...alert, msg:'', msgTitle:"Client with '"+form.companyDomain+"' domain already exist", type:'error', show:true});
-                }else{
+                }else{  //act:  INSERT_NEW_CLIENT
+                   //return console.log(url, body)
                    const resData =  await postRequest(url, body)
                         .then((res)=> {
                             //console.log(res)
@@ -66,8 +62,6 @@ export const handleCreateClient = async (form, alert, setAlert, handleRevalidate
                         */
                         });
                     if(resData?.url){
-                        //Auto create client Tables
-                        //console.log(resData)
                         await patchRequest(resData.url, resData.body)
                         .then((res)=> {
                             setAlert({...alert, msg:'', msgTitle:"Client with domain name '"+resData.body.domain+"' and tables created successfully", type:'success', show:true});

@@ -14,6 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { handleSubmitMultiAccts } from './utils/handleSubmitMultiAccts';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 
 const Customers = ({ssUser}) => {
@@ -72,8 +73,11 @@ const Customers = ({ssUser}) => {
   }
   const handleClickCell =(el)=>{     
       if(el?.row?.createdBy !== "DEMO"){
-        //console.log()
-        handleClickRow({el, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt});
+        //return console.log({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row})
+        const result = getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row});
+        if(result.permit){
+          handleClickRow({el, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt});
+        }else{notify("error", result.msg)}
       }
   }
 
@@ -106,7 +110,7 @@ const Customers = ({ssUser}) => {
   }
  },[searchValue, customers]);
 
- //console.log(uploadedForm.rows)
+
   React.useEffect(()=>{
     if(uploadedForm.show && uploadedForm.rows){
       setUploadInfo({msg:'Form uploaded successfully', error:false});
@@ -143,22 +147,22 @@ const Customers = ({ssUser}) => {
           personalAcctType="Customers"
        />
       :<CreatePersonalAccount 
-        formData={formInput}
-        setFormData={setFormInput}
-        handleSubmit={handleSubmitFunction}
-        handleUpload={handleUpload}
-        personalAcctType="CUSTOMERS"
-        infoMsgByEntry={infoMsg}
-        setInfoMsgByEntry={(e)=>setInfoMsg(e)}
-        useUploadedForm
-        setUploadedForm={e=>setUploadedForm(e)}
-        uploadInfo={uploadInfo}
-        editForm={editForm}
-        handleInfoMsg={handleInfoMsg}
-        handleCancel={()=>setActiveTab('DISPLAY')}
-        showCreateBtn={!uploadInfo?.error}
-        handleCreateMultiPersonalAccts={handleCreateMultiPersonalAccts}
-        accountGroups={accountGroups}
+          formData={formInput}
+          setFormData={setFormInput}
+          handleSubmit={handleSubmitFunction}
+          handleUpload={handleUpload}
+          personalAcctType="CUSTOMERS"
+          infoMsgByEntry={infoMsg}
+          setInfoMsgByEntry={(e)=>setInfoMsg(e)}
+          useUploadedForm
+          setUploadedForm={e=>setUploadedForm(e)}
+          uploadInfo={uploadInfo}
+          editForm={editForm}
+          handleInfoMsg={handleInfoMsg}
+          handleCancel={()=>setActiveTab('DISPLAY')}
+          showCreateBtn={!uploadInfo?.error}
+          handleCreateMultiPersonalAccts={handleCreateMultiPersonalAccts}
+          accountGroups={accountGroups}
       />
      } 
 

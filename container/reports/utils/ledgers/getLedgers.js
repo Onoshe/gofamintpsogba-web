@@ -1,6 +1,7 @@
 import { calculateCumBalanceArray } from "./calculateBalances";
 
 export function getTrialBalanceAcct(processedLedgers){
+     //console.log(processedLedgers)
     //const {processedLedgers} = this.processTransactions();
     let values = Object.values(processedLedgers);
     values = values.map((el)=> {

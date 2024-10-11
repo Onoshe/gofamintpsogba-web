@@ -1,0 +1,2 @@
+id,userId,fullName,email,companyDomain,activity,activityDescription,activityDate,createdAt,inactive,deleted
+1,DEMO@sunday.adegboye,"Sunday Adegboye",ozitechstudio@gmail.com,demo,LOGIN,"User login",2024-09-22T21:21:14.737Z,2024-09-22T21:21:14.737Z,0,0

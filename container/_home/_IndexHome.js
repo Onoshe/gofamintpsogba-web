@@ -24,7 +24,7 @@ import { loginHandler } from './utils/loginHandler';
 import ChangePassword from './changepassword/ChangePassword';
 import { useAuthCustom } from "@/lib/hooks/useAuthCustom";
 import useOnline from '@/lib/hooks/useOnline';
-import NetworkError from '@/components/Errors/NetworkError';
+import { resetPwdOTPQuery } from './utils/requests';
 
 const IndexHome = ({ssUser}) => {
     const pathname = usePathname();
@@ -50,9 +50,10 @@ const IndexHome = ({ssUser}) => {
     const handleForgotPassword = async ()=>{
         forgotPasswordHandler(form, setAlert, setModalAlert, setModalAlertCall);
     }
-    const handleResendOpt =()=>{
-        setResendOpt(true);
-        dispatchForm({...form, password:'', otp:''})
+    const handleResendOpt = async (userId)=>{
+      await resetPwdOTPQuery({userId,setResendOpt, form, dispatchForm, setAlert});
+        //setResendOpt(true);
+        //dispatchForm({...form, password:'', otp:''});
     };
 
 
@@ -94,9 +95,8 @@ const IndexHome = ({ssUser}) => {
         setModalAlertCall({showModal:false, act:''})
     }
    }
-   const handelRegister=()=>{
-    //router.push('/');
-    //setModalAlertCall({showModal:false, act:'GOTOLOGIN'})
+   const handelRegister=(e)=>{
+    e.preventDefault();
      registerHandler(form, dispatchResetForm, alert, setAlert, setModalAlert, setModalAlertCall);
    }
    
@@ -138,13 +138,14 @@ const IndexHome = ({ssUser}) => {
     }
 
   React.useEffect(()=>{
+    //Auto go to dashboard id companyId is in the url
     if(status === "authenticated"){
         postActivity(session.user, activities.LOGIN, "User login");
 
         const domain = session?.user?.companyId;
         if(domain){
-            goToPage("/"+domain);
-            dispatchActivePage({name:'', title:"Dashboard"});
+           // goToPage("/"+domain);
+           // dispatchActivePage({name:'', title:"Dashboard"});
         }
     }
     

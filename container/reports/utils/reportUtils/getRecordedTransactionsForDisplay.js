@@ -9,6 +9,7 @@ const keysRecordTransSummary = ["date", "account", "accountSub", "description", 
     const dateFormFmt = dateForm?.defaultDate? getStartAndEndDate("THIS-MONTH") : dateForm;
     const recordedTrans = transProcessor.getRecordedTransactions(dateFormFmt);
 
+    //console.log(recordedTrans)
     const startDateFmt = new Date(dateFormFmt?.startDate).toDateString();
     const endDateFmt = new Date(dateFormFmt?.endDate).toDateString();
     const date = 'Report from '+startDateFmt+" to "+endDateFmt;

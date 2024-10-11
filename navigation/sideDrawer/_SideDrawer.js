@@ -80,12 +80,13 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
             <CountiXpressLogo
                 width={149} 
                 height={50}
-                className={' p-2 bg-sky-300 mt-3 lg:hidden'}
+                includeClass
+                className={'p-2 bg-sky-300 mt-3 lg:hidden'}
               />
               <p className='text-[10px] mb-[5px] text-[yellow] lg:hidden'>...simplifying your financial records</p>
           </div>
           <div className={``}>
-            <div className='pb-5 px-2 mt-3 h-[80vh] overflow-y-auto'>
+            <div className='pb-5 px-2 mt-3 h-[75vh] overflow-y-auto'>
               <Link href={`/${coy}`} 
                 className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm  flex flex-row hover:text-[blue] ${isDashboardPage? "bg-sky-300 text-[blue]" : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
                 onClick={()=>handleNav({name:coy, title:'Dashboard'})}
@@ -108,11 +109,11 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
               }
             </div>
             <div
-              className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 cursor-pointer flex flex-row text-gray-700 hover:text-red-500 hover:bg-sky-300 rounded-md p-2 gap-1 items-center`}
+              className={`${showSidebarTitle? 'w-[250px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-4 flex flex-row text-gray-700 bg-gray-400   p-2 gap-1 items-center`}
               onClick={()=>handleLogout()}
               data-tip={'Logout'}>
-              <BiLogOutCircle color='red' className='rotate-180 text-[24px] mr-4'/> 
-              {showSidebarTitle && <span>Logout</span>}
+              <BiLogOutCircle color='red' className='rotate-180 text-[24px] mr-4  cursor-pointer'/> 
+              {showSidebarTitle && <span className=" cursor-pointer">Logout</span>}
             </div> 
         </div>
     </div>

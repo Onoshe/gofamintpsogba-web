@@ -43,7 +43,7 @@ const HeaderBar = ({chartOfAccounts,handleSelAccount, listOfAccounts, setListOfA
                 products={products}
                 />
             <div className='flex flex-row  text-blue-600  hover:tooltip-open tooltip tooltip-top' data-tip={'Report date'}>
-                <p className="px-2">Report as at </p>
+                <p className="px-2">Reports as at </p>
                 <input type='date' className='bg-blue-400  rounded-sm px-1 border border-white cursor-pointer text-white w-fit'
                     onChange={onChangeReportDate} value={reportDate}/>
                 

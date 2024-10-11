@@ -6,7 +6,7 @@
         //echo json_encode(['ok' => false, 'table' => $table, 'tables' => array_values($tableNames), 'queries' => $insertQueries, 'create'=> $createQueries]);
         //return;
         $errorMsg = ['ok' => true];
-        $tablesUpperCase =  array_keys($tableNames);
+        $tablesUpperCase =  array_keys($tableNames); //$tableNames = ["COASTRUCTURE" => $domain."_coastructure", ...]
         $tableNamesLowercase =  array_values($tableNames);
 
         $createdTables = "";
@@ -20,8 +20,7 @@
         $deletedExistTable = ""; //Turn it to 1 and turn $createTableIfNoExist to "" to deleted existed tables. Reverse is the case for insert
         $createTableIfNoExist = 1;
 
-        //echo json_encode(["tb"=> $tableNames, 'q'=> $createQueries]);
-        //return;
+
         if(isset($table)){
             //Insert client data
             $insertClRes =  getInsertClientQuery($conn);
@@ -44,7 +43,7 @@
                                     $existTables =  "$existTables, $tableNm";
                                 }
                                 
-                        }else{ //Table does not exist
+                        }else{ //Table does not exist, then create
                             if($createTableIfNoExist){
                                 if($conn->query($createQuery) === TRUE) {
                                     $resetAutoIncrementQuery = "ALTER TABLE $tableNm AUTO_INCREMENT = 1"; //Reset auto number
@@ -54,7 +53,7 @@
                                     $createdTablesError =  "$createdTablesError, $tableNm -$conn->error";
                                 }
                             }
-                            //Insert data to the tables if domain is demo
+                            //Insert coastructure table data to all clients and other data if domain is demo
                             if(isset($insertQueries[$tab])){
                                 $insertQuery = $insertQueries[$tab];
                                 if($tab === "COASTRUCTURE" || strtolower($domain) === "demo"){
@@ -147,18 +146,18 @@ function createAndInsertNewClientData($conn, $tableNm, $createQuery, $tab,$dataI
 
                 
                 if($act === "INSERT_NEW_CLIENT" && isset($requestBody['fields']) && 
-                isset($requestBody['values']) && isset($requestBody['types'])){
-                // Extract the table, fields, values, types, and act from the request body
-                $fields = array_map('htmlspecialchars', $requestBody['fields'], array_fill(0, count($requestBody['fields']), ENT_QUOTES));
-                $values = $requestBody['values'];
-                $types = $requestBody['types'];
+                    isset($requestBody['values']) && isset($requestBody['types'])){
+                    // Extract the table, fields, values, types, and act from the request body
+                    $fields = array_map('htmlspecialchars', $requestBody['fields'], array_fill(0, count($requestBody['fields']), ENT_QUOTES));
+                    $values = $requestBody['values'];
+                    $types = $requestBody['types'];
 
-                // Type casting
-                $fields = array_map('strval', $fields);
+                    // Type casting
+                    $fields = array_map('strval', $fields);
 
 
-                $fieldPlaceholders = implode(', ', array_fill(0, count($fields), '?'));
-                $query = "INSERT INTO $table (" . implode(', ', $fields) . ") VALUES (" . $fieldPlaceholders . ")";
+                    $fieldPlaceholders = implode(', ', array_fill(0, count($fields), '?'));
+                    $query = "INSERT INTO $table (" . implode(', ', $fields) . ") VALUES (" . $fieldPlaceholders . ")";
                 
 
                 // Prepare the statement

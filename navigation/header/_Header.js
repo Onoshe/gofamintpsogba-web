@@ -72,7 +72,7 @@ const Header = ({ssUser}) => {
     const currentActivePage = navs?.find((dt)=> "/"+coyId+"/"+dt.name == "/"+coyId+"/"+domainAndPage[1]);
     const dashboardPage = "/"+coyId === pathname;
 
-    //console.log(currentActivePage, activePage)
+    //console.log(user)
     //Causing multiple rendering on scroll
     if(dashboardPage){
       if(activePage.name !=='dashboard'){
@@ -86,10 +86,6 @@ const Header = ({ssUser}) => {
     //console.log([coyId, coy])
   },[coy, session]);
 
-
-  if(!isOnline && status === "authenticated"){
-    //return <NetworkError show={true}/>
-  }
 
   React.useEffect(()=>{
     //Return to Home if companyId on url is not the session.user.companyId or NOT in allowedPaths

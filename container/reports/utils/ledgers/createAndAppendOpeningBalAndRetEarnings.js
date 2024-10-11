@@ -1,5 +1,3 @@
-
-
 /**************** 
 *    1. CREATE AND APPEND OPENING BALANCES TO INDIVIDUAL LEDGERS TRANS ARRAY  
 *    2. CREATE RETAINED EARNINGS LEDGER IF NOT EXIST, ADD BALANCES (OPENINGBAL, ETC) AND CREATE & APPEND OPENING BALANCE ON TRANS
@@ -12,30 +10,35 @@ export function createAndAppendOpeningBalAndRetEarnings({coaStructure, chartOfAc
     let retainedEarningsTypeCode = chartOfAccounts?.find((dt)=> dt.typeCode == controlAcctsCode.retainedEarnings)?.typeCode;
         incomeClassTypeCode = parseInt(incomeClassTypeCode);
 
-
-
-    //Set retained earnings if not exist
-    if (accountType === "GENLED" && !ledgers[retainedEarningsCode]) {
-        ledgers[retainedEarningsCode] = {
-            name: 'Retained Earnings',
-            accountCode: retainedEarningsCode,
-            debit: 0,
-            credit:0,
-            openingBal:0,
-            closingBal:0,
-            typeCode:retainedEarningsTypeCode,
-            trans: []
-        };
+        
+    //Set Retained Earnings if not exist
+    //if (ledgers.accountType === "GENLED") {   
+    if (accountType === "GENLED") {   
+        if(!ledgers[retainedEarningsCode]?.name){
+            ledgers[retainedEarningsCode] = {
+                name: 'Retained Earnings',
+                accountType:"GENLED",
+                accountCode: retainedEarningsCode,
+                debit: 0,
+                credit:0,
+                openingBal:0,
+                closingBal:0,
+                typeCode:retainedEarningsTypeCode,
+                trans: []
+            };
+        }
     }
 
     // Iterate through each ledger account
     for (let code in ledgers) {
         let ledger = ledgers[code];
         let openingBal = ledger.openingBal;
+        
 
         // Check typeCode to determine how to handle the opening balance
-        if (ledger.typeCode < incomeClassTypeCode || code.includes('C-') || code.includes('V-') || accountType === "PRODUCTS") { // For Balance sheet accounts and sub accounts
-            if (openingBal !== 0) {
+        if (parseInt(ledger.typeCode) < incomeClassTypeCode || code.includes('C-') || code.includes('V-') || accountType === "PRODUCTS") {
+            // For Balance Sheet accounts and Sub Accounts 
+            if (openingBal != 0) {
                 // Create the opening balance transaction
                 let isDebit = openingBal > 0;
                 ledger?.trans?.unshift({
@@ -80,6 +83,7 @@ export function createAndAppendOpeningBalAndRetEarnings({coaStructure, chartOfAc
     if(ledgers[retainedEarningsCode]?.name){
         const retainedEarningsLedger = ledgers[retainedEarningsCode]; 
         const openingBal = retainedEarningsLedger.openingBal;
+        let closingBal = retainedEarningsLedger.closingBal || 0;
         const openingBalDr = retainedEarningsLedger.openingBalDr;
         const openingBalCr = retainedEarningsLedger.openingBalCr;
         const openingDr = openingBal > 0;
@@ -89,27 +93,31 @@ export function createAndAppendOpeningBalAndRetEarnings({coaStructure, chartOfAc
             ...retainedEarningsLedger,
             openingBalDr: openingDr? openingBal : 0,
             openingBalCr: openingDr? 0 : openingBal,
-            closingBal:openingBal,
+            //closingBal:openingBal,
             //debit:openingDr? openingBal : 0,
             //credit:openingDr? 0 : openingBal,
         }
 
         //Create Opening Retained Earnings balance on the trans array
+        //Opening balance included in BS & sub ledgers trans array above should be filtered out
+        let isDebit = closingBal > 0;
+        const amount = closingBal; //isDebit? closingBal : openingBal; //Amount is being used for display in General Ledger
         ledgers[retainedEarningsCode].trans = [ 
             {
                 transactionDate:startDate,
                 accountCode: retainedEarningsCode,
                 accountName:"Retained Earnings",
-                entryType:openingDr? 'DR' : 'CR',
-                entryDimen: openingDr? 1 : -1,
-                amount: openingDr? openingBal : -openingBal,
-                balance: openingDr? openingBal : -openingBal,
+                entryType:isDebit? 'DR' : 'CR',
+                entryDimen: isDebit? 1 : -1,
+                amount: amount,
+                balance: amount,
                 description:'Opening balance',
-                debit:openingBalDr,
-                credit:openingBalCr,
+                [isDebit? 'debit' : 'credit']:amount,
                 name:'Opening balance',
                 typeCode:retainedEarningsLedger.typeCode
-            }, ...retainedEarningsLedger.trans];
+            },
+            ...retainedEarningsLedger.trans.filter((dt)=> dt.name !== "Opening balance")
+        ];
     }
     
     

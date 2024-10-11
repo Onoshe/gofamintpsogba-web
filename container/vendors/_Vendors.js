@@ -13,6 +13,7 @@ import { handleSubmit } from '../customers/utils/handleSubmit';
 import { handleClickRow } from '../customers/utils/handleTableActions';
 import { handleSubmitMultiAccts } from '../customers/utils/handleSubmitMultiAccts';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 
 const Vendors = ({ssUser}) => {
@@ -68,13 +69,17 @@ const Vendors = ({ssUser}) => {
   const handleUpload =(e)=>{
     console.log(e)
   }
-  const handleClickCell =(el)=>{     
-      if(el?.row?.createdBy !== "DEMO"){
-        //console.log()
-        handleClickRow({el, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt});
-      }
-  }
  
+  const handleClickCell =(el)=>{     
+    if(el?.row?.createdBy !== "DEMO"){
+      //return console.log({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row})
+      const result = getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row});
+      if(result.permit){
+        handleClickRow({el, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt});
+      }else{notify("error", result.msg)}
+    }
+}
+
   const handleInfoMsg = (type, msg)=>{
     notify(type, msg);
   }

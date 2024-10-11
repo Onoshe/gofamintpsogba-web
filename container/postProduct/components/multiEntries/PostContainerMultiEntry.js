@@ -95,16 +95,16 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
     <>
     <div className='w-full bg-gray-300 py-3 mt-0 text-blue-900 px-8 font-bold flex flex-row justify-between'>
       <p>Record Product <span className='text-blue-500'> {activeTab==="TAB1"? "Purchase" : activeTab==="TAB2"? "Sale" : "Adjustment"}</span></p>
-        <div className='cursor-pointer tooltip tooltip-left w-fit hover:tooltip-open' data-tip={'Posting guide'}
+        <div className='hidden sm:block cursor-pointer tooltip tooltip-left w-fit hover:tooltip-open' data-tip={'Posting guide'}
           onClick={()=>toggleShowCard(true)}>
           <BsInfoCircle size={20}/>
         </div>    
       
     </div>
-    <div className='flex flex-row items-baseline mt-1 xl:ml-10 gap-2 flex-wrap'>
+    <div className={`flex flex-row items-baseline mt-1 xl:ml-10 gap-2 flex-wrap`}>
       <TabsComponent
         activeTab={activeTab} setActiveTab={setActiveTab} transSheetReset={transSheetReset}/>
-      <div className='flex flex-row items-center justify-center w-fit ml-3  gap-2 hover:tooltip-open tooltip tooltip-right' data-tip={showBankBalances? 'Check to hide Cashbook balances':'Check to show Cashbook balances'}>
+      <div className='hidden sm:flex flex-row items-center justify-center w-fit ml-3  gap-2 hover:tooltip-open tooltip tooltip-right' data-tip={showBankBalances? 'Check to hide Cashbook balances':'Check to show Cashbook balances'}>
         <input type='checkbox' className='bg-white size-4' checked={showBankBalances} onChange={()=>setShowBankBalances(!showBankBalances)}/>
         <BsBank2 size={20} color='dodgerblue'/>
       </div>

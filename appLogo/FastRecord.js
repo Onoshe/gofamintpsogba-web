@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 
-const FastRecordLogo = ({className, width, height, dynamicPage, activePage, goToDashboard, dispatchActivePage, dispatchIsOpen, dispatchShowLoadingNavPage}) => {
+const FastRecordLogo = ({className, includeClass, width, height, dynamicPage, activePage, goToDashboard, dispatchActivePage, dispatchIsOpen, dispatchShowLoadingNavPage}) => {
   //const href= `/${dynamicPage}`;
   
   const goToDashboardPage =()=>{
@@ -30,7 +30,7 @@ const FastRecordLogo = ({className, width, height, dynamicPage, activePage, goTo
             priority={true}
             width={width? width : 100}
             height={30} 
-            className={`object-cover `}
+            className={`object-cover ${includeClass? className : ""}`}
         />
       </div>
   )

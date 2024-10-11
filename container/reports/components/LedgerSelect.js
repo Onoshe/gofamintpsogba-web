@@ -6,6 +6,8 @@ import { MdClose } from 'react-icons/md'
 function LedgerSelect({showLedgers, handleSelectedLedger, isReportPage,  handleCloseShowLedgers, processedLedgers, 
     genLedgerCodes, ledgerTitle}) {
 
+    const genLedgerCodesArr = genLedgerCodes.filter(code=> code !== "TOTAL");
+    
   const showPage = isReportPage? 'flex' : showLedgers? 'flex z-50' :'hidden';
   return (
     <div className={`fixed w-full bg-blue-100/70 pt-8 h-full justify-center  ${showPage}`} >
@@ -15,9 +17,9 @@ function LedgerSelect({showLedgers, handleSelectedLedger, isReportPage,  handleC
             />}
             <p className='font-bold text-center py-2'>{ledgerTitle}</p>
             <div className='h-[400px] overflow-y-auto bg-white p-3 min-w-[250px]'>
-                {genLedgerCodes?.map((code, i)=>{
+                {genLedgerCodesArr?.map((code, i)=>{
                 return(
-                    <p key={`${i}key`} className='cursor-pointer w-fit hover:text-blue-800 hover:font-bold'
+                    <p key={`${i}key`} className='cursor-pointer w-fit hover:text-[blue]'
                     onClick={()=>handleSelectedLedger(code)}>
                         {code} {processedLedgers[code].name}
                     </p>

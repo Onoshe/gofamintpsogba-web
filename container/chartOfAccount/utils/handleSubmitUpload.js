@@ -3,8 +3,7 @@ import { coaCreateQuery } from './coaQuery';
 
 
 
-const handleSubmitUpload = async ({formInput, user, coaStructure, runDispatchClientDataCall,handleInfoMsg, setShowBlind, dispatchCreate})=>{
-  
+const handleSubmitUpload = async ({formInput, user, coaStructure, runDispatchClientDataCall,handleInfoMsg, setShowBlind, setIsLoading, dispatchCreate})=>{
     for (let i = 0; i < formInput.length; i++) {
       const formData = formInput[i];
       const lastItem = formInput.length == i +1;
@@ -25,6 +24,7 @@ const handleSubmitUpload = async ({formInput, user, coaStructure, runDispatchCli
           
             const {url, body} = coaCreateQuery(form, user, "chartofaccount");
             await postRequest(url, body).then((res)=> {
+              setIsLoading(false);
               if(res?.ok){
                 if(lastItem){
                   runDispatchClientDataCall()

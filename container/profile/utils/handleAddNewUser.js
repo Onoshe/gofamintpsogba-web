@@ -11,7 +11,7 @@ import { generatePassword } from "@/lib/generator";
 
 export const handleAddNewUser= async(updateForm, session)=>{
     const user = session?.user;
-    //return console.log(user)
+
     let result = {};
     const pwdOk =  await verifyPassword(updateForm, user);
     const userName = updateForm.userId1.toLowerCase()+"."+updateForm.userId2.toLowerCase();

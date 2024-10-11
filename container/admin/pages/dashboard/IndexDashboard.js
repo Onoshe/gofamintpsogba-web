@@ -12,16 +12,19 @@ import { ClientsCard, ClientsTablesCard, ExistingUsers, ExistingUsersCard, Gener
 import { AccessCard } from './cards/DashboardAccess';
 import CreateUser from './tabs/CreateUser';
 import { getLinksAdmin } from '@/lib/apiRequest/urlLinks';
+import CreateAccount from './tabs/CreateAccount';
 
 
 
 
 const IndexDashboard = ({}) => {
-    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl} = getLinksAdmin();
+    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl, subscriptionsUrl, settingsUrl} = getLinksAdmin();
     const usersAccount = useSWRFetcher(usersAccountUrl);
     const clientsData = useSWRFetcher(clientsDataUr);
     const accessData = useSWRFetcher(accessDataUrl);
     const dbTables = useSWRFetcher(dbTablesUrl); //t must be a valid table in the db
+    //const dbSubscriptions = useSWRFetcher(subscriptionsUrl);
+    //const dbSettings = useSWRFetcher(settingsUrl);
     const access = useSWRFetcher(accessUrl);
     const {tabsArrHome, activeTabHome, dispatchActiveTabHome} = useStoreHome((state) => state);
 
@@ -61,6 +64,7 @@ const IndexDashboard = ({}) => {
     MANAGECLIENTS:<ManageClients clientsData={clientsDataFmt} handleRevalidate={handleRevalidate} clientTables={clientTables}/>,
     SQLQUERY:<SQLQuery clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     CREATECLIENT:<CreateClient clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
+    CREATEACCOUNT:<CreateAccount clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     CREATEUSER:<CreateUser clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     ACCESS:<Access clientsData={clientsDataFmt} handleRevalidate={handleRevalidate} access={access}/>,
  } 

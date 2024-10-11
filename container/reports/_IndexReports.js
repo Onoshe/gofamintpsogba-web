@@ -62,7 +62,7 @@ const IndexReports = ({ssUser}) => {
   const companyLogoFile = getCompanyLogo(settings);
   const windowDimen = useWindowDimensions();  
   
-// console.log(chartOfAccounts);
+
   // console.log(windowDimen)
   const handleReport =(report)=>{
       console.log(report);
@@ -262,7 +262,7 @@ const IndexReports = ({ssUser}) => {
               ledgerTitle={ledgerTitle}
           />
           :<Suspense>
-            <p className='px-3 pt-1 text-gray-600'><span className='underline'>Display Tab: </span> <span className=' text-blue-700'>{currentReportTab}</span></p>
+            <p className='px-3 pt-1 text-gray-600'><span className='underline font-[600]'>Tab: </span> <span className=' text-blue-700'>{currentReportTab}</span></p>
             <DynamicPageDisplay
               pathname={pathname}
               processedLedgers={processedLedgers}
@@ -294,6 +294,7 @@ const IndexReports = ({ssUser}) => {
                 notify={toastNotify}
                 runDispatchClientDataCall={runDispatchClientDataCall}
                 router={router}
+                transactions={transactions}
                 />
             </Suspense>
             }

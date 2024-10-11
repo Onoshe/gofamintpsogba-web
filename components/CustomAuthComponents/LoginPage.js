@@ -35,7 +35,7 @@ function LoginPageCustom({ssUser}) {
     if (result.success) {
       // Redirect to the dashboard or home page after successful login
       //router.push("/dashboard");
-      console.log(result)
+      //console.log(result)
     } else {
       setError(result.msg);
     }

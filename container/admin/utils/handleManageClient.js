@@ -26,7 +26,7 @@ export const handleManageClient = async (form, alert, setAlert, handleRevalidate
                         //console.log(bodyFmt)
                         
                         const coyTableExist = checkIfClientTableExist(clientTables, form.domain);
-                        console.log(url, bodyFmt)
+                        //console.log(url, bodyFmt)
                         if(coyTableExist){
                             await patchRequest(url, bodyFmt)
                             .then((res)=> {

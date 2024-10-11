@@ -1,5 +1,6 @@
 import { getHeadersTitle } from "@/container/reports/utils/ledgers/getHeaders"; 
 import { getStartAndEndDate } from "@/lib/dummyData/getStartAndEndDate";
+import { sortArrayByKey } from "@/lib/sort/sortArrayByKey";
 
 ////recordedTransArr
 
@@ -12,6 +13,7 @@ const keysRecordTransSummary = ["date", "account", "accountSub", "description", 
     const dateFormFmt = dateForm?.defaultDate? getStartAndEndDate("THIS-MONTH") : dateForm;
     const res = transProcessor.getRecordedTransactions(dateFormFmt);
 
+    //console.log(res)
     const startDateFmt = new Date(dateFormFmt?.startDate).toDateString();
     const endDateFmt = new Date(dateFormFmt?.endDate).toDateString();
     const date = 'Transactions from '+startDateFmt+" to "+endDateFmt;
@@ -30,7 +32,8 @@ const keysRecordTransSummary = ["date", "account", "accountSub", "description", 
     }
     const pdfData =  pdfDataFullData;
     let rowKeysShow = keysRecordTransSummary;
-    let rows = res.recordedTransArr;        
+    let rows = res.recordedTransArr; 
+    sortArrayByKey(rows, 'transId', 'ASC');       
 
     result =  {date, name:reportName, title:"Transactions Query", clickables:"ALL", rowKeysShow, rowHeaders:getHeadersTitle(rowKeysShow), rows, pdfData}
 

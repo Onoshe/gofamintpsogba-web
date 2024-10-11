@@ -74,7 +74,7 @@ const ChartOfAccount = ({ssUser}) => {
   };
   const coaStructureWithoutRetEarnings = coaStructure?.filter((dt)=> dt.name.toLowerCase() !== "retainedearnings");
   const coaAcct = mapChartOfAccountForDisplay(chartOfAccounts, coaStructure);
-  //console.log(coaAcct)
+  //console.log(chartOfAccounts, coaStructure)
 
   //console.log(formInput)
   const handleInfoMsg = (type, msg)=>{
@@ -132,13 +132,13 @@ const ChartOfAccount = ({ssUser}) => {
           {createType === "MANUAL" && 
             <TableWithPinnedView
               header={headersArr} 
-              rowKeys={['accountCode', 'accountName', 'accountType', 'description', 'addToDashboard', 'edit', 'delete']}
+              rowKeys={['accountCode', 'accountName', 'accountType', 'description', 'edit', 'delete']}
               rows={coaAcct}
               classNameTable={"overflow-x-auto max-h-[65vh] overflow-y-auto my-4 md:my-6"}
               classNameHeaderTR="bg-blue-50 cursor-pointer" 
               classNameRowsTR="border border-gray-200 hover:bg-blue-50"
               clickableHeader={true}
-              onClickHeader={(e)=>console.log(e)}
+              onClickHeader={(e)=>console.log()}
               clickableRowCell={true}
               clickableRowCellKeys ={['edit', 'delete']}
               onClickRowCell={handleClickRowFunction}

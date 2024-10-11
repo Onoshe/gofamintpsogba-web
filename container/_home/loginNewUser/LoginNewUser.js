@@ -53,11 +53,11 @@ const LoginNewUser = ({viewPwd, handleViewPwd, enterBtn,goBack,  handleForgotPas
                     <p className='cursor-pointer bg-white py-3 px-8 rounded-md hover:bg-blue-100 active:bg-blue-200 text-gray-600'>Sign in with Google</p>
                 </div>
             </div>
-            <Link href={"/"}>
+            <div>
                 <div className='w-full justify-center flex items-center text-white mt-10 mb-5'>
-                    <p>Already have an account? <span className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'>Login</span></p>
+                    <div>Already have an account? <Link href={"/"} className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'>Login</Link></div>
                 </div>
-            </Link>
+            </div>
         </Card>
     </div>
   )

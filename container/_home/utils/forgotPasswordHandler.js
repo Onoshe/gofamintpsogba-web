@@ -24,7 +24,10 @@ const  forgotPasswordHandler = async (form, setAlert, setModalAlert, setModalAle
                 if(user.data[0].email == form.email || user.data[0]?.recoveryEmail == form.email){
                     const {url, body, resetCode} = updateResetPassword(user.data[0], domain);
                     //return console.log(body)
-                    const mailHtml = getOTPEmailBody({OTP:resetCode, name:"Dear "+form.email, subject:"Password Reset Code"});
+                    const mailHtml = getOTPEmailBody({OTP:resetCode, name:"Dear: "+form.userName, 
+                        subject:"Password Reset Initiated on your Account",
+                        optMsg: "This OTP Is valid only for 15 mintues, If you haven't requested this OTP Contact us immediately!",
+                    });
                     const sendMailLink = getLinkClientServer().dev;
                     const mailBody = {
                         route:"SENDMAIL",
@@ -35,8 +38,8 @@ const  forgotPasswordHandler = async (form, setAlert, setModalAlert, setModalAle
                             mailBody:mailHtml
                         }
                     };
-                    console.log(sendMailLink, mailBody)
-                    await postRequest(sendMailLink, mailBody).then((res)=> console.log(res));
+                    //console.log(sendMailLink, mailBody)
+                    await postRequest(sendMailLink, mailBody);
                     await postRequest(url, body)
                     .then((res)=> {
                         //setAlert({...alert, msgTitle:'OTP sent successfully!', msg:'Check your inbox or spam messages for the code', type:'success', show:true});

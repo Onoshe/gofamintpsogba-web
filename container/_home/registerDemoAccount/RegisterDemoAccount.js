@@ -18,7 +18,7 @@ const RegisterDemoAccount = ({viewPwd, handleViewPwd, form, handleOnChange, hand
         <Card
             title="Register"
             details="Register a demo account to test the app"
-        >   <div className='flex flex-col gap-3 w-full'>
+        >   <form className='flex flex-col gap-3 w-full' onSubmit={handelRegister}>
                 <InputLabel
                     handleOnChange={handleOnChange}
                     icon1={person}
@@ -73,22 +73,22 @@ const RegisterDemoAccount = ({viewPwd, handleViewPwd, form, handleOnChange, hand
                 />
                 
                 <div className='flex w-full flex-col md:flex-row justify-center items-center space-y-5 md:space-y-0'>
-                    <p className='bg-[#FFA900] hover:bg-[#fbc049]  active:bg-[#af9259] w-full items-center justify-center py-3 px-5 rounded-md cursor-pointer flex flex-1 mr-2 font-bold max-w-96'
-                      onClick={handelRegister}>Register</p>
+                    <input className='bg-[#FFA900] hover:bg-[#fbc049]  active:bg-[#af9259] w-full items-center justify-center py-3 px-5 rounded-md cursor-pointer flex flex-1 mr-2 font-bold max-w-96'
+                       type="submit" value="Register"/>
                 </div>
-            </div>
+            </form>
             <div className='hidden'>
                 <p className='mt-5 w-full justify-center items-center flex text-white font-bold'>or</p>
                 <div className='w-full justify-center flex items-center text-white mt-10 mb-5'>
                     <p className='cursor-pointer bg-white py-3 px-8 rounded-md hover:bg-blue-100 active:bg-blue-200 text-gray-600'>Sign in with Google</p>
                 </div>
             </div>
-            <Link href={"/"}  onClick={()=>setShowBlind({show:true})}>
+            <div  onClick={()=>setShowBlind({show:true})}>
                 <div className='w-full justify-center flex items-center text-white mt-10 mb-5'>
-                    <p>Already have an account? <span className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'
-                      >Login</span></p>
+                    <div>Already have an account? <Link href={"/"} className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'
+                      >Login</Link></div>
                 </div>
-            </Link>
+            </div>
         </Card>
     </div>
   )

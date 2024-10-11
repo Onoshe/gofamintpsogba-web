@@ -78,7 +78,7 @@ export const ClientsCard = ({clientsData, handleRevalidate, activeTab}) => {
               <div className='flex justify-start mt-5'> 
                   <p className='bg-gray-200  active:bg-gray-100 hover:border-gray-500 hover:shadow-md cursor-pointer text-gray-800 py-2 px-5 w-fit border 
                       border-gray-400 rounded-md'
-                      onClick={()=>handleRefresh('DBTABLES')}>Refresh</p>
+                      onClick={()=>handleRevalidate('DBTABLES')}>Refresh</p>
               </div>
           </DashboardCard>
       

@@ -44,7 +44,7 @@ const IndexProfile = ({ssUser}) => {
   const [updateFormAddUser, setUpdateFormAddUser] = React.useState(updateFormAddUserDef);
   const [updateUserForm, setUpdateUserForm] = React.useState({role:"", nonActive:"", password:"", passwordDelete:"", passwordReset:""});
   let planLimit = getPlanLimit(subscriptions, generalSettings);
-  //console.log(users)
+  //console.log(generalSettings)
 
   const notify = (type, msg) => toast[type](msg, {
     position: "top-right",

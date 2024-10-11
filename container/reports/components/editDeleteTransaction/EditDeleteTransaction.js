@@ -6,9 +6,11 @@ import { patchRequest } from '@/lib/apiRequest/patchRequest';
 import { getLinkPostTrans } from '@/lib/apiRequest/urlLinks';
 
 
-const EditDeleteTransaction = ({reportName, viewTransId,  selectedTranFromList, handleClickCell,  recordTransaction,  user, notify, runDispatchClientDataCall, router}) => {
+const EditDeleteTransaction = ({reportName, viewTransId,  selectedTranFromList, handleClickCell, transactions, recordTransaction,  user, notify, runDispatchClientDataCall, router}) => {
     const [showConfirm, setShowConfirm] = React.useState(false);
   
+   const viewTran =  transactions?.find((dt)=> parseInt(dt.id) == parseInt(viewTransId));
+   const isEditable = viewTran?.createdBy !== "DEMO";
 
     const handleDeleteTran =()=>{
         setShowConfirm(true)
@@ -22,10 +24,7 @@ const EditDeleteTransaction = ({reportName, viewTransId,  selectedTranFromList, 
     }
 
     const handleTransaction =(act)=>{
-        //return console.log(selectedTranFromList);
-        //const transEntries = transactionsDetails.filter((dt)=> dt.transId == viewTransId);
-        //const transEntry = transactionsDetails?.find((dt)=> dt.transId == viewTransId);
-        //return console.log(selectedTranFromList, act)
+        if(isEditable)
         if(act === "EDIT" && selectedTranFromList?.row){
             //console.log(selectedTranFromList)
             handleClickCell({...selectedTranFromList, key:'edit'});
@@ -37,9 +36,9 @@ const EditDeleteTransaction = ({reportName, viewTransId,  selectedTranFromList, 
   return (
     <>
         <div className={`my-8 px-4 flex-row items-center gap-5 py-8 ${reportName === "transaction-view" && viewTransId && selectedTranFromList?.row? 'flex' :'hidden'}`}>
-            <div className='text-blue-700 bg-gray-200 py-2 px-3 hover:shadow-md rounded-md cursor-pointer hover:text-[blue] flex flex-row items-center'
+            <div className={`${isEditable? `text-blue-700 bg-blue-200 hover:bg-blue-300 hover:text-[blue] hover:shadow-md cursor-pointer` : 'bg-gray-200'} py-2 px-3 rounded-md  flex flex-row items-center`}
                 onClick={()=>handleTransaction('EDIT')}><BiEditAlt size={22}/> Edit</div>
-            <div className='text-red-700 bg-gray-200 py-2 px-3 hover:shadow-md rounded-md cursor-pointer hover:text-red-600 flex flex-row items-center'
+            <div className={`${isEditable? `text-red-700 bg-blue-200 hover:bg-blue-300 hover:shadow-md cursor-pointer hover:text-red-600` : 'bg-gray-200'} py-2 px-3 rounded-md  flex flex-row items-center`}
                 onClick={()=>handleTransaction('DELETE')}><MdDelete size={22}/> Delete</div>
         </div>
         <br/>

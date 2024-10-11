@@ -21,8 +21,7 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
     }
     
  
-    //return console.log(editedRow)
-    if(formInput.editAcct){
+    if(formInput.editAcct){ //Edit User
       if(validateAcctCode.error) return handleInfoMsg('error', res?.error || "Error in updating user record");
 
         const accountCodeEdited = formInput.accountCode;
@@ -30,7 +29,7 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
         const urlLink = getLinkPersoanlAcct({user, personalAcct, accountCodeNew});
         const acct = await getRequest(urlLink).then((res)=> res);
         const {url, body} = updatePAQuery(formInput, user, personalAcct);
-        //return console.log(acct, formInput.accountCode)
+        //return console.log(acct, body)
         if(acct?.data?.length){ //AccountCode found
             if(acct.data[0].id == formInput.id){
                 //Found account id and edited account id are the same meaning accountCode was not changed. Run update
@@ -58,9 +57,10 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
               }
             })
           }
-    }else{
+    }else{ //Create User
       if(!validateAcctCode.error){
         const {url, body} = preparePAQuery(formInput, user, personalAcct);
+        //return  console.log(body)
         await postRequest(url, body).then((res)=> {
           if(res?.ok){
             setFormInput({}); 

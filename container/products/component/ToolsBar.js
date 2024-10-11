@@ -14,7 +14,7 @@ const ToolsBar = ({excelData}) => {
   //console.log(excelData)
   const handleExportToExcel =()=>{
     const title = "Products List"
-    handleExport2Excel({docName:'All Customers', docHeader:[['Ozitech Technologies Limited'], [title], ['']],col1MaxW:false, data:data.dataWithHeader, styleRows:[], styleCells:[]});
+    handleExport2Excel({docName:'All Products', docHeader:[['Ozitech Technologies Limited'], [title], ['']],col1MaxW:false, data:data.dataWithHeader, styleRows:[], styleCells:[]});
   }
   return (
     <div className='flex flex-row gap-2 items-center  bg-gray-200 p-1'>

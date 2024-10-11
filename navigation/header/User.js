@@ -48,23 +48,23 @@ const User = ({userInit, userEmail, userRole, userDropdown, setUserDropdown, han
 const UserDropdown =({handleLogout, handleClickCompany, handleClickProfile})=>{
 
     return(
-        <div className='flex flex-col gap-3 absolute right-2 shadow-md text-gray-600 bg-[aliceblue] p-3 w-[200px]'>
-            <div className='flex flex-row gap-2 items-center cursor-pointer hover:text-blue-600'
+        <div className='flex flex-col gap-3 rounded-md absolute right-2 shadow-md text-gray-600 bg-sky-100 p-3 w-[200px]'>
+            <div className='flex flex-row gap-2 items-center w-fit cursor-pointer hover:text-blue-600'
                 onClick={handleClickProfile}>
                 <MdPerson size={25}/>
                 <p>Profile</p>
             </div>
-            <div className='flex flex-row gap-2 items-center cursor-pointer hover:text-blue-600'
+            <div className='flex flex-row gap-2 items-center w-fit cursor-pointer hover:text-blue-600'
                 onClick={handleClickCompany}>
                 <BsGearFill size={20}/>
                 <p>Company</p>
             </div>
-            <div className='hidden flex-row gap-2 items-center cursor-pointer hover:text-blue-600'>
+            <div className='hidden flex-row gap-2 items-center w-fit cursor-pointer hover:text-blue-600'>
                 <MdPerson size={25} className=''/>
                 <p>Switch User</p>
             </div>
             <HorizontalLine widths={100} heights={1}/>
-            <div className='flex flex-row gap-2 text-red-500 items-center cursor-pointer hover:text-red-700'
+            <div className='flex flex-row gap-2 text-red-500 w-fit items-center cursor-pointer hover:text-red-700'
               onClick={handleLogout}>
                 <MdLogout size={25} className=''/>
                 <p>Logout</p>

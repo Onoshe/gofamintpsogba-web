@@ -15,7 +15,7 @@ export const handleUpdateUserProfile= async(form, fetchedUser, session)=>{
     let result = {};
 
     if(form.recoveryEmail == fetchedUser.email){
-        result = {ok:false, msg:"Your email cannot the same as your recovery email."}
+        result = {ok:false, msg:"Your email cannot be the same as your recovery email."}
     }else{
         if(fetchedUser?.id && user?.userId){
         const pwdOk =  await verifyPassword(form, user)

@@ -1,0 +1,2 @@
+id,userId,firstname,lastname,email,gender,title,phoneNo,secret,nonActive,inactive,deleted,defaultSecret,companyId,companyDomain,role,info,registeredDate,recoveryEmail,appSlug,emailConfirmed,resetPassword,resetPasswordCode,resetPasswordExpires,updatedAt,createdAt
+1,DEMO@sunday.adegboye,Sunday,Adegboye,ozitechstudio@gmail.com,,,,$2a$10$v9avSSqK8HOlQ9ZAi7mT.u57tb8brcCyD2PBT4.eOg8AvTU8OOuaC,0,1,0,0,11,demo,admin,,,,,0,0,,,2024-09-22T21:00:37.243Z,2024-09-22T21:00:37.243Z
