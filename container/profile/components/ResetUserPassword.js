@@ -40,7 +40,8 @@ export const ResetUserPassword = ({ updateForm, setUpdateForm,
                     <input name="passwordReset" value={updateForm.passwordReset} className='px-2 w-full border-b border-b-blue-400 outline-none' onChange={onChangeHandler} placeholder='Your password' required/>
                 </div>
                 <HorizontalLine widths={100} margTop={20} margBot={10} bColor={'red'}/>
-                <button className='btn btn-error' type='submit'>Enter</button>
+                <button className='btn btn-error' type='submit'
+                >Enter</button>
 
             </form>
         </div>

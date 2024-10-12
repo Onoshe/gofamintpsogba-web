@@ -14,6 +14,7 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import NetworkError from '@/components/Errors/NetworkError';
 import useOnline from '@/lib/hooks/useOnline';
 import PageLoading from '@/loadingPage/PageLoading';
+import { isProduction } from '@/lib/apiRequest/urlLinks';
 //import { usePathname, useRouter } from 'next/navigation';
 /* eslint-disable @next/next/no-img-element */
 
@@ -103,6 +104,8 @@ const Header = ({ssUser}) => {
     }
   },[pathname, session])
 
+
+  if(isProduction && !isOnline) return <NetworkError/>;
   
   return (
     <div className={`fixed w-full z-50`} onClick={handleDropdown}>

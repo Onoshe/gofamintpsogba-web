@@ -18,6 +18,7 @@ import SubscriptionsHistory from './components/homeComponents/SubscriptionsHisto
 import { handleExportReceipt } from './components/utils/handleExportReceipt';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import convertImageToBase64 from '@/lib/image/convertImageToBase64';
+import { HeaderTab } from './components/headerTab/HeaderTab';
 //import { AccessCard } from './cards/DashboardAccess';
 
 
@@ -32,6 +33,7 @@ const IndexCompany = ({ssUser}) => {
     const [base64Image, setBase64Image] = React.useState('');
     const [appB64Image, setAppBase64Image] = React.useState(''); 
     const subcriptionHistory = getSubscriptionHistory({subscriptions});
+    const [tabs, setTabs] = React.useState({activeTab:{name:'home', title:'Home'}});
 
     let quickRecordsLogo = "";
     if(generalSettings?.length){
@@ -46,7 +48,7 @@ const IndexCompany = ({ssUser}) => {
                 setAppBase64Image(base64String)
                 })
                 .catch(error => {
-                console.error(error);
+                //console.error(error);
             });
     },[]);
   
@@ -76,71 +78,77 @@ const IndexCompany = ({ssUser}) => {
   
 
   return (
-    <div className='p-4 flex  flex-col items-center '>
-        <BackgroundCard style={''} childContStyle title={clientAccount?.companyName}>
-            <div className='w-full pb-4'>
-                <div className={`p-[2px] px-3 w-full flex flex-row justify-between ${subcriptionHistory?.lastSub?.active?'bg-[lime] text-[teal]':'bg-red-500 text-gray-700'}`}>
-                   <p className=''><span className='font-bold'>{subcriptionHistory?.lastSub?.active?'ACTIVE':'EXPIRED'} <span>({subcriptionHistory?.lastSub?.subscriptionType})</span></span></p> 
-                   <p>Due date: {subcriptionHistory?.lastSub?.subDueDateStr}</p>
+    <div className=''>
+        <HeaderTab tabs={tabs} setTabs={setTabs}/>
+        <br/><br/>
+        <div className='p-4 flex flex-col items-center z-0'>
+            {tabs.activeTab.name === "home" && <>
+                <BackgroundCard style={''} childContStyle title={clientAccount?.companyName}>
+                    <div className='w-full pb-4'>
+                        <div className={`p-[2px] px-3 w-full flex flex-row justify-between ${subcriptionHistory?.lastSub?.active?'bg-[lime] text-[teal]':'bg-red-500 text-gray-700'}`}>
+                        <p className=''><span className='font-bold'>{subcriptionHistory?.lastSub?.active?'ACTIVE':'EXPIRED'} <span>({subcriptionHistory?.lastSub?.subscriptionType})</span></span></p> 
+                        <p>Due date: {subcriptionHistory?.lastSub?.subDueDateStr}</p>
+                        </div>
+                        <Image
+                                //src={coyLogo}
+                                src={`data:image/png;base64,${appB64Image}`}
+                                width={100}
+                                height={100}
+                                alt='Company logo'
+                                className='hidden  flex-1 w-full bg-red-50 max-h-[100px] max-w-[150px] mb-5'
+                            />
+                        <UpperDashboard 
+                            base64Image={base64Image}
+                            setBase64Image={setBase64Image}
+                            coyLogo={coyLogo}
+                            notify={notify}
+                            user={user}
+                            dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
+                            clientAccount ={clientAccount}
+                            subscriptions={subscriptions}
+                            dispatchSubscriptions={dispatchSubscriptions}
+                        />
+                    
+                    </div>
+                </BackgroundCard>
+                <div className='flex w-full flex-col lg:flex-row mt-10'>
+                
+                    <div className='w-full flex-wrap flex flex-row gap-5 justify-around items-center'>
+                        <AuditedYearLock
+                            dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
+                            notify={notify} 
+                            user={user}
+                            settings={settings}
+                        />
+                        <PostingLock
+                            dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
+                            notify={notify} 
+                            user={user}
+                            settings={settings}
+                        />
+                    </div>
                 </div>
-                <Image
-                        //src={coyLogo}
-                        src={`data:image/png;base64,${appB64Image}`}
-                        width={100}
-                        height={100}
-                        alt='Company logo'
-                        className='hidden  flex-1 w-full bg-red-50 max-h-[100px] max-w-[150px] mb-5'
-                    />
-                <UpperDashboard 
-                    base64Image={base64Image}
-                    setBase64Image={setBase64Image}
-                    coyLogo={coyLogo}
-                    notify={notify}
-                    user={user}
-                    dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
-                    clientAccount ={clientAccount}
-                    subscriptions={subscriptions}
-                    dispatchSubscriptions={dispatchSubscriptions}
-                />
-            
-            </div>
-        </BackgroundCard>
-        <div className='flex w-full flex-col lg:flex-row mt-10'>
-        
-            <div className='w-full flex-wrap flex flex-row gap-5 justify-around items-center'>
-                <AuditedYearLock
-                    dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
-                    notify={notify} 
-                    user={user}
-                    settings={settings}
-                />
-                <PostingLock
-                    dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
-                    notify={notify} 
-                    user={user}
-                    settings={settings}
-                />
-            </div>
+            </>}
+            {tabs.activeTab.name === "subscriptions" && <SubscriptionsHistory
+                subscriptions={subscriptions}
+                handleExportReceipt={handleExportReceipt}
+                generalSettings={generalSettings}
+                client_Admin={client_Admin}
+                clientData={clientData}
+                quickRecordsLogo={`data:image/png;base64,${appB64Image}`}
+            />}
+            <ToastContainer 
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick={true}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            />
         </div>
-        <SubscriptionsHistory
-            subscriptions={subscriptions}
-            handleExportReceipt={handleExportReceipt}
-            generalSettings={generalSettings}
-            client_Admin={client_Admin}
-            clientData={clientData}
-            quickRecordsLogo={`data:image/png;base64,${appB64Image}`}
-        />
-        <ToastContainer 
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick={true}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
     </div>
   )
 }

@@ -31,7 +31,7 @@ const updateFormAddUserDef ={firstname:"", lastname:"", title:"", email:"",
 const IndexProfile = ({ssUser}) => {
   const { session,  status} = useAuthCustom(ssUser); 
   const {user, users, subscriptions, client_Admin, clientData, generalSettings, quickrecordsLogo, dispatchFetchSettingsCall} = useStoreHeader((state) => state);
-  const {online,  dispatchUser} = {online:true, user:{}, dispatchUser:()=>console.log(12)};
+  const {online,  dispatchUser} = {online:true, user:{}, dispatchUser:()=>console.log()};
   const [changePassword, setChangePassword] = React.useState(false);
   const [changePasswordCode, setChangePasswordCode] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
@@ -102,8 +102,9 @@ const IndexProfile = ({ssUser}) => {
   })
 }
 
-const handleAddUser =async (e)=>{
+const handleAddUser =async (e, updateForm)=>{
   e.preventDefault();
+  //console.log(updateForm)
   if(users?.length < planLimit){
     setUpdateFormAddUser(updateFormAddUser)
     await handleAddNewUser(updateFormAddUser, session)
@@ -145,6 +146,7 @@ const handleResetUserPwd =async (e)=>{
   e.preventDefault();
   await  handleResetUserPassword(updateUserForm, updateUser.user, session)
   .then((res)=> {
+    //console.log(res)
     if(res.ok){
       notify("success", "Login details have been sent to user email");
       setUpdateUser(({userL:{}, update:false, reset:false}))

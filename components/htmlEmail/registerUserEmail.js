@@ -1,6 +1,6 @@
 //a password reset on your account was initiated.
 
-const getRegisterUserEmailBody =({name,subject, userName, email, password, loginPage})=>{
+const getRegisterUserEmailBody =({name,subject, userName, email, password, loginPage, emailMsg1, emailMsg2})=>{
  const body = `
      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
@@ -24,12 +24,12 @@ const getRegisterUserEmailBody =({name,subject, userName, email, password, login
                 <td>
                     <p style="font-size:14px;line-height:24px;margin:0 0 10px 0;text-align:left"><strong>${name},</strong></p>
                     <p style="font-size:14px;line-height:24px;margin:0 0 10px 0;text-align:left">
-                        Your account registration on QuickRecords was successful and your login details are:
+                        ${emailMsg1}
                         <div style="text-align:left;">Username: ${userName}</div>
                         <div style="text-align:left;">One-Time Password: ${password}</div> 
                         <div style="text-align:left;">Email: ${email}</div> 
                     </p>
-                    <p style="text-align:left;">Go to the login page and login to change your one-time password.</p>
+                    <p style="text-align:left;">${emailMsg2}</p>
                     <div style="padding:5px 0;">
                         <a href="${loginPage}" style="background-color: aquamarine; padding: 8px 14px; text-align:left; text-decoration: none; border-radius: 4px;">
                           Login Page

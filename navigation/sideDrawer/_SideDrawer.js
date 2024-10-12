@@ -109,7 +109,7 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
               }
             </div>
             <div
-              className={`${showSidebarTitle? 'w-[250px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-4 flex flex-row text-gray-700 bg-gray-400   p-2 gap-1 items-center`}
+              className={`${showSidebarTitle? 'w-[250px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-2 flex flex-row text-black bg-blue-300   p-2 gap-1 items-center`}
               onClick={()=>handleLogout()}
               data-tip={'Logout'}>
               <BiLogOutCircle color='red' className='rotate-180 text-[24px] mr-4  cursor-pointer'/> 

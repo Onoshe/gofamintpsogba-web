@@ -18,12 +18,13 @@ export const loginHandler = async({e, loadingBtn, setLoadingBtn, signIn, form, d
     setLoadingBtn({loading:true});
     
     const findUserRes = await findLoginUser(form);
+    //console.log(findUserRes)
     //******* Verify if defaultPassword || nonActive. Default password occur when a new user is added or when there is a reset of password**************
     if(findUserRes.ok){
         if(parseInt(findUserRes.defaultSecret) || parseInt(findUserRes.nonActive) || parseInt(findUserRes.resetPassword)){
             if(parseInt(findUserRes.defaultSecret)){
                 setAlert({msgTitle:'Password reset has been initiated on your account', msg:'You will be redirected to password reset page to change your password.', type:'error', show:true});
-                handleSendOTP(findUserRes) // defaultSecret changed to 0 and resetPassword set to 1
+                await handleSendOTP(findUserRes) // defaultSecret changed to 0 and resetPassword set to 1
                 setTimeout(()=>{
                     dispatchResetPwdInfo({msg:'Password change code sent to '+findUserRes.email, style:'text-[cyan]', title:"Change Default Password", 
                         id:findUserRes.id, userName:findUserRes.userId, email:findUserRes.email,});
@@ -68,9 +69,14 @@ export const loginHandler = async({e, loadingBtn, setLoadingBtn, signIn, form, d
             }
         }
     }else{
-        
-        setAlert({msgTitle:'Login error', msg:'', type:'error', show:true});
+        if(findUserRes?.msg){
+           const res = findUserRes.msg.split("|");
+           setAlert({msgTitle:res[0], msg:res[1], type:'error', show:true});
+            setLoadingBtn({loading:false});
+        }else{
+            setAlert({msgTitle:"Login error!", msg:'', type:'error', show:true});
         setLoadingBtn({loading:false});
+        }        
     }
 }
 

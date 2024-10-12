@@ -50,19 +50,22 @@ const pdfData = {};
  }
 
   return (
-    <DashboardCard title={"Subscriptions and Billing History"} maxWidth="w-full">    
-        <div className='flex flex-col self-start px-3 bg-white p-3 max-h-[60vh] overflow-auto'>
-            {subHistory?.length? 
-            <ReportTable
-                rowKeys={["subscriptionDate", "paymentRef", "subscriptionType", "description", "expiredDate", "status", "subPaymentStatus", "subscriptionAmount",  "export"]}
-                header={headers}
-                rows={subHistory}
-                onClickRowCell={handleClickRowCell}
-            />
-            :<p className='text-red-700'>No subscription available!</p>
-            }                   
-        </div>
-    </DashboardCard>
+     <>
+        <br/><br/>
+        <DashboardCard title={"Subscriptions and Billing History"} maxWidth="w-full">    
+            <div className='flex flex-col self-start px-3 bg-white p-3 max-h-[60vh] overflow-auto'>
+                {subHistory?.length? 
+                <ReportTable
+                    rowKeys={["subscriptionDate", "paymentRef", "subscriptionType", "description", "expiredDate", "status", "subPaymentStatus", "subscriptionAmount",  "export"]}
+                    header={headers}
+                    rows={subHistory}
+                    onClickRowCell={handleClickRowCell}
+                />
+                :<p className='text-red-700'>No subscription available!</p>
+                }                   
+            </div>
+        </DashboardCard>
+      </>
   )
 }
 

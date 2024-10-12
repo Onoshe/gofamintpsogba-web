@@ -6,7 +6,7 @@ import { getLinkClientServer, getLinkUserData, isProduction } from "@/lib/apiReq
 import getRegisterUserEmailBody from "@/components/htmlEmail/registerUserEmail";
 
 
-const platformDomain = isProduction? 'https://quick-records.vercel.app/login':"http://localhost:3000/login";
+export const platformDomain = isProduction? 'https://quick-records.vercel.app/login':"http://localhost:3000/login";
 
 //Register a demo account only.
 //User registration will be done by the client Admin 
@@ -29,8 +29,13 @@ const  registerHandler = async (form, dispatchResetForm, alert, setAlert, setMod
                   setModalAlert({...alert, showLoading:true, loadingMsg:'Sending mail, please wait...', show:true});
 
                   const mailHtml = getRegisterUserEmailBody({
-                    name:'Dear: '+form.firstname+' '+form.lastname, subject:"QuickRecords Login Details", 
-                    userName:loginDetails.userId, email:form.email, password:loginDetails.password, 
+                    name:'Dear: '+form.firstname+' '+form.lastname, 
+                    subject:"QuickRecords Login Details", 
+                    userName:loginDetails.userId, 
+                    email:form.email, 
+                    password:loginDetails.password, 
+                    emailMsg1:'Your account registration on QuickRecords was successful and your login details are:',
+                    emailMsg2:'Go to the login page and login to change your one-time password.',
                     loginPage:platformDomain});
                     const sendMailLink = getLinkClientServer().dev;
                     const mailBody = {

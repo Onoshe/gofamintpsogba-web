@@ -3,7 +3,7 @@ import { getLinkFetchTableWithConds, getLinkRegisterDemoAcct, getLinkUserData } 
 import { dateFmtISO } from "@/lib/date/dateFormats";
 import { getRandomNumbers } from "@/lib/radomNos/getRandomNumbers";
 import * as bcrypt from "bcryptjs";
-import { updateResetPassword } from "./handleSendOTP";
+import { postOTPMail, updateResetPassword } from "./handleSendOTP";
 import { patchRequest } from "@/lib/apiRequest/patchRequest";
 
 
@@ -34,7 +34,9 @@ async function postQuery(form, client, domain){
 
 
 async function resetPwdOTPQuery({userId, setResendOpt, form, dispatchForm, setAlert}){
+  //return console.log(123)
   //const userId = form.userName;
+  setResendOpt(false);
   if(!userId) return setAlert({msg:'',msgTitle:'User ID not found', type:'error', show:true});
 
   const companyId = userId.split("@")[0]?.toLowerCase();
@@ -48,15 +50,19 @@ async function resetPwdOTPQuery({userId, setResendOpt, form, dispatchForm, setAl
   if(!userIdExist?.data?.length) return setAlert({msg:'',msgTitle:'User ID does not exist', type:'error', show:true}); 
   if(!resetPwdExist?.data?.length) return setAlert({msg:'',msgTitle:'Reset password not initiated on this account', type:'error', show:true}); 
 
-  const {url, body}  = updateResetPassword(userIdExist.data[0], companyId);
+  //return console.log(userIdExist)
+  const {url, body, resetCode}  = updateResetPassword(userIdExist.data[0], companyId);
+  //return console.log(url, body, resetCode)
   const res =  await patchRequest(url, body);
   if(res?.ok){
-    setResendOpt(true);
-    dispatchForm({...form, password:'', otp:''});
+    await postOTPMail({resetCode, userId, email:userIdExist.data[0].email}).then((res)=>{
+      setResendOpt(true);
+      dispatchForm({...form, password:'', otp:''});
     //setAlert({msg:'OTP sent to '+userIdExist.data[0].email, msgTitle:'Check your inbox or junck messages for the OTP', type:'success', show:true}); 
+    })
   }
 
   //return {url, body, loginDetails:{userId, password:form.password, ok:true}}
 }   
 
-export { postQuery, resetPwdOTPQuery}
+export { postQuery, resetPwdOTPQuery};

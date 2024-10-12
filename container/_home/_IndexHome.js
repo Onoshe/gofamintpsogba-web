@@ -51,7 +51,8 @@ const IndexHome = ({ssUser}) => {
         forgotPasswordHandler(form, setAlert, setModalAlert, setModalAlertCall);
     }
     const handleResendOpt = async (userId)=>{
-      await resetPwdOTPQuery({userId,setResendOpt, form, dispatchForm, setAlert});
+        //console.log(userId)
+        await resetPwdOTPQuery({userId,setResendOpt, form, dispatchForm, setAlert});
         //setResendOpt(true);
         //dispatchForm({...form, password:'', otp:''});
     };
