@@ -53,7 +53,7 @@ const ChartOfAccount = ({ssUser}) => {
         setSelectedOpt('999')
   }
   const handleClickBtn =(act)=>{
-    if(act==="MANUAL"){
+    if(act==="MANUAL" && createType === "MANUAL"){
       handleShowBlind(true)
     }
     setCreateType(act)

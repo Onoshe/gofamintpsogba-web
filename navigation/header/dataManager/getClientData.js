@@ -2,8 +2,7 @@ import { getRequest } from "@/lib/apiRequest/getRequest";
 import { getDefaultCOA, getDefaultPersonalAcct, getDefaultProductList } from "./processDbData";
 import { getLinkClientData, getLinkUserData } from "@/lib/apiRequest/urlLinks";
 import { productsLedgerProcessor } from "./productsLedgersProcessor";
-import { productsList } from "@/public/data/productsList";
-import { chartOfAccounts } from "@/public/data/chartOfAccount";
+
 
 
 export function getDataUrl(domain){
@@ -11,12 +10,26 @@ export function getDataUrl(domain){
    return url;
 }
 
-export const  getClientData = async (domain)=>{
+export const  getClientData = async (domain, userId)=>{
        const dataUrl =  getDataUrl(domain);
        const res = await getRequest(dataUrl).then((res)=> res);
-       //console.log(res)
        if(res?.data?.tables?.length){
-        return {tables:res?.data?.tables, data:res?.data}
+         //Set secret as ""
+         const usersAcct = res.data[domain+'_usersaccount']?.map((dt)=> {return {...dt, secret:""}})
+         res.data[domain+'_usersaccount'] = usersAcct;
+         
+         //Filter out transactions not posted by User for demo account
+         if(domain === "demo"){
+            const tablesList = [domain+'_chartofaccount', domain+'_customers', domain+'_vendors',domain+'_transactions',domain+'_transactionsdetails', domain+'_products',];
+            tablesList?.forEach(tb => {
+               if(res?.data[tb]){
+                  const tbTrans = res.data[tb];
+                  const defaultAndUserTrans = tbTrans.filter((dt)=> dt.createdBy === "DEMO" || dt.createdBy === userId);
+                  res.data[tb] = defaultAndUserTrans;
+               }  
+            });
+         }
+         return {tables:res?.data?.tables, data:res?.data}
      }else{return {}}
 }
 
@@ -30,9 +43,9 @@ export const  fetchAndDispatchClientAccount = async (domain, dispatchClientAccou
 
 //const data ={fetchedData, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails}
 export const runDispatchClientData = async ({fetchedData, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, 
-   dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails})=>{
+   dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, userId})=>{
    
-   const res = fetchedData?.tables?.length? fetchedData : await getClientData(domain).then((res)=> res);
+   const res = fetchedData?.tables?.length? fetchedData : await getClientData(domain, userId).then((res)=> res);
    //return console.log(res)
    if(!res?.tables?.length) return console.log("Error! Unable to fetch data");
    const coaStruc = res.data[domain+"_coastructure"];

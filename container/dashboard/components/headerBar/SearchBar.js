@@ -70,9 +70,9 @@ const SearchBar = ({chartOfAccounts, user, customers, vendors, products}) => {
     },[searchTerm]);
 
   return (
-    <div>
+    <div className='lg:w-[500px]'>
          <label className="input bg-white border-gray-200 input-bordered hidden smc:flex items-center gap-2 input-sm">
-            <input type="text" className="grow " value={searchTerm} placeholder="Search" onChange={handleOnChange}/>
+            <input type="text" className="grow" value={searchTerm} placeholder="Search" onChange={handleOnChange}/>
             <MdSearch size={22}/>
         </label>
         <div className={`fixed pl-3 pt-1 ${searchFound?.length? '' :'hidden'}`}>

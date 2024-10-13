@@ -135,7 +135,7 @@ export const getReceiptsAndPaymentsCall =(transactions, dateForm, coaStructure)=
   };
   paymentsAndReceipts.all.push(netAmount);
 
-   console.log(netDoubleEntry)
+   //console.log(netDoubleEntry)
   
     return {paymentsAndReceipts}
   } 

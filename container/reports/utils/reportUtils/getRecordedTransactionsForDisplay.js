@@ -2,7 +2,7 @@ import { getHeadersTitle } from "../ledgers/getHeaders";
 import { getStartAndEndDate } from "@/lib/dummyData/getStartAndEndDate";
 
 
-const keysRecordTrans = ["date", "account", "accountSub","description",  "transactionNo","voucher", "reference", "debit", "credit"];
+const keysRecordTrans = ["date", "account", "accountSub", "description",  "transactionNo","voucher", "reference", "debit", "credit"];
 const keysRecordTransSummary = ["date", "account", "accountSub", "description",   "transactionNo","voucher", "reference", "debit", "credit"];
 
  export const getRecordedTransactionsForDisplay =({dateForm, reportName,  transProcessor, query})=>{
@@ -31,7 +31,7 @@ const keysRecordTransSummary = ["date", "account", "accountSub", "description", 
     const pdfData =  pdfDataFullData;
     let rowKeysShow = keysRecordTransSummary;
     let rows = recordedTrans.recordedTransSummary;        
-    //console.log(recordedTrans)
+    //console.log(rows)
     result = result = {date, name:reportName, title:"Recorded Transactions", clickables:"ALL", rowKeysShow, rowHeaders:getHeadersTitle(rowKeysShow), rows, pdfData}
 
     

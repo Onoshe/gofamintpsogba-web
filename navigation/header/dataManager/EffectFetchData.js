@@ -17,14 +17,14 @@ const EffectFetchData = ({ session}) => {
   
     
   const domain = session?.user?.companyId;
-
+  const userId = session?.user?.userId;
 
     const firstDataFetch = async()=>{
       //console.log('Fetching data')
-      await getClientData(domain)
+      await getClientData(domain, userId)
       .then((res)=> {
         //console.log(res)
-        runDispatchClientData({fetchedData:res, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails});
+        runDispatchClientData({fetchedData:res, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, userId});
       })
       .then(()=>{ dispatchTransReady(true)});
     }
@@ -145,7 +145,8 @@ const EffectFetchData = ({ session}) => {
    useEffect(()=>{
     //Subsequent fetch data call on the function: runDispatchClientData
     if(domain && clientsDataCall ){
-      runDispatchClientData({fetchedData:{}, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails});
+      const userId = "";
+      runDispatchClientData({fetchedData:{}, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, userId});
     }
    },[clientsDataCall]);
 

@@ -14,7 +14,7 @@ const Header = ({handleClickBtn, createType}) => {
           <div className='smc:flex self-end gap-4'>
               <button className=" btn-info btn btn-sm text-[12px] smc:text-base smc:btn-md text-white px-4 mr-4"
                 onClick={()=>handleClickBtn('MANUAL')}>
-                <BsPlusLg size={23}/> New Account
+                {createType === "MANUAL"? <><BsPlusLg size={23}/> New Account</> : "Chart of Accounts"}
               </button>
               <button className="btn btn-sm smc:btn-md btn-neutral text-white px-4 text-[12px] smc:text-base"
                 onClick={()=>handleClickBtn('UPLOAD')}>

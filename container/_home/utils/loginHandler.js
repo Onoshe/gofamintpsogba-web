@@ -54,7 +54,8 @@ export const loginHandler = async({e, loadingBtn, setLoadingBtn, signIn, form, d
                 dispatchCoy(domain);
                 dispatchActivePage({name:'', title:"Dashboard"});
                 if(domain !== "admin"){
-                    await runDispatchClientData({domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails})
+                    const userId = form.userName;
+                    await runDispatchClientData({domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, userId})
                     .then(()=> goToPage("/"+domain))
                 }else{
                     goToPage("/"+domain)

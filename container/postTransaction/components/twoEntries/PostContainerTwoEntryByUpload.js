@@ -49,7 +49,7 @@ const PostContainerTwoEntryByUpload = ({postError,setUploading, setPostError, ch
         setUploading(false);
       }
 
-      //console.log(table)
+      //console.log(postError)
       React.useEffect(()=>{
         if(table?.show && table?.rows?.length){
           //const transSheetFmt =

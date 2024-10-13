@@ -112,7 +112,7 @@ const IndexReports = ({ssUser}) => {
     const handleClickCell =(cell)=>{
       //console.log(cell, reportName)
       // cell = {key:'edit'||'view', row:{}, i:0}
-      const keyWords = ["gl", "trial-balance", "general-ledger", "personal-ledgers", "recorded-transactions", "products-valuation"];
+      const keyWords = ["gl", "trial-balance", "general-ledger", "personal-ledgers", "recorded-transactions", "receipts-and-payments", "products-valuation"];
       const isMatch = keyWords.some(keyword => reportName.includes(keyword));
       if(isMatch){
         handleClickCellNav({cell, reportName, companyId, router, transactions, dispatchSelectedTranFromList,
@@ -164,7 +164,7 @@ const IndexReports = ({ssUser}) => {
   }
   
   const handleDetailReport =()=>{
-    
+
     let report = {name:'fs-balance-sheet', title:'Condensed Balance Sheet', mainReport:'BALANCESHEET'};
     if(reportName === 'fs-balance-sheet'){
       report = {name:'fs-balance-sheet-details', title:'Balance Sheet', mainReport:'BALANCESHEETDETAILS'};

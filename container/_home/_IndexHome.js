@@ -135,7 +135,7 @@ const IndexHome = ({ssUser}) => {
     loginHandler({loadingBtn, setLoadingBtn, signIn, form, dispatchCoy, dispatchActivePage,
         runDispatchClientData, setAlert, goToPage, postActivity,dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts,
         dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, activities,
-        dispatchResetPwdInfo})
+        dispatchResetPwdInfo, userId: user.userId})
     }
 
   React.useEffect(()=>{
