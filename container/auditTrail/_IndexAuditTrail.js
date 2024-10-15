@@ -54,7 +54,7 @@ const IndexAuditTrail = ({ssUser}) => {
       const {styleRows} =  getStyleRows(rows, docHeader.length + 3);
       //console.log({data, docName:title, docHeader, rowsHeader, styleRows})
       handleExcelExport({data, docName:title, docHeader, rowsHeader, styleRows, col1WchInDigit, noFmtCols:[4]});
-      postActivity(user, activities.DOWNLOAD, title+" report exported to excel")
+      postActivity(user, activities.DOWNLOAD, title+" excel report")
     }
 
     const handleReportNav =(act)=>{

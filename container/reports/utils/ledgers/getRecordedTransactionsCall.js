@@ -7,7 +7,6 @@ export const getRecordedTransactionsCall =(transactions, dateForm, coaStructure)
   //console.log(transactions)
     //return
     const transWithinDate = [];
-    let recordedTransObj = {};
     let recordedTransArr = [];
     const startDate = dateForm.startDate;
     const endDate = dateForm.endDate;
@@ -48,6 +47,7 @@ export const getRecordedTransactionsCall =(transactions, dateForm, coaStructure)
             credit: entryType==="CR"? amountFmt : 0,
             entryType,
             typeCode,
+            documentNo,
             transId,
             postedBy:updatedBy,
             postedDate:updatedAt,

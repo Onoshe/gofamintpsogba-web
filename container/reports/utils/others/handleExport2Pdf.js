@@ -34,7 +34,7 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
     if(!reportRows?.length) return;
 
     let noOfColsDef = 2;
-    let data = objectToArray(reportRows, reportRowKeys, noFmtCols);
+    let data = objectToArray(reportRows, reportRowKeys, noFmtCols, tableColsFSize);
 
     const {rowsHeader} = extractKeysFomObject(reportHeader, reportRowKeys, 'name');
     const noOfCols = rowsHeader?.length || noOfColsDef;
@@ -110,7 +110,7 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
       doc.save(reportName+".pdf");
  };
 
- function objectToArray(arr, keys, noFmtCols) {
+ function objectToArray(arr, keys, noFmtCols, fontSize) {
   let agingOrder = ["OVER_DAYS_180", "DAYS_90_180", "DAYS_60_90", "DAYS_30_60", "LESS_DAYS_30", "stockin", "stockout", "stockopening", "stockclosing", "costPerUnit", "valuation", "unitcost", 'avgCost'];
   agingOrder = agingOrder.map((dt)=> dt.toLocaleLowerCase());
     const likelyCurrencyCol = [...agingOrder, "debit", "credit", "openingbal", "openingbalance", "closingbal", "closingbalance", "amount", "balance", "total"];
@@ -121,7 +121,9 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
             if(likelyCurrencyCol.includes(key.toLowerCase()) && parseFloat(content)){
               content =  formatToCurrency(parseFloat(content))
             }
-            return { content, styles: {fontStyle: obj?.classNameTD? 'bold' :'normal' } }
+            const styles = fontSize? {fontStyle: obj?.classNameTD? 'bold' :'normal', fontSize} : {fontStyle: obj?.classNameTD? 'bold' :'normal'};
+            return { content, styles}
+            //return { content, styles: {fontStyle: obj?.classNameTD? 'bold' :'normal'} }
         })
     });
   }

@@ -24,7 +24,7 @@ export const UpdatedPassword = ({user,  handleClose, handleUpdatePwd}) => {
              onClick={handleClose}/>
             <p className='text-center font-bold py-3 text-red-800'>Change Password</p>
             <div className='flex flex-col gap-3 p-4 text-sm'>
-                <p>A password update code was sent to your email. Check your spam or junk messages if the code is not in your inbox.</p>
+                <p>Please note that you will be signed out for you to login with you new password after successfully changing it.</p>
                 <div>
                     <p>Username</p>
                     <p className='text-blue-400 border-b border-b-blue-400'>{user.userName}</p>

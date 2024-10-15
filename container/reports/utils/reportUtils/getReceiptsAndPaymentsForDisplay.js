@@ -10,12 +10,10 @@ const keysRecordTransSummary = ["date", "account", "accountSub", "description", 
     const dateFormFmt = dateForm?.defaultDate? getStartAndEndDate("THIS-MONTH") : dateForm;
     const recordedTrans = transProcessor.getReceiptsAndPayment(dateFormFmt);
 
-    console.log(recordedTrans)
     const startDateFmt = new Date(dateFormFmt?.startDate).toDateString();
     const endDateFmt = new Date(dateFormFmt?.endDate).toDateString();
     const date = 'Report from '+startDateFmt+" to "+endDateFmt;
-
-    //console.log(recordedTrans)
+    
     let result = {};
     const pdfDataFullData = {
         reportRowKeys:keysRecordTrans,
@@ -31,7 +29,10 @@ const keysRecordTransSummary = ["date", "account", "accountSub", "description", 
     let rowKeysShow = keysRecordTransSummary;
     let rows = recordedTrans.paymentsAndReceipts.all;        
     //console.log(recordedTrans)
-    result = result = {date, name:reportName, title:"Receipts & Payments", clickables:"ALL", rowKeysShow, rowHeaders:getHeadersTitle(rowKeysShow), rows, pdfData}
+    let rowHeaders = getHeadersTitle(rowKeysShow);
+    rowHeaders = rowHeaders?.map((row)=> {return row.name === "debit"? {name:'debit', title:'Amount'} : row.name === "credit"? {name:'credit', title:'Amount'} : row})
+    
+    result = result = {date, name:reportName, title:"Receipts & Payments", clickables:"ALL", rowKeysShow, rowHeaders, rows, pdfData}
 
 return result
 }

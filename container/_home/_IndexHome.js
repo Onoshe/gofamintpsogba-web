@@ -46,7 +46,6 @@ const IndexHome = ({ssUser}) => {
     //const { data: session, status } = useSession(); //{status:'', data:{seeeion:''}}; //useSession();
     const { signIn, signOut, session, user, status} = useAuthCustom(ssUser);
 
-
     const handleForgotPassword = async ()=>{
         forgotPasswordHandler(form, setAlert, setModalAlert, setModalAlertCall);
     }
@@ -135,22 +134,8 @@ const IndexHome = ({ssUser}) => {
     loginHandler({loadingBtn, setLoadingBtn, signIn, form, dispatchCoy, dispatchActivePage,
         runDispatchClientData, setAlert, goToPage, postActivity,dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts,
         dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, activities,
-        dispatchResetPwdInfo, userId: user.userId})
+        dispatchResetPwdInfo})
     }
-
-  React.useEffect(()=>{
-    //Auto go to dashboard id companyId is in the url
-    if(status === "authenticated"){
-        postActivity(session.user, activities.LOGIN, "User login");
-
-        const domain = session?.user?.companyId;
-        if(domain){
-           // goToPage("/"+domain);
-           // dispatchActivePage({name:'', title:"Dashboard"});
-        }
-    }
-    
-  },[status]);
 
   
   if(!isOnline){

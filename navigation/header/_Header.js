@@ -15,12 +15,17 @@ import NetworkError from '@/components/Errors/NetworkError';
 import useOnline from '@/lib/hooks/useOnline';
 import PageLoading from '@/loadingPage/PageLoading';
 import { isProduction } from '@/lib/apiRequest/urlLinks';
+import useStoreTransactions from '@/context/storeTransactions';
+import PageLoadingInnerControl from '@/loadingPage/PageLoadingInnerControl';
+import PageFetchingData from '@/loadingPage/PageFetchingData';
+import PageLogOut from '@/loadingPage/PageLogOut';
 //import { usePathname, useRouter } from 'next/navigation';
 /* eslint-disable @next/next/no-img-element */
 
 
 const Header = ({ssUser}) => {
   const {pageIsOpen, activePage, isOpen, coy, dispatchCoy, dispatchActivePage, dispatchIsOpen, dynamicPage, showLoadingNavPage, dispatchShowLoadingNavPage} = useStoreHeader((state) => state);
+  const {transReady} = useStoreTransactions((state) => state);
   //const { data: session, status } = useSession(); //{status:'', data:{session:''}}; //useSession();
   const {  signOut, session, user, status} = useAuthCustom(ssUser);
   const [userDropdown, setUserDropdown] = React.useState(false);
@@ -29,6 +34,7 @@ const Header = ({ssUser}) => {
   const router = useRouter();
   const companyId = session?.user?.companyId;
   const isOnline = useOnline();
+  const [mounted, setMounted] = useOnScroll({ready:false});
   
   //const pathname = usePathname();
 
@@ -39,7 +45,7 @@ const Header = ({ssUser}) => {
     if(userDropdown) setUserDropdown(false)
   }
   const handleLogout =()=>{
-    signOut({dispatchCoy});
+    signOut({dispatchCoy, user});
      //console.log(session)
    }
 
@@ -104,12 +110,19 @@ const Header = ({ssUser}) => {
     }
   },[pathname, session])
 
+  //console.log(status)
 
-  if(isProduction && !isOnline) return <NetworkError/>;
+  //if(isProduction && !isOnline) return <NetworkError/>;
+  //console.log(transReady)
+  //return  <PageLogOut/>
   
   return (
     <div className={`fixed w-full z-50`} onClick={handleDropdown}>
         <EffectFetchData session={session}/>
+        {!transReady && <PageFetchingData/>}
+        {transReady && isProduction && !isOnline && <NetworkError/>}
+        {status === "logout" && <PageLogOut/>}
+
         <div data-theme="aqua" 
           className='py-2 z-50 px-3 flex items-center justify-between'
          >

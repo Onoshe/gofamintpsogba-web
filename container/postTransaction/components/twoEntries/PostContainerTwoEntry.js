@@ -67,7 +67,7 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
             setPostError({msg:'Posting successfull', error:false, color:'text-green-600'});
           });
       }
-    }else{
+    }else{ //BY UPLOAD
       
       if(postError?.error){
         setUploading(false);

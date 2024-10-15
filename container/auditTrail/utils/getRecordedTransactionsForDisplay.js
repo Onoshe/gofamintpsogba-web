@@ -4,8 +4,8 @@ import { sortArrayByKey } from "@/lib/sort/sortArrayByKey";
 
 ////recordedTransArr
 
-const keysRecordTrans = ["date", "account", "accountSub","description",  "transactionNo","voucher", "reference", "debit", "credit"];
-const keysRecordTransSummary = ["date", "account", "accountSub", "description",   "transactionNo","voucher", "reference", "postedBy", "postedDate", "debit", "credit"];
+const keysRecordTrans = ["date", "entryType", "account", "accountSub","description",  "transactionNo","voucher", "documentNo", "reference", "debit", "credit"];
+const keysRecordTransSummary = ["date", "entryType", "account", "accountSub", "description",   "transactionNo","voucher", "documentNo", "reference", "postedBy", "postedDate", "debit", "credit"];
 
 
 
@@ -13,7 +13,7 @@ const keysRecordTransSummary = ["date", "account", "accountSub", "description", 
     const dateFormFmt = dateForm?.defaultDate? getStartAndEndDate("THIS-MONTH") : dateForm;
     const res = transProcessor.getRecordedTransactions(dateFormFmt);
 
-    //console.log(res)
+   // console.log(res)
     const startDateFmt = new Date(dateFormFmt?.startDate).toDateString();
     const endDateFmt = new Date(dateFormFmt?.endDate).toDateString();
     const date = 'Transactions from '+startDateFmt+" to "+endDateFmt;

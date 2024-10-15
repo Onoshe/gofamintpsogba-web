@@ -28,7 +28,7 @@ const handleSelDate = (date)=>{
 }
 const handlePdfExport =()=>{
     handleExport2Pdf({reportRows, reportHeader, pdfHeader, pdfData, headerRowsColsArr, companyLogoFile});
-    postActivity(user, activities.DOWNLOAD, pdfHeader[1][0]+" report exported to pdf")
+    postActivity(user, activities.DOWNLOAD, pdfHeader[1][0]+" pdf report")
 }
 
 const handleOnChangeDate =(e)=>{
@@ -94,7 +94,7 @@ const handleCustomDate =()=>{
                         onClick={()=>handleActivityToggle("TRAN")}
                     />
                 </div>
-                <div className='hover:tooltip-open tooltip tooltip-bottom mx-2' data-tip={'Activities'}>
+                <div className='hover:tooltip-open tooltip tooltip-left mx-2' data-tip={'Activities'}>
                     <AiOutlineHistory className='text-[22px] text-red-900 cursor-pointer hover:text-red-600 active:text-red-700'
                         onClick={()=>handleActivityToggle("ACT")}
                     />

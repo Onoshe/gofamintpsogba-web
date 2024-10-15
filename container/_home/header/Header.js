@@ -15,7 +15,7 @@ const HomeHeader = ({session, signOut}) => {
   
   //console.log(coy)
   const handleLogout =()=>{
-    signOut({dispatchCoy});
+    signOut({dispatchCoy, user:session?.user});
      //console.log(session)
    }
    const handleBackToDashboard =()=>{

@@ -65,7 +65,8 @@ export const loginHandler = async({e, loadingBtn, setLoadingBtn, signIn, form, d
                 setAlert({...alert, msgTitle:msgs[0], msg:msgs[1], type:'error', show:true});
                 
                 const domain = form?.userName?.split("@")[0]?.toLowerCase();
-                postActivity({userId:form?.userName, firstname:form?.userName, lastname:'', email:form?.email, companyId:domain}, activities.LOGIN_ATTEMPT, "User login attempted")
+                const user = {userId:form?.userName, firstname:form?.userName, lastname:'', email:form?.email, companyId:domain};
+                postActivity(user, activities.LOGIN_ATTEMPT)
                 setLoadingBtn({loading:false});
             }
         }

@@ -30,7 +30,7 @@ const Layout = ({children, tabsArr, activeTab, handleSelectedTab, handleHideDrop
   const handleSelectedPage=(selPage)=>{
     dispatchSelectedPage(selPage);
     if(selPage?.name === "LOGOUT"){
-      signOut({dispatchCoy});
+      signOut({dispatchCoy, user});
     }
   }
   

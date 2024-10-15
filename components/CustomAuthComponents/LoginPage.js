@@ -44,7 +44,7 @@ function LoginPageCustom({ssUser}) {
   };
 
   const logoutHandler = async ()=>{
-    await signOut({dispatchCoy});
+    await signOut({dispatchCoy, user});
   }
 
   return (

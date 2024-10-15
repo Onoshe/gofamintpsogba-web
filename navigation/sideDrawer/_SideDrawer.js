@@ -36,7 +36,7 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
   const handleLogout =()=>{
     dispatchActivePage({name:"", title:'Dashboard'});
     setLocalStorageValue({});
-    signOut({dispatchCoy});
+    signOut({dispatchCoy, user});
     router.push('/');
   };
 

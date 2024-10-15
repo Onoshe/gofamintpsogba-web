@@ -4,12 +4,18 @@ import TableWithPinnedView from '@/components/tables/TableWithPinnedView';
 import { MdClear, MdSearch } from 'react-icons/md';
 import { ExcelIcon } from '../icons/iconsSvg';
 import ToolsBar from './ToolsBar';
+import useStoreTransactions from '@/context/storeTransactions';
+import { getCompanyLogo } from '@/container/company/components/utils/getSubscriptionHistory';
+import useStoreHeader from '@/context/storeHeader';
 
 
 
 const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searchValue,onChangeSearch, handleClear, handleSearch,
-    handleExportToExcel, personalAcctType
-}) => {
+    handleExportToExcel, personalAcctType}) => {
+    const  {clientAccount, runDispatchClientDataCall} = useStoreTransactions((state) => state);
+    const {settings} = useStoreHeader((state) => state);
+    const companyLogoFile = getCompanyLogo(settings);
+
   const [showAllRows, setShowAllRows] = React.useState(false);
 
   const rowKeysMain = ['edit', 'type', 'title', 'accountCode', 'firstname', 'othernames', 'lastname', 'formNo', 'dob', 'phoneNo', 'email', 'accountGroup', 'residentialAddress'];
@@ -40,6 +46,8 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
             handleExportToExcel={handleExportToExcel}
             personalAccounts={personalAccounts}
             personalAcctType={personalAcctType}
+            clientAccount={clientAccount}
+            companyLogoFile={companyLogoFile}
           />
           <TableWithPinnedView
             classNameTable={"overflow-x-auto max-h-[65vh] overflow-y-auto"}

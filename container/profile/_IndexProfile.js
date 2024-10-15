@@ -22,6 +22,14 @@ import { handleResetUserPassword } from './utils/handleResetUserPassword';
 import { getPlanLimit } from './utils/getPlanLimit';
 import { capitalizeFirstCharOnly } from '@/lib/capitalize/capitalizeString';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import { Modal } from './components/Modal';
+import { BiUpload } from 'react-icons/bi';
+import { FileUploadCustom } from './components/FileUploadCustom';
+import { MdClose } from 'react-icons/md';
+import { getImageLink } from '@/lib/apiRequest/urlLinks';
+import Image from 'next/image';
+import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
+import { getRequest } from '@/lib/apiRequest/getRequest';
 
 
 
@@ -29,8 +37,8 @@ const updateFormAddUserDef ={firstname:"", lastname:"", title:"", email:"",
   phoneNo:"", role:"", password:"", userId1:'', userId2:'', showUserId:false, defaultUserId:true};
 
 const IndexProfile = ({ssUser}) => {
-  const { session,  status} = useAuthCustom(ssUser); 
-  const {user, users, subscriptions, client_Admin, clientData, generalSettings, quickrecordsLogo, dispatchFetchSettingsCall} = useStoreHeader((state) => state);
+  const { session, signOut, status} = useAuthCustom(ssUser); 
+  const {user, users, subscriptions, coy, dispatchCoy, client_Admin, clientData, generalSettings, quickrecordsLogo, dispatchFetchSettingsCall} = useStoreHeader((state) => state);
   const {online,  dispatchUser} = {online:true, user:{}, dispatchUser:()=>console.log()};
   const [changePassword, setChangePassword] = React.useState(false);
   const [changePasswordCode, setChangePasswordCode] = React.useState("");
@@ -41,9 +49,16 @@ const IndexProfile = ({ssUser}) => {
   const [addUser, setAddUser] = React.useState({user:{}, add:false});
   const [deleteUser, setDeleteUser] = React.useState({user:{}, delete:false});
   const [updateForm, setUpdateForm] = React.useState({});
+  const [signingOut, setSigningOut] = React.useState({show:false});
   const [updateFormAddUser, setUpdateFormAddUser] = React.useState(updateFormAddUserDef);
   const [updateUserForm, setUpdateUserForm] = React.useState({role:"", nonActive:"", password:"", passwordDelete:"", passwordReset:""});
   let planLimit = getPlanLimit(subscriptions, generalSettings);
+  const userId = session?.user?.userId;
+  let userIdImg = userId?.replace(".", "_");
+  const userPhoto = getImageLink(userIdImg);
+  //console.log(userPhoto)
+  //userIdImg += ".jpg";
+  const [file, setFile] = React.useState(null);
   //console.log(generalSettings)
 
   const notify = (type, msg) => toast[type](msg, {
@@ -82,11 +97,14 @@ const IndexProfile = ({ssUser}) => {
   }
   const handleUpdatePwd = async (e, form)=>{
     e.preventDefault();
+    //return console.log(form)
     await handleUpdateUserPassword(form, user, session)
     .then((res)=> {
       if(res.ok){
         notify("success", "Password update successful");
-        setUpdatePassword({password:{}, update:false})
+        setUpdatePassword({password:{}, update:false});
+        setSigningOut({show:true});
+        setTimeout(()=>signOut({dispatchCoy, user}), 3000);
       }else{notify("error", res.msg);}
     })
  }
@@ -180,32 +198,42 @@ const handleResetUserPwd =async (e)=>{
     setUpdatePassword({password:{}, update:false});
     setAddUser({user:{}, add:false})
   };
-
-
+  
+  //console.log(userPhoto)
 
   React.useEffect(()=>{
     setUpdateForm({title:user.title, phoneNo:user.phoneNo, recoveryEmail:user.recoveryEmail, password:''})
   },[user]);
+  
+
+  const userPhotoRender = (userPhoto?
+  <Image width={100} height={100} src={userPhoto} alt='photo' className='size-[100px]'/>
+  :<BsPerson color='seagreen' className='text-[100px] text-center'/>);
 
   return (
     <div  data-theme='light'  className='p-3 md:p-4 min-h-screen'>
-        <div className='font-bold flex flex-row items-center gap-2 header1 text-blue-700'>
+        <div className='font-bold flex  flex-row items-center gap-2 header1 text-blue-700'>
             <BsFillPersonFill  className={`${user?.lastname? 'text-green' : ''} text-[28px]`}/>
                 {user?.lastname? user?.lastname+"'s Profile" : 'My Profile'}
-            
         </div>
         <div className='font-bold  flex-row items-center gap-2 header1 text-sm text-teal-800 mt-2'>{capitalizeFirstCharOnly(user?.role)}</div>
         <div className='flex justify-center items-center my-5 mb-10 '>
           {!user?.imageUrl?
-            <div className="avatar online">
+            <div className="avatar online relative">
                 <div className="w-24 rounded-full flex justify-center items-center ring ring-primary ring-offset-base-100 ring-offset-2">
-                    <BsPerson color='seagreen' className='text-[100px] text-center'/>
-                </div>
+                    {file?.name? 
+                      <img src={URL.createObjectURL(file)} alt="Uploade image" className='size-[50px]'/>
+                      : userPhotoRender
+                    }
+                </div>   
+                <FileUploadCustom file={file} setFile={setFile} session={session} 
+                  className={'hidden'} notify={notify} userId={userId}/>
             </div>
             :<div className='flex justify-center items-center pt-4 pb-6'>
                 <div className="avatar">
                     <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                        <img src={user?.imageUrl} alt='photo' />
+                        {/*<img src={user?.imageUrl} alt='photo' />*/}
+                       
                     </div>
                 </div>
             </div>}
@@ -278,6 +306,7 @@ const handleResetUserPwd =async (e)=>{
             setUpdateForm={setUpdateFormAddUser}
             />
         }
+        {signingOut.show && <Modal />}
         <br/>
         <ToastContainer 
             position="top-right"

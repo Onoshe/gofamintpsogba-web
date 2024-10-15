@@ -65,7 +65,7 @@ const IndexReports = ({ssUser}) => {
 
   // console.log(windowDimen)
   const handleReport =(report)=>{
-      console.log(report);
+      //console.log(report);
   }
 
     //console.log(rows)
@@ -102,7 +102,7 @@ const IndexReports = ({ssUser}) => {
       const {styleRows} =  getStyleRows(rows, docHeader.length + offsetRows);
       //console.log({data, docName:title, docHeader, rowsHeader, styleRows})
       handleExcelExport({data, docName:title, docHeader, rowsHeader, styleRows, col1WchInDigit, noFmtCols:[4]});
-      postActivity(user, activities.DOWNLOAD, title+" report exported to excel")
+      postActivity(user, activities.DOWNLOAD, title+" excel report")
     }
 
     const handleReportNav =(act)=>{
@@ -196,6 +196,8 @@ const IndexReports = ({ssUser}) => {
         dispatchCurrentReport(rep);
       }else{dispatchCurrentReport(tabsDropdown[currentReportTab.toLocaleLowerCase()][0]);}
     }
+    //Refresh upon mount
+    handleRefresh();
   },[]);
 
   const showReport = typeof rows === "object" || rows?.length ? true : false;

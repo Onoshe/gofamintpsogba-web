@@ -37,7 +37,8 @@ export const POST = async (req, res) => {
     // Set the session cookie
     //const sessionToken = `token-${user.id}`;
      // Create a JWT containing the user's ID and email
-     const userData = user;
+     const {secret, ...userWithoutSecret} = user;
+     const userData = userWithoutSecret;
      const sessionToken = jwt.sign(userData,
       JWT_SECRET,
       { expiresIn: JWT_EXPIRATION }

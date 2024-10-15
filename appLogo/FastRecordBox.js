@@ -3,12 +3,12 @@ import Image from 'next/image';
 
 
 
-const FastRecordBox = ({className, width, height,}) => {
+const FastRecordBox = ({className, width, height, noSpin}) => {
  
   
   return (
       <div
-        className='animate-spin'
+        className={`${noSpin? '' :'animate-spin'}`}
         >
         <Image src="/QuickRecordsLogoTN.png" alt="FastRecord Logo"
             width={width? width : 100}

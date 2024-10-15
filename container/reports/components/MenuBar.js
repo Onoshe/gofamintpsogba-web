@@ -27,8 +27,9 @@ const handleSelDate = (date)=>{
     setDateForm(res);
 }
 const handlePdfExport =()=>{
+    //console.log({reportRows, reportHeader, pdfHeader, pdfData, headerRowsColsArr, companyLogoFile})
     handleExport2Pdf({reportRows, reportHeader, pdfHeader, pdfData, headerRowsColsArr, companyLogoFile});
-    postActivity(user, activities.DOWNLOAD, pdfHeader[1][0]+" report exported to pdf")
+    postActivity(user, activities.DOWNLOAD, pdfHeader[1][0]+" pdf report")
 }
 
 const handleOnChangeDate =(e)=>{
