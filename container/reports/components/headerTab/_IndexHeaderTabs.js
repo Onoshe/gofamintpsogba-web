@@ -27,10 +27,10 @@ const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,
                     //console.log(i===selTab.idx && selTab.open+" Hello");
                     return(
                         <div key={`${i}+key`}
-                         className={`cursor-pointer text-[22px] lg:text-[26px] flex-1 py-1 items-center justify-center flex flex-col ${isReport? 'text-[blue] bg-white border-x-blue-600 border-[3px] border-b-white' : 'text-[#97aec3] '}  whitespace-nowrap group`}
+                         className={`cursor-pointer text-[18px] flex-1 items-center justify-center flex flex-col ${isReport? 'text-[blue] bg-white border-x-blue-600 border-[3px] border-b-white' : 'text-[#97aec3] '}  whitespace-nowrap group`}
                          onClick={()=>selectedTabHandler(tabItem, i)}>
                             {tabItem.icon}
-                            <span className='text-[11px] lg:text-[13px] hidden smc:block'>{tabItem.tabName}</span>
+                            <span className='text-[11px] hidden smc:block'>{tabItem.tabName}</span>
                             <Dropdown tabItem={tabItem} 
                                 companyId={ companyId}
                                 handleSelReport={handleSelReport}

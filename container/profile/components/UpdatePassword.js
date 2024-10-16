@@ -19,11 +19,11 @@ export const UpdatedPassword = ({user,  handleClose, handleUpdatePwd}) => {
     }
   return (
     <div className='z-50 fixed top-0 bottom-0 right-0 w-full h-screen bg-[#33486ea7] flex justify-center items-center'>
-        <div className='relative bg-white boder border-blue-500 p-3 rounded-md w-full max-w-[450px]'>
-            <MdClose size={28} className='absolute right-5 cursor-pointer text-red-500 hover:text-red-800'
+        <div className='relative bg-white boder border-blue-500 p-3  rounded-md w-full max-w-[400px]'>
+            <MdClose size={24} className='absolute right-5 cursor-pointer text-red-500 hover:text-red-800'
              onClick={handleClose}/>
             <p className='text-center font-bold py-3 text-red-800'>Change Password</p>
-            <div className='flex flex-col gap-3 p-4 text-sm'>
+            <div className='flex flex-col gap-3 p-4 text-[12px]'>
                 <p>Please note that you will be signed out for you to login with you new password after successfully changing it.</p>
                 <div>
                     <p>Username</p>
@@ -43,7 +43,7 @@ export const UpdatedPassword = ({user,  handleClose, handleUpdatePwd}) => {
                         <input name="passwordConfirm" className='w-full border-b border-b-blue-400 outline-none' placeholder='Confirm password'
                             onChange={onChangeHandler} value={updatePwd.passwordConfirm} required/>
                     </div>
-                    <button type='submit' className='btn btn-info px-10'>Update</button>
+                    <button type='submit' className='btn btn-info btn-sm px-8'>Update</button>
                 </form>
                 <form className='hidden' onSubmit={(e)=>handleUpdatePwd(e, updatePwd)}>
                     <div className='mb-4 flex flex-col gap-3'>
@@ -52,7 +52,7 @@ export const UpdatedPassword = ({user,  handleClose, handleUpdatePwd}) => {
                         onChange={onChangeHandler} value={updatePwd.otp} required/>
                         <p>{"You did'nt see the message?"}<span className='btn btn-success btn-sm ml-2'>Resend</span></p>
                     </div>
-                    <button type='submit' className='btn btn-info px-10'>Enter</button>
+                    <button type='submit' className='btn btn-info btn-sm px-8'>Enter</button>
                 </form>
             </div>
         </div>

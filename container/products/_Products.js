@@ -110,7 +110,7 @@ const Products = ({ssUser}) => {
           {createType === "MANUAL" && <>
             {products?.length > 1?
               <TableWithPinnedView
-                classNameTable={"overflow-x-auto max-h-[65vh] overflow-y-auto my-4 md:my-6"}
+                classNameTable={"overflow-x-auto max-h-[65vh] overflow-y-auto mt-2 mb-4"}
                 header={headersArr} 
                 rowKeys={['productCode', 'category', 'productName', 'description', 'edit', 'delete']}
                 rows={products.slice(1)}

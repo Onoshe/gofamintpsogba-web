@@ -9,7 +9,7 @@ const TextInput=({title,subTitle, placeholder, type, value, onClick, isRequired,
                 {title} <span className='text-[red]'>{required? '*' : ''}</span>
                 <span className='text-gray-500 '>{subTitle}</span>
             </label>
-            <input className={`${styles.input_base} ${inputStyle} mt-[-5px]`}
+            <input className={`${styles.input_base} ${inputStyle} mt-0`}
                  type={type? type : "text"} 
                  placeholder={placeholder}
                  value={value}

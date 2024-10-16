@@ -22,8 +22,8 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
     return (
     <PageBlind showBlind={showBlind}>
         <div className={`w-full justify-center items-center flex flex-col`}>
-            <div className='w-full max-w-[600px] justify-center flex flex-col bg-white shadow-lg text-gray-900'>
-                <div className='bg-[aliceblue] w-full  border-b border-gray-100 flex flex-row items-center justify-between p-2 md:p-6'>
+            <div className='w-full max-w-[500px] justify-center flex flex-col bg-white shadow-lg text-gray-900'>
+                <div className='bg-[aliceblue] w-full  border-b border-gray-100 flex flex-row items-center justify-between p-2 md:px-6'>
                     <p className='font-bold text-blue-500'>Create Account</p>
                     <MdClose size={32} className='text-red-700 hover:text-[red] active:text-red-200 cursor-pointer'
                      onClick={handleClose}/>
@@ -34,7 +34,7 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
                             labelName="Account Type*"
                             //classNameCont={'w-[calc(100% - 120px)]'}
                             classNameCont={'max-w-[350px]'}
-                            classNameLabel={'whitespace-nowrap w-[120px] text-red-600 mr-2'}
+                            classNameLabel={'whitespace-nowrap w-[120px] text-[12px] text-red-600 mr-2'}
                             classNameInput={'text-blue-700'}
                             name="typeCode"
                             required
@@ -63,7 +63,7 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
                         </Selection>
                         <TextInput
                             labelName="Account Name*"
-                            classNameLabel={'whitespace-nowrap w-[120px] text-red-600 mr-2'}
+                            classNameLabel={'whitespace-nowrap w-[80px] text-[12px] text-red-600 mr-2'}
                             type="text"
                             name="accountName"
                             placeholder="Maximum length of 52"
@@ -74,7 +74,7 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
                         />
                         <TextInput
                             labelName="Account Code*"
-                            classNameLabel={'whitespace-nowrap w-[120px] text-red-600 mr-2'}
+                            classNameLabel={'whitespace-nowrap w-[80px] text-[12px] text-red-600 mr-2'}
                             type="text"
                             name="accountCode"
                             placeholder="Digits- maximum length of 15"
@@ -85,7 +85,7 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
                         />
                         <TextArea
                             labelName="Description"
-                            classNameLabel={'whitespace-nowrap w-[120px] mr-2'}
+                            classNameLabel={'whitespace-nowrap w-[80px] text-[12px] mr-2'}
                             type="text"
                             name="description"
                             placeholder="Maximum of 500 characters"
@@ -100,7 +100,7 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
                             checked={formInput.addToDashboard}
                             onChange={()=>handleFormInput({target:{name:"addToDashboard", value:!formInput.addToDashboard}})}
                             />
-                        <div className="text-[12px] -mt-3 -mb-5">
+                        <div className="text-[11px] -mt-3 -mb-5">
                             <p class="font-[500]">Valid Account Code:</p>
                             <p>* Any of 0 - 9, A - Z, a - z, and hyphen and no space</p>
                             <p>* Can only begin with any of the digits from 1 - 9</p>
@@ -113,8 +113,8 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
                        {infoMsg?.error && <BiSolidError size={23} />} <p>{infoMsg?.msg}</p>
                     </div>
                     <div className='flex flex-row gap-4 p-4 md:p-6'>
-                        <input type='submit' className="btn btn-info px-10" value="Save"/>
-                        <button className="btn bg-gray-300 text-black hover:bg-gray-400" onClick={handleClose}>Cancel</button>
+                        <input type='submit' className="btn btn-info btn-sm px-8" value="Save"/>
+                        <button className="btn btn-sm bg-gray-300 text-black hover:bg-gray-400" onClick={handleClose}>Cancel</button>
                     </div>
                 </form>
             </div>

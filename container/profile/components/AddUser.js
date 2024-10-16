@@ -30,12 +30,12 @@ export const AddUser = ({
     const classNameUserId = `flex-grow flex max-w-[80px] rounded-sm outline-none ${updateForm.defaultUserId? '' :'pl-1 bg-teal-200'}`;
   return (
     <div className='z-50 fixed top-0 bottom-0 right-0 w-full h-screen bg-[#33486ea7] flex justify-center items-center'>
-        <div className='relative bg-blue-100 boder border-blue-500 p-3 rounded-md w-full max-w-[450px] '>
+        <div className='relative text-[12px] bg-blue-100 boder border-blue-500 p-3 rounded-md w-full max-w-[450px] '>
             <MdClose size={28} className='absolute right-5 cursor-pointer text-red-500 hover:text-red-800'
              onClick={handleClose}/>
             <p className='text-center font-bold py-3'>Add New User</p>
 
-            <form className='flex flex-col text-sm' onSubmit={(e)=>handleAddUser(e, updateForm)}>
+            <form className='flex flex-col' onSubmit={(e)=>handleAddUser(e, updateForm)}>
                 <div className='max-h-[55vh] bg-white overflow-y-auto flex flex-col gap-3 p-4'>
                     <div>
                         <p className='font-[600] text-blue-800 pb-2'>Firstname</p>

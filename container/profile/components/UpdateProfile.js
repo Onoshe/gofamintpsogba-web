@@ -19,11 +19,11 @@ export const UpdatedProfile = ({
     
   return (
     <div className='z-50 fixed top-0 bottom-0 right-0 w-full h-screen bg-[#33486ea7] flex justify-center items-center'>
-        <div className='relative bg-white boder border-blue-500 p-3 py-6 rounded-md w-full max-w-[450px]'>
+        <div className='relative bg-white boder text-[12px] border-blue-500 p-3 py-6 rounded-md w-full max-w-[400px]'>
             <MdClose size={28} className='absolute right-5 cursor-pointer text-red-500 hover:text-red-800'
              onClick={handleClose}/>
             <p className='text-center font-bold pb-3'>Update Profile</p>
-            <form className='flex flex-col gap-3 p-4' onSubmit={handleUpdateUser}>
+            <form className='flex flex-col gap-3 p-4 ' onSubmit={handleUpdateUser}>
                 <div>
                     <p>Username</p>
                     <p className='text-blue-400 border-b border-b-blue-400' >{user.userName}</p>

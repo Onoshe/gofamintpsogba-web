@@ -217,7 +217,7 @@ const handleResetUserPwd =async (e)=>{
                 {user?.lastname? user?.lastname+"'s Profile" : 'My Profile'}
         </div>
         <div className='font-bold  flex-row items-center gap-2 header1 text-sm text-teal-800 mt-2'>{capitalizeFirstCharOnly(user?.role)}</div>
-        <div className='flex justify-center items-center my-5 mb-10 '>
+        <div className='flex justify-center items-center my-3 '>
           {!user?.imageUrl?
             <div className="avatar online relative">
                 <div className="w-24 rounded-full flex justify-center items-center ring ring-primary ring-offset-base-100 ring-offset-2">

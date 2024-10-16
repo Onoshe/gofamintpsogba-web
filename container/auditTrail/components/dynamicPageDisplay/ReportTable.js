@@ -17,9 +17,9 @@ const ReportTable = ({
   return (
     <div className={classNameTable}
         data-theme="pastel" >
-        <table className={`table table-sm table-zebra ${pinRow? 'table-pin-rows' :''} ${pinCol? 'table-pin-cols' :''}`}>
+        <table className={`table table-xs table-zebra ${pinRow? 'table-pin-rows' :''} ${pinCol? 'table-pin-cols' :''}`}>
             <thead className="">
-                <tr className={`text-[14px] ${classNameHeaderTR}`}>
+                <tr className={`text-[12px] ${classNameHeaderTR}`}>
                     <td className={'py-6'}>{''}</td> 
                     {rowKeys?.map((key, i)=>{
                         const dt = header?.find((e)=> e.name === key);
@@ -46,7 +46,7 @@ const ReportTable = ({
                                         <td key={`${id}key`}
                                             className={`${row.classNameTD} ${clickableRow && ''}`}  
                                             onClick={()=>{if(clickableRow){onClickRow(row)}}}>
-                                            <span className={`${row[key+"ClassName"]}`} 
+                                            <span className={`${row[key+"ClassName"]} text-[12px]`} 
                                                 onClick={()=>handleClickableCell(row, i, key, id)}>
                                                 {displayData}
                                             </span>

@@ -24,7 +24,7 @@ const PageWrapper = ({children, classNameCont}) => {
     },[]);
 
     return (
-        <div className={`bg-white w-full pt-[70px] min-h-screen ${classNameCont}`}>
+        <div className={`bg-white w-full pt-[55px] min-h-screen ${classNameCont}`}>
             {children}
         </div>
   )

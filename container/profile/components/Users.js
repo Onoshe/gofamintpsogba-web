@@ -50,7 +50,7 @@ const Users = ({users, handleClickCell, handleAddUser, planLimit}) => {
             classNameRowsTd="py-2"
         />
         <br/>
-        <button className={`btn  ${users?.length >= planLimit? 'btn-disabled' : 'btn-accent'}`} onClick={handleAddUser}>Add New User</button>
+        <button className={`btn btn-sm text-[12px]  ${users?.length >= planLimit? 'btn-disabled' : 'btn-accent'}`} onClick={handleAddUser}>Add New User</button>
         <p className={`text-sm text-red-700 italic py-2 ${users?.length >= planLimit? '' : 'hidden'}`}>You have reach your maximum quota. To be able to add more users, kindly upgrade to a higher plan</p>
     </div>
   )

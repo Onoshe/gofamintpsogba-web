@@ -31,22 +31,22 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
 
   return (
     <div className='flex w-full flex-col justify-center items-center p-3 pt-0 mx-4 text-gray-600'>
-      <div className={`my-3 `}>
-        <p className='text-center font-medium text-lg'>{currentReportTitle}</p>
+      <div className={`my-3 text-[13px]`}>
+        <p className='text-center font-medium'>{currentReportTitle}</p>
          <p className='text-center'>{reportDateDisplay}</p>
          <p className='text-center'>{subTitle}</p>
       </div>
 
-      <div className={`${viewTransId? 'hidden' :'flex'} my-5 grow self-start gap-2 smc:w-[400px] items-center bg-white border px-3 border-blue-400 rounded-md focus:border-blue-600`}>
-        <input type="text" className="bg-white outline-none py-2 rounded-md w-full" placeholder="Search" 
+      <div className={`${viewTransId? 'hidden' :'flex'} grow self-start gap-2 smc:w-[400px] items-center bg-white border px-3 border-blue-400 rounded-md focus:border-blue-600`}>
+        <input type="text" className="bg-white input-sm outline-none py-2 rounded-md w-full" placeholder="Search" 
           onChange={onChangeHandler} value={searchValue}/>
         <BiSearch size={22} className={` ${searchValue? 'hidden' : ''}`}/>
         <MdClear size={22} className={`cursor-pointer active:text-red-200 text-red-600 ${searchValue? '' : 'hidden'}`}
           onClick={handleCancel}/>
       </div>
-       <div className={`w-[98%] overflow-x-auto mr-10`}>
+       <div className={`w-[98%] overflow-x-auto mr-10 mt-1`}>
           <ReportTable
-                classNameTable={`overflow-x-auto overflow-y-auto ${viewTransId? 'max-h-[70vh]' : 'max-h-[60vh]'}`}
+                classNameTable={`overflow-x-auto overflow-y-auto ${viewTransId? 'max-h-[75vh]' : 'max-h-[60vh]'}`}
                 header={[{className:'bg-blue-50 py-5', title:''}, ...rowHeaders]}
                 rowKeys={rowKeysShow}
                 rows={rowsForDisplay}

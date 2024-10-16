@@ -12,7 +12,7 @@ import { datesDiffGreaterThan365, monthsDiffMoreThan12 } from '@/lib/date/datesD
 
 const MenuBarBar = ({handleReportNav, handleExportToExcel, handleDetailReport, reportName, reportRows, reportRowKeys, 
     reportHeader, showBar, pdfData, pdfHeader, user, toastNotify, dateForm, setDateForm, ledgerCode,  monthlyQuery, 
-    handleMonthlySummaryToggle, headerRowsColsArr, companyLogoFile, viewTransId, handleRefresh}) => {
+    handleMonthlySummaryToggle, headerRowsColsArr, companyLogoFile, viewTransId, handleRefresh, currentReportTab}) => {
     const [showDate, setShowDate] = React.useState(false);
     const [customDate, setCustomDate] = React.useState({startDate:{min:'', max:''}, endDate:{min:'', max:''}});
     const [dateFormPrelim, setDateFormPrelim] = React.useState("");
@@ -69,60 +69,63 @@ const handleCustomDate =(e)=>{
      }
 
   return (
-    <div className={`z-20 px-3 flex-row gap-3 shadow-md border-b-2 border-t-2 w-full items-center bg-sky-50 h-9 ${showBar? 'flex' : 'hidden'}`}>
-        <div className='hover:tooltip-open tooltip tooltip-right' data-tip={'Back'}>
-            <BiArrowBack size={24} className='text-[navy] hover:bg-blue-100 shadow-md rounded-lg cursor-pointer hover:text-blue-500 active:text-blue-300' 
-            onClick={()=>handleReportNav('PREV')}
-            />
-        </div>
-        <div className='hover:tooltip-open tooltip tooltip-right' data-tip={'Next'}>
-            <BiArrowBack size={24} className='text-[navy] hover:bg-blue-100 shadow-md rounded-lg tooltip-open tooltip-top tooltip cursor-pointer hover:text-blue-500 active:text-blue-300 rotate-180' 
-            onClick={()=>handleReportNav('NEXT')}
-            />
-        </div>
-        <div className={`flex-row gap-3 items-center ${hideBtns? 'hidden' :'flex'}`}>
-            <div className='hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Excel'}>
-                <ExcelIcon className={'fill-green-700  h-5 w-5 cursor-pointer hover:fill-green-500 active:fill-green-800'}
-                onClick={handleExportToExcel}/>
-            </div>
-            <div className='hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Pdf'}>
-                <BsFileEarmarkPdf className='text-[22px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
-                onClick={handlePdfExport}
+    <div className={`z-20 px-3 flex-row shadow-md border-b-2 border-t-2 w-full justify-between items-center bg-sky-50 h-8 ${showBar? 'flex' : 'hidden'}`}>
+        <div className={`flex flex-row gap-3 items-center`}>
+            <div className='hover:tooltip-open tooltip tooltip-right' data-tip={'Back'}>
+                <BiArrowBack size={18} className='text-[navy] hover:bg-blue-100 shadow-md rounded-lg cursor-pointer hover:text-blue-500 active:text-blue-300' 
+                onClick={()=>handleReportNav('PREV')}
                 />
             </div>
-            <DateComp handleSelDate={handleSelDate}
-                hideComponent={hideDateComponent}
-                showDate={showDate}
-                setShowDate={setShowDate}
-                dateForm={dateFormPrelim}
-                customDate={customDate}
-                handleOnChange={handleOnChangeDate}
-                handleCustomDate={handleCustomDate}
-            />
-            <div className={`flex flex-row items-center justify-center gap-2 ${showDetailReport? '' :'hidden'}`}>
-                <div className={`hover:tooltip-open tooltip tooltip-top ${reportName?.includes('details')? 'hidden' :''}`} data-tip={'Detail report'}>
-                    <BiDetail className='text-[24px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
-                    onClick={handleDetailReport}/>
-                </div>
-                <div className={`hover:tooltip-open tooltip tooltip-top ${reportName?.includes('details')? '' :'hidden'}`} data-tip={'Condensed report'}>
-                    <MdOutlineFeaturedPlayList className='text-[24px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
-                    onClick={handleDetailReport}/>
-                </div>
+            <div className='hover:tooltip-open tooltip tooltip-right' data-tip={'Next'}>
+                <BiArrowBack size={18} className='text-[navy] hover:bg-blue-100 shadow-md rounded-lg tooltip-open tooltip-top tooltip cursor-pointer hover:text-blue-500 active:text-blue-300 rotate-180' 
+                onClick={()=>handleReportNav('NEXT')}
+                />
             </div>
-            <div className={`flex flex-row items-center justify-center gap-2 ${showMonthlyReport? '' :'hidden'}`}>
-                <div className={`hover:tooltip-open tooltip tooltip-top ${monthlyQuery? 'hidden' :''}`} data-tip={'Full month'}>
-                    <BiDetail className='text-[24px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
-                    onClick={handleMonthlySummaryToggle}/>
+            <div className={`flex-row gap-3 items-center ${hideBtns? 'hidden' :'flex'}`}>
+                <div className='hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Excel'}>
+                    <ExcelIcon className={'fill-green-700  h-4 w-4 cursor-pointer hover:fill-green-500 active:fill-green-800'}
+                    onClick={handleExportToExcel}/>
                 </div>
-                <div className={`hover:tooltip-open tooltip tooltip-top ${monthlyQuery? '' :'hidden'}`} data-tip={'Monthly summary'}>
-                    <MdOutlineFeaturedPlayList className='text-[24px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
-                    onClick={handleMonthlySummaryToggle}/>
+                <div className='hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Pdf'}>
+                    <BsFileEarmarkPdf className='text-[16px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
+                    onClick={handlePdfExport}
+                    />
+                </div>
+                <DateComp handleSelDate={handleSelDate}
+                    hideComponent={hideDateComponent}
+                    showDate={showDate}
+                    setShowDate={setShowDate}
+                    dateForm={dateFormPrelim}
+                    customDate={customDate}
+                    handleOnChange={handleOnChangeDate}
+                    handleCustomDate={handleCustomDate}
+                />
+                <div className={`flex flex-row items-center justify-center gap-2 ${showDetailReport? '' :'hidden'}`}>
+                    <div className={`hover:tooltip-open tooltip tooltip-top ${reportName?.includes('details')? 'hidden' :''}`} data-tip={'Detail report'}>
+                        <BiDetail className='text-[16px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
+                        onClick={handleDetailReport}/>
+                    </div>
+                    <div className={`hover:tooltip-open tooltip tooltip-top ${reportName?.includes('details')? '' :'hidden'}`} data-tip={'Condensed report'}>
+                        <MdOutlineFeaturedPlayList className='text-[16px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
+                        onClick={handleDetailReport}/>
+                    </div>
+                </div>
+                <div className={`flex flex-row items-center justify-center gap-2 ${showMonthlyReport? '' :'hidden'}`}>
+                    <div className={`hover:tooltip-open tooltip tooltip-top ${monthlyQuery? 'hidden' :''}`} data-tip={'Full month'}>
+                        <BiDetail className='text-[16px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
+                        onClick={handleMonthlySummaryToggle}/>
+                    </div>
+                    <div className={`hover:tooltip-open tooltip tooltip-top ${monthlyQuery? '' :'hidden'}`} data-tip={'Monthly summary'}>
+                        <MdOutlineFeaturedPlayList className='text-[16px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
+                        onClick={handleMonthlySummaryToggle}/>
+                    </div>
                 </div>
             </div>
         </div>
-        <div className=' flex flex-1 justify-end'>
+        <p className='px-3 pt-1 text-[10px] sm:text-[13px] text-blue-700 flex'>{currentReportTab}</p>
+        <div className=' flex'>
             <div className={`hover:tooltip-open tooltip tooltip-left flex items-center justify-between`} data-tip={'Refresh data'}>
-                    <MdRefresh className='text-[24px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
+                    <MdRefresh className='text-[16px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
                     onClick={handleRefresh}/>
             </div>
         </div>
@@ -145,7 +148,7 @@ const DateComp =({handleSelDate, showDate, dateForm, hideComponent, customDate, 
           //onMouseEnter={()=>setShowDate(true)}
           //onMouseLeave={()=>setShowDate(false)}
           >
-            <MdDateRange className='text-[24px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
+            <MdDateRange className='text-[18px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
              onClick={toggleShowDate}/>
             <>
                 <div className={`z-50 fixed  left-2 sm:left-auto sm:absolute pb-2 text-[12px] md:text-[12px] border border-blue-600 rounded-md bg-blue-50 shadow-lg ${showDate? '' :'hidden'}`}>

@@ -27,7 +27,7 @@ const RootLayout = ({params, children}) => {
               <SideDrawer ssUser={user} params={params}/>
             </div>
             </div>
-            <div className='lg:ml-[250px] w-full lg:w-[calc(100% - 220px)] overflow-x-hidden'>
+            <div className='lg:ml-[200px] w-full lg:w-[calc(100% - 180px)] overflow-x-hidden'>
               {children}
             </div>
           </div>

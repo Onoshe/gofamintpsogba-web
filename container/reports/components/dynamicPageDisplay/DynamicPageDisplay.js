@@ -31,8 +31,8 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
 //w-[calc(100% - 200px)]
   return (
     <div className=' flex w-full flex-col text-sm smc:text-base justify-center items-center p-3 pt-0  mx-4 text-gray-600'>
-      <div className={`mb-3`}>
-        <p className='text-center hidden sm:block'>{companyName}</p>
+      <div className={`mb-3 text-[13px]`}>
+        <p className='text-center hidden'>{companyName}</p>
         <p className='text-center'>{currentReportTitle}</p>
          <p className='text-center'>{reportDateDisplay}</p>
          <p className='text-center'>{subTitle}</p>
@@ -40,7 +40,7 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
       
        <div className='w-[98%] overflow-x-auto mr-10'>
           <ReportTable
-                classNameTable={"overflow-x-auto overflow-y-auto max-h-[calc(100vh_-_250px)] sm:max-h-[calc(100vh_-_300px)]"}
+                classNameTable={"overflow-x-auto overflow-y-auto max-h-[calc(100vh_-_200px)]"}
                 header={[{className:'bg-blue-50 py-5', title:''}, ...rowHeaders]}
                 rowKeys={rowKeysShow}
                 rows={rowsForDisplay}

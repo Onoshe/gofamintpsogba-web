@@ -73,15 +73,15 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
   //<div className={`h-full z-50 min-h-screen mt-[60px] ${showSidebarTitle? 'w-[220px]': 'w-[70px]'} transition-width duration-500 bg-[aliceblue] lg:bg-[#c5dcf0] shadow-[gray_1px_0px_8px_0px]`}>
  
   return (
-    <div className={`h-full z-50 min-h-screen mt-[60px] ${showSidebarTitle? 'w-[250px]': 'w-[70px]'} transition-width duration-500 bg-[aliceblue] lg:bg-[#c5dcf0] shadow-[gray_1px_0px_8px_0px]`}>
+    <div className={`h-full z-50 min-h-screen mt-[55px] ${showSidebarTitle? 'w-[200px]': 'w-[70px]'} transition-width duration-500 bg-[aliceblue] lg:bg-[#c5dcf0] shadow-[gray_1px_0px_8px_0px]`}>
           <div className='bg-[#192d51] px-3 pt-2 relative flex flex-col w-full  lg:bg-transparent'>
-            <AiOutlineClose className='font-bold right-2 absolute cursor-pointer text-white lg:hidden text-[25px] hover:text-[28px] animate-text'
+            <AiOutlineClose className='font-bold right-2 mt-2 absolute cursor-pointer text-white lg:hidden text-[20px] hover:text-[red] animate-text'
             onClick={closeDrawer}/>
             <CountiXpressLogo
-                width={149} 
-                height={50}
+                width={120} 
+                height={40}
                 includeClass
-                className={'p-2 bg-sky-300 mt-3 lg:hidden'}
+                className={'p-2 mt-3 lg:hidden'}
               />
               <p className='text-[10px] mb-[5px] text-[yellow] lg:hidden'>...simplifying your financial records</p>
           </div>
@@ -91,7 +91,7 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
                 className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm  flex flex-row hover:text-[blue] ${isDashboardPage? "bg-sky-300 text-[blue]" : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
                 onClick={()=>handleNav({name:coy, title:'Dashboard'})}
                 data-tip={'Dashboard'}>
-                <AiOutlineDashboard  size={24} className='mr-4'/>
+                <AiOutlineDashboard  size={20} className='mr-2'/>
                 {showSidebarTitle && <span>Dashboard</span>}
               </Link>
               {
@@ -102,17 +102,17 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
                       data-tip={dt.title}
                       onClick={()=>handleNav({name:dt.name, title:dt.title})}>
                       {dt.icon}
-                      {showSidebarTitle && <span>{dt.title}</span>}
+                      {showSidebarTitle && <span className='text-[12px]'>{dt.title}</span>}
                     </Link>
                   )
                 })
               }
             </div>
             <div
-              className={`${showSidebarTitle? 'w-[250px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-2 flex flex-row text-black bg-blue-300   p-2 gap-1 items-center`}
+              className={`${showSidebarTitle? 'w-[200px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-2 flex flex-row text-black bg-blue-300   p-2 gap-1 items-center`}
               onClick={()=>handleLogout()}
               data-tip={'Logout'}>
-              <BiLogOutCircle color='red' className='rotate-180 text-[24px] mr-4  cursor-pointer'/> 
+              <BiLogOutCircle color='red' className='rotate-180 text-[20px] mr-2  cursor-pointer'/> 
               {showSidebarTitle && <span className=" cursor-pointer">Logout</span>}
             </div> 
         </div>
@@ -124,20 +124,20 @@ export default SideDrawer;
 
 
 export var icons = {
-  dashboard:<AiOutlineDashboard  size={24} className='mr-4'/>,
-  reports:<BsGraphUpArrow  size={24} className='mr-4'/>,
-  chartOfAccount:<MdOutlineAccountTree  size={24} className='mr-4'/>,
-  customer:<BsCart  size={24} className='mr-4'/>,
-  vendor:<BiShoppingBag  size={24} className='mr-4'/>,
-  recordTransaction:<GrMoney  size={24} className='mr-4'/>,
-  recordProduct:<MdInventory  size={24} className='mr-4'/>,
-  recordJournal:<BsJournalPlus  size={24} className='mr-4'/>,
-  auditTrail:<RiMenuSearchLine  size={24} className='mr-4'/>,
-  guide:<GrResources  size={24} className='mr-4'/>,
-  profile:<BsFillPersonVcardFill  className='text-[22px] mr-4'/>,
-  products:<MdInventory  className='text-[22px] mr-4'/>,
-  company:<MdSettings  className='text-[22px] mr-4'/>,
-  reconciliation:<MdAccountTree  className='text-[22px] mr-4'/>
+  dashboard:<AiOutlineDashboard  size={18} className='mr-2'/>,
+  reports:<BsGraphUpArrow  size={18} className='mr-2'/>,
+  chartOfAccount:<MdOutlineAccountTree  size={18} className='mr-2'/>,
+  customer:<BsCart  size={18} className='mr-2'/>,
+  vendor:<BiShoppingBag  size={18} className='mr-2'/>,
+  recordTransaction:<GrMoney  size={18} className='mr-2'/>,
+  recordProduct:<MdInventory  size={18} className='mr-2'/>,
+  recordJournal:<BsJournalPlus  size={18} className='mr-2'/>,
+  auditTrail:<RiMenuSearchLine  size={18} className='mr-2'/>,
+  guide:<GrResources  size={18} className='mr-2'/>,
+  profile:<BsFillPersonVcardFill  className='text-[22px] mr-2'/>,
+  products:<MdInventory  className='text-[18px] mr-2'/>,
+  company:<MdSettings  className='text-[18px] mr-2'/>,
+  reconciliation:<MdAccountTree  className='text-[18px] mr-2'/>
 };
 
 export var navs = [

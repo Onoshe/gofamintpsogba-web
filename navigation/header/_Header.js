@@ -126,16 +126,16 @@ const Header = ({ssUser}) => {
         <div data-theme="aqua" 
           className='py-2 z-50 px-3 flex items-center justify-between'
          >
-          <div className='flex flex-row gap-2 items-center h-[54px]'>
+          <div className='flex flex-row gap-2 items-center h-[40px]'>
             {!isOpen?
               <IoMdMenu size={24} onClick={()=>dispatchIsOpen(!isOpen)} color='white' className='cursor-pointer lg:hidden'/>
               : <IoMdClose size={24} onClick={()=>dispatchIsOpen(!isOpen)} color='white' className='cursor-pointer lg:hidden'/>
             }
-            <div className='flex flex-col w-fit'
+            <div className='hidden md:flex flex-col w-fit'
               >
               <FastRecordLogo
-                    width={150} height={40}
-                    className={'py-2 pl-3 hidden sm:flex bg-[aliceblue]'}
+                    width={100} height={20}
+                    className={'py-2 pl-3  bg-[aliceblue]'}
 
                     dynamicPage={dynamicPage}
                     goToDashboard={true}
@@ -144,11 +144,11 @@ const Header = ({ssUser}) => {
                     dispatchActivePage={dispatchActivePage}
                     dispatchShowLoadingNavPage={dispatchShowLoadingNavPage}
                 />
-              <p className='text-[10px] md:text-[12px] text-[yellow] italic hidden sm:flex'>...simplifying your financial records</p>
+              <p className='text-[10px] text-[yellow] italic'>...simplifying your financial records</p>
             </div>
             
           </div>
-          <p className='font-bold hidden smc:block text-lg md:text-xl text-white'>{activePage?.title}</p>
+          <p className='font-bold hidden smc:block md:text-lg text-white'>{activePage?.title}</p>
           <div className={`${session?.user? '' : 'hidden'} flex flex-row gap-2`}>
               {/*<HeaderNotification newNotice="New Message"/>*/}
               <User userInit={userInit}

@@ -166,7 +166,7 @@ const handleAddRemoveRow =(dt, i)=>{
             </div>
           </div>
           <div className='p-5 hidden'>
-            <button onClick={handleSubmit} className='btn btn-info px-7'>Record</button>
+            <button onClick={handleSubmit} className='btn btn-info btn-sm px-7'>Record</button>
           </div>
         </div>
         
@@ -198,12 +198,12 @@ const handleAddRemoveRow =(dt, i)=>{
     <br/>
     <br/>
     <div className='px-5 py-3 fixed bottom-0 bg-gray-200 w-full mt-10'>
-        <button onClick={handleSubmit} className='hidden btn btn-info px-7'>Record</button>
-        <button onClick={handleSubmit} className='btn btn-info px-7 inline-block mr-10 mb-4'>
+        <button onClick={handleSubmit} className='hidden btn btn-info btn-sm px-7'>Record</button>
+        <button onClick={handleSubmit} className='btn btn-info btn-sm px-7 inline-block mr-10 '>
             {recordTransaction?.editTran? 'Save' :'Record'}
         </button>
         <div className={`inline-flex flex-row flex-wrap gap-4 ${recordTransaction?.editTran? '' : 'hidden'}`}>
-            <button onClick={handleDeleteTran} className='btn btn-error px-5 inline-flex'>Delete</button>
+            <button onClick={handleDeleteTran} className='btn btn-error btn-sm px-5 inline-flex'>Delete</button>
         </div>
     </div>
     </>

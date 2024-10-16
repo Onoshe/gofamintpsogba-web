@@ -48,7 +48,7 @@ const IndexPostJournal = ({ssUser}) => {
   return (
     <div 
       className={`text-sm`}>
-            <div className='p-4 flex flex-col bg-[aliceblue] border border-b-[#e4f1fd] mb-5 smc:flex-row smc:items-center justify-between'>
+            <div className='px-4 py-2 flex flex-col bg-[aliceblue] border border-b-[#e4f1fd] mb-2 smc:flex-row smc:items-center justify-between'>
               <p className='text-lg font-bold text-blue-700'>Record Journal</p>
              
             </div>

@@ -19,7 +19,7 @@ export const ResetUserPassword = ({ updateForm, setUpdateForm,
 
   return (
     <div className='z-50 fixed top-0 bottom-0 right-0 w-full h-screen bg-[#33486ea7] flex justify-center items-center'>
-        <div className='relative bg-red-100 boder border-blue-500 p-3 rounded-md w-full max-w-[450px]'>
+        <div className='relative text-[12px] bg-red-100 boder border-blue-500 p-3 rounded-md w-full max-w-[450px]'>
             <MdClose size={28} className='absolute right-5 cursor-pointer text-red-500 hover:text-red-800'
              onClick={handleClose}/>
             <p className='text-center font-bold py-3 text-red-900'>Reset User Password</p>
@@ -32,8 +32,8 @@ export const ResetUserPassword = ({ updateForm, setUpdateForm,
                     <p>Email</p>
                     <p className='text-blue-400 border-b border-b-blue-400'>{selectedUser.email}</p>
                 </div>
-                <p className='italic text-sm'>A new default login password will be sent to the above username email. The user is expected to login with the default password and change it.</p>
-                <p className='italic text-sm'>{"Note that it's possible for the message to be delivered on inbox or spam messages"}</p>
+                <p className='italic'>A new default login password will be sent to the above username email. The user is expected to login with the default password and change it.</p>
+                <p className='italic'>{"Note that it's possible for the message to be delivered on inbox or spam messages"}</p>
 
                 <div className=''>
                     <p className='text-blue-900 font-[600]'>Password</p>

@@ -29,18 +29,18 @@ const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctTy
   }
 
   return (
-    <div className='flex flex-row gap-2 items-center mt-4 mb-2 md:mt-6'>
-        <div className='px-2'>
+    <div className='flex flex-row gap-2 items-center my-2'>
+        <div className='px-2 flex items-center'>
             <input type='checkbox' className='size-4 mr-2 cursor-pointer checkbox checkbox-info' checked={showAllRows} onChange={()=>setShowAllRows(!showAllRows)}/>
-            <span>Show all rows</span>
+            <span className='text-[12px]'>Show all rows</span>
         </div>
         <div className='flex flex-row gap-2 cursor-pointer hover:bg-green-100 rounded-sm py-[2px] px-2 active:bg-gray-200 hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Excel'}
             onClick={handleExportToExcel}>
-            <ExcelIcon className={'fill-green-700  h-5 w-5 '}
+            <ExcelIcon className={'fill-green-700  h-4 w-4 '}
             />
-        </div>
+        </div> 
         <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Export to Pdf'}>
-            <BsFileEarmarkPdf className='text-[22px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
+            <BsFileEarmarkPdf className='text-[18px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
             onClick={handlePdfExport}
             />
         </div>

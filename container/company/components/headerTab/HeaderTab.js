@@ -10,7 +10,7 @@ export const HeaderTab = ({tabs, setTabs}) => {
  }
 
   return (
-    <div className='w-full bg-blue-50 flex flex-row fixed z-50 lg:w-[calc(100vw-278px)] shadow-md'>
+    <div className='w-full bg-blue-50 flex flex-row fixed z-50 lg:w-[calc(100vw-220px)] shadow-md'>
         {
             tabsArr.map((dt, i)=>{
                 return (

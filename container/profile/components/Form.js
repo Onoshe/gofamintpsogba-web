@@ -19,7 +19,7 @@ const Form = ({
    const gender = capitalizeFirstChar(user.gender);
   return (
     <div className=''>
-        <div className='text-lg mx-2 lg:mx-10 xl:mx-[200px] lg:gap-10 font-bold grid gap-5 sm:grid-cols-2 grid-cols-1'>
+        <div className=' mx-2 lg:mx-10 xl:mx-[200px] font-[600] grid gap-5 sm:grid-cols-2 grid-cols-1'>
             <TextInput
                 title="Lastname"
                 name="lastname"
@@ -93,8 +93,8 @@ const Form = ({
         </div>
         <br/>
         <div className='flex gap-5 flex-wrap'>
-            <button className='btn btn-info btn-outline' onClick={handleUpdateProfile}>Update profile</button>
-            <button className='btn btn-error btn-outline' onClick={handleUpdatePassword}>Change password</button>
+            <button className='btn btn-info btn-sm text-[12px] btn-outline' onClick={handleUpdateProfile}>Update profile</button>
+            <button className='btn btn-error btn-sm text-[12px] btn-outline' onClick={handleUpdatePassword}>Change password</button>
         </div>
         
     </div>

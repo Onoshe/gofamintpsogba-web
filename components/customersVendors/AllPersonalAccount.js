@@ -34,9 +34,9 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
 
   return (
     <div className='w-[lg:w-[calc(100vw-300px)] mx-4 overflow-x-auto overflow-hidden'>
-        <label className="input flex items-center gap-2 mt-3 bg-transparent  border-blue-100 shadow-sm shadow-blue-400"
+        <label className="input input-sm flex items-center gap-2 mt-1 bg-transparent  border-blue-100 shadow-sm shadow-blue-400"
          >
-          <input type="text" className="grow " placeholder="Search" name={searchName} onChange={onChangeSearch} value={searchValue}/>
+          <input type="text" className="grow" placeholder="Search" name={searchName} onChange={onChangeSearch} value={searchValue}/>
           {searchValue && <MdClear size={22} className='cursor-pointer over-text-blue-500 text-red-600' onClick={handleClear}/>}
           <MdSearch size={22} className='cursor-pointer over-text-blue-500' onClick={handleSearch}/>
         </label>

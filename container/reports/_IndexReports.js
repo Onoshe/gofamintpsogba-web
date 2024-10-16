@@ -239,6 +239,7 @@ const IndexReports = ({ssUser}) => {
               handleMonthlySummaryToggle={handleMonthlySummaryToggle}
               companyLogoFile={companyLogoFile}
               handleRefresh={handleRefresh}
+              currentReportTab={currentReportTab}
             />
         </Suspense>
         <div className={`flex justify-center items-center h-[50vh] ${showReport? 'hidden' : ''}`}>
@@ -264,7 +265,7 @@ const IndexReports = ({ssUser}) => {
               ledgerTitle={ledgerTitle}
           />
           :<Suspense>
-            <p className='px-3 pt-1 text-gray-600'><span className='underline font-[600]'>Tab: </span> <span className=' text-blue-700'>{currentReportTab}</span></p>
+            
             <DynamicPageDisplay
               pathname={pathname}
               processedLedgers={processedLedgers}

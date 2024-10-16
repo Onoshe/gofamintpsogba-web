@@ -134,7 +134,7 @@ const ChartOfAccount = ({ssUser}) => {
               header={headersArr} 
               rowKeys={['accountCode', 'accountName', 'accountType', 'description', 'edit', 'delete']}
               rows={coaAcct}
-              classNameTable={"overflow-x-auto max-h-[65vh] overflow-y-auto my-4 md:my-6"}
+              classNameTable={"overflow-x-auto max-h-[65vh] overflow-y-auto m-4"}
               classNameHeaderTR="bg-blue-50 cursor-pointer" 
               classNameRowsTR="border border-gray-200 hover:bg-blue-50"
               clickableHeader={true}

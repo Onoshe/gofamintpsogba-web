@@ -111,14 +111,14 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
 
   return (
     <>
-    <div className={`flex-row flex gap-2 flex-wrap bg-gray-200 mx-3 pb-2`}>
-      <div className={`py-4 px-8 pb-0  flex-row gap-2 hidden sm:flex `}>
+    <div className={`flex-row flex items-center py-1 gap-2 flex-wrap bg-gray-200 mx-3`}>
+      <div className={`px-8  flex-row gap-2 hidden sm:flex `}>
           <input type='checkbox' className='size-4 cursor-pointer checkbox checkbox-success' checked={showBankBalances} onChange={()=>setShowBankBalances(!showBankBalances)}/>
-          <p className='text-blue-800'>Show Bank balances</p>
+          <p className='text-blue-800 text-[12px]'>Show Bank balances</p>
       </div>
-      <div className={`py-4 px-8 pb-0  flex-row gap-2 flex ${showTransView? '' : 'invisible'}`}>
+      <div className={`px-8 flex-row gap-2 flex ${showTransView? '' : 'invisible'}`}>
           <input type='checkbox' className='size-4 cursor-pointer checkbox checkbox-success'  checked={showTransView} onChange={handleOnChangeShowRecord}/>
-          <p className='text-blue-800'>Show Record Entries</p>
+          <p className='text-blue-800 text-[12px]'>Show Record Entries</p>
       </div>
     </div>
     <div className={`absolute w-full flex justify-center items-center ${showBankBalances? '' : 'hidden'}`}>
@@ -163,7 +163,7 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
           <p className='text-blue-800'>Show Record Entries</p>
         </div>
           <div className='p-5 hidden'>
-            <button onClick={handleSubmit} className='btn btn-info px-7'>Record</button>
+            <button onClick={handleSubmit} className='btn btn-sm btn-info px-7'>Record</button>
           </div>
         </div>
         
@@ -196,12 +196,12 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
     <br/>
     <br/>
     
-      <div className={`pt-5 px-3 fixed bottom-0 bg-gray-200 w-full mt-10 `}>
-          <button onClick={submitHandler} className='btn btn-info px-7 inline-block mr-10 mb-4'>
+      <div className={`pt-2 px-3 fixed bottom-0 bg-gray-200 w-full mt-10 `}>
+          <button onClick={submitHandler} className='btn btn-info btn-sm px-7 inline-block mr-10 mb-4'>
             {recordTransaction?.editTran? 'Save' :'Record'}
           </button>
           <div className={`inline-flex flex-row flex-wrap gap-4 ${recordTransaction?.editTran? '' : 'hidden'}`}>
-            <button onClick={handleDeleteTran} className='btn btn-error px-5 inline-flex'>Delete</button>
+            <button onClick={handleDeleteTran} className='btn btn-error btn-sm px-5 inline-flex'>Delete</button>
           </div>
         </div>
     </>

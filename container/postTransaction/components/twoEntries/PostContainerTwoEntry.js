@@ -257,12 +257,12 @@ const handleTransView =(act)=>{
         <br/>
         <br/>
         <br/>
-        <div className={`pt-5 px-3 fixed bottom-0 bg-gray-200 w-full mt-10 `}>
-          <button onClick={handleSubmit} disabled={uploading} className='btn btn-info px-7 inline-block mr-10 mb-4'>
+        <div className={`pt-2 px-3 fixed bottom-0 bg-gray-200 w-full mt-10 `}>
+          <button onClick={handleSubmit} disabled={uploading} className='btn btn-sm btn-info px-7 inline-block mr-10 mb-4'>
             {recordTransaction?.editTran? 'Save' :'Record'}
           </button>
           <div className={`inline-flex flex-row flex-wrap gap-4 ${recordTransaction?.editTran? '' : 'hidden'}`}>
-            <button onClick={handleCancelTran} className='btn btn-neutral px-5 inline-flex'>Cancel</button>
+            <button onClick={handleCancelTran} className='btn btn-sm btn-neutral px-5 inline-flex'>Cancel</button>
           </div>
           {uploading && <span className='text-red-500'>Uploading, please wait...</span>}
         </div>

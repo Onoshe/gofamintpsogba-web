@@ -87,7 +87,7 @@ const DashboardIndex = ({ssUser}) => {
   }
   return (
     <div className={`text-gray-600 ${showNotificationBar? 'mt-10' : ''}`}>
-        <div className='fixed w-full lg:w-[calc(100%_-_250px)]'>
+        <div className='fixed w-full lg:w-[calc(100%_-_200px)]'>
             <HeaderBar
                 chartOfAccounts={chartOfAccounts}
                 handleSelAccount={handleSelAccount}

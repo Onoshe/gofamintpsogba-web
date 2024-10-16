@@ -5,7 +5,7 @@ const TextInput = ({labelName, classNameCont, classNameInput, required, classNam
     <div className={`flex flex-col smc:flex-row justify-start smc:items-center ${classNameCont}`}>
         <p className={`pl-3 smc:pl-0 ${classNameLabel}`}>{labelName}</p>
         <input required={required}
-             className={`input input-bordered input-info w-full max-w-xs bg-white ${classNameInput}`} 
+             className={`input input-sm input-bordered input-info w-full max-w-xs bg-white ${classNameInput}`} 
              {...props}/>
     </div>
   )
@@ -37,7 +37,7 @@ const Radio = ({labelName, classNameCont, classNameRadio, required, classNameLab
       <div className={`flex flex-col smc:flex-row justify-start smc:items-center ${classNameCont}`}>
           <p className={`pl-3 smc:pl-0 ${classNameLabel}`}>{labelName}</p>
           <textarea  required={required}
-            className={`textarea textarea-info bg-white  w-full max-w-[400px] ${classNameTextarea}`}  {...props}>
+            className={`textarea textarea-sm textarea-info bg-white  w-full max-w-[400px] ${classNameTextarea}`}  {...props}>
           </textarea>
       </div>
     )
@@ -48,7 +48,7 @@ const Radio = ({labelName, classNameCont, classNameRadio, required, classNameLab
       <div className={`flex flex-col smc:flex-row justify-start smc:items-center ${classNameCont}`}>
           <p className={`pl-3 smc:pr-0 ${classNameLabel}`}>{labelName}</p>
             <select required={required} defaultValue={defaultValue} onChange={onChange} name={name}
-                className={`select select-info w-full max-w-xs bg-white ${classNameSelection}`}>
+                className={`select select-sm select-info w-full max-w-xs bg-white ${classNameSelection}`}>
                 {children}
             </select>
     </div>

@@ -105,7 +105,7 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
       <TabsComponent
         activeTab={activeTab} setActiveTab={setActiveTab} transSheetReset={transSheetReset}/>
       <div className='hidden sm:flex flex-row items-center justify-center w-fit ml-3  gap-2 hover:tooltip-open tooltip tooltip-right' data-tip={showBankBalances? 'Check to hide Cashbook balances':'Check to show Cashbook balances'}>
-        <input type='checkbox' className='bg-white size-4' checked={showBankBalances} onChange={()=>setShowBankBalances(!showBankBalances)}/>
+        <input type='checkbox' className='bg-white size-4 checkbox border border-blue-600' checked={showBankBalances} onChange={()=>setShowBankBalances(!showBankBalances)}/>
         <BsBank2 size={20} color='dodgerblue'/>
       </div>
     </div>
@@ -162,7 +162,7 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
               <p className='text-blue-800'>Show Record Entries</p>
             </div>
               <div className='p-5 hidden'>
-                <button onClick={handleSubmit} className='btn btn-info px-7'>Record</button>
+                <button onClick={handleSubmit} className='btn btn-sm btn-info px-7'>Record</button>
               </div>
           </div>
         </div>
@@ -203,12 +203,12 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
     <br/>
     <br/>
       
-      <div className='px-5 py-3 fixed bottom-0 bg-gray-200 w-full mt-10'>
-          <button onClick={handleSubmit} className='btn btn-info px-7 inline-block mr-10'>
+      <div className='px-5 py-2 fixed bottom-0 bg-gray-200 w-full mt-10'>
+          <button onClick={handleSubmit} className='btn btn-sm btn-info px-7 inline-block mr-10'>
               {recordTransaction?.editTran? 'Save' :'Record'}
           </button>
           <div className={`inline-flex flex-row flex-wrap gap-4 ${recordTransaction?.editTran? '' : 'hidden'}`}>
-              <button onClick={handleCancelTran} className='btn btn-neutral px-5 inline-flex'>Cancel</button>
+              <button onClick={handleCancelTran} className='btn btn-sm btn-neutral px-5 inline-flex'>Cancel</button>
           </div>
       </div>
     </>

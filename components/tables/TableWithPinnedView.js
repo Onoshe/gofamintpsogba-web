@@ -16,10 +16,10 @@ const TableWithPinnedView = ({
   return (
     <div className={classNameTable}
         data-theme="pastel" >
-        <table className={`table table-sm table-zebra ${pinRow? 'table-pin-rows' :''} ${pinCol? 'table-pin-cols' :''}`}>
+        <table className={`table table-xs table-zebra ${pinRow? 'table-pin-rows' :''} ${pinCol? 'table-pin-cols' :''}`}>
             <thead>
-                <tr className={`text-[14px] ${classNameHeaderTR}`}>
-                    <td className={'py-6'}>{''}</td> 
+                <tr className={`text-[12px] ${classNameHeaderTR}`}>
+                    <td className={'py-5'}>{''}</td> 
                     {rowKeys?.map((key, i)=>{
                         const dt = header?.find((e)=> e.name === key);
                         return(
@@ -35,14 +35,15 @@ const TableWithPinnedView = ({
                 {rows?.map((row, i)=>{
                     //console.log(row)
                     return(
-                        <tr key={`${i}td`} className={classNameRowsTR}>
+                        <tr key={`${i}td`} className={classNameRowsTR}
+                            >
                             <td className={``}>{i+1}</td>
                             {
                                rowKeys?.map((key, id)=>{
                                     return(
                                         <td key={`${id}key`} className={`${row.classNameTD} ${clickableRow && ''}`}  
                                             onClick={()=>{if(clickableRow){onClickRow(row)}}}>
-                                            <span className={`${row[key+"ClassName"]}`} 
+                                            <span className={`${row[key+"ClassName"]} text-[11px]`} 
                                                 onClick={()=>handleClickableCell(row, i, key, id)}>{row[key]}
                                             </span>
                                         </td>

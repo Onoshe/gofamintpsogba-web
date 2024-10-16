@@ -125,9 +125,9 @@ const CreateProductByUpload = ({stateCreate, dispatchCreate, handleCreateMultiPr
         <div className='fixed bottom-0 bg-blue-50 w-full'>
             <div className='flex flex-row gap-4 p-4 md:p-6'>
                 {table?.show && uploadInfo?.uploaded && !uploadInfo?.error &&
-                  <input type='submit' className="btn btn-info px-10" value="Create" 
+                  <input type='submit' className="btn btn-sm btn-info px-10" value="Create" 
                     onClick={handleCreateMultiProducts}/>}
-                <button className="hidden btn bg-gray-300 text-black hover:bg-gray-400" onClick={handleCreateMultiProducts}>Cancel</button>
+                <button className="hidden btn btn-sm bg-gray-300 text-black hover:bg-gray-400" onClick={handleCreateMultiProducts}>Cancel</button>
             </div>
         </div> 
     </div>
