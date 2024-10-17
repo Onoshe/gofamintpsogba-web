@@ -87,7 +87,7 @@ const Products = ({ssUser}) => {
   return (
       <div className='min-h-screen -mt-[15px]'>
         <div className='bg-blue-50 pt-4 pb-3'>
-            <CreateProduct showBlind={showBlind} handleClose={()=>handleShowBlind(false)}
+            <CreateProduct showBlind={showBlind} handleClose={()=>{handleShowBlind(false); setFormInput({});}}
               formInput={formInput}
               handleFormInput={handleFormInput}
               handleSubmit={handleSubmitFunction}

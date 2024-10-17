@@ -11,19 +11,20 @@ import useStoreHeader from '@/context/storeHeader';
 
 
 const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searchValue,onChangeSearch, handleClear, handleSearch,
-    handleExportToExcel, personalAcctType}) => {
+    handleExportToExcel, personalAcctType,  user}) => {
     const  {clientAccount, runDispatchClientDataCall} = useStoreTransactions((state) => state);
     const {settings} = useStoreHeader((state) => state);
     const companyLogoFile = getCompanyLogo(settings);
 
   const [showAllRows, setShowAllRows] = React.useState(false);
 
-  const rowKeysMain = ['edit', 'type', 'title', 'accountCode', 'firstname', 'othernames', 'lastname', 'formNo', 'dob', 'phoneNo', 'email', 'accountGroup', 'residentialAddress'];
+  const rowKeysMain = ['edit', 'type', 'title', 'accountCode', 'firstname', 'lastname', 'othernames',  'formNo', 'dob', 'phoneNo', 'email', 'accountGroup', 'residentialAddress'];
   const rowKeysOthers = ['position', 'nextContactPersonName', 'nextContactPersonPhoneNo', 'nextContactPersonEmail', 'companyName', 'companyPhoneNo', 'companyEmail', 'companyAddress', 
   'businessType', 'region', 'country', 'state', 'zip', 'registeredDate', 'info'];
 
   const rowKeysShow = showAllRows? [...rowKeysMain, ...rowKeysOthers] : rowKeysMain;
-  const rowHeaders = [{title:'Edit', name:'edit'},
+  rowKeysShow.push( 'delete');
+  const rowHeaders = [{title:'Edit', name:'edit'},{title:'Delete', name:'delete'},
                       {title:'Type', name:'type'}, {title:'Title',  name:'title'}, {title:'Account Code',  name:'accountCode'}, {title:'Firstname',  name:'firstname'}, {title:'Othernames',  name:'othernames'}, 
                       {title:'Lastname',  name:'lastname'}, {title:'Birthday',  name:'dob'}, {title:'Phone No',  name:'phoneNo'}, {title:'Email',  name:'email'}, {title:'Residential Address',  name:'residentialAddress'},
                       {title:'Form No',  name:'formNo'}, {title:'Position',  name:'position'}, {title:'Next Contact Person Name', name: 'nextContactPersonName'}, {title:'Next Contact Person Phone No', name:'nextContactPersonPhoneNo'}, 
@@ -48,9 +49,10 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
             personalAcctType={personalAcctType}
             clientAccount={clientAccount}
             companyLogoFile={companyLogoFile}
+            user={user}
           />
           <TableWithPinnedView
-            classNameTable={"overflow-x-auto max-h-[65vh] overflow-y-auto"}
+            classNameTable={"overflow-x-auto max-h-[100vh] overflow-y-auto resize-y"}
             header={[{className:'bg-blue-50 py-5', title:''}, ...rowHeaders]}
             rowKeys={rowKeysShow}
             rows={personalAccounts}
@@ -59,7 +61,7 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
             clickableHeader={false}
             //onClickHeader={(e)=>console.log(e)}
             clickableRowCell={true}
-            clickableRowCellKeys ={['edit']}
+            clickableRowCellKeys ={['edit', 'delete']}
             onClickRowCell={handleClickCell}
           />
       </div>

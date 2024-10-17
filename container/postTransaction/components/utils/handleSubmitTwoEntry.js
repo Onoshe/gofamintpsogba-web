@@ -8,7 +8,7 @@ import { getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
 export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, user, vendors, customers,  setTransSheet, 
     runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, router, notify, resetUploadTableCall, setResetUploadTableCall}) {
    const {url, body} =  prepareQueryTwoEntryTrans({transSheetForm, user, chartOfAccounts, postingFrom:"TWOENTRY"});
-    
+   //return console.log(body, transSheetForm) 
 
    if(recordTransaction?.editTran){
     const transListingPage = recordTransaction.transListingPage;

@@ -2,71 +2,55 @@ import { preparePAQuery } from '@/container/customers/utils/preparePAQuery';
 import { updatePAQuery } from '@/container/customers/utils/updatePAQuery';
 import { getRequest } from '@/lib/apiRequest/getRequest';
 import { patchRequest } from '@/lib/apiRequest/patchRequest';
+import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 import { postRequest } from '@/lib/apiRequest/postRequest';
-import { getLinkPersoanlAcct } from '@/lib/apiRequest/urlLinks';
+import { getLinkFetchTableWithConds, getLinkPersoanlAcct } from '@/lib/apiRequest/urlLinks';
+import { capitalizeFirstChar } from '@/lib/capitalize/capitalizeString';
 import { validateInputs } from '@/lib/validation/validateInput';
 
 
 
 const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAccts,  personalAcct,
-  runDispatchClientDataCall, setFormInput, user, setActiveTab})=>{
+  runDispatchClientDataCall, setFormInput, user, setActiveTab, handleClear})=>{
 
    const validateFieldVal = validateInputs({type:'FIELDVALUE', form:formInput, test:{reqFields:['type', 'accountCode', 'firstname', 'lastname', 'title']}});
    if(!validateFieldVal.error){
-    let validateAcctCode = {};
-    if(formInput.editAcct){
-      validateAcctCode = validateInputs({form:personalAccts, type:'VALUEEXIST', test:{key:'accountCode', value:formInput.accountCode}});
-    }else{
-      validateAcctCode = validateInputs({form:personalAccts, type:'VALUEEXIST', test:{key:'accountCode', value:"C-"+formInput.accountCode}});
-    }
+    const acctCodePref = personalAcct==="vendors"? "V-" : "C-";
+    const inputAcctCodeFmt = acctCodePref+parseInt(formInput.accountCode).toString().padStart(6,0);
+    const personalAcctsUrl = getLinkFetchTableWithConds({table:user.companyId+'_'+personalAcct.toLowerCase(), conds:'deleted', values:'0'});
+    let personalAcctsFecthed = await getRequest(personalAcctsUrl);
+    let validateAcctCode = validateInputs({form:personalAcctsFecthed.data, type:'VALUEEXIST', test:{key:'accountCode', value:inputAcctCodeFmt}});
     
- 
+    //return console.log(validateAcctCode, personalAcctsFecthed.data, inputAcctCodeFmt)
     if(formInput.editAcct){ //Edit User
-      if(validateAcctCode.error) return handleInfoMsg('error', res?.error || "Error in updating user record");
+      if(validateAcctCode.error){
+        if(validateAcctCode.data.id != formInput.id) return handleInfoMsg('error', "Account code already exist");
+      }
+      // NO ERROR || FOUND ACCOUNT-ID IS EDITED ACCOUNT-ID: RUN UPDATE
+      const urlLink = getLinkPersoanlAcct({user, personalAcct, accountCodeNew:inputAcctCodeFmt});
+      const {url, body} = updatePAQuery(formInput, user, personalAcct);
+      await patchRequest(url, body).then((res)=> {
+        if(res?.ok){
+          setActiveTab('DISPLAY')
+          handleInfoMsg('success', "User record updated successfully");
+          postActivity(user, activities.UPDATE, `${capitalizeFirstChar(personalAcct)}'s Account: ${formInput.firstname} ${formInput.lastname}`);
+          setFormInput({}); 
+          handleClear(); //To update displayPersonal Account displayed on table
 
-        const accountCodeEdited = formInput.accountCode;
-        let accountCodeNew = personalAcct==="vendors"? "V-"+parseInt(accountCodeEdited).toString().padStart(6,0) : "C-"+parseInt(accountCodeEdited).toString().padStart(6,0);
-        const urlLink = getLinkPersoanlAcct({user, personalAcct, accountCodeNew});
-        const acct = await getRequest(urlLink).then((res)=> res);
-        const {url, body} = updatePAQuery(formInput, user, personalAcct);
-        //return console.log(acct, body)
-        if(acct?.data?.length){ //AccountCode found
-            if(acct.data[0].id == formInput.id){
-                //Found account id and edited account id are the same meaning accountCode was not changed. Run update
-                await patchRequest(url, body).then((res)=> {
-                  if(res?.ok){
-                    setFormInput({}); 
-                    setActiveTab('DISPLAY')
-                    runDispatchClientDataCall()
-                    handleInfoMsg('success', "User record updated successfully");
-                  }else{
-                    handleInfoMsg('error', res?.error || "Error in updating user record");
-                }})
-            }else{ //Error. Found accountCode id varies from account being edited      
-                handleInfoMsg('error', "Account Code already exist.");
-              }
-          }else{//AccountCode not found meaning accountCode was changed. Run update
-            await patchRequest(url, body).then((res)=> {
-              if(res?.ok){
-                setFormInput({}); 
-                setActiveTab('DISPLAY')
-                runDispatchClientDataCall()
-                handleInfoMsg('success', "User record updated successfully");
-              }else{
-                handleInfoMsg('error', res?.error || "Error in posting data");
-              }
-            })
-          }
+        }else{
+          handleInfoMsg('error', res?.error || "Error in updating user record");
+      }})
     }else{ //Create User
       if(!validateAcctCode.error){
         const {url, body} = preparePAQuery(formInput, user, personalAcct);
-        //return  console.log(body)
+        //return  console.log(body, formInput, personalAcct)
         await postRequest(url, body).then((res)=> {
           if(res?.ok){
-            setFormInput({}); 
             setActiveTab('DISPLAY')
-            runDispatchClientDataCall()
-            handleInfoMsg('success', "New user added successfully");
+            handleInfoMsg('success', "New personal account created successfully");
+            postActivity(user, activities.CREATE, `New ${capitalizeFirstChar(personalAcct)}'s Account: ${formInput.firstname} ${formInput.lastname}`);
+            setFormInput({}); 
+            handleClear(); 
           }else{
             handleInfoMsg('error', res?.error || "Error in posting data");
           }
@@ -81,7 +65,9 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
     setInfoMsg({msg:"Enter the require fields!", error:true});
     handleInfoMsg("error", "Enter the require fields!")
    }
-   //setFormInput({...formInput, editAcct:''})
+
+   //Run update incase some deleted or created account have not populated on the display table
+   runDispatchClientDataCall();
 }
 
 

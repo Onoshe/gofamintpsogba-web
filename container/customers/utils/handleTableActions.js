@@ -1,6 +1,6 @@
 
 
-const handleClickRow = ({el, setFormInput,  setInfoMsg, handleActiveTab,  setSelectedOpt})=>{
+const handleClickRow = ({el, setFormInput,  setInfoMsg, handleActiveTab,   setShowConfirm, setSelectedOpt})=>{
     const {key, i, row} = el;
     const rowIndex = i; // ---New Category-- is the default row 0;
 
@@ -12,7 +12,7 @@ const handleClickRow = ({el, setFormInput,  setInfoMsg, handleActiveTab,  setSel
     }
     //Delete
     if(key === 'delete'){
-      handleActiveTab('CREATE');
+      setShowConfirm({show:true, cell:el})
     }
   }
 

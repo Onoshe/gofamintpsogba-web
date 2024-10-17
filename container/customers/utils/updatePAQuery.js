@@ -100,7 +100,7 @@ export const updatePAQuery =(form, user, personalAcct) =>{
         state, 
         zip, 
         info,
-        form.accountGroup, 
+        form?.accountGroup? form?.accountGroup.toUpperCase() : "GENERAL", 
         dateFmtISO(), 
         updatedBy || user.userId,
         dateFmtISO()],

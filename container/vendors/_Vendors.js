@@ -14,11 +14,19 @@ import { handleClickRow } from '../customers/utils/handleTableActions';
 import { handleSubmitMultiAccts } from '../customers/utils/handleSubmitMultiAccts';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
+import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
+import { getPersonalAcctUrl } from '../customers/utils/getPersonalAcctUrl';
+import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
+import { handleDeleteAccountOrTran} from '../customers/utils/handleDeleteAccountOrTran';
+import { getLinkFetchTableWithConds } from '@/lib/apiRequest/urlLinks';
+import { getRequest } from '@/lib/apiRequest/getRequest';
 
 
 const Vendors = ({ssUser}) => {
   const { session, user,  status} = useAuthCustom(ssUser);
   const {vendors, dispatchVendors, runDispatchClientDataCall} = useStoreTransactions((state) => state);
+  //const {data, mutate} = useSWRFetcher(getPersonalAcctUrl(user, 'vendors'));
+  //const vendors = data.data;
   const [activeTab, setActiveTab] = React.useState('DISPLAY');
   const [editForm, setEditForm] = React.useState(false);
   const [formInput, setFormInput] = React.useState({});
@@ -28,8 +36,9 @@ const Vendors = ({ssUser}) => {
   const [uploadInfo, setUploadInfo] = React.useState({msg:'', error:false});
   const [searchValue, setSearchValue] = React.useState('');
   const [vendorsDisplay, setVendorsDisplay] = React.useState([...vendors]);
-  
+  const [showConfirm, setShowConfirm] = React.useState({show:false, cell:{}});
 
+  
   //Uploaded file accountCode is of type accountCode:00007. Format to accountCode:C-00007
   if(uploadedForm?.rows?.length){
     uploadedForm.rows = uploadedForm.rows.map((dt)=> {
@@ -75,17 +84,29 @@ const Vendors = ({ssUser}) => {
       //return console.log({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row})
       const result = getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row});
       if(result.permit){
-        handleClickRow({el, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt});
+        handleClickRow({el, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
       }else{notify("error", result.msg)}
     }
 }
 
-  const handleInfoMsg = (type, msg)=>{
+  const handleConfirm = (act)=>{
+    if(act === "CANCEL"){setShowConfirm({show:false, cell:{}});}
+    if(act === "CONTINUE"){
+      if(showConfirm?.cell?.row?.id && user?.companyId){
+        const {id, accountCode, firstname, lastname} = showConfirm.cell.row;
+        const deletedAcct = `${accountCode}: ${firstname} ${lastname} account`;
+        handleDeleteAccountOrTran({user, notify, setShowConfirm, runDispatchClientDataCall, deletedAcct, showConfirmObj:true, whereVal:id, tableName:"vendors"})
+     }else{notify('error', 'Account not found or User not logged in!')}
+    }
+  }
+
+
+ const handleInfoMsg = (type, msg)=>{
     notify(type, msg);
   }
   const handleSubmitFunction = async (e)=>{
    handleSubmit({e, formInput, setInfoMsg, handleInfoMsg,  personalAccts:vendors, handleActiveTab, dispatchVendors, setFormInput,
-     user, runDispatchClientDataCall, setActiveTab, setFormInput, personalAcct:"vendors"});
+     user, runDispatchClientDataCall, setActiveTab, setFormInput, personalAcct:"vendors", handleClear});
     //console.log(formInput)
   }
 
@@ -98,7 +119,8 @@ const Vendors = ({ssUser}) => {
  }
  const handleClear =()=>{     
   setSearchValue("");
-  setVendorsDisplay(vendors)
+  setVendorsDisplay(vendors);
+  //console.log(vendors)
 }
  React.useEffect(()=>{
   if(!searchValue){
@@ -106,9 +128,14 @@ const Vendors = ({ssUser}) => {
   }
  },[searchValue, vendors]);
 
- // console.log(uploadedForm)
-  React.useEffect(()=>{
-    if(uploadedForm.show && uploadedForm.rows){
+ React.useEffect(()=>{
+   handleClear();
+ },[vendors]);
+
+
+  const validateUploadData = async ()=>{
+    const fetchTableUrl = getLinkFetchTableWithConds({table:user.companyId+'_vendors', conds:'deleted', values:'0'});
+    const vendors = await getRequest(fetchTableUrl);
       setUploadInfo({msg:'Form uploaded successfully', error:false});
       const res =validateAndFormatPersonalAcct(uploadedForm.rows, vendors);
       if(res.error){
@@ -117,9 +144,14 @@ const Vendors = ({ssUser}) => {
       }else{
         setUploadedForm(res.data);
       }
-    }
-  },[uploadedForm]);
-
+   }
+  
+    React.useEffect(()=>{
+      if(uploadedForm.show && uploadedForm.rows){
+        validateUploadData();
+      }
+    },[uploadedForm]);
+  
   return (
     <TabWrapper
       tab1Name="DISPLAY"
@@ -140,6 +172,7 @@ const Vendors = ({ssUser}) => {
           handleSearch={handleSearch}
           handleClear={handleClear}
           personalAcctType="Vendors"
+          user={user}
        />
       :<CreatePersonalAccount 
         formData={formInput}
@@ -160,6 +193,13 @@ const Vendors = ({ssUser}) => {
         accountGroups={accountGroups}
       />
      } 
+
+        <ConfirmAlert showBlind={showConfirm.show}
+             title={`Do you really want to delete account: ${showConfirm?.cell?.row?.accountCode}- ${showConfirm?.cell?.row?.firstname} ${showConfirm?.cell?.row?.lastname}?`}
+             msg="Please note that all transactions associated with this account will also be deleted."
+             handleCancel={()=>handleConfirm("CANCEL")}
+             handleContinue={()=>handleConfirm("CONTINUE")}
+           />
      <ToastContainer 
           position="top-right"
           autoClose={5000}

@@ -79,7 +79,7 @@ export function prepareQueryTrans({transSheet, user, chartOfAccounts, postingPla
         date,
         description,
         reference,
-        2,
+        2,              //entries count
         postingPlat,
         amount,
         debitAcctChart.id,

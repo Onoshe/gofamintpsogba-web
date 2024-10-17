@@ -118,7 +118,7 @@ const TextAreaInputComponent = ({title, required, name, value, onChange, pholder
 
   
   export const SelectionTagNew =({noWidth, type, pholder, name, title, onChange, value,titleStyle, contStyle, inputStyle,  subTitle, required, 
-    selectedOption, setSelectedOption, handleSelected, contStyleDropdown, groupValue, options, noGroupValueMsg})=>{
+    selectedOption, setSelectedOption, handleSelected, contStyleDropdown, groupValue, options, personalAcctType, noGroupValueMsg})=>{
     function onChangeHandler(opt){
         //const e = {target:{name, value:opt.target.value}};
         //onChange(e)
@@ -128,9 +128,9 @@ const TextAreaInputComponent = ({title, required, name, value, onChange, pholder
     return(
         <div className={`flex flex-row   text-sm md:text-base justify-between  ${noWidth? noWidth : 'sm:min-w-[350px] md:min-w-[400px] max-w-[450px]'} ${contStyle}`}>
             
-            <div className={`border-b-2 shadow-sm px-3 pb-2 ${titleStyle}`}>
+            <div className={`border-b-2 shadow-sm px-3 pb-2 ${titleStyle} hover:tooltip-open tooltip tooltip-right`}
+                data-tip={'To group the same '+personalAcctType+"'s account. Default is GENERAL"}>
                 Group <span className='text-[red] font-bold'>{required? '*' : ''}</span>
-                <p className="text-[10px] ml-5">Default is GENERAL</p>
              </div>
             <div className={`flex flex-col justify-end`}>
               <div className='flex flex-row gap-3 '>

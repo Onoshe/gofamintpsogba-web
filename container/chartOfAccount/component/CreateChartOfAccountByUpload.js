@@ -11,6 +11,8 @@ import { validateCOAUploads } from '@/lib/validation/validateCOAUpload';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
 import { handleSubmitUpload } from '../utils/handleSubmitUpload';
 import { getUploadSampleFile } from '../utils/getUploadSampleFile';
+import { getLinkFetchTableWithConds } from '@/lib/apiRequest/urlLinks';
+import { getRequest } from '@/lib/apiRequest/getRequest';
 
 
 
@@ -36,15 +38,22 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
         setShowBlind, setIsLoading})
     }
     
-    React.useEffect(()=>{
-      if(table?.show && table?.rows?.length){
-       const validateRes = validateCOAUploads(table?.rows, chartOfAccounts, coaStructure);
+    const validateUploadData = async ()=>{
+      const fetchTableUrl = getLinkFetchTableWithConds({table:user.companyId+'_chartofaccount', conds:'deleted', values:'0'});
+      const chartOfAccts = await getRequest(fetchTableUrl);
+
+      const validateRes = validateCOAUploads(table?.rows, chartOfAccts, coaStructure);
         if(validateRes?.error){
          const errorMsg = getErrorMessage(validateRes?.errorType, validateRes?.key, validateRes?.rowIndex, validateRes?.title);
          setPostError({msg:errorMsg, error:validateRes?.error});
         }else{
          setPostError({msg:'Upload successfull', error:false});
         }
+    }
+
+    React.useEffect(()=>{
+      if(table?.show && table?.rows?.length){
+        validateUploadData();
       }
       if(!table.show){
         setPostError({msg:'', error:false})

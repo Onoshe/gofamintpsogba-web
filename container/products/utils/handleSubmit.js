@@ -1,17 +1,16 @@
 //const { BiEditAlt, BiTrash } = require("react-icons/bi");
 import { postRequest } from '@/lib/apiRequest/postRequest';
-import { validateInputs } from '@/lib/validation/validateInput';
 import { getRequest } from '@/lib/apiRequest/getRequest';
 import { patchRequest } from '@/lib/apiRequest/patchRequest';
 import { productInsertQuery, productUpdateQuery } from './productQuery';
 import { validateAndFormatProducts } from '@/lib/validation/validateProductsUpload';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
-import { getLinkProduct } from '@/lib/apiRequest/urlLinks';
+import { getLinkFetchTableWithConds, getLinkProduct } from '@/lib/apiRequest/urlLinks';
 
 
 
 //For creating or editing a particular product
-const handleSubmit = async ({ formInput, setInfoMsg, user,products, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})=>{
+const handleSubmit = async ({ formInput, setInfoMsg, user, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})=>{
 
 
    if(formInput?.productName && formInput?.productCode && (formInput?.category || formInput?.newCategory)){
@@ -19,6 +18,9 @@ const handleSubmit = async ({ formInput, setInfoMsg, user,products, setShowBlind
     
     const {productCode, productName, description, category} = formInput;
     const isEdit = formInput.editProduct;
+    const fetchTableUrl = getLinkFetchTableWithConds({table:user.companyId+'_products', conds:'deleted', values:'0'});
+    const productsObj = await getRequest(fetchTableUrl);
+    const products = productsObj.data;
     const res =validateAndFormatProducts([{productCode, productName, description, category:category? category : formInput?.newCategory}], products, isEdit);
     if(res.error){
       const errorMsg = getErrorMessage(res?.errorType, res?.key, res?.rowIndex);
@@ -26,11 +28,10 @@ const handleSubmit = async ({ formInput, setInfoMsg, user,products, setShowBlind
     }
 
     if(formInput.editProduct){
-            const urlLink = getLinkProduct({user, productCode});
-            const product = await getRequest(urlLink).then((res)=> res);
             const {url, body} = productUpdateQuery(formInput, user);
-            if(product?.data?.length){ //AccountCode found
-                if(product.data[0].id == formInput.id){
+            const product = products.find((dt)=> dt.productCode == productCode);
+            if(product?.id){ //AccountCode found
+                if(product.id == formInput.id){
                     await patchRequest(url, body).then((res)=> {
                       if(res?.ok){
                         setFormInput({}); 
@@ -41,7 +42,7 @@ const handleSubmit = async ({ formInput, setInfoMsg, user,products, setShowBlind
                         handleInfoMsg('error', res?.error || "Error in updating user record");
                     }})
                 }else{ //Error. Found accountCode id different from editing id
-                  handleInfoMsg('error', "Error in updating product");
+                  handleInfoMsg('error', "Product code "+productCode+" already exist");
                 }
 
             }else{ //AccountCode not found meaning accountCode was changed. Run update  
@@ -57,11 +58,9 @@ const handleSubmit = async ({ formInput, setInfoMsg, user,products, setShowBlind
               })
             }
 
-    }else{
-        const urlLink = getLinkProduct({user, productCode});
-        const product = await getRequest(urlLink).then((res)=> res);
-        //return console.log(product);
-        if(product?.data?.length){
+    }else{ //Create Account Chart
+        const product = products.find((dt)=> dt.productCode == productCode);
+        if(product?.id){
             handleInfoMsg('error', "Product with code'"+productCode+"' already exist");
          }else{
             const {url, body} = productInsertQuery(formInput, user);
@@ -81,7 +80,7 @@ const handleSubmit = async ({ formInput, setInfoMsg, user,products, setShowBlind
    }else{
      setInfoMsg({msg:"Enter the require fields!", error:true});
    }
-   setFormInput({...formInput, editAcct:''})
+   //setFormInput({...formInput, editAcct:''})
 }
 
 

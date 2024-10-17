@@ -6,12 +6,14 @@ import { tableHeaderFormater } from '@/lib/exel/tableHeaderFormater';
 import { BsFileEarmarkPdf } from 'react-icons/bs';
 import { handleExport2Pdf } from '@/container/reports/utils/others/handleExport2Pdf';
 import { getHeadersTitle } from '@/container/reports/utils/ledgers/getHeaders';
+import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 
 
   
 
 
-const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctType, clientAccount, companyLogoFile}) => {
+const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctType, clientAccount, 
+    companyLogoFile, user}) => {
 
     const data = objectToArray(personalAccounts, ['edit', 'editedAt', 'updatedBy', 'updatedAt', 'createdBy', 'createdAt', 'deleted', 'inactive'], 'exclude');
     const docHeader = [[clientAccount?.companyName], [`All ${personalAcctType} Data`], ["Report as at "+new Date().toDateString()], ['']];
@@ -19,6 +21,7 @@ const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctTy
  //console.log(data)
   const handleExportToExcel =()=>{
     handleExport2Excel({docName:'All Customers', docHeader, col1MaxW:false, data:data.dataWithHeader, styleRows:[], styleCells:[]});
+    postActivity(user, activities.DOWNLOAD, "All "+personalAcctType+" Excel report")
   }
 
   const handlePdfExport =()=>{
@@ -26,6 +29,7 @@ const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctTy
     const pdfForm =  {reportRows:rows, pdfHeader:docHeader, reportHeader, pdfData, headerRowsColsArr:'', companyLogoFile};
     //console.log(data);
     handleExport2Pdf(pdfForm);
+    postActivity(user, activities.DOWNLOAD, "All "+personalAcctType+" Pdf report")
   }
 
   return (

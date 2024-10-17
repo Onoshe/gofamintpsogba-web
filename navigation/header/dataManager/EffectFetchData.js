@@ -145,8 +145,9 @@ const EffectFetchData = ({ session}) => {
    useEffect(()=>{
     //Subsequent fetch data call on the function: runDispatchClientData
     if(domain && clientsDataCall ){
-      const userId = "";
-      runDispatchClientData({fetchedData:{}, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, userId});
+      //const userId = "";
+      //runDispatchClientData({fetchedData:{}, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, userId});
+      firstDataFetch();
     }
    },[clientsDataCall]);
 

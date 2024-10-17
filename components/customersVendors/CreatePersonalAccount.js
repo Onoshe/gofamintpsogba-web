@@ -156,7 +156,7 @@ const CreatePersonalAccount = ({ handleUpload, useUploadedForm, setUploadedForm,
                   {showCreateBtn && 
                     <div className='fixed bottom-0 bg-blue-50 w-full'>
                       <div className='flex flex-row gap-4 p-4 '>
-                            <input type='submit' className="btn btn-info px-10" value="Create" 
+                            <input type='submit' className="btn btn-info btn-sm px-10" value="Create" 
                               onClick={handleCreateMultiPersonalAccts}/>
                       </div>
                     </div>}

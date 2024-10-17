@@ -1,4 +1,5 @@
 import { patchRequest } from "@/lib/apiRequest/patchRequest";
+import { activities, postActivity } from "@/lib/apiRequest/postActivity";
 import { getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
 
 
@@ -42,6 +43,7 @@ const handleClickRow = ({el, setFormInput, setShowBlind, setInfoMsg, dispatchPro
       if(res?.ok){
         runDispatchClientDataCall()
         handleInfoMsg('success', "Product "+deleteRow.productCode+ ' deleted successfull');
+        postActivity(user, activities.DELETE, `${deleteRow.productCode}:${deleteRow.productName} deleted from products table by user`);
         setAlertBlind({show:false});
         setDeleteRow({});
       }else{

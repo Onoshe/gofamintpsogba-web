@@ -1,7 +1,13 @@
+import { getRequest } from '@/lib/apiRequest/getRequest';
 import { patchRequest } from '@/lib/apiRequest/patchRequest';
-import { getLinkPostTrans } from '@/lib/apiRequest/urlLinks';
+import { getLinkFetchTableWithConds, getLinkPostTrans } from '@/lib/apiRequest/urlLinks';
+import { handleDeleteAccountOrTrans } from './handleDeleteRelatedTrans';
 
 
+/********** DELETE CHART OF ACCOUNT
+ * 
+ * 
+ */
 
 
 export const handleDelete = async ({ formInput,  user, setShowConfirm, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})=>{
@@ -15,7 +21,8 @@ export const handleDelete = async ({ formInput,  user, setShowConfirm, setShowBl
       fields:["deleted"],
       values :["1"],
       types:["INT"]
-    };
+    };  
+
     await patchRequest(url, body).then((res)=> {
       if(res?.ok){
         setFormInput({}); 
@@ -26,5 +33,8 @@ export const handleDelete = async ({ formInput,  user, setShowConfirm, setShowBl
       }else{
         handleInfoMsg('error', res?.error || "Error in deleting account. Try again");
       }
+    })
+    .then(()=>{
+      handleDeleteAccountOrTrans({user, t:'m', c:formInput.accountCode})
     })
 }

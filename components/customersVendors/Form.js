@@ -40,6 +40,7 @@ const Form = ({ onChangeHandler, basicTextFields, keysCompany, keysContactPerson
                     contStyle={'mb-4 pl-3'}
                     options={options}
                     noGroupValueMsg={noGroupValueMsg}
+                    personalAcctType={personalAcctType}
                     required
                 />
                 {/*<SelectionTag
@@ -171,11 +172,11 @@ const Form = ({ onChangeHandler, basicTextFields, keysCompany, keysContactPerson
                 </Hideable>  
 
                 
-                <input className="hidden btn my-5 btn-accent px-7 text-white" type='submit' value="Submit"/>
+                <input className="hidden btn my-5 btn-accent btn-sm px-5 text-white" type='submit' value="Submit"/>
                 <div className=' px-5 py-3 fixed bottom-0 bg-gray-200 w-full flex flex-row gap-10'>
-                    <input className="btn btn-accent px-7 text-white" type='submit' value="Submit"/>
+                    <input className="btn btn-accent btn-sm px-5 text-white" type='submit' value="Submit"/>
                     {infoMsg?.error && <div className='text-red-700 pt-3 hidden text-sm flex-row gap-2 flex-wrap'><BiError size={24}/> {infoMsg?.msg}</div>}
-                    <p className='btn btn-neutral px-8' onClick={handleCancel}>Cancel</p>
+                    <p className='btn btn-neutral btn-sm px-5' onClick={handleCancel}>Cancel</p>
                 </div>       
         </form> 
   )

@@ -35,11 +35,10 @@ const Header = ({ssUser}) => {
   const companyId = session?.user?.companyId;
   const isOnline = useOnline();
   const [mounted, setMounted] = useOnScroll({ready:false});
-  
   //const pathname = usePathname();
 
   let userInit = 'NA';
-  
+  //console.log(pathname)
   
   const handleDropdown =()=>{
     if(userDropdown) setUserDropdown(false)
@@ -109,6 +108,21 @@ const Header = ({ssUser}) => {
       }
     }
   },[pathname, session])
+
+
+  React.useEffect(()=>{
+    //This graps the current path and dispatch it as Active Page in order to align the active current tab agree with the current page
+    if(pathname){
+        const path = pathname.split("/")[2];
+        if(path){
+          const {name, title} = navs?.find((dt)=> dt.name == path);
+          dispatchActivePage({name, title});
+        }else{
+          dispatchActivePage({name:"", title:'Dashboard'});
+        }
+    }
+  },[]);
+
 
   //console.log(status)
 

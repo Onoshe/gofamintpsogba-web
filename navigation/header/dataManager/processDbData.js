@@ -38,7 +38,8 @@ export const getDefaultPersonalAcct = (el, personalAccount)=>{
         return {
             ...dt,
             accountCode:dt.accountCode?.replace('V-', el), 
-            edit: <BiEditAlt size={22} className={`${getEditClass(dt)}`}/>
+            edit: <BiEditAlt size={22} className={`${getEditClass(dt)}`}/>,
+            delete:<BiTrash size={22} className={`${getDeleteClass(dt)}`}/>, 
         }
     })
 }

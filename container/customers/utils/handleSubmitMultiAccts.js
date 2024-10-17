@@ -1,4 +1,5 @@
 import { preparePAQuery } from '@/container/customers/utils/preparePAQuery';
+import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 import { postRequest } from '@/lib/apiRequest/postRequest';
 
 
@@ -12,11 +13,12 @@ export const handleSubmitMultiAccts = async ({forms,  handleInfoMsg,  personalAc
           const {url, body} = preparePAQuery(form, user, personalAcct);
           await postRequest(url, body).then((res)=> {
             if(res?.ok){
-              if(lastItem){
-                setFormInput({}); 
+              if(lastItem){ 
                 setActiveTab('DISPLAY')
-                runDispatchClientDataCall()
+                runDispatchClientDataCall();
                 handleInfoMsg('success', "New user added successfully");
+                postActivity(user, activities.CREATE, `Multiple ${personalAcct} Account `);
+                setFormInput({});
               }
             }else{
               handleInfoMsg('error', res?.error || "Error in posting data");

@@ -16,12 +16,13 @@ import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import { handleDelete } from './utils/handleDelete';
 import ToolsBar from './component/ToolsBar';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import { getRequest } from '@/lib/apiRequest/getRequest';
 
 
 
 const ChartOfAccount = ({ssUser}) => {
   const { session, user,  status} = useAuthCustom(ssUser);
-  const {coaStructure,runDispatchClientDataCall, chartOfAccounts, dispatchChartOfAccounts} = useStoreTransactions((state) => state);
+  const {coaStructure, clientsDataCall, runDispatchClientDataCall, transactions, chartOfAccounts, dispatchChartOfAccounts} = useStoreTransactions((state) => state);
   const [stateCreate, dispatchCreate] = useReducer(reducerCreateByUpload, initStateCreateByUpload);
   const [showBlind, setShowBlind] = React.useState(false);
   const [formInput, setFormInput] = React.useState({id:'',  accountName:'', accountType:'', typeCode:'', accountCode:'', description:'', addToDashboard:false, editAcct:false});
@@ -31,7 +32,9 @@ const ChartOfAccount = ({ssUser}) => {
   const [showConfirm, setShowConfirm] = React.useState(false);
   sortArrayByKey(chartOfAccounts, 'accountCode');
   
-  //console.log(stateCreate);
+  //getRequest("http://localhost/quickrecords_backend/server.php/api/affected-trans?d=demo").then((res)=>console.log(res));
+
+
 
   const notify = (type, msg) => toast[type](msg, {
     position: "top-right",
@@ -83,7 +86,6 @@ const ChartOfAccount = ({ssUser}) => {
   const handleConfirm = (act)=>{
       if(act === "CANCEL"){setShowConfirm(false); handleShowBlind(false)}
       if(act === "CONTINUE"){
-         //console.log(formInput)
         handleDelete({ formInput,  user, setShowConfirm, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})
       }
   }
@@ -95,7 +97,7 @@ const ChartOfAccount = ({ssUser}) => {
 
   return (
       <div className=''>
-          <CreateChartOfAccount showBlind={showBlind} handleClose={()=>handleShowBlind(false)}
+          <CreateChartOfAccount showBlind={showBlind} handleClose={()=>{handleShowBlind(false); setFormInput({});}}
             formInput={formInput}
             handleFormInput={handleFormInput}
             handleSubmit={handleSubmitFunction}
@@ -128,7 +130,7 @@ const ChartOfAccount = ({ssUser}) => {
              handleCancel={()=>handleConfirm("CANCEL")}
              handleContinue={()=>handleConfirm("CONTINUE")}
            />
-
+            <button className='btn btn-sm m-2 hidden' onClick={()=>{runDispatchClientDataCall()}}>Run Update Data</button>
           {createType === "MANUAL" && 
             <TableWithPinnedView
               header={headersArr} 
