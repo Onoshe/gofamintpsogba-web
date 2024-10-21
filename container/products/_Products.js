@@ -14,6 +14,8 @@ import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import ToolsBar from './component/ToolsBar';
 import { handleSubmitMultiple } from './utils/handleSubmitMultiple';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import useStoreHeader from '@/context/storeHeader';
+import { getCompanyLogo } from '../company/components/utils/getSubscriptionHistory';
 
 const Products = ({ssUser}) => {
   const { session, user,  status} = useAuthCustom(ssUser);
@@ -25,8 +27,10 @@ const Products = ({ssUser}) => {
   const [infoMsg, setInfoMsg] = React.useState({msg:""});
   const [createType, setCreateType] = React.useState('MANUAL');
   const [selectedProduct, setSelectedProduct] = React.useState('');
-  const [alertBlind, setAlertBlind] = React.useState({show:false, title:'', msg:''});
- 
+  const [alertBlind, setAlertBlind] = React.useState({show:false, cell:{}, title:'', msg:'', showInput:false, inputVal:""}); //React.useState({show:false, title:'', msg:''});
+  const {settings} = useStoreHeader((state) => state);
+  const [showConfirm, setShowConfirm] = React.useState({show:false, cell:{}, title:'', msg:'', showInput:false, inputVal:""});
+  const companyLogoFile = getCompanyLogo(settings);
 
  //console.log(stateCreate)
  const notify = (type, msg) => toast[type](msg, {
@@ -72,8 +76,29 @@ const Products = ({ssUser}) => {
   }
   const handleClickRowFunction =(el)=>{
     //console.log(el)
-    handleClickRow({el, products, setFormInput, setShowBlind, setInfoMsg, dispatchProducts, setDeleteRow, deleteRow, setSelectedProduct, setAlertBlind})
+    handleClickRow({el, products, setFormInput, setShowBlind, setInfoMsg, dispatchProducts, setDeleteRow, deleteRow, setSelectedProduct, 
+      setAlertBlind, user})
   };
+  const handleConfirmation =(event)=>{
+    if(event === "CANCEL"){
+      handleDeleteProduct({deleteType:'CANCEL', setAlertBlind})
+    }else if(event === "CONTINUE"){
+      //handleDeleteProduct({el:{}, deleteRow, deleteType:'CONTINUE', handleInfoMsg, setAlertBlind, setDeleteRow, user, runDispatchClientDataCall})
+      
+        if(alertBlind?.cell?.row?.id && user?.companyId){
+          const {id, productCode, productName} = alertBlind.cell.row;
+          const deletedAcct = `${productCode}: ${productName} account`;
+        if(alertBlind.showInput){
+            if(!alertBlind?.inputVal) return notify('error', 'Please, enter '+alertBlind.cell.row.productName+' account code to confirm account delete!')
+            if(alertBlind?.inputVal?.trim() === alertBlind.cell.row.productCode){
+              handleDeleteProduct({el:{}, deleteRow, deleteType:'CONTINUE', handleInfoMsg, setAlertBlind, setDeleteRow, user, runDispatchClientDataCall})
+            }else{notify('error', 'The value you entered is not the same as '+alertBlind.cell.row.productName+' account code')}
+        }else{
+          handleDeleteProduct({el:{}, deleteRow, deleteType:'CONTINUE', handleInfoMsg, setAlertBlind, setDeleteRow, user, runDispatchClientDataCall})
+        }
+      }else{notify('error', 'Account not found or User not logged in!')} 
+    }
+  }
   const handleSubmitFunction =(e)=>{
     e.preventDefault();
     handleSubmit({ formInput, setInfoMsg, user, products, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput});
@@ -106,11 +131,16 @@ const Products = ({ssUser}) => {
           }
           {createType !== "UPLOAD" && <ToolsBar
              excelData={products}
+             notify={notify}
+             runDispatchClientDataCall={runDispatchClientDataCall}
+             user={user}
+             companyLogoFile={companyLogoFile}
           />}
           {createType === "MANUAL" && <>
             {products?.length > 1?
               <TableWithPinnedView
-                classNameTable={"overflow-x-auto max-h-[65vh] overflow-y-auto mt-2 mb-4"}
+                classNameTable={"overflow-x-auto h-[70vh] overflow-y-auto mt-2 mx-4 mb-4 resize-y"}
+                //classNameTable={"overflow-x-auto h-[70vh] overflow-y-auto resize-y m-4"}
                 header={headersArr} 
                 rowKeys={['productCode', 'category', 'productName', 'description', 'edit', 'delete']}
                 rows={products.slice(1)}
@@ -135,8 +165,10 @@ const Products = ({ssUser}) => {
             showBlind={alertBlind.show}
             title={alertBlind.title}
             msg={alertBlind.msg}
-            handleContinue={()=>handleDeleteProduct({el:{}, deleteRow, deleteType:'CONTINUE', handleInfoMsg, setAlertBlind, setDeleteRow, user, runDispatchClientDataCall})}
-            handleCancel={()=>handleDeleteProduct({deleteType:'CANCEL', setAlertBlind})}
+            handleContinue={()=>handleConfirmation("CONTINUE")}
+            handleCancel={()=>handleConfirmation("CANCEL")}
+            setShowConfirm={setAlertBlind}
+            showConfirm={alertBlind}
             //handleInfoMsg={handleInfoMsg}
             //runDispatchClientDataCall={runDispatchClientDataCall}
           />

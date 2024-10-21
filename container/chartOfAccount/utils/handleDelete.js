@@ -1,13 +1,9 @@
 import { getRequest } from '@/lib/apiRequest/getRequest';
 import { patchRequest } from '@/lib/apiRequest/patchRequest';
 import { getLinkFetchTableWithConds, getLinkPostTrans } from '@/lib/apiRequest/urlLinks';
-import { handleDeleteAccountOrTrans } from './handleDeleteRelatedTrans';
+import { handleDeleteAffectedTransactions } from './handleDeleteRelatedTrans';
+import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 
-
-/********** DELETE CHART OF ACCOUNT
- * 
- * 
- */
 
 
 export const handleDelete = async ({ formInput,  user, setShowConfirm, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})=>{
@@ -22,19 +18,19 @@ export const handleDelete = async ({ formInput,  user, setShowConfirm, setShowBl
       values :["1"],
       types:["INT"]
     };  
-
-    await patchRequest(url, body).then((res)=> {
-      if(res?.ok){
+    //return console.log(formInput)
+    const deletedAcct = `${formInput.accountCode}:${formInput.accountName}`;
+    const updateRes = await handleDeleteAffectedTransactions({user, t:'m', c:formInput.accountCode});
+    if(updateRes?.ok){
+      await patchRequest(url, body).then((res)=>{
+        postActivity(user, activities.DELETE, `${deletedAcct} deleted from chart of account table by user`);
         setFormInput({}); 
         runDispatchClientDataCall()
         handleInfoMsg('success', formInput.accountName+" deleted successfully");
         setShowBlind(false);
-        setShowConfirm(false)
-      }else{
-        handleInfoMsg('error', res?.error || "Error in deleting account. Try again");
-      }
-    })
-    .then(()=>{
-      handleDeleteAccountOrTrans({user, t:'m', c:formInput.accountCode})
-    })
+        setShowConfirm({show:false, cell:'', title:'', msg:'', titleRed:false, showInput:false})
+      })
+    }else{
+      handleInfoMsg('error', updateRes?.error || "Error in deleting account. Try again");
+    }
 }

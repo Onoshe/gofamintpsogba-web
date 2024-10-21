@@ -11,7 +11,7 @@ import useStoreHeader from '@/context/storeHeader';
 
 
 const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searchValue,onChangeSearch, handleClear, handleSearch,
-    handleExportToExcel, personalAcctType,  user}) => {
+    handleExportToExcel, personalAcctType,  user, notify}) => {
     const  {clientAccount, runDispatchClientDataCall} = useStoreTransactions((state) => state);
     const {settings} = useStoreHeader((state) => state);
     const companyLogoFile = getCompanyLogo(settings);
@@ -50,9 +50,11 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
             clientAccount={clientAccount}
             companyLogoFile={companyLogoFile}
             user={user}
+            runDispatchClientDataCall={runDispatchClientDataCall}
+            notify={notify}
           />
           <TableWithPinnedView
-            classNameTable={"overflow-x-auto max-h-[100vh] overflow-y-auto resize-y"}
+            classNameTable={"overflow-x-auto h-[70vh] overflow-y-auto resize-y"}
             header={[{className:'bg-blue-50 py-5', title:''}, ...rowHeaders]}
             rowKeys={rowKeysShow}
             rows={personalAccounts}

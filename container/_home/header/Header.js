@@ -25,12 +25,12 @@ const HomeHeader = ({session, signOut}) => {
   return (
     <div className="text-white text-center bg-white fixed w-full top-0">
         <div data-theme="aqua" 
-          className='py-2 z-50 px-3 flex items-center justify-between h-[80px]'
+          className='py-1 z-50 px-3 flex items-center justify-between h-[60px]'
          >
             <div className='flex flex-col w-fit'
               >
               <FastRecordLogo
-                    width={150} height={40}
+                    width={120} height={30}
                     className={'py-2 pl-3 hidden sm:flex bg-[aliceblue]'}
                     dynamicPage={"/"}
                 />

@@ -33,7 +33,7 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
         if(res?.ok){
           setActiveTab('DISPLAY')
           handleInfoMsg('success', "User record updated successfully");
-          postActivity(user, activities.UPDATE, `${capitalizeFirstChar(personalAcct)}'s Account: ${formInput.firstname} ${formInput.lastname}`);
+          postActivity(user, activities.UPDATE, `${capitalizeFirstChar(personalAcct)}'s Account:${formInput.accountCode}- ${formInput.firstname} ${formInput.lastname}`);
           setFormInput({}); 
           handleClear(); //To update displayPersonal Account displayed on table
 
@@ -48,7 +48,7 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
           if(res?.ok){
             setActiveTab('DISPLAY')
             handleInfoMsg('success', "New personal account created successfully");
-            postActivity(user, activities.CREATE, `New ${capitalizeFirstChar(personalAcct)}'s Account: ${formInput.firstname} ${formInput.lastname}`);
+            postActivity(user, activities.CREATE, `New ${capitalizeFirstChar(personalAcct)}'s Account:${formInput.accountCode}- ${formInput.firstname} ${formInput.lastname}`);
             setFormInput({}); 
             handleClear(); 
           }else{

@@ -21,6 +21,7 @@ const CreatePersonalAccount = ({ handleUpload, useUploadedForm, setUploadedForm,
     const {file,table, infoMsg, checkedBtn, checkedEditBtn, isDropped, isDragging, selected} = stateCreate;
     const [selectedOption, setSelectedOption] = React.useState({});
     const [group, setGroup] = React.useState("NEW");
+    const [editFormCheck, setEditFormCheck] = React.useState(editForm);
     
     const handleGetFileExtension=()=>{
       return getFileExtension(file);
@@ -56,7 +57,9 @@ const CreatePersonalAccount = ({ handleUpload, useUploadedForm, setUploadedForm,
         }
     },[file]);
 
+    //console.log(editFormCheck, editForm);
     useEffect(()=>{
+          //Reset accountGroup on toggle between Select & New
           setFormData({...formData, accountGroup:""})
           setInfoMsgByEntry({error:false, msg:""});
           setSelectedOption({})

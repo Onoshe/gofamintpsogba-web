@@ -90,7 +90,7 @@ export function DoughnutChart({name, dataArr, titleChart, titleTotal, titleAmoun
   return (
     <div className="w-[330px] h-[300px] lg:w-[430px] lg:h-[400px] p-3 cardShodow ">
       <Doughnut data={data} options={options}/>
-      <p className={`text-[14px] -mt-7 pl-2 ${name==="INCOME"? 'text-[#1cac88]' : name==="RECEIVABLES" || name==="PAYABLES"? 'text-blue-800' : 'text-[#f26c6c]'}`}>{titleTotal} {titleAmount}</p>
+      <p className={`text-[14px] -mt-12 md:-mt-10 pl-2 ${name==="INCOME"? 'text-[#1cac88]' : name==="RECEIVABLES" || name==="PAYABLES"? 'text-blue-800' : 'text-[#f26c6c]'}`}>{titleTotal} {titleAmount}</p>
     </div>
   );
 }

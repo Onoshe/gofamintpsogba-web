@@ -1,6 +1,7 @@
+import { getDeleteAffectedTransactions } from "./handleDeleteRelatedTrans";
 
 
-const handleClickRow = ({el, setFormInput, setShowBlind, setShowConfirm, setInfoMsg, chartOfAccounts, dispatchChartOfAccounts, setSelectedOpt, coaStructure})=>{
+const handleClickRow = async ({el, user, setFormInput, setShowBlind, setShowConfirm, setInfoMsg, chartOfAccounts, dispatchChartOfAccounts, setSelectedOpt, coaStructure})=>{
     const {key, i, row} = el;
     const rowIndex = i; // ---New Category-- is the default row 0;
 
@@ -16,8 +17,23 @@ const handleClickRow = ({el, setFormInput, setShowBlind, setShowConfirm, setInfo
     }
     //Delete
     if(key === 'delete'){
-      setFormInput({...row, accountType:acctStructure.name, deleteAcct:true});
-      setShowConfirm(true);
+
+      const affectedTrans = await getDeleteAffectedTransactions({user, t:'m', c:row?.accountCode});
+      if(affectedTrans?.transIds?.length){
+        const title = `${row?.accountCode}- ${row?.accountName} account affected ${affectedTrans.transIds.length} transactions!`
+        const msg= `${row?.accountCode} Account and all associated transactions will be deleted. Enter ${row.accountName}'s account code if you really want to continue`;
+        setShowConfirm({show:true, cell:el, title, msg, titleRed:true, showInput:true});
+        setFormInput({...row, accountType:acctStructure.name, deleteAcct:true});
+       }else{
+        const title = `Do you really want to delete account: ${row?.productCode}- ${row?.productName}?`
+        const msg= "Please note that all transactions associated with this account will also be deleted.";
+        setShowConfirm({show:true, showInput:false, cell:el, title, msg});
+        setFormInput({...row, accountType:acctStructure.name, deleteAcct:true});
+       }
+
+
+      //setFormInput({...row, accountType:acctStructure.name, deleteAcct:true});
+      //setShowConfirm({show:true, cell:el, title, msg, titleRed:true, showInput:true});
       //const newCOA = chartOfAccounts.filter((acct, i)=> acct.accountCode !== row.accountCode);
       //dispatchChartOfAccounts(newCOA);
     }

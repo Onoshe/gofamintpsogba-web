@@ -46,7 +46,7 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
       </div>
        <div className={`w-[98%] overflow-x-auto mr-10 mt-1`}>
           <ReportTable
-                classNameTable={`overflow-x-auto overflow-y-auto ${viewTransId? 'max-h-[75vh]' : 'max-h-[60vh]'}`}
+                classNameTable={`overflow-x-auto overflow-y-auto h-[70vh] resize-y`} //${viewTransId? 'max-h-[75vh]' : 'max-h-[60vh]'}
                 header={[{className:'bg-blue-50 py-5', title:''}, ...rowHeaders]}
                 rowKeys={rowKeysShow}
                 rows={rowsForDisplay}

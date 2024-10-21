@@ -1,6 +1,7 @@
 import { preparePAQuery } from '@/container/customers/utils/preparePAQuery';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 import { postRequest } from '@/lib/apiRequest/postRequest';
+import { capitalizeFirstCharOnly } from '@/lib/capitalize/capitalizeString';
 
 
 
@@ -17,7 +18,7 @@ export const handleSubmitMultiAccts = async ({forms,  handleInfoMsg,  personalAc
                 setActiveTab('DISPLAY')
                 runDispatchClientDataCall();
                 handleInfoMsg('success', "New user added successfully");
-                postActivity(user, activities.CREATE, `Multiple ${personalAcct} Account `);
+                postActivity(user, activities.CREATE, `${capitalizeFirstCharOnly(personalAcct)}'s Account:${form.accountCode}- ${form.firstname} ${form.lastname}`);
                 setFormInput({});
               }
             }else{

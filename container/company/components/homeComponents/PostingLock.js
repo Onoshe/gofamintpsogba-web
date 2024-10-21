@@ -35,7 +35,7 @@ const handleOnChange =()=>{
     <DashboardCard title={"Lock Posting"} maxWidth="max-w-[450px]" style={``}>
         <div>
             <p className='text-red-800 font-[500] my-4'>Lock Posting: <span className={`bg-white ml-3 py-1 px-3 border border-gray-300 font-bold ${postingLock? "text-red-500" : "text-blue-500"}`}>{postingLock? "ON" : "OFF"}</span></p>
-            <p className='italic pb-3'>This is general locking of transaction recording or postin. If this is ON, you will not be able to record transaction at all.</p>
+            <p className='italic pb-3'>This is general locking of transaction recording or posting. If this is ON, you will not be able to record transaction at all.</p>
             <form  className={`flex flex-row gap-3 items-center`}>
                 <label className='font-bold'>Turn {postingLock? "OFF" : "ON"}</label>
                 <SwitchComponent isOn={postingLock} 

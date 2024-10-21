@@ -2,11 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import BackgroundCard from './components/reusableComponents/BackgroundCard';
 import Image from 'next/image';
-import { BsUpload } from 'react-icons/bs';
-import UploadImageFile from '@/components/upload/UploadImageFile';
 import { getLinksAdmin } from '@/lib/apiRequest/urlLinks';
 import useStoreTransactions from '@/context/storeTransactions';
-import { CompanyLogoUpload } from './components/CompanyLogoUpload';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useStoreHeader from '@/context/storeHeader';

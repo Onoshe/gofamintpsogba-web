@@ -1,5 +1,6 @@
 import { postRequest } from '@/lib/apiRequest/postRequest';
 import { coaCreateQuery } from './coaQuery';
+import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 
 
 
@@ -27,10 +28,11 @@ const handleSubmitUpload = async ({formInput, user, coaStructure, runDispatchCli
               setIsLoading(false);
               if(res?.ok){
                 if(lastItem){
+                  postActivity(user, activities.CREATE, "Chart of Account code "+accountCode);
                   runDispatchClientDataCall()
                   handleInfoMsg('success', "New chart of account created successfully");
                   setShowBlind(false);
-                  dispatchCreate({type:'resetTableData', payload:''})
+                  dispatchCreate({type:'resetTableData', payload:''});
                 }
               }else{
                 handleInfoMsg('error', res?.error || "Error in posting data");

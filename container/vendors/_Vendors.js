@@ -36,8 +36,7 @@ const Vendors = ({ssUser}) => {
   const [uploadInfo, setUploadInfo] = React.useState({msg:'', error:false});
   const [searchValue, setSearchValue] = React.useState('');
   const [vendorsDisplay, setVendorsDisplay] = React.useState([...vendors]);
-  const [showConfirm, setShowConfirm] = React.useState({show:false, cell:{}});
-
+  const [showConfirm, setShowConfirm] = React.useState({show:false, cell:{}, title:'', msg:'', showInput:false, inputVal:""});
   
   //Uploaded file accountCode is of type accountCode:00007. Format to accountCode:C-00007
   if(uploadedForm?.rows?.length){
@@ -79,26 +78,33 @@ const Vendors = ({ssUser}) => {
     console.log(e)
   }
  
-  const handleClickCell =(el)=>{     
+
+  const handleClickCell = async (el)=>{     
     if(el?.row?.createdBy !== "DEMO"){
-      //return console.log({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row})
       const result = getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row});
       if(result.permit){
-        handleClickRow({el, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
+       await handleClickRow({el, user, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
       }else{notify("error", result.msg)}
     }
 }
-
-  const handleConfirm = (act)=>{
-    if(act === "CANCEL"){setShowConfirm({show:false, cell:{}});}
-    if(act === "CONTINUE"){
-      if(showConfirm?.cell?.row?.id && user?.companyId){
+const handleConfirm = (act)=>{
+  if(act === "CANCEL"){ setShowConfirm({show:false, cell:{}, inputVal:''});}
+  if(act === "CONTINUE"){
+    if(showConfirm?.cell?.row?.id && user?.companyId){
         const {id, accountCode, firstname, lastname} = showConfirm.cell.row;
         const deletedAcct = `${accountCode}: ${firstname} ${lastname} account`;
-        handleDeleteAccountOrTran({user, notify, setShowConfirm, runDispatchClientDataCall, deletedAcct, showConfirmObj:true, whereVal:id, tableName:"vendors"})
-     }else{notify('error', 'Account not found or User not logged in!')}
-    }
-  }
+       if(showConfirm?.showInput){
+          if(!showConfirm?.inputVal) return notify('error', 'Please, enter '+showConfirm.cell.row.firstname+' '+showConfirm.cell.row.lastname+' account code to confirm account delete!')
+          if(showConfirm?.inputVal?.trim() === showConfirm.cell.row.accountCode){
+            //return console.log(showConfirm?.inputVal?.trim(), showConfirm.cell.row.accountCode)
+            handleDeleteAccountOrTran({user, notify, setShowConfirm, runDispatchClientDataCall, deletedAcct, showConfirm, showConfirmObj:true, whereVal:id, tableName:"vendors"})
+          }else{notify('error', 'The value you entered is not the same as '+showConfirm.cell.row.firstname+' '+showConfirm.cell.row.lastname+' account code')}
+       }else{
+          handleDeleteAccountOrTran({user, notify, setShowConfirm, showConfirm, runDispatchClientDataCall, deletedAcct, showConfirmObj:true, whereVal:id, tableName:"vendors"})    
+       }
+    }else{notify('error', 'Account not found or User not logged in!')}
+ } 
+}
 
 
  const handleInfoMsg = (type, msg)=>{
@@ -173,6 +179,7 @@ const Vendors = ({ssUser}) => {
           handleClear={handleClear}
           personalAcctType="Vendors"
           user={user}
+          notify={notify}
        />
       :<CreatePersonalAccount 
         formData={formInput}
@@ -195,10 +202,12 @@ const Vendors = ({ssUser}) => {
      } 
 
         <ConfirmAlert showBlind={showConfirm.show}
-             title={`Do you really want to delete account: ${showConfirm?.cell?.row?.accountCode}- ${showConfirm?.cell?.row?.firstname} ${showConfirm?.cell?.row?.lastname}?`}
-             msg="Please note that all transactions associated with this account will also be deleted."
+             title={showConfirm.title}
+             msg={showConfirm.msg}
              handleCancel={()=>handleConfirm("CANCEL")}
              handleContinue={()=>handleConfirm("CONTINUE")}
+             setShowConfirm={setShowConfirm}
+             showConfirm={showConfirm}
            />
      <ToastContainer 
           position="top-right"

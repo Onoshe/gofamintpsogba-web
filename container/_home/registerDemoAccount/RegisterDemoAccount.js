@@ -14,7 +14,7 @@ const RegisterDemoAccount = ({viewPwd, handleViewPwd, form, handleOnChange, hand
 
         
     return (
-     <div className='w-full flex justify-center'>
+     <div className='w-full text-sm flex justify-center'>
         <Card
             title="Register"
             details="Register a demo account to test the app"

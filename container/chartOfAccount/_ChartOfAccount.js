@@ -17,6 +17,8 @@ import { handleDelete } from './utils/handleDelete';
 import ToolsBar from './component/ToolsBar';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import { getRequest } from '@/lib/apiRequest/getRequest';
+import useStoreHeader from '@/context/storeHeader';
+import { getCompanyLogo } from '../company/components/utils/getSubscriptionHistory';
 
 
 
@@ -29,7 +31,9 @@ const ChartOfAccount = ({ssUser}) => {
   const [selectedOpt, setSelectedOpt] = React.useState('999');
   const [infoMsg, setInfoMsg] = React.useState({msg:""});
   const [createType, setCreateType] = React.useState('MANUAL');
-  const [showConfirm, setShowConfirm] = React.useState(false);
+  const [showConfirm, setShowConfirm] = React.useState({show:false, cell:'', title:'', msg:'', titleRed:false, showInput:false});
+  const {settings} = useStoreHeader((state) => state);
+  const companyLogoFile = getCompanyLogo(settings);
   sortArrayByKey(chartOfAccounts, 'accountCode');
   
   //getRequest("http://localhost/quickrecords_backend/server.php/api/affected-trans?d=demo").then((res)=>console.log(res));
@@ -73,20 +77,31 @@ const ChartOfAccount = ({ssUser}) => {
   const handleClickRowFunction =(el)=>{
     const {key, row} = el;
      if(row.createdBy === "DEMO") return;
-     handleClickRow({el, setFormInput, setShowBlind, setInfoMsg, setShowConfirm, handleSubmitFunction, chartOfAccounts, dispatchChartOfAccounts, setSelectedOpt, coaStructure})
+     handleClickRow({el, user, setFormInput, setShowBlind, setInfoMsg, setShowConfirm, handleSubmitFunction, chartOfAccounts, dispatchChartOfAccounts, setSelectedOpt, coaStructure})
   };
   const coaStructureWithoutRetEarnings = coaStructure?.filter((dt)=> dt.name.toLowerCase() !== "retainedearnings");
   const coaAcct = mapChartOfAccountForDisplay(chartOfAccounts, coaStructure);
   //console.log(chartOfAccounts, coaStructure)
 
-  //console.log(formInput)
   const handleInfoMsg = (type, msg)=>{
     notify(type, msg);
   }
   const handleConfirm = (act)=>{
-      if(act === "CANCEL"){setShowConfirm(false); handleShowBlind(false)}
+      if(act === "CANCEL"){setShowConfirm({show:false, cell:'', title:'', msg:''}); handleShowBlind(false)}
       if(act === "CONTINUE"){
-        handleDelete({ formInput,  user, setShowConfirm, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})
+          if(showConfirm?.cell?.row?.id && user?.companyId){
+          if(showConfirm.showInput){
+              if(!showConfirm?.inputVal) return notify('error', 'Please, enter '+showConfirm.cell.row.accountName+' account code to confirm account delete!')
+              if(showConfirm?.inputVal?.trim() === showConfirm.cell.row.accountCode){
+                //handleDeleteProduct({el:{}, deleteRow, deleteType:'CONTINUE', handleInfoMsg, setShowConfirm, setDeleteRow, user, runDispatchClientDataCall})
+                handleDelete({ formInput,  user, setShowConfirm, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})
+              }else{notify('error', 'The value you entered is not the same as '+showConfirm.cell.row.accountName+' account code')}
+          }else{
+            //handleDeleteProduct({el:{}, deleteRow, deleteType:'CONTINUE', handleInfoMsg, setShowConfirm, setDeleteRow, user, runDispatchClientDataCall})
+            handleDelete({ formInput,  user, setShowConfirm, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})
+          }
+        }else{notify('error', 'Account not found or User not logged in!')} 
+
       }
   }
   const handleSubmitFunction =(e)=>{
@@ -123,12 +138,19 @@ const ChartOfAccount = ({ssUser}) => {
           }
           {createType === "MANUAL" && <ToolsBar
              excelData={chartOfAccounts}
+             runDispatchClientDataCall={runDispatchClientDataCall}
+             notify={notify}
+             user={user}
+             companyLogoFile={companyLogoFile}
+             coaStructure={coaStructure}
           />}
-           <ConfirmAlert showBlind={showConfirm}
-             title={"Do you really want to delete "+formInput.accountName+ " ?"}
-             msg="Please note that all transactions associated with this account will also be deleted."
+           <ConfirmAlert showBlind={showConfirm.show}
+             title={showConfirm.title}
+             msg={showConfirm.msg}
              handleCancel={()=>handleConfirm("CANCEL")}
              handleContinue={()=>handleConfirm("CONTINUE")}
+             setShowConfirm={setShowConfirm}
+              showConfirm={showConfirm}
            />
             <button className='btn btn-sm m-2 hidden' onClick={()=>{runDispatchClientDataCall()}}>Run Update Data</button>
           {createType === "MANUAL" && 
@@ -136,7 +158,8 @@ const ChartOfAccount = ({ssUser}) => {
               header={headersArr} 
               rowKeys={['accountCode', 'accountName', 'accountType', 'description', 'edit', 'delete']}
               rows={coaAcct}
-              classNameTable={"overflow-x-auto max-h-[65vh] overflow-y-auto m-4"}
+              //classNameTable={"overflow-x-auto h-[70vh] overflow-y-auto resize-y"}
+              classNameTable={"overflow-x-auto h-[70vh] overflow-y-auto resize-y m-4"}
               classNameHeaderTR="bg-blue-50 cursor-pointer" 
               classNameRowsTR="border border-gray-200 hover:bg-blue-50"
               clickableHeader={true}

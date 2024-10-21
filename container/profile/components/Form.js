@@ -80,7 +80,7 @@ const Form = ({
             />
             <TextInput
                 title="Role"
-                value={user.role}
+                value={capitalizeFirstChar(user.role)}
                 readOnly
                 inputStyle={`${styles.genInput}`}
             />

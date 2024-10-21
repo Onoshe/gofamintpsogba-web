@@ -65,6 +65,16 @@ export const keysList = {
 export const getHeadersTitle = (keys, report)=>{
    
    return keys?.map((key)=>{
-       return {name:key, title:keysList[key]?.title || capitalizeFirstChar(key), }
+       return {name:key, title:keysList[key]?.title || formatLabel(key), }
     })
 } 
+
+
+export function formatLabel(label) {
+    return label
+        // Insert a space before each capital letter (that is not at the start)
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        // Capitalize the first letter of the entire string
+        .replace(/^./, str => str.toUpperCase());
+  }
+  

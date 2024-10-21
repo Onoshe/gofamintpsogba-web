@@ -6,6 +6,7 @@ import { productInsertQuery, productUpdateQuery } from './productQuery';
 import { validateAndFormatProducts } from '@/lib/validation/validateProductsUpload';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
 import { getLinkFetchTableWithConds, getLinkProduct } from '@/lib/apiRequest/urlLinks';
+import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 
 
 
@@ -27,13 +28,14 @@ const handleSubmit = async ({ formInput, setInfoMsg, user, setShowBlind,handleIn
      return  handleInfoMsg('error', errorMsg);
     }
 
-    if(formInput.editProduct){
+    if(formInput.editProduct){ //EDIT PRODUCT
             const {url, body} = productUpdateQuery(formInput, user);
             const product = products.find((dt)=> dt.productCode == productCode);
             if(product?.id){ //AccountCode found
                 if(product.id == formInput.id){
                     await patchRequest(url, body).then((res)=> {
                       if(res?.ok){
+                        postActivity(user, activities.UPDATE, "Product Account code "+productCode);
                         setFormInput({}); 
                         runDispatchClientDataCall()
                         handleInfoMsg('success',  "Product updated successfully");
@@ -51,6 +53,7 @@ const handleSubmit = async ({ formInput, setInfoMsg, user, setShowBlind,handleIn
                   setFormInput({});
                   runDispatchClientDataCall()
                   handleInfoMsg('success', "Product updated successfully");
+                  postActivity(user, activities.UPDATE, "Product Account code "+productCode);
                   setShowBlind(false)
                 }else{
                   handleInfoMsg('error', res?.error || "Error in posting data");
@@ -66,6 +69,7 @@ const handleSubmit = async ({ formInput, setInfoMsg, user, setShowBlind,handleIn
             const {url, body} = productInsertQuery(formInput, user);
             await postRequest(url, body).then((res)=> {
               if(res?.ok){
+                postActivity(user, activities.CREATE, "Product Account code "+productCode);
                 setFormInput({}); 
                 runDispatchClientDataCall()
                 handleInfoMsg('success', "New chart of account created successfully");

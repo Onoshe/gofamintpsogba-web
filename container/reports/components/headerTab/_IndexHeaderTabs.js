@@ -53,7 +53,7 @@ const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,
 const Dropdown =({tabItem, handleSelReport, index, tabsLen})=>{
 
     return(
-        <div className={`absolute  z-50 top-[50px] min-w-[150px] flex-col items-center hidden hover:flex group-hover:flex ${index==0? 'left-0 smc:left-auto' : index== tabsLen-1? 'right-0 smc:right-auto' : ''}`}
+        <div className={`absolute  z-50 top-[40px] min-w-[150px] flex-col items-center hidden  hover:flex group-hover:flex ${index==0? 'left-0 smc:left-auto' : index== tabsLen-1? 'right-0 smc:right-auto' : ''}`}
             >
             <BiCaretUp className="absolute -top-[14px] text-blue-600 text-[22px]"/>
             <div className="text-[10px] md:text-[12px] border border-blue-600 rounded-md bg-blue-50 shadow-lg w-fit">

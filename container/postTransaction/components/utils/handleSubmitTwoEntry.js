@@ -2,13 +2,14 @@ import { patchRequest } from "@/lib/apiRequest/patchRequest";
 import {prepareQueryTwoEntryTrans, prepareQueryTwoEntryTransDetails } from "./prepareQueryTwoEntry";
 import { postRequest } from "@/lib/apiRequest/postRequest";
 import { getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
+import { activities, postActivity } from "@/lib/apiRequest/postActivity";
 
 
 
 export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, user, vendors, customers,  setTransSheet, 
     runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, router, notify, resetUploadTableCall, setResetUploadTableCall}) {
    const {url, body} =  prepareQueryTwoEntryTrans({transSheetForm, user, chartOfAccounts, postingFrom:"TWOENTRY"});
-   //return console.log(body, transSheetForm) 
+   //return console.log(body, transSheetForm, recordTransaction) 
 
    if(recordTransaction?.editTran){
     const transListingPage = recordTransaction.transListingPage;
@@ -28,7 +29,7 @@ export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, use
         runUpdate({url, body, transSheetForm, notify, setTransSheet, runDispatchClientDataCall, 
           dispatchTranSheetTwoEntryReset, router, transListingPage});
       }
-    }else{
+    }else{ //POST TRANS
       //return console.log(transSheetForm)
       const transRes = await postRequest(url, body);
       if(transRes?.data?.length){
@@ -38,6 +39,9 @@ export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, use
           .then((res)=> {
               if(res?.ok){
                     //console.log(res)
+                    const transRefs = transSheetForm.map(dt => dt.reference).join(', ');
+                    const postingNote = transSheetForm?.length >1? `Transaction with references ${transRefs}` :`Transaction with reference ${transRefs}`;
+                    postActivity(user, activities.RECORD, postingNote);
                     setTransSheet([{date:'', description:'', debitAccount:'', creditAccount:'', debitSub:'', creditSub:'', reference:'', amount:''}]); 
                     runDispatchClientDataCall();
                     setResetUploadTableCall(resetUploadTableCall +1);
@@ -63,6 +67,7 @@ async function runUpdate({url, body, transSheetForm, notify, setTransSheet, runD
     //return console.log(body)
     const values = body.values;
     let tranDetailsId = [transSheetForm[0].idDr, transSheetForm[0].idCr]; 
+    console.log(values, transSheetForm);
     for (let i = 0; i < values.length; i++) {
         const lastItem = (values.length-1) == i;
         const value = values[i];
@@ -80,10 +85,16 @@ async function runUpdate({url, body, transSheetForm, notify, setTransSheet, runD
               if(!res?.ok){
                return notify('error', res?.error || "Error in updating user record");
               }else{
-                if(lastItem)
+                if(lastItem){
+                  const tranRef = transSheetForm[0]?.reference;
+                  const postingNote = `Transaction with reference ${transRef}`;
+                  postActivity(user, activities.UPDATE, postingNote);
+                  
                   dispatchTranSheetTwoEntryReset();
                   runDispatchClientDataCall();
                   notify('success', "User record updated successfully");
+
+                }
               }
             })
           .then(()=> { setTimeout(()=>router.push(transListingPage), 500)}) 

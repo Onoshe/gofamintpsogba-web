@@ -36,23 +36,22 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
   let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
   const processedLedgers = ledgers.processedLedgers;
   
-  //console.log(transSheet)
+
   const handleSubmit = async ()=>{
     if(checkedBtn === "BYENTRY"){
         setUploading(true);
-        const transSheetForm = transSheet?.map((form)=>{ //Purpose?
+        const transSheetForm = transSheet?.map((form)=>{ //Purpose?- It's sets sub account to null when accountCode is not a control account
           const drAcct = chartOfAccounts?.find((dt)=> dt.accountCode == form.debitAccount);
           const crAcct = chartOfAccounts?.find((dt)=> dt.accountCode == form.creditAccount);
-          
-          if(![controlAcctsCode.receivables, controlAcctsCode.payables].includes(parseInt(drAcct?.typeCode))){
+          const cntrlAcct = [parseInt(controlAcctsCode.receivables), parseInt(controlAcctsCode.payables)];
+          if(!cntrlAcct.includes(parseInt(drAcct?.typeCode))){
             form.debitSub = ""; 
           };
-          if(![controlAcctsCode.receivables, controlAcctsCode.payables].includes(parseInt(crAcct?.typeCode))){
+          if(!cntrlAcct.includes(parseInt(crAcct?.typeCode))){
             form.creditSub = ""; 
           };
           return form
         });
-        
       const validateRes = validateTransactions(transSheetForm, chartOfAccounts, personalAcctsList, controlAcctsCode)
       if(validateRes?.error){
         const errorMsg = getErrorMessage(validateRes?.errorType, validateRes?.key, validateRes?.rowIndex, validateRes?.title);
@@ -60,6 +59,7 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
         notify('error', errorMsg);
         setUploading(false);
       }else{
+        //console.log(transSheet); setUploading(false); return;
        await handleSubmitTwoEntry({transSheetForm, chartOfAccounts, user, vendors, customers,  setTransSheet, runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, 
           router, notify, resetUploadTableCall, setResetUploadTableCall})
           .then(()=>{
@@ -68,25 +68,24 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
           });
       }
     }else{ //BY UPLOAD
-      
       if(postError?.error){
         setUploading(false);
         return notify('error', postError?.msg);
+      }else{
+        if(transSheets?.length){
+          setUploading(true);
+          await handleSubmitTwoEntry({transSheetForm:transSheets, chartOfAccounts, user, vendors, customers,  setTransSheet, runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, 
+             router, notify, resetUploadTableCall, setResetUploadTableCall})
+             .then(()=>{
+               setUploading(false);
+               setPostError({msg:'Posting successfull', error:false, color:'text-green-600'});
+             });
+           //setPostBtn({show:true});
+         }else{notify('error', "Data for posting not available");}
       }
-      if(transSheets?.length){
-       //return  console.log(transSheets)
-       setUploading(true);
-       await handleSubmitTwoEntry({transSheetForm:transSheets, chartOfAccounts, user, vendors, customers,  setTransSheet, runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, 
-          router, notify, resetUploadTableCall, setResetUploadTableCall})
-          .then(()=>{
-            setUploading(false);
-            setPostError({msg:'Posting successfull', error:false, color:'text-green-600'});
-          });
-        //setPostBtn({show:true});
-      }else{notify('error', "Data for posting not available");}
     }
-   
   }
+
   const handleAddRemoveRow =(dt, i)=>{
     if(i===0){
         setTransSheet([...transSheet, {}])

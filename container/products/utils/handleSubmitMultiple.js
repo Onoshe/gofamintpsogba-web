@@ -7,6 +7,7 @@ import { productInsertQuery, productUpdateQuery } from './productQuery';
 import { validateAndFormatProducts } from '@/lib/validation/validateProductsUpload';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
 import { getLinkPostMultiple } from '@/lib/apiRequest/urlLinks';
+import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 
 
 
@@ -35,6 +36,7 @@ export const handleSubmitMultiple = async ({ formData,  user,products, setShowBl
                   if(res?.ok){
                     const lastItem = formData.length == i +1;
                     if(lastItem){
+                        postActivity(user, activities.CREATE, "Product Account code "+el.productCode);
                         setFormInput({}); 
                         runDispatchClientDataCall()
                         handleInfoMsg('success', "New chart of account created successfully");

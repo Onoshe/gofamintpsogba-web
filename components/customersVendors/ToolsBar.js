@@ -7,13 +7,14 @@ import { BsFileEarmarkPdf } from 'react-icons/bs';
 import { handleExport2Pdf } from '@/container/reports/utils/others/handleExport2Pdf';
 import { getHeadersTitle } from '@/container/reports/utils/ledgers/getHeaders';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
+import { BiRefresh } from 'react-icons/bi';
 
 
   
 
 
 const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctType, clientAccount, 
-    companyLogoFile, user}) => {
+    companyLogoFile, user, runDispatchClientDataCall, notify}) => {
 
     const data = objectToArray(personalAccounts, ['edit', 'editedAt', 'updatedBy', 'updatedAt', 'createdBy', 'createdAt', 'deleted', 'inactive'], 'exclude');
     const docHeader = [[clientAccount?.companyName], [`All ${personalAcctType} Data`], ["Report as at "+new Date().toDateString()], ['']];
@@ -32,20 +33,32 @@ const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctTy
     postActivity(user, activities.DOWNLOAD, "All "+personalAcctType+" Pdf report")
   }
 
+  const handleRefreshData = async ()=>{
+    runDispatchClientDataCall();
+    setTimeout(()=> notify('success', 'Data refreshed successfully'), 500);
+  }
+
   return (
-    <div className='flex flex-row gap-2 items-center my-2'>
-        <div className='px-2 flex items-center'>
-            <input type='checkbox' className='size-4 mr-2 cursor-pointer checkbox checkbox-info' checked={showAllRows} onChange={()=>setShowAllRows(!showAllRows)}/>
-            <span className='text-[12px]'>Show all rows</span>
+    <div className='flex flex-row justify-between items-center my-2'>
+        <div className='flex flex-row gap-2 items-center'>
+            <div className='px-2 flex items-center'>
+                <input type='checkbox' className='size-4 mr-2 cursor-pointer checkbox checkbox-info' checked={showAllRows} onChange={()=>setShowAllRows(!showAllRows)}/>
+                <span className='text-[12px]'>Show all rows</span>
+            </div>
+            <div className='flex flex-row gap-2 cursor-pointer hover:bg-green-100 rounded-sm py-[2px] px-2 active:bg-gray-200 hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Excel'}
+                onClick={handleExportToExcel}>
+                <ExcelIcon className={'fill-green-700  h-4 w-4 '}
+                />
+            </div> 
+            <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Export to Pdf'}>
+                <BsFileEarmarkPdf className='text-[18px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
+                onClick={handlePdfExport}
+                />
+            </div>
         </div>
-        <div className='flex flex-row gap-2 cursor-pointer hover:bg-green-100 rounded-sm py-[2px] px-2 active:bg-gray-200 hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Excel'}
-            onClick={handleExportToExcel}>
-            <ExcelIcon className={'fill-green-700  h-4 w-4 '}
-            />
-        </div> 
-        <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Export to Pdf'}>
-            <BsFileEarmarkPdf className='text-[18px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
-            onClick={handlePdfExport}
+        <div className='hover:tooltip-open tooltip tooltip-left mr-2' data-tip={'Refresh data'}>
+            <BiRefresh className='text-[25px] text-teal-500 cursor-pointer hover:text-teal-400 active:text-teal-700'
+            onClick={handleRefreshData}
             />
         </div>
     </div>
