@@ -37,12 +37,12 @@ const IndexPostProduct = ({ssUser}) => {
   const [showBankBalances, setShowBankBalances] = React.useState(false);
   
   
-
+  //console.log(transSheet, recordTransaction);
   //const [activeTab, setActiveTab] = useState("TAB1");
   //const [transSheet, setTransSheet] = useState({date:"", description:'', reference:'', amount:'', accountCodeDr:'', subCodeDr:'', quantityDr:'',unitsDr:'',accountCodeCr:'', subCodeCr:'', quantityCr:'',unitsCr:'',accountCodeProduct:'', subCodeProduct:'', quantityProduct:'',unitsProduct:'', accountCodeCOS:'', quantityBal:''});
+  
+  //ProductBalance calculation
   let productBalance = {bal:0, price:0};
-  //console.log(ledgersAcct, processedLedgers)
-
   if(transSheet?.subCodeProduct && ledgersAcct?.productsLedger[transSheet?.subCodeProduct]?.trans.length){
    productBalance = ledgersAcct?.productsLedger[transSheet?.subCodeProduct].trans.reduce((cum, dt, i, arr)=>{
       cum.bal = cum.bal + parseFloat(dt.quantity);
@@ -53,10 +53,6 @@ const IndexPostProduct = ({ssUser}) => {
     },{bal:0, price:0});
   }
 
-  
-  //console.log(transSheet,ledgersAcct?.productsLedger[transSheet?.subCodeProduct])
-  //console.log(ledgersAcct.productsLedger.RDW0001.trans);
-  //console.log(transSheet);
   
 
   const transSheetReset =(tab)=>{

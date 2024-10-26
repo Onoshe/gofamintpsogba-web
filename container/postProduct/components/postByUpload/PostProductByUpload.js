@@ -9,17 +9,28 @@ import { MdClose, MdDownload } from 'react-icons/md';
 import Table from '@/components/tables/Table';
 import { validateCOAUploads } from '@/lib/validation/validateCOAUpload';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
-import { handleSubmitUpload } from '../utils/handleSubmitUpload';
-import { getUploadSampleFile } from '../utils/getUploadSampleFile';
+//import { handleSubmitUpload } from '../utils/handleSubmitUpload';
+//import { getUploadSampleFile } from '../utils/getUploadSampleFile';
 import { getLinkFetchTableWithConds } from '@/lib/apiRequest/urlLinks';
 import { getRequest } from '@/lib/apiRequest/getRequest';
+import { initStateCreateByUpload, reducerCreateByUpload } from '@/container/products/reducers/reducerCreateByUpload';
+import { getRecordProductByUploadSampleFile } from './getUploadSampleFile';
+import Link from 'next/link';
+import { validateProductPurchaseAndAdj } from '../utils/validation/validateProductPurchaseAndAdj';
+import { validateProductSale } from '../utils/validation/validateProductSale';
+import { BiError } from 'react-icons/bi';
 
 
+const purchaseFlds = ({date:"", description:'', reference:'', amount:'', accountCodeDr:'', subCodeDr:'', quantityDr:'',unitsDr:'',accountCodeCr:'', subCodeCr:'', quantityCr:'',unitsCr:''});
+const salseFlds = ({date:"", description:'', reference:'', amount:'', accountCodeDr:'', subCodeDr:'', quantityDr:'',unitsDr:'',accountCodeCr:'', subCodeCr:'', quantityCr:'',unitsCr:'',accountCodeProduct:'', subCodeProduct:'', quantityProduct:'',unitsProduct:'', accountCodeCOS:'', quantityBal:''});
 
-const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccounts, coaStructure,user, runDispatchClientDataCall, handleInfoMsg, setShowBlind,controlAcctsCode}) => {
+
+const PostProductByUpload = ({chartOfAccounts,activeTab, controlAcctsCode, coaStructure,user, runDispatchClientDataCall, uploadError, setUploadError, handleInfoMsg, setShowBlind,}) => {
+    const [stateCreate, dispatchCreate] = useReducer(reducerCreateByUpload, initStateCreateByUpload);
     const {isDropped, isDragging, selected,  uploadedData, resetFileUploadCount, closeTable, file, infoMsg, table} = stateCreate;
-    const [postError, setPostError] = useState({msg:'', error:false});
     const [isLoading, setIsLoading] = useState(false);
+
+    //console.log(table);
 
     const handleUpload =()=>{
     }
@@ -32,22 +43,38 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
       return getFileExtension(file);
     }
 
-    const handleSubmit = ()=>{
+    const handleSubmit =()=>{
       setIsLoading(true);
-      handleSubmitUpload({formInput:table.rows, setInfoMsg:setPostError, coaStructure, dispatchCreate,user, runDispatchClientDataCall, handleInfoMsg, 
-        setShowBlind, setIsLoading})
+      submitHandler({transSheet:table.rows, controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
+        runDispatchClientDataCall, setUploadError, toastNotify, transSheetReset, recordTransaction, router})
+    }
+
+    const handleSubmit99 = ()=>{
+      setIsLoading(true);
+     // handleSubmitUpload({formInput:table.rows, setInfoMsg:setUploadError, coaStructure, dispatchCreate,user, runDispatchClientDataCall, handleInfoMsg, 
+     //   setShowBlind, setIsLoading})
     }
     
-    const validateUploadData = async ()=>{
-      const fetchTableUrl = getLinkFetchTableWithConds({table:user.companyId+'_chartofaccount', conds:'deleted', values:'0'});
-      const chartOfAccts = await getRequest(fetchTableUrl);
 
-      const validateRes = validateCOAUploads(table?.rows, chartOfAccts?.data, coaStructure, controlAcctsCode);
-        if(validateRes?.error){
+
+    const validateUploadData = async ()=>{
+      const fetchTableUrl = getLinkFetchTableWithConds({table:user.companyId+'_products', conds:'deleted', values:'0'});
+      //const chartOfAccts = await getRequest(fetchTableUrl);
+      let validateRes = {};
+      if(activeTab==="TAB1"){
+          validateRes = await validateProductPurchaseAndAdj(table.rows, controlAcctsCode, activeTab, chartOfAccounts, user);
+      }else if(activeTab === "TAB2"){
+          validateRes = await validateProductSale(table.rows, controlAcctsCode, activeTab, chartOfAccounts, user);
+      }
+      
+      //const validateRes = validateCOAUploads(table?.rows, chartOfAccts?.data, coaStructure, controlAcctsCode);
+      //console.log(validateRes);
+
+      if(validateRes?.error){
          const errorMsg = getErrorMessage(validateRes?.errorType, validateRes?.key, validateRes?.rowIndex, validateRes?.title);
-         setPostError({msg:errorMsg, error:validateRes?.error});
+         setUploadError({msg:errorMsg, error:validateRes?.error});
         }else{
-         setPostError({msg:'Upload successfull', error:false});
+         setUploadError({msg:'Upload successfull', error:false, uploadTable:table.rows});
         }
     }
 
@@ -57,7 +84,7 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
         validateUploadData();
       }
       if(!table.show){
-        setPostError({msg:'', error:false})
+        setUploadError({msg:'', error:false})
       }
     },[table]);
 
@@ -87,17 +114,24 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
 
   return (
     <div className=''>
-      <div className='bg-gray-200 px-2 py-1 text-gray-700'>
+      <div className='bg-gray-200 px-2 py-1 text-gray-700 flex flex-row gap-2 flex-wrap'>
           <div className='flex flex-row gap-1 hover:bg-white px-2 py-[2px] hover:text-blue-600 active:bg-gray-100 rounded-sm w-fit cursor-pointer'
-            onClick={()=>getUploadSampleFile(coaStructure)}>
+            onClick={()=>getRecordProductByUploadSampleFile(coaStructure)}
+            >
             <MdDownload size={22} className=''/> Sample File
           </div>
+
+          <Link className='flex flex-row gap-1 hover:bg-white px-2 py-[2px] hover:text-blue-600 active:bg-gray-100 rounded-sm w-fit cursor-pointer'
+            href={'/excel/FastRecord_Database_Structure.xlsx'}
+            >
+            <MdDownload size={22} className=''/> FastRecord_Database_Structure
+          </Link>
        </div>
        <div className='m-4'>
        <div className=''>
-          <p className={`text-center  px-10 ${postError.error? 'text-red-600' : 'text-green-500'}`}>
-            {postError.msg}
-          </p>
+          <div className={`text-center flex justify-center items-center gap-2 px-10 ${uploadError.error? 'text-red-600' : 'text-green-500'}`}>
+            {uploadError.error && <BiError className='text-[20px]'/>}{uploadError.msg}
+          </div>
         </div>
        {!table?.show?
             <CreatePersonalAccountByUpload
@@ -137,7 +171,7 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
         
         </div>
         
-        { (table.show && !postError.error) && <>
+        <div className='hidden'>
           <div className='mx-7 xl:ml-[4vw] hidden'>
             <button type='submit' className="btn btn-info px-10"
               onClick={handleSubmit}>
@@ -151,10 +185,10 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
                       onClick={handleSubmit}/>                
               </div>
           </div> 
-          </>}
+        </div>
       
     </div>
   )
 }
 //
-export default CreateChartOfAccountByUpload
+export default PostProductByUpload

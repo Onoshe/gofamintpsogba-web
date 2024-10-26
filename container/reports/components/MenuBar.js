@@ -122,7 +122,7 @@ const handleCustomDate =(e)=>{
                 </div>
             </div>
         </div>
-        <p className='px-3 pt-1 text-[10px] sm:text-[13px] text-blue-700 flex'>{currentReportTab}</p>
+        <p className='px-3 pt-1 text-[12px] sm:text-[13px] text-blue-700 flex'>{currentReportTab}</p>
         <div className=' flex'>
             <div className={`hover:tooltip-open tooltip tooltip-left flex items-center justify-between`} data-tip={'Refresh data'}>
                     <MdRefresh className='text-[16px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'

@@ -81,10 +81,10 @@ const Vendors = ({ssUser}) => {
 
   const handleClickCell = async (el)=>{     
     if(el?.row?.createdBy !== "DEMO"){
-      const result = getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row});
-      if(result.permit){
+      const perms = await getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, form:[el.row]});
+      if(perms.permit){
        await handleClickRow({el, user, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
-      }else{notify("error", result.msg)}
+      }else{notify("error", perms.msg)}
     }
 }
 const handleConfirm = (act)=>{
@@ -111,9 +111,11 @@ const handleConfirm = (act)=>{
     notify(type, msg);
   }
   const handleSubmitFunction = async (e)=>{
+    const perms = await getPermissions({user, act:pmsActs.CREATE_PERSONAL_ACCOUNT, form:[formInput]});
+    if(!perms.permit) return notify("error", perms.msg);
+
    handleSubmit({e, formInput, setInfoMsg, handleInfoMsg,  personalAccts:vendors, handleActiveTab, dispatchVendors, setFormInput,
      user, runDispatchClientDataCall, setActiveTab, setFormInput, personalAcct:"vendors", handleClear});
-    //console.log(formInput)
   }
 
   const handleSearch =(el)=>{

@@ -20,6 +20,7 @@ const useStoreHeader = create((set) => ({
     client_Admin:{},
     clientData:{},
     quickrecordsLogo:"http://localhost/quickrecords_backend/asset/quickrecords-logo.jpg",
+    expiration:{demoRegDate:'', demoTrialPeriod:'', expired:false, expireDays:20, lastSub:{},  daysToExpire:''},
 
     dispatchUsers: (act) => set((state) => ({
         users: act,
@@ -69,6 +70,9 @@ const useStoreHeader = create((set) => ({
     })),
     dispatchClientData: (act) => set((state) => ({
         clientData: act,
+    })),
+    dispatchExpiration: (act) => set((state) => ({
+        expiration: act,
     })),
    
 }));

@@ -78,12 +78,11 @@ const Customers = ({ssUser}) => {
     //console.log(e)
   }
   const handleClickCell = async (el)=>{     
-      if(el?.row?.createdBy !== "DEMO"){
-        const result = getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row});
-        if(result.permit){
+        const perms = await getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, form:[el.row]});
+        if(perms.permit){
          await handleClickRow({el, user, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
-        }else{notify("error", result.msg)}
-      }
+        }else{notify("error", perms.msg)}
+      
   }
   const handleConfirm = (act)=>{
     if(act === "CANCEL"){ setShowConfirm({show:false, cell:{}, inputVal:''});}
@@ -108,7 +107,10 @@ const Customers = ({ssUser}) => {
     notify(type, msg);
   }
  
-  const handleSubmitFunction =(e)=>{
+  const handleSubmitFunction = async (e)=>{
+    const perms = await getPermissions({user, act:pmsActs.CREATE_PERSONAL_ACCOUNT, form:[formInput]});
+    if(!perms.permit) return notify("error", perms.msg);
+
     handleSubmit({e, formInput, setInfoMsg,  handleInfoMsg, personalAccts:customers, handleActiveTab, dispatchCustomers, setFormInput, 
       user, runDispatchClientDataCall, setActiveTab, setFormInput, personalAcct:"customers", handleClear})
     //console.log(e)

@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { handleSubmit } from '../utils/handleSubmit';
 import { controlAcctChecker } from '@/container/postTransaction/components/utils/controlAccountChecker';
 import CashAndBankBalances from '@/container/postTransaction/components/balancesComponent/CashAndbankBalances';
-
+import { getPermissions, pmsActs } from "@/lib/permissions/permissions";
 
 const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSelection, personalAcctsList, personalAccts, 
   productsList, controlAcctsCode, runDispatchClientDataCall, user, vendors, customers,handleDeleteTran,processedLedgers,
@@ -31,7 +31,7 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
     }
   }
 
-  const submitHandler =()=>{
+  const submitHandler = async ()=>{
     //console.log(transSheet)
     const validateRes = validateTransactionsMulti(transSheet, chartOfAccounts, controlAcctsCode, netAmount)
     //console.log(validateRes)
@@ -40,10 +40,13 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
      //setPostError({msg:errorMsg, error:validateRes?.error});
      toastNotify('error', errorMsg);
     }else{
-     handleSubmit({transSheetForm:transSheet, chartOfAccounts, user, vendors, customers,  setTransSheet, runDispatchClientDataCall, notify:toastNotify,
+      const perms = await getPermissions({user, act:pmsActs.POST_JOURNAL, form:transSheet});
+      if(!perms.permit) return toastNotify("error", perms.msg);
+
+      await handleSubmit({transSheetForm:transSheet, chartOfAccounts, user, vendors, customers,  setTransSheet, runDispatchClientDataCall, notify:toastNotify,
       recordTransaction, dispatchTranSheetMultiEntryReset,  router })
-     //setPostError({msg:'Posting successfull', error:false});
-     toastNotify('success', 'Posting successfull');
+      //setPostError({msg:'Posting successfull', error:false});
+     //toastNotify('success', 'Posting successfull');
     }  
   }
   const handleTransView =(act)=>{

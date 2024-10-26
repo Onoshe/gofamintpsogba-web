@@ -113,7 +113,12 @@ const CreateProduct = ({handleSubmit, showBlind, handleClose,formInput, handleFo
                             value={formInput.description}
                             onChange={(e)=>handleFormInput(e)}
                         />
-                        
+                        <div className="text-[11px] -mt-3 -mb-5">
+                            <p class="font-[500]">Valid Product Code:</p>
+                            <p>* Any of 0 - 9 and A - Z and no space and can only begin with a letter</p>
+                            <p>* Minimum characters of 5 and maximum of 15 . </p>
+                            <p>* Maximum characters of 24 for Category and 52 for Product Name</p>
+                        </div>
                     </div>
                     <div 
                         className={`smc:ml-[150px] ${infoMsg?.error? 'text-red-600' :'text-green-800'}`} >

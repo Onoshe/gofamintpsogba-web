@@ -3,34 +3,6 @@ import { patchRequest } from "@/lib/apiRequest/patchRequest";
 import { activities, postActivity } from "@/lib/apiRequest/postActivity";
 import { getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
 
-/*
-const handleClickCell = async (el)=>{     
-  if(el?.row?.createdBy !== "DEMO"){
-    const result = getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, companyId:user.companyId, form:el.row});
-    if(result.permit){
-     await handleClickRow({el, user, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
-    }else{notify("error", result.msg)}
-  }
-}
-const handleConfirm = (act)=>{
-if(act === "CANCEL"){ setShowConfirm({show:false, cell:{}, inputVal:''});}
-if(act === "CONTINUE"){
-  if(showConfirm?.cell?.row?.id && user?.companyId){
-      const {id, accountCode, firstname, lastname} = showConfirm.cell.row;
-      const deletedAcct = `${accountCode}: ${firstname} ${lastname} account`;
-     if(showConfirm?.showInput){
-        if(!showConfirm?.inputVal) return notify('error', 'Please, enter '+showConfirm.cell.row.firstname+' '+showConfirm.cell.row.lastname+' account code to confirm account delete!')
-        if(showConfirm?.inputVal?.trim() === showConfirm.cell.row.accountCode){
-          //return console.log(showConfirm?.inputVal?.trim(), showConfirm.cell.row.accountCode)
-          handleDeleteAccountOrTran({user, notify, setShowConfirm, runDispatchClientDataCall, deletedAcct, showConfirm, showConfirmObj:true, whereVal:id, tableName:"vendors"})
-        }else{notify('error', 'The value you entered is not the same as '+showConfirm.cell.row.firstname+' '+showConfirm.cell.row.lastname+' account code')}
-     }else{
-        handleDeleteAccountOrTran({user, notify, setShowConfirm, showConfirm, runDispatchClientDataCall, deletedAcct, showConfirmObj:true, whereVal:id, tableName:"vendors"})    
-     }
-  }else{notify('error', 'Account not found or User not logged in!')}
-} 
-}
-*/
 
 const handleClickRow = async ({el, setFormInput, setShowBlind, setInfoMsg, dispatchProducts, deleteType, setDeleteRow,
      deleteRow, setAlertBlind, setSelectedProduct, handleInfoMsg, runDispatchClientDataCall, user, setShowConfirm})=>{

@@ -3,6 +3,7 @@ import { IoMdArrowRoundForward } from 'react-icons/io';
 import { MdClose, MdDateRange, MdOutlineReport, MdReport, MdSearch } from 'react-icons/md';
 import { BiRefresh } from 'react-icons/bi';
 import SearchBar from './SearchBar';
+import Link from 'next/link';
 
 
 
@@ -16,20 +17,17 @@ const HeaderBar = ({chartOfAccounts,handleSelAccount, listOfAccounts, setListOfA
         const route = `/${companyId}/reports/gl?l=${ledgerCode}`;
         router.push(route);
     }
-    const goToReportPage = ()=>{
-        const route = `/${companyId}/reports`;
-        router.push(route);
-    }
+   
 
   return (
     <div className='bg-white -mt-[11px] smc:mt-0'>
         <div className='justify-between px-4 hidden bg-white smc:flex'>
             <p className='text-blue-500 font-bold invisible'>Dashboard</p>
             <div className='flex-row gap-3 py-2 flex'>
-                <div className='flex flex-row active:bg-blue-50 cursor-pointer hover:shadow-lg items-center border shadow-md border-gray-300 w-fit px-2 py-[3px] text-[12px] rounded-sm'
-                 onClick={goToReportPage}>
+                <Link href={`/${companyId}/reports`} className='flex flex-row active:bg-blue-50 cursor-pointer hover:shadow-lg items-center border shadow-md border-gray-300 w-fit px-2 py-[3px] text-[12px] rounded-sm'
+                 >
                     <MdOutlineReport/><p>Reports</p><IoMdArrowRoundForward/>
-                </div>
+                </Link>
                 <div className='flex flex-row items-center active:bg-blue-50 cursor-pointer hover:shadow-lg border shadow-md border-gray-300 w-fit px-2 py-[3px] text-[12px] rounded-sm'
                   onClick={()=>setListOfAccounts(true)}>
                     <MdOutlineReport/><p>List of Accounts</p><IoMdArrowRoundForward/>

@@ -62,122 +62,130 @@ function getVoucher(typeCode, entry){
 
 export function prepareQueryTrans({transSheet, user, chartOfAccounts, postingPlat}) {
     const url =  getLinkPostAndRetrieve();
+    const transactionsArr = [];
+    for (let i = 0; i < transSheet.length; i++) {
+        const transSht = transSheet[i]; 
+        let {
+            date,
+            amount,
+            description,
+            reference,
+            accountCodeDr,
+            accountCodeCr
+        } =  transSht;
 
-    let {
-        date,
-        amount,
-        description,
-        reference,
-        accountCodeDr,
-        accountCodeCr
-      } =  transSheet;
+        const debitAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeDr);
+        const creditAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeCr);
 
-      const debitAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeDr);
-      const creditAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeCr);
+        const transactions = [
+            date,
+            description,
+            reference,
+            2,              //entries count
+            postingPlat,
+            amount,
+            debitAcctChart.id,
+            creditAcctChart.id,
 
-      const transactions = [
-        date,
-        description,
-        reference,
-        2,              //entries count
-        postingPlat,
-        amount,
-        debitAcctChart.id,
-        creditAcctChart.id,
-
-        user.userId,
-        dateFmtISO(), 
-        user.userId,
-        dateFmtISO()
-    ];
-    
+            user.userId,
+            dateFmtISO(), 
+            user.userId,
+            dateFmtISO()
+        ];
+        transactionsArr.push(transactions)
+    }
     let body = {
         act:"INSERT",
         table:user.companyId+"_transactions",
         fields:transFields,
-        values:[transactions],
+        values:transactionsArr,
         types:transTypes
     }
     return {body, url}
 }
 
-export function prepareQueryTransDetails({transSheet, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTrans, doubleEntryId}) {
+export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr, doubleEntryIdArr}) {
     const url =  getLinkPostAndRetrieve();
     const {receivables, payables, inventoryControl, inventoryAdj} = controlAcctsCode;
-    let {
-        date,
-        description,
-        reference,
-        accountCodeDr,
-        accountCodeCr,
-        subCodeDr,
-        subCodeCr,
-        quantityDr,
-        quantityCr,
-        amount,
-      } =  transSheet;
-
-    const insertedTran = insertedTrans[0];
+    
     const transactionsDetails = [];
-
-        const debitAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeDr);
-        const creditAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeCr);
-        
-        //Get the personalAccount of subAccount
-        let debitSubs = debitAcctChart.typeCode == receivables? 'customers' : debitAcctChart.typeCode == payables? 'vendors' : debitAcctChart.typeCode == inventoryControl? 'products' : 'nil';
-        let creditSubs = creditAcctChart.typeCode == receivables? 'customers' : creditAcctChart.typeCode == payables? 'vendors' : creditAcctChart.typeCode == inventoryControl? 'products' : 'nil';
-        
-        const personalAcctType = {
-            customers:{acct:customers, acctCode:'accountCode'},
-            vendors:{acct:vendors, acctCode:'accountCode'},
-            products:{acct:products, acctCode:'productCode'},
-            nil:{acct:[], acctCode:'nil'}
-        };
-
-        //Get id of sub Account
-        const debitSubAcctChart = personalAcctType[debitSubs].acct?.find((dt)=> dt[personalAcctType[debitSubs].acctCode] == subCodeDr);
-        const creditSubAcctChart = personalAcctType[creditSubs].acct?.find((dt)=> dt[personalAcctType[creditSubs].acctCode] == subCodeCr);
-
-        const transDetailsFieldsDr = [
-            insertedTran.id,
-            "DR",
-            "1",
-            debitAcctChart?.id,
-            debitSubAcctChart?.id? debitSubAcctChart?.id : "",
-            debitSubAcctChart?.id? debitSubs.toUpperCase() : 'COA',
+    for (let i = 0; i < transSheetArr.length; i++) {
+        const transSheet = transSheetArr[i];
+    
+        let {
+            date,
+            description,
+            reference,
+            accountCodeDr,
+            accountCodeCr,
+            subCodeDr,
+            subCodeCr,
+            quantityDr,
+            quantityCr,
             amount,
-            quantityDr || "",
-            doubleEntryId,
-            debitAcctChart?.dueDate && debitAcctChart?.dueDateType === "REC"? debitAcctChart.dueDate : "",
+            } =  transSheet;
 
-            "Payment",
-            user.userId,
-            dateFmtISO(), 
-            user.userId,
-            dateFmtISO()
-        ];
-        transactionsDetails.push(transDetailsFieldsDr);
+        const insertedTran = insertedTransArr[i];
+        const doubleEntryId = doubleEntryIdArr[i]; //Error?
         
-        const transDetailsFieldsCr = [
-            insertedTran.id,
-            "CR",
-            "-1",
-            creditAcctChart?.id,
-            creditSubAcctChart?.id? creditSubAcctChart?.id : "",
-            creditSubAcctChart?.id?  creditSubs.toUpperCase() : 'COA',
-            amount,
-            quantityCr || "",
-            doubleEntryId,
-            creditAcctChart?.dueDate && creditAcctChart?.dueDateType === "REC"? creditAcctChart.dueDate : "",
+            const debitAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeDr);
+            const creditAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeCr);
+            
+            //Get the personalAccount of subAccount
+            let debitSubs = debitAcctChart.typeCode == receivables? 'customers' : debitAcctChart.typeCode == payables? 'vendors' : debitAcctChart.typeCode == inventoryControl? 'products' : 'nil';
+            let creditSubs = creditAcctChart.typeCode == receivables? 'customers' : creditAcctChart.typeCode == payables? 'vendors' : creditAcctChart.typeCode == inventoryControl? 'products' : 'nil';
+            
+            const personalAcctType = {
+                customers:{acct:customers, acctCode:'accountCode'},
+                vendors:{acct:vendors, acctCode:'accountCode'},
+                products:{acct:products, acctCode:'productCode'},
+                nil:{acct:[], acctCode:'nil'}
+            };
 
-            "Payment",
-            user.userId,
-            dateFmtISO(), 
-            user.userId,
-            dateFmtISO()
-        ];
-        transactionsDetails.push(transDetailsFieldsCr);
-       
+            //Get id of sub Account
+            const debitSubAcctChart = personalAcctType[debitSubs].acct?.find((dt)=> dt[personalAcctType[debitSubs].acctCode] == subCodeDr);
+            const creditSubAcctChart = personalAcctType[creditSubs].acct?.find((dt)=> dt[personalAcctType[creditSubs].acctCode] == subCodeCr);
+
+            const transDetailsFieldsDr = [
+                insertedTran.id,
+                "DR",
+                "1",
+                debitAcctChart?.id,
+                debitSubAcctChart?.id? debitSubAcctChart?.id : "",
+                debitSubAcctChart?.id? debitSubs.toUpperCase() : 'COA',
+                amount,
+                quantityDr || "",
+                doubleEntryId,
+                debitAcctChart?.dueDate && debitAcctChart?.dueDateType === "REC"? debitAcctChart.dueDate : "",
+
+                "Payment",
+                user.userId,
+                dateFmtISO(), 
+                user.userId,
+                dateFmtISO()
+            ];
+            transactionsDetails.push(transDetailsFieldsDr);
+            
+            const transDetailsFieldsCr = [
+                insertedTran.id,
+                "CR",
+                "-1",
+                creditAcctChart?.id,
+                creditSubAcctChart?.id? creditSubAcctChart?.id : "",
+                creditSubAcctChart?.id?  creditSubs.toUpperCase() : 'COA',
+                amount,
+                quantityCr || "",
+                doubleEntryId,
+                creditAcctChart?.dueDate && creditAcctChart?.dueDateType === "REC"? creditAcctChart.dueDate : "",
+
+                "Payment",
+                user.userId,
+                dateFmtISO(), 
+                user.userId,
+                dateFmtISO()
+            ];
+            transactionsDetails.push(transDetailsFieldsCr);
+    }
     let body = {
         act:"INSERT",
         table:user.companyId+"_transactionsdetails",

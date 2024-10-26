@@ -11,7 +11,7 @@ const Dashboad = () => {
 
   return (
       <PageWrapper>
-          <NotificationHeaderBar/>
+          {/*<NotificationHeaderBar/>*/}
           <DashboardIndex ssUser={user}/>
       </PageWrapper>
   )

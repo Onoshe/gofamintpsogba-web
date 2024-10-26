@@ -15,6 +15,7 @@ import { isProduction } from '@/lib/apiRequest/urlLinks';
 import useStoreTransactions from '@/context/storeTransactions';
 import PageFetchingData from '@/loadingPage/PageFetchingData';
 import PageLogOut from '@/loadingPage/PageLogOut';
+import NotificationHeaderBar from '../notificationHeaderBar/NotificationHeaderBar';
 //import { usePathname, useRouter } from 'next/navigation';
 /* eslint-disable @next/next/no-img-element */
 
@@ -132,7 +133,9 @@ const Header = ({ssUser}) => {
         {!transReady && <PageFetchingData/>}
         {transReady && isProduction && !isOnline && <NetworkError/>}
         {status === "logout" && <PageLogOut/>}
-
+        
+        <div className='absolute w-full  bottom-[20px]'><NotificationHeaderBar user={user}/></div>
+        
         <div data-theme="aqua" 
           className='py-2 z-50 px-3 flex items-center justify-between'
          >
@@ -156,10 +159,9 @@ const Header = ({ssUser}) => {
                 />
               <p className='text-[10px] text-[yellow] italic'>...simplifying your financial records</p>
             </div>
-            
           </div>
-          <p className='font-bold hidden smc:block md:text-lg text-white'>{activePage?.title}</p>
-          <div className={`${session?.user? '' : 'hidden'} flex flex-row gap-2`}>
+          <p className='font-bold hidden smc:block md:text-lg text-white -mt-3'>{activePage?.title}</p>
+          <div className={`${session?.user? '' : 'hidden'} z-20 flex flex-row gap-2`}>
               {/*<HeaderNotification newNotice="New Message"/>*/}
               <User userInit={userInit}
                 userEmail={session?.user?.userId}

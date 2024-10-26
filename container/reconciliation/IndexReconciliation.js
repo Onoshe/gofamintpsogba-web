@@ -6,7 +6,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import useStoreHeader from '@/context/storeHeader';
 import ReconciliationSelect from './components/ReconciliationSelect';
 import { mapChartOfAccount } from '@/lib/transactionsManager/mapChartOfAccount';
-import { mapProducts } from '@/lib/transactionsManager/mapProducts';
 import { LedgersManager } from '../reports/utils/ledgers/ledgersManger';
 import { getStartAndEndDate } from '@/lib/dummyData/getStartAndEndDate';
 import ReconReportTable from './components/ReconReportTable';
@@ -17,14 +16,13 @@ import ReconOthersEntry from './components/ReconOthersEntry';
 import { getLongMonth } from '@/lib/date/shortLongDate';
 import { handleExcelExport } from '../reports/utils/others/handleExcelExport';
 import { getStyleRows, objectToArray } from '../auditTrail/_IndexAuditTrail';
-import { extractKeysFomObject } from '../reports/_IndexReports';
 import { handleExport2Pdf } from './utils/handleExport2Pdf';
-import { getSlug } from '@/lib/string/getSlug';
 import { handleSaveReport } from './utils/handleSaveReport';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import { getLinkFetchTable, getLinksAdmin } from '@/lib/apiRequest/urlLinks';
 import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
+import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 
 const keys = ['transactionDate', 'description', 'transactionNo', 'debit', 'credit'];
@@ -65,16 +63,16 @@ const IndexReconciliation = ({ssUser}) => {
     const ledgerAccts = processedLedgers[selAcctCode];
     const ledger = ledgerAccts?.trans || [];
     
-   
+
     let reportDetails = {};
     if(form.dateFrom && form.dateTo && ledgerAccts?.name){
-     const reportDt = getLongMonth(form.dateTo)?.fullMonth;
+     const reportDt = new Date(form.dateTo).toDateString(); //getLongMonth(form.dateTo)?.fullMonth;
      reportDetails = {companyName:clientAccount.companyName, asAt:"As at "+reportDt, ledgerName:ledgerAccts.name, ledgerCode:ledgerAccts.accountCode,
         title:"Bank Reconciliation", accountTitle:ledgerAccts.accountCode+" "+ledgerAccts.name,
       };
     }
     reportDetails = savedReportView.show? savedReportView.report.reportDetails : reportDetails;
-
+    //console.log(reportDetails, form)
 
     let reportData = {};
     if(user?.lastname){
@@ -115,6 +113,9 @@ const IndexReconciliation = ({ssUser}) => {
         },[]);
         //return console.log(styleRowsArr)  
         if(type=== "SAVE"){
+          const perms = await getPermissions({user, act:pmsActs.DO_RECON, form:reportData.rows});
+          if(!perms.permit) return notify("error", perms.msg);
+
           if(!displayReport.name){
             notify("error", "Please, enter the report name")
           }else{
@@ -226,7 +227,7 @@ const IndexReconciliation = ({ssUser}) => {
               setSavedReportView={setSavedReportView}
               pinRow
             />
-        <div className={`${displayReport.show? 'hidden' :''} px-4 py-2`}>
+        <div className={`${displayReport.show? 'hidden' :''} px-4 pb-2 pt-1`}>
           <ReconciliationSelect
             form={form}
             setForm={setForm}

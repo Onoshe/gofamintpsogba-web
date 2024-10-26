@@ -14,6 +14,7 @@ import SalesGuideContainer from '../postingGuides/SalesGuideContainer';
 import { payableControlAcctChecker } from '@/container/postTransaction/components/utils/controlAccountChecker';
 import CashAndBankBalances from '@/container/postTransaction/components/balancesComponent/CashAndbankBalances';
 import ProductAdjustmentSelection from './ProductAdjustmentSelection';
+import PostProductByUpload from '../postByUpload/PostProductByUpload';
 
 
 const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, personalAcctsList, personalAccts, transactionsDetails,
@@ -27,6 +28,8 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
   const [componentReady, setComponentReady] = useState(false);
   const [showCard, toggleShowCard] = React.useState(false);
   const [selectedDueDate, setSelectedDueDate] = React.useState({value:30, label:'Select'});
+  const [productBy, setProductBy] = React.useState({manual:true, });
+  const [uploadError, setUploadError] = useState({msg:'', error:false, uploadTable:[]});
   
  //console.log(transSheet)
   const handleAdjustProductBy =(e)=>{
@@ -34,7 +37,7 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
  }
  
   const handleSubmit =()=>{
-    submitHandler({transSheet, controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
+    submitHandler({transSheet:[transSheet], controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
       runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router})
   }
   const handleTransView =(act)=>{
@@ -89,8 +92,18 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
     setComponentReady(true) //Used to prevent server hydration error
   },[transSheet]);
 
+ const handleToggle =()=>{
+  const val = productBy.manual;
+  setProductBy({...productBy, manual:!val})
+ }
 
-
+ let showRecordBtn = true;
+ if(!productBy.manual){
+    showRecordBtn = false;
+    if(!uploadError.error && uploadError?.uploadTable?.length){
+      showRecordBtn = true;
+    }
+ }
   return (
     <>
     <div className='w-full bg-gray-300 py-3 mt-0 text-blue-900 px-8 font-bold flex flex-row justify-between'>
@@ -108,10 +121,28 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
         <input type='checkbox' className='bg-white size-4 checkbox border border-blue-600' checked={showBankBalances} onChange={()=>setShowBankBalances(!showBankBalances)}/>
         <BsBank2 size={20} color='dodgerblue'/>
       </div>
+      <div className='flex flex-row justify-self-end ml-10 text-blue-800 items-center gap-2'>
+        <input type='checkbox' className='checkbox checkbox-error checkbox-xs'
+          checked={productBy.manual} onChange={handleToggle}/>
+        <label>Record by {productBy.manual? 'Manual' : 'Upload'}</label>
+      </div>
     </div>
 
    
-    <div className={`pb-4 flex flex-col items-center justify-center ${recordTransaction?.editTran? 'pt-2' : 'pt-5'}`}>
+    {!productBy.manual?
+      <PostProductByUpload 
+        activeTab={activeTab}
+        chartOfAccounts={chartOfAccounts}
+        coaStructure={coaStructure}
+        user={user}
+        runDispatchClientDataCall={runDispatchClientDataCall}
+        handleInfoMsg={()=>console.log()}
+        setShowBlind={()=>console.log()}
+        controlAcctsCode={controlAcctsCode}
+        uploadError={uploadError}
+        setUploadError={setUploadError}
+        />
+      :<div className={`pb-4 flex flex-col items-center justify-center ${recordTransaction?.editTran? 'pt-2' : 'pt-5'}`}>
         {activeTab==="TAB3" &&
           <ProductAdjustmentSelection
           adjustProductChecked={transSheet?.adjustProductChecked}
@@ -166,7 +197,7 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
               </div>
           </div>
         </div>
-    </div>
+    </div>}
     <div className={`w-full flex justify-center items-center px-5 mb-20`}>
       <TransactionsEntriesView 
             transSheet={transSheet}
@@ -203,7 +234,8 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
     <br/>
     <br/>
       
-      <div className='px-5 py-2 fixed bottom-0 bg-gray-200 w-full mt-10'>
+
+        <div className={`${showRecordBtn? '' : 'hidden'} px-5 py-2 fixed bottom-0 bg-gray-200 w-full mt-10`}>
           <button onClick={handleSubmit} className='btn btn-sm btn-info px-7 inline-block mr-10'>
               {recordTransaction?.editTran? 'Save' :'Record'}
           </button>

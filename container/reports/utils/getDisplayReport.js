@@ -49,6 +49,8 @@ export const getDisplayReport =({reportName, pathname, transProcessor, customers
     }else{
         result = getLedgersAndPersonalAcctsForDisplay({reportName,  transProcessor, customers, vendors, products, dateForm, transactionsDetails, viewTransId, user});
     }
+
+    
     if(!result?.date){result.date = date}
     if(!result.moreDocHeader?.length){result.moreDocHeader = []};
 

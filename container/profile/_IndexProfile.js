@@ -56,6 +56,7 @@ const IndexProfile = ({ssUser}) => {
   const userId = session?.user?.userId;
   let userIdImg = userId?.replace(".", "_");
   const userPhoto = getImageLink(userIdImg);
+  const showRegUsers = user.role.toLowerCase() === "admin";
   //console.log(userPhoto)
   //userIdImg += ".jpg";
   const [file, setFile] = React.useState(null);
@@ -251,11 +252,13 @@ const handleResetUserPwd =async (e)=>{
             handleUpdateProfile={()=>setUpdateProfile({profile:{}, update:true})}
         />
         <HorizontalLine widths={100} margTop={20} margBot={15} bColor={'dodgerblue'}/>
-        <Users users={users} 
-          handleClickCell={handleUser} 
-          handleAddUser={()=>setAddUser({user:{}, add:true})}
-          planLimit={planLimit}
-          />
+        {showRegUsers && 
+            <Users users={users} 
+            handleClickCell={handleUser} 
+            handleAddUser={()=>setAddUser({user:{}, add:true})}
+            planLimit={planLimit}
+            />
+          }
         {updateUser.update && 
             <UpdatedUser 
                 user={user} 

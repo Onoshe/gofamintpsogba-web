@@ -18,14 +18,14 @@ const User = ({userInit, userEmail, userRole, userDropdown, setUserDropdown, han
 
    // console.log(userDropdown)
   return (
-    <div className='relative ' onMouseLeave={handleCloseDropdown}>
+    <div className='relative -mt-3' onMouseLeave={handleCloseDropdown}>
         <div className='flex flex-row gap-2 items-center'>
             <div className={`hidden avatar online placeholder w-6 h-6 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2`}>
                 <div className="bg-neutral-focus text-neutral-content rounded-full ">
                     <span className="text-[16px] text-transparent">{userInit}</span>
                 </div> 
             </div>
-            <div className='text-[12px]'>
+            <div className='text-[10px] sm:text-[12px]'>
                 <p className=''>{userEmail}</p>
                 <p className='text-right text-cyan-300'>{capitalizeFirstCharOnly(userRole)}</p>
             </div>

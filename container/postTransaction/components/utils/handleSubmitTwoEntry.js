@@ -87,7 +87,7 @@ async function runUpdate({url, body, transSheetForm, notify, setTransSheet, runD
               }else{
                 if(lastItem){
                   const tranRef = transSheetForm[0]?.reference;
-                  const postingNote = `Transaction with reference ${transRef}`;
+                  const postingNote = `Transaction with reference ${tranRef}`;
                   postActivity(user, activities.UPDATE, postingNote);
                   
                   dispatchTranSheetTwoEntryReset();

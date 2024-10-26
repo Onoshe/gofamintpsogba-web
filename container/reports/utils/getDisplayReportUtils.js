@@ -73,7 +73,7 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
             footerArr:[],
             tableHeaderFSize:8,
         };
-       // console.log(transProcessor.getGeneralLedgers());
+       //console.log(transProcessor.getGeneralLedgers());
 
         switch (reportName) {
             case 'trial-balance':
@@ -157,6 +157,7 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
                     const ledger = ledgersCus[acctCode];
                     return {...ledger, accountCode:ledger?.trans[0]?.accountCodeSub}
                 });
+                //console.log(cusBal)
                 result = {name:reportName, title:"Customers Balances", rowKeysShow:keysPersonalBalances, rowHeaders:getHeadersTitle(keysPersonalBalances), rows:cusBal,  pdfData}
                 break;
              case 'personal-ledgers-vendors-balances':

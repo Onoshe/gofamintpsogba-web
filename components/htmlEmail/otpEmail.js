@@ -14,7 +14,7 @@ const getOTPEmailBody =({OTP, name, optMsg, subject})=>{
     <body style="color:#24292e;font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;">
     <table align="center" role="presentation" cellSpacing="0" cellPadding="0" border="2px" width="100%" style="max-width:37.5em;width:580px;margin:60px auto;padding:0">
         <tr style="width:100%; background-color: #fff; border: solid 2px blue !important;">
-        <td style="padding: 15px;"><img alt="Gofamint PS Ogba Logo" src="https://quickrecords.gofamintpsogba.org/image_server.php?image=quickrecords-logo.jpg" width="120" height="60" style="display:block;outline:none;border:none;text-decoration:none" />
+        <td style="padding: 15px;"><img alt="Gofamint PS Ogba Logo" src="https://quickrecords.gofamintpsogba.org/image_server.php?image=quickrecords-logo" width="120" height="60" style="display:block;outline:none;border:none;text-decoration:none" />
             <p style="font-size:20px;line-height:1.25; text-align: center;">
                 ${subject}
             </p>

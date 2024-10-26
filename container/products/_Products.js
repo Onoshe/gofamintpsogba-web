@@ -16,6 +16,7 @@ import { handleSubmitMultiple } from './utils/handleSubmitMultiple';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import useStoreHeader from '@/context/storeHeader';
 import { getCompanyLogo } from '../company/components/utils/getSubscriptionHistory';
+import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 const Products = ({ssUser}) => {
   const { session, user,  status} = useAuthCustom(ssUser);
@@ -32,7 +33,7 @@ const Products = ({ssUser}) => {
   const [showConfirm, setShowConfirm] = React.useState({show:false, cell:{}, title:'', msg:'', showInput:false, inputVal:""});
   const companyLogoFile = getCompanyLogo(settings);
 
- //console.log(stateCreate)
+
  const notify = (type, msg) => toast[type](msg, {
   position: "top-right",
   autoClose: 5000,
@@ -74,10 +75,14 @@ const Products = ({ssUser}) => {
   const handleInfoMsg = (type, msg)=>{
     notify(type, msg);
   }
-  const handleClickRowFunction =(el)=>{
-    //console.log(el)
+  const handleClickRowFunction = async (el)=>{
+    const {key, row} = el;
+    if(row.createdBy === "DEMO") return;
+    const perms = await getPermissions({user, act:pmsActs.EDIT_PRODUCT, form:[row]});
+    if(!perms.permit) return notify("error", perms.msg);
+
     handleClickRow({el, products, setFormInput, setShowBlind, setInfoMsg, dispatchProducts, setDeleteRow, deleteRow, setSelectedProduct, 
-      setAlertBlind, user})
+      setAlertBlind, user});
   };
   const handleConfirmation =(event)=>{
     if(event === "CANCEL"){
@@ -99,8 +104,11 @@ const Products = ({ssUser}) => {
       }else{notify('error', 'Account not found or User not logged in!')} 
     }
   }
-  const handleSubmitFunction =(e)=>{
+  const handleSubmitFunction = async(e)=>{
     e.preventDefault();
+    const perms = await getPermissions({user, act:pmsActs.CREATE_PRODUCT, form:[formInput]});
+    if(!perms.permit) return notify("error", perms.msg);
+
     handleSubmit({ formInput, setInfoMsg, user, products, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput});
     //handleSubmit({e, formInput,products, setInfoMsg, dispatchProducts, handleShowBlind, setFormInput})
   }

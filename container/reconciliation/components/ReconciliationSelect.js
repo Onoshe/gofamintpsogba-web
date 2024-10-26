@@ -213,7 +213,7 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
                             <button className='bg-blue-500 px-4 rounded-sm hover:bg-blue-700 active:translate-y-[1px] active:bg-blue-600 text-white btn-sm w-fit '
                              onClick={()=>setDisplayReport({...displayReport, show:true})}>Report</button>
                             <button className={`ml-2 text-right text-[12px]  border  w-fit py-1 px-2 cursor-pointer ${isErrorAdjReport? 'text-red-700 active:bg-red-200  hover:bg-red-100 border-red-400' : 'border-teal-300 bg-teal-50'}`}
-                                onClick={handleShowReconOthersCont} disabled={Math.abs(errorAdj)> 1? '' : 'disabled'}>Error/Adj: {errorAdjReport}
+                                onClick={handleShowReconOthersCont} disabled={Math.abs(errorAdj)> 1? '' : ''}>Error/Adj: {errorAdjReport}
                              </button>
                         </div>
                     </div>

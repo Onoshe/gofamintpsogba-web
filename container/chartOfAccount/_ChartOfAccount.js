@@ -19,12 +19,13 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import { getRequest } from '@/lib/apiRequest/getRequest';
 import useStoreHeader from '@/context/storeHeader';
 import { getCompanyLogo } from '../company/components/utils/getSubscriptionHistory';
+import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 
 
 const ChartOfAccount = ({ssUser}) => {
   const { session, user,  status} = useAuthCustom(ssUser);
-  const {coaStructure, clientsDataCall, runDispatchClientDataCall, transactions, chartOfAccounts, dispatchChartOfAccounts} = useStoreTransactions((state) => state);
+  const {coaStructure, clientsDataCall,controlAcctsCode, runDispatchClientDataCall, transactions, chartOfAccounts, dispatchChartOfAccounts} = useStoreTransactions((state) => state);
   const [stateCreate, dispatchCreate] = useReducer(reducerCreateByUpload, initStateCreateByUpload);
   const [showBlind, setShowBlind] = React.useState(false);
   const [formInput, setFormInput] = React.useState({id:'',  accountName:'', accountType:'', typeCode:'', accountCode:'', description:'', addToDashboard:false, editAcct:false});
@@ -35,7 +36,7 @@ const ChartOfAccount = ({ssUser}) => {
   const {settings} = useStoreHeader((state) => state);
   const companyLogoFile = getCompanyLogo(settings);
   sortArrayByKey(chartOfAccounts, 'accountCode');
-  
+
   //getRequest("http://localhost/quickrecords_backend/server.php/api/affected-trans?d=demo").then((res)=>console.log(res));
 
 
@@ -74,9 +75,12 @@ const ChartOfAccount = ({ssUser}) => {
         setInfoMsg({msg:""});
     }
 
-  const handleClickRowFunction =(el)=>{
+  const handleClickRowFunction = async (el)=>{
     const {key, row} = el;
-     if(row.createdBy === "DEMO") return;
+    if(row.createdBy === "DEMO") return;
+    const perms = await getPermissions({user, act:pmsActs.EDIT_COA, form:[row]});
+    if(!perms.permit) return notify("error", perms.msg);
+
      handleClickRow({el, user, setFormInput, setShowBlind, setInfoMsg, setShowConfirm, handleSubmitFunction, chartOfAccounts, dispatchChartOfAccounts, setSelectedOpt, coaStructure})
   };
   const coaStructureWithoutRetEarnings = coaStructure?.filter((dt)=> dt.name.toLowerCase() !== "retainedearnings");
@@ -104,8 +108,10 @@ const ChartOfAccount = ({ssUser}) => {
 
       }
   }
-  const handleSubmitFunction =(e)=>{
-      //return console.log(formInput)
+  const handleSubmitFunction = async (e)=>{
+    const perms = await getPermissions({user, act:pmsActs.CREATE_COA, form:[formInput]});
+    if(!perms.permit) return notify("error", perms.msg);
+
       e.preventDefault();
       handleSubmit({formInput, setInfoMsg, user, coaStructure, chartOfAccounts, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})
   }
@@ -119,6 +125,8 @@ const ChartOfAccount = ({ssUser}) => {
             coaStructure={coaStructureWithoutRetEarnings}
             infoMsg={infoMsg}
             selectedOpt={selectedOpt}
+            chartOfAccounts={chartOfAccounts}
+            controlAcctsCode={controlAcctsCode}
             />
           <Header handleShowBlind={handleShowBlind} handleClickBtn={handleClickBtn} createType={createType}/>
           {createType === "UPLOAD" && 
@@ -134,6 +142,7 @@ const ChartOfAccount = ({ssUser}) => {
               runDispatchClientDataCall={runDispatchClientDataCall}
               handleInfoMsg={handleInfoMsg}
               setShowBlind={setShowBlind}
+              controlAcctsCode={controlAcctsCode}
               />
           }
           {createType === "MANUAL" && <ToolsBar

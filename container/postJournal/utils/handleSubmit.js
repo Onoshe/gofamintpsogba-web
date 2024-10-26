@@ -2,11 +2,16 @@ import { patchRequest } from "@/lib/apiRequest/patchRequest";
 import { prepareQueryJournalTrans, prepareQueryJournalTransDetails } from "./prepareQueryJournal";
 import { postRequest } from "@/lib/apiRequest/postRequest";
 import { getLinkDeleteTran, getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
+import { activities, postActivity } from "@/lib/apiRequest/postActivity";
+
 
 export async function handleSubmit({transSheetForm, chartOfAccounts, user, vendors, customers,  setTransSheet, 
     runDispatchClientDataCall, notify, recordTransaction, dispatchTranSheetMultiEntryReset, router}) {
    const {url, body} =  prepareQueryJournalTrans({transSheetForm, user, chartOfAccounts, postingFrom:"JOURNAL"});
 
+   const postingNote = `${recordTransaction?.editTran? "EDIT" : "CREATE"} Journal entry with transaction reference ${transSheetForm.reference}`;
+   postActivity(user, activities[recordTransaction?.editTran?"UPDATE":"CREATE"], postingNote);
+    
    if(recordTransaction?.editTran){
     const transListingPage = recordTransaction.transListingPage;
     const url = getLinkPostTrans().patch;

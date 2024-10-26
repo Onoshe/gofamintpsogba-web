@@ -2,6 +2,7 @@ import { patchRequest } from "@/lib/apiRequest/patchRequest";
 import { prepareQueryMultiTrans, prepareQueryMultiTransDetails } from "./prepareQueryMultiEntry";
 import { postRequest } from "@/lib/apiRequest/postRequest";
 import { getLinkDeleteTran, getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
+import { activities, postActivity } from "@/lib/apiRequest/postActivity";
 
 
 export async function handleSubmitMultiEntry({transSheetForm, chartOfAccounts, user, vendors, customers,  setTransSheet, 
@@ -62,6 +63,10 @@ const prepareAndPostTransDetails = async ({transSheetForm, chartOfAccounts, user
             //console.log(res)
             if(res?.ok){
                 //setTransSheet([{debitCredit:1, date:"", reference:''}, {debitCredit:2}]); 
+                const transRefs = transSheetForm.map(dt => dt.reference).join(', ');
+                const postingNote = transSheetForm?.length >1? `Transaction with references ${transRefs}` :`Transaction with reference ${transRefs}`;
+                postActivity(user, activities.RECORD, postingNote);
+
                 dispatchTranSheetMultiEntryReset();
                 runDispatchClientDataCall();
                 notify('success', "User record updated successfully");

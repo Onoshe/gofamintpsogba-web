@@ -5,7 +5,7 @@ import { BiSolidError } from 'react-icons/bi';
 import { MdCancel, MdClose } from 'react-icons/md';
 
 
-const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handleClose,formInput,infoMsg, handleFormInput, coaStructure}) => {
+const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handleClose,formInput,infoMsg, handleFormInput, coaStructure, controlAcctsCode, chartOfAccounts}) => {
     const selectCOA = {
         class:"",
         classCode:"",
@@ -16,9 +16,24 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
         subCode:"",
         title: "---Select---"
     };
+    /****************************** CHART OF ACCOUNT FILTER *********************************
+     * There MUST be One Receivable & Payable Control Account each. Hence, they will be filtered out if they exist,
+     */ 
+    const recControl = controlAcctsCode.receivables;
+    const payControl = controlAcctsCode.payables;
+    const recControlAcct = chartOfAccounts?.find((dt)=> dt.typeCode == recControl);
+    const payControlAcct = chartOfAccounts?.find((dt)=> dt.typeCode == payControl);
+    let coaStructureFiltered = coaStructure;
+    if(recControlAcct){
+        coaStructureFiltered = coaStructureFiltered.filter((dt)=> dt.code != recControl);
+    }
+    if(payControlAcct){
+        coaStructureFiltered = coaStructureFiltered.filter((dt)=> dt.code != payControl);
+    }
+    
+    const coaStructureArr = [selectCOA, ...coaStructureFiltered];
+    //console.log(recControl, payControl, recControlAcct, payControlAcct)
 
-    const coaStructureArr = [selectCOA, ...coaStructure];
-    //console.log(selectedOpt)
     return (
     <PageBlind showBlind={showBlind}>
         <div className={`w-full justify-center items-center flex flex-col`}>

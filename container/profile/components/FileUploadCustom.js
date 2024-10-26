@@ -67,7 +67,7 @@ export const FileUploadCustom = ({file, setFile, session,userId, className, noti
   };
   
 
-//  const userPhoto = getImageLink("https://quickrecords.gofamintpsogba.org/image_server.php?image=DEMO@sundaycom.png");
+//  const userPhoto = getImageLink("https://quickrecords.gofamintpsogba.org/image_server.php?image=DEMO@sundaycom");
 
   return (
     <div className={className}>   

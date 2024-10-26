@@ -29,6 +29,7 @@ const IndexPostTransaction = ({ssUser}) => {
   const productsList = mapProducts(products);
   const processedLedgers = []; //ledgers.processedLedgers;
 
+  
   const notify = (type, msg) => toast[type](msg, {
     position: "top-right",
     autoClose: 5000,
@@ -40,6 +41,7 @@ const IndexPostTransaction = ({ssUser}) => {
     theme: "colored",
     //transition: 'Bounce',
     });
+
 
   function controlAcctChecker(transSheet, entryAcct, contAct, idx){
     //entryType = debit || credit; entryAcct = debitAccount || creditAccount; contAcct = receivables || payables || inventrolControl, 
@@ -70,6 +72,7 @@ const IndexPostTransaction = ({ssUser}) => {
     const transListingPage = recordTransaction.transListingPage;
     router.push(transListingPage);
   }
+  
   const handleConfirm = (act)=>{
     if(act === "CANCEL"){setShowConfirm(false); }
     if(act === "CONTINUE"){

@@ -63,7 +63,6 @@ const IndexReports = ({ssUser}) => {
   const windowDimen = useWindowDimensions();  
   
 
-  // console.log(windowDimen)
   const handleReport =(report)=>{
       //console.log(report);
   }

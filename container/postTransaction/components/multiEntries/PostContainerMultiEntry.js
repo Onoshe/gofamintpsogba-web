@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { handleSubmitMultiEntry } from '../utils/handleSubmitMultiEntry';
 import { useRouter } from 'next/navigation';
 import { controlAcctChecker } from '../utils/controlAccountChecker';
+import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 
 const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, personalAcctsList, personalAccts, 
@@ -28,7 +29,6 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
  //console.log(transSheet);
 
 
-
 const handleAddRemoveRow =(dt, i)=>{
     //console.log(dt, i);
     if(i===0){
@@ -44,6 +44,9 @@ const handleAddRemoveRow =(dt, i)=>{
   },0);
 
   const handleSubmit =async ()=>{
+    const perms = await getPermissions({user, act:pmsActs.POST_TRAN, form:transSheet});
+    if(!perms.permit) return toastNotify("error", perms.msg);
+
     //console.log(transSheet)
     setUploading(true);
     const validateRes = validateTransactionsMulti(transSheet, chartOfAccounts, controlAcctsCode, netAmount)

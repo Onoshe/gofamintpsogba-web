@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import CashAndBankBalances from '../balancesComponent/CashAndbankBalances';
 import { LedgersManager } from '@/container/reports/utils/ledgers/ledgersManger';
 import { getLedgerCodesForAcctClass } from '../../utils/getLedgerCodesForAcctClass';
+import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 
 const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaStructure, chartOfAccountSelection, personalAccts, products,
@@ -36,8 +37,11 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
   let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
   const processedLedgers = ledgers.processedLedgers;
   
-
+  
   const handleSubmit = async ()=>{
+     const perms = await getPermissions({user, act:pmsActs.POST_TRAN, form:checkedBtn === "BYENTRY"? transSheet: transSheets});
+      if(!perms.permit) return notify("error", perms.msg);
+
     if(checkedBtn === "BYENTRY"){
         setUploading(true);
         const transSheetForm = transSheet?.map((form)=>{ //Purpose?- It's sets sub account to null when accountCode is not a control account

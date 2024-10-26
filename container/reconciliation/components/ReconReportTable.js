@@ -18,9 +18,12 @@ const ReconReportTable = ({
   return (
     <div className={`${displayReport.show? '' :'hidden'} w-full flex-col justify-center items-center pt-0 text-gray-600
         `}>
-    <div className="fixed w-full bg-gray-200 z-50  p-3 text-blue-800 text-sm flex flex-row flex-wrap items-center justify-between">
-        <GrClose className="absolute top-1 right-4 text-[18px] cursor-pointer text-red-600 hover:text-red-700 active:text-red-500"
-          onClick={handleCloseReport}/>
+    <div className="fixed lg:w-[calc(100vw-225px)] w-full bg-gray-200 z-10 mr-10 py-1 px-3 text-blue-800 text-sm flex flex-row flex-wrap items-center justify-between">
+        <div className="absolute top-1 flex w-full justify-end pr-8 group">
+            <p className="bg-gray-500 mr-2 text-white px-2 py-[2px] rounded-md hidden group-hover:block">Close report</p>
+            <GrClose className="text-[18px] cursor-pointer text-red-600 hover:text-red-700 active:text-red-500"
+                onClick={handleCloseReport}/>
+        </div>
         <div className="flex flex-col w-full max-w-[350px]">
             <p>Report Name</p>
             {!savedReportView?.show?
@@ -52,7 +55,7 @@ const ReconReportTable = ({
         </div>
     </div>
     <div className="px-4 py-2 mt-12">
-        <div className={`mb-3`}>
+        <div className={`mb-3 font-[600]`}>
             <p className='text-center'>{reportDetails?.companyName}</p>
             <p className='text-center'>{reportDetails?.title}</p>
             <p className='text-center'>{reportDetails?.asAt}</p>

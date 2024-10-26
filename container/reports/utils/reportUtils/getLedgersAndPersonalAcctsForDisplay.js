@@ -82,7 +82,7 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
                 pdfData.noFmtCols = [3];
                 let ledgersCus = transProcessor.processTransactions(dateForm?.startDate, dateForm?.endDate);
                 ledgersCus = ledgersCus.customersLedger;
-                
+
                 const cusBal = getSubAcctBalances(ledgersCus);
                 result = {name:reportName, date, title:"Customers Balances", rowKeysShow:keysPersonalBalances, rowHeaders:getHeadersTitle(keysPersonalBalances), clickables, rows:cusBal,  pdfData}
                 break;

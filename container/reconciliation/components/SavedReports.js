@@ -5,6 +5,7 @@ import React from 'react'
 import { MdCancel, MdClose, MdDelete } from 'react-icons/md';
 import { deleteQueryRecon } from '../utils/reconQuery';
 import { patchRequest } from '@/lib/apiRequest/patchRequest';
+import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 
 const SavedReports = ({ reportCont, setReportCont, savedReportView, setSavedReportView, 
@@ -12,38 +13,47 @@ const SavedReports = ({ reportCont, setReportCont, savedReportView, setSavedRepo
     const reconOthers = {};
     const [selectedRep, setSelectedRep] = React.useState({el:{}, i:0, act:""}); 
     const [showConfirm, setShowConfirm] = React.useState({show:false}); 
+    const savedData = data?.data.filter((dt)=> dt.createdBy == user.userId);
+    //console.log(savedData, user)
    
    const handleSelected = async ( act, el, i)=>{
+
         if(act==="SELECT"){
             setSelectedRep({el, i, act});
             setSavedReportView({reportRaw:el, report:JSON.parse(el.text1), show:true})
             setDisplayReport({...displayReport, show:true});
             setReportCont({...reportCont, show:false});
             //console.log(JSON.parse(el))
-        }else if(act==="DELETE"){
-            setSelectedRep({el, i, act});
-            setShowConfirm({show:true});
-            setSavedReportView({reportRaw:el, report:JSON.parse(el.text1), show:false})
-        }else if(act==="CANCEL"){
-            setShowConfirm({show:false})
-            setSavedReportView({report:el, show:false})
-        }else if(act==="CONTINUE"){
-            //console.log(savedReportView)
-            if(savedReportView.reportRaw && user.companyId){
-                const {url, body }= deleteQueryRecon(savedReportView.reportRaw, user);
-                await patchRequest(url, body).then((res)=> {
-                    console.log(res)
-                    if(res?.ok){
-                        mutate();
-                        notify("success", "'"+savedReportView.reportRaw.name +"' Report deleted successfully!");
-                        setSavedReportView({show:false});
-                        setReportCont({...reportCont, show:false});
-                    }else{notify("error", res?.error);}
-                })
-            }else{
-                notify("error", "No report selected!");
+        }else{
+            const perms = await getPermissions({user, act:pmsActs.RECON_EDIT, form:data.data});
+            if(!perms.permit) return notify("error", perms.msg);
+        
+            if(act==="DELETE"){
+                setSelectedRep({el, i, act});
+                setShowConfirm({show:true});
+                setSavedReportView({reportRaw:el, report:JSON.parse(el.text1), show:false})
+            }else if(act==="CANCEL"){
+                setShowConfirm({show:false})
+                setSavedReportView({report:el, show:false})
+            }else if(act==="CONTINUE"){
+                //console.log(savedReportView)
+                if(savedReportView.reportRaw && user.companyId){
+                    const {url, body }= deleteQueryRecon(savedReportView.reportRaw, user);
+                    await patchRequest(url, body).then((res)=> {
+                        console.log(res)
+                        if(res?.ok){
+                            mutate();
+                            notify("success", "'"+savedReportView.reportRaw.name +"' Report deleted successfully!");
+                            setSavedReportView({show:false});
+                            setReportCont({...reportCont, show:false});
+                        }else{notify("error", res?.error);}
+                    })
+                }else{
+                    notify("error", "No report selected!");
+                }
             }
         }
+        
    }
 
    const closeSavedReports =()=>{
@@ -63,7 +73,7 @@ const SavedReports = ({ reportCont, setReportCont, savedReportView, setSavedRepo
                 
                 <div className='text-[13px] flex flex-col  border border-gray-200 m-2 p-2 h-[30vh] overflow-auto'>
                     {
-                        data?.data?.map((dt, i)=>{
+                        savedData?.map((dt, i)=>{
                             let by = dt?.updatedBy?.split("@")[1];
                             by = by.split(".");
 

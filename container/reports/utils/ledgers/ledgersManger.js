@@ -24,7 +24,7 @@ export class LedgersManager {
       this.cusTransTotal = {debit:0, credit:0, net:0};
       this.vedTransTotal = {debit:0, credit:0, net:0};
     }
-  
+    
     arrayToMap(array, key, keys) {
       return array?.reduce((map, item) => {
         map[item[key]] = keys?.length? keys?.reduce((result, ky) => {return {...result, [ky]:item[ky]}},{}) : item;
@@ -119,8 +119,8 @@ export class LedgersManager {
         let accountName;
         let group;
         
+        //console.log(this.customers, this.vendors, accountCodeSub)
         switch (accountCodeSubAcct) {
-          
           case 'CUSTOMERS':
             subLedger = customersLedger;
             subLedgerMap = this.customers;

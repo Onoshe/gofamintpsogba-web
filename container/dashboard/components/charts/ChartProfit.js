@@ -98,7 +98,7 @@ export function ChartProfit({name, titleChart, titleChartSub, incomeData,  expen
   },
 };
   return (
-    <div className="w-[350px] h-[250px] lg:w-[450px] lg:h-[350px] p-3 cardShodow">
+    <div className="w-[350px] h-[250px] lg:w-[450px] lg:h-[250px] p-3 cardShodow">
       <Line ref={incomeExpRef} data={data} options={options}/>      
     </div>
   );
