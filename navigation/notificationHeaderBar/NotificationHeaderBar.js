@@ -17,13 +17,13 @@ const NotificationHeaderBar = ({user}) => {
 
       if(companyId === "DEMO"){
         const today = new Date().toISOString().split("T")[0];
-        const stDate = addDaysToDate(regDate.split("T")[0], trialPeriod);
+        const stDate = addDaysToDate(regDate?.split("T")[0], trialPeriod);
         daysToExpire = getDaysDifference(stDate, today); //(start, end): start-end
       }else{
         if(subscriptions?.length){
             lastSub = subscriptions[0];
-            const today = new Date().toISOString().split("T")[0];
-            daysToExpire = getDaysDifference(lastSub.expiredDate, today);
+            const today = new Date()?.toISOString().split("T")[0];
+            daysToExpire = getDaysDifference(lastSub?.expiredDate, today);
           }
       }
     

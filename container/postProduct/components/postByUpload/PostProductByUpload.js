@@ -25,7 +25,7 @@ const purchaseFlds = ({date:"", description:'', reference:'', amount:'', account
 const salseFlds = ({date:"", description:'', reference:'', amount:'', accountCodeDr:'', subCodeDr:'', quantityDr:'',unitsDr:'',accountCodeCr:'', subCodeCr:'', quantityCr:'',unitsCr:'',accountCodeProduct:'', subCodeProduct:'', quantityProduct:'',unitsProduct:'', accountCodeCOS:'', quantityBal:''});
 
 
-const PostProductByUpload = ({chartOfAccounts,activeTab, controlAcctsCode, coaStructure,user, runDispatchClientDataCall, uploadError, setUploadError, handleInfoMsg, setShowBlind,}) => {
+const PostProductByUpload = ({chartOfAccounts,activeTab, controlAcctsCode, coaStructure,user, runDispatchClientDataCall, uploadError, setUploadError, resetCall, handleInfoMsg, setShowBlind,}) => {
     const [stateCreate, dispatchCreate] = useReducer(reducerCreateByUpload, initStateCreateByUpload);
     const {isDropped, isDragging, selected,  uploadedData, resetFileUploadCount, closeTable, file, infoMsg, table} = stateCreate;
     const [isLoading, setIsLoading] = useState(false);
@@ -43,18 +43,17 @@ const PostProductByUpload = ({chartOfAccounts,activeTab, controlAcctsCode, coaSt
       return getFileExtension(file);
     }
 
-    const handleSubmit =()=>{
+    const handleSubmit99 =()=>{
       setIsLoading(true);
       submitHandler({transSheet:table.rows, controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
         runDispatchClientDataCall, setUploadError, toastNotify, transSheetReset, recordTransaction, router})
     }
 
-    const handleSubmit99 = ()=>{
+    const handleSubmit = ()=>{
       setIsLoading(true);
      // handleSubmitUpload({formInput:table.rows, setInfoMsg:setUploadError, coaStructure, dispatchCreate,user, runDispatchClientDataCall, handleInfoMsg, 
      //   setShowBlind, setIsLoading})
     }
-    
 
 
     const validateUploadData = async ()=>{
@@ -62,9 +61,9 @@ const PostProductByUpload = ({chartOfAccounts,activeTab, controlAcctsCode, coaSt
       //const chartOfAccts = await getRequest(fetchTableUrl);
       let validateRes = {};
       if(activeTab==="TAB1"){
-          validateRes = await validateProductPurchaseAndAdj(table.rows, controlAcctsCode, activeTab, chartOfAccounts, user);
+          validateRes = await validateProductPurchaseAndAdj(table.rows, controlAcctsCode, activeTab, user);
       }else if(activeTab === "TAB2"){
-          validateRes = await validateProductSale(table.rows, controlAcctsCode, activeTab, chartOfAccounts, user);
+          validateRes = await validateProductSale(table.rows, controlAcctsCode, activeTab, user);
       }
       
       //const validateRes = validateCOAUploads(table?.rows, chartOfAccts?.data, coaStructure, controlAcctsCode);
@@ -78,7 +77,12 @@ const PostProductByUpload = ({chartOfAccounts,activeTab, controlAcctsCode, coaSt
         }
     }
 
-    //console.log(controlAcctsCode)
+    React.useEffect(()=>{
+      handleDispatchPost('handleCancel', '');
+      handleDispatchPost('resetUploadData', '');
+    },[resetCall]);
+
+    //console.loghandleDispatchPost(controlAcctsCode)
     React.useEffect(()=>{
       if(table?.show && table?.rows?.length){
         validateUploadData();

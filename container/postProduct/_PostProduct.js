@@ -37,7 +37,7 @@ const IndexPostProduct = ({ssUser}) => {
   const [showBankBalances, setShowBankBalances] = React.useState(false);
   
   
-  //console.log(transSheet, recordTransaction);
+  //console.log(transSheet);
   //const [activeTab, setActiveTab] = useState("TAB1");
   //const [transSheet, setTransSheet] = useState({date:"", description:'', reference:'', amount:'', accountCodeDr:'', subCodeDr:'', quantityDr:'',unitsDr:'',accountCodeCr:'', subCodeCr:'', quantityCr:'',unitsCr:'',accountCodeProduct:'', subCodeProduct:'', quantityProduct:'',unitsProduct:'', accountCodeCOS:'', quantityBal:''});
   

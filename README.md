@@ -83,4 +83,3 @@ Here's a brief explanation:
 * git remote -v
 
 Would you like more Git guidance or best practices?
-

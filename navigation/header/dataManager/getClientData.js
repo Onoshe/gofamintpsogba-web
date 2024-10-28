@@ -61,15 +61,15 @@ export const runDispatchClientData = async ({fetchedData, domain, dispatchCOAStr
    //dispatchProducts([{id:"", productName:"", productCode:"", category:"", description:''}, ...defaultProductList]);
    if(dispatchCOAStructure){
          //{retainedEarnings:321, receivables:142, payables:232, inventoryControl:152, inventoryAdj:153, costOfSale:511},
-         const retainedEarnings = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'retainedEarnings'.toLocaleLowerCase()).code;
-         const receivables = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'accountReceivableControl'.toLocaleLowerCase()).code;
-         const payables = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'accountPayableControl'.toLocaleLowerCase()).code;
-         const inventoryControl = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'inventoryControl'.toLocaleLowerCase()).code;
-         const inventoryAdj = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'inventoryAdjustment'.toLocaleLowerCase()).code;
-         const costOfSale = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'costOfGoodsSold'.toLocaleLowerCase()).code;
-         const bank = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'bank'.toLocaleLowerCase()).code;
-         const cash = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'cash'.toLocaleLowerCase()).code;
-         const paymentClearing = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'paymentClearing'.toLocaleLowerCase()).code;
+         const retainedEarnings = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'retainedEarnings'.toLocaleLowerCase())?.code;
+         const receivables = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'accountReceivableControl'.toLocaleLowerCase())?.code;
+         const payables = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'accountPayableControl'.toLocaleLowerCase())?.code;
+         const inventoryControl = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'inventoryControl'.toLocaleLowerCase())?.code;
+         const inventoryAdj = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'inventoryAdjustment'.toLocaleLowerCase())?.code;
+         const costOfSale = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'costOfGoodsSold'.toLocaleLowerCase())?.code;
+         const bank = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'bank'.toLocaleLowerCase())?.code;
+         const cash = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'cash'.toLocaleLowerCase())?.code;
+         const paymentClearing = coaStruc?.find((dt)=> dt.name.toLowerCase()=== 'paymentClearing'.toLocaleLowerCase())?.code;
           
          dispatchCOAStructure({
             coaStructure:[...coaStruc],

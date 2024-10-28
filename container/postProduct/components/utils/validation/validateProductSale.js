@@ -9,7 +9,7 @@ import { capitalizeFirstChar } from "@/lib/capitalize/capitalizeString";
 export const validateProductSale = async (forms, controlAcctsCode, activeTab, user)=> {
    const {receivables, payables, inventoryControl, inventoryAdj} = controlAcctsCode;
    const controlAcctsArr = [parseInt(receivables), parseInt(payables), parseInt(inventoryControl)];
-   
+  
    const coaUrl = getLinkFetchTableWithConds({table:user.companyId+'_chartofaccount', conds:'deleted', values:'0'});
    const coa = await getRequest(coaUrl);
    const chartOfAccounts = coa.data;
@@ -25,7 +25,8 @@ export const validateProductSale = async (forms, controlAcctsCode, activeTab, us
    const productsUrl = getLinkFetchTableWithConds({table:user.companyId+'_products', conds:'deleted', values:'0'});
    const productsFtch = await getRequest(productsUrl);
    const products = productsFtch.data;
-  
+
+
    const mainKeys = ["date", "description", "reference", "accountCodeDr", "accountCodeCr", "subCodeDr", "subCodeCr", "quantityDr", 
         "amount", "accountCodeProduct","subCodeProduct", "quantityProduct", "accountCodeCOS"];
    //For upload

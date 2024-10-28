@@ -28,6 +28,8 @@ export const  validateProductPurchaseAndAdj = async (forms, controlAcctsCode, ac
   
   const mainKeys = ["date", "description", "reference", "accountCodeDr", "accountCodeCr", "subCodeDr", "subCodeCr", "quantityDr", "amount"];
   //For upload
+  //console.log(forms, controlAcctsCode, activeTab, chartOfAccounts, customers, vendors, products, user, coaUrl)
+  //return {}
   if(forms.length > 1){
     const row = forms[0];
     const rowKeys = Object.keys(row);
@@ -121,7 +123,7 @@ export const  validateProductPurchaseAndAdj = async (forms, controlAcctsCode, ac
               };
           }
           //Validate subCode
-          const acct = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeCr);
+          const acct = chartOfAccounts?.find((dt)=> dt.accountCode == accountCodeCr);
           if([parseInt(receivables), parseInt(payables), parseInt(inventoryControl)].includes(parseInt(acct.typeCode)) && !subCodeCr){
             return {
               error: true,

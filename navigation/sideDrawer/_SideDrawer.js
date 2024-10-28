@@ -107,6 +107,13 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
                   )
                 })
               }
+              <Link href={`/${coy}/company`} 
+                className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row hover:text-[blue] ${currentActivePage?.name==='company'? "bg-sky-300 text-[blue] " : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
+                data-tip={'Company'}
+                onClick={()=>handleNav({name:'company', title:'Company'})}>
+                {icons.company}
+                {showSidebarTitle && <span className='text-[12px]'>{'Company'}</span>}
+              </Link>
             </div>
             <div
               className={`${showSidebarTitle? 'w-[200px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-2 flex flex-row text-black bg-blue-300   p-2 gap-1 items-center`}
@@ -129,13 +136,13 @@ export var icons = {
   chartOfAccount:<MdOutlineAccountTree  size={18} className='mr-2'/>,
   customer:<BsCart  size={18} className='mr-2'/>,
   vendor:<BiShoppingBag  size={18} className='mr-2'/>,
+  products:<MdInventory  className='text-[18px] mr-2'/>,
   recordTransaction:<GrMoney  size={18} className='mr-2'/>,
   recordProduct:<MdInventory  size={18} className='mr-2'/>,
   recordJournal:<BsJournalPlus  size={18} className='mr-2'/>,
   auditTrail:<RiMenuSearchLine  size={18} className='mr-2'/>,
   guide:<GrResources  size={18} className='mr-2'/>,
   profile:<BsFillPersonVcardFill  className='text-[22px] mr-2'/>,
-  products:<MdInventory  className='text-[18px] mr-2'/>,
   company:<MdSettings  className='text-[18px] mr-2'/>,
   reconciliation:<MdAccountTree  className='text-[18px] mr-2'/>
 };
@@ -143,15 +150,15 @@ export var icons = {
 export var navs = [
   {name:'customers', title:"Customers", icon:icons.customer},
   {name:'vendors', title:"Vendors", icon:icons.vendor},
+  {name:'products', title:"Products", icon:icons.products},
   {name:'record-transaction', title:"Record Transaction", icon:icons.recordTransaction},
   {name:'record-product', title:"Record Product", icon:icons.recordProduct},
   {name:'record-journal', title:"Record Journal", icon:icons.recordJournal},
   {name:'reports', title:"Reports", icon:icons.reports},
   {name:'chart-of-account', title:"Chart of Account", icon:icons.chartOfAccount},
-  {name:'products', title:"Products", icon:icons.products},
   {name:'reconciliation', title:"Reconciliation", icon:icons.reconciliation},
   {name:'audit-trail', title:"Audit Trail", icon:icons.auditTrail},
   //{name:'guide', title:"Guide", icon:icons.guide},
   {name:'profile', title:"Profile", icon:icons.profile},
-  {name:'company', title:"Company", icon:icons.company}
+  //{name:'company', title:"Company", icon:icons.company}
 ];

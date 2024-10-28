@@ -12,13 +12,14 @@ import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 //Note: transSheet is an array []
 
 export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, chartOfAccounts, setPostError, 
-    toastNotify, user, personalAccounts, runDispatchClientDataCall, transSheetReset, recordTransaction, router})=>{
+    toastNotify, user, personalAccounts, runDispatchClientDataCall, transSheetReset, recordTransaction, router, 
+    postByUpload, resetCall, setResetCall})=>{
     const {customers, vendors, products} = personalAccounts;
     let validateRes = {};
     if(activeTab === "TAB1"){
          validateRes = await validateProductPurchaseAndAdj(transSheet, controlAcctsCode, activeTab, user);
     }else if(activeTab === "TAB2"){
-        validateRes = await validateProductSale(transSheet, controlAcctsCode, activeTab);
+        validateRes = await validateProductSale(transSheet, controlAcctsCode, activeTab, user);
     }else if(activeTab === "TAB3"){
         validateRes = await validateProductPurchaseAndAdj(transSheet, controlAcctsCode, activeTab, user);
     }
@@ -40,11 +41,11 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
         if(activeTab === "TAB1"){
             /************ FOR PRODUCT PURCHASE**************** */
             processTransForPosting({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-                transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router});
+                transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, resetCall, setResetCall});
         }else if(activeTab === "TAB2"){
             if(recordTransaction?.editTran){
                 processUpdateSalesTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-                    transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router});
+                    transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, resetCall, setResetCall});
             }else{
                 /******************************
                         For Product Sale; two entries will be posted: Main Entry (Entry 1) & COS Entry (Entry 2)
@@ -56,7 +57,7 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
                 */
                     //For Main Entry
                     const res = await processTransForPosting({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-                        transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router});
+                        transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, resetCall, setResetCall});
                     
                     //For COS Entry
                     const transSheetArr = [];
@@ -132,7 +133,7 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
             }    
             //return console.log(transSheetFmt);
             processTransForPosting({transSheet:transSheetFmtArr, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-                transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router});
+                transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, resetCall, setResetCall});
         }
     }  
   }
@@ -150,7 +151,7 @@ async function postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, v
     }
 }
 async function postTransAndNotify({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body,
-    TAB, transSheetReset, runDispatchClientDataCall, toastNotify}){
+    TAB, transSheetReset, runDispatchClientDataCall, toastNotify, postByUpload, resetCall, setResetCall}){
 
     await postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body
     }).then((res)=>{
@@ -160,6 +161,9 @@ async function postTransAndNotify({transSheet, user, chartOfAccounts, controlAcc
             transSheetReset(TAB); 
             runDispatchClientDataCall()
             toastNotify('success', 'Posting successfull');
+            if(postByUpload && setResetCall){
+                setResetCall(resetCall + 1);
+            }
         }else{
         toastNotify('error', res?.error || "Error in updating user record");
         }
@@ -277,7 +281,7 @@ async function processUpdateSalesTrans({transSheet, user, chartOfAccounts, contr
 
 async function processTransForPosting({
     transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-    transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router }){
+    transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, resetCall, setResetCall }){
     
     const {url, body} = prepareQueryTrans({transSheet, user, chartOfAccounts, postingPlat:TAB === "TAB1"? 'PRODUCT-PCH' : TAB === "TAB2"? 'PRODUCT-SAL' : 'PRODUCT-ADJ'});
     //return console.log(url, body)
@@ -308,7 +312,7 @@ async function processTransForPosting({
             const urlDelete = getLinkDeleteTran();
             const deleteRes = await patchRequest(urlDelete, deleteBody);
 
-            console.log(deleteRes);
+            //console.log(deleteRes);
             if(deleteRes.ok){
                 //Insert updated data in transactiondetails table
                 const insertedTrans = [{id:transId}];
@@ -321,7 +325,7 @@ async function processTransForPosting({
             return await postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body})
         }else{
             postTransAndNotify({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body,
-                TAB, transSheetReset, runDispatchClientDataCall, toastNotify});
+                TAB, transSheetReset, runDispatchClientDataCall, toastNotify, postByUpload, resetCall, setResetCall});
         }
     }
 };

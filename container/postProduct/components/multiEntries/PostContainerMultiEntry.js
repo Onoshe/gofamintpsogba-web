@@ -30,15 +30,23 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
   const [selectedDueDate, setSelectedDueDate] = React.useState({value:30, label:'Select'});
   const [productBy, setProductBy] = React.useState({manual:true, });
   const [uploadError, setUploadError] = useState({msg:'', error:false, uploadTable:[]});
-  
+  const [resetCall, setResetCall] = useState(0);
+
  //console.log(transSheet)
   const handleAdjustProductBy =(e)=>{
     setTransSheet({ ...transSheet, adjustProductChecked:e});
  }
  
   const handleSubmit =()=>{
-    submitHandler({transSheet:[transSheet], controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
-      runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router})
+    if(productBy.manual){
+      submitHandler({transSheet:[transSheet], controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
+        runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:false})
+    }else{
+      if(!uploadError.error && uploadError.uploadTable.length){
+        submitHandler({transSheet:uploadError.uploadTable, controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
+        runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:true, resetCall, setResetCall})
+      }else{toastNotify("error", "Please, upload data.");}
+    }
   }
   const handleTransView =(act)=>{
     setShowTransView(act);
@@ -66,7 +74,7 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
     setPostError({msg:'', error:false})
  }
 
- //console.log(transSheet)
+ //console.log(transSheet, uploadError)
  //Due date accountCodeCr | accountCodeCr || subCodeCr
  
  const showDueDate = payableControlAcctChecker(transSheet, chartOfAccounts, controlAcctsCode, activeTab);
@@ -141,6 +149,8 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
         controlAcctsCode={controlAcctsCode}
         uploadError={uploadError}
         setUploadError={setUploadError}
+        resetCall={resetCall}
+        setResetCall={setResetCall}
         />
       :<div className={`pb-4 flex flex-col items-center justify-center ${recordTransaction?.editTran? 'pt-2' : 'pt-5'}`}>
         {activeTab==="TAB3" &&
