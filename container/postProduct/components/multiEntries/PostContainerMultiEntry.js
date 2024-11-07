@@ -39,6 +39,7 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
  }
  
   const handleSubmit =()=>{
+    setRecordingProduct(true);
     if(productBy.manual){
       submitHandler({transSheet:[transSheet], controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
         runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:false, setRecordingProduct,})

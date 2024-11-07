@@ -32,6 +32,7 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
      const errorMsg = getErrorMessage(validateRes?.errorType, validateRes?.key, validateRes?.rowIndex, validateRes?.title);
      setPostError({msg:errorMsg, error:validateRes?.error});
      toastNotify('error', errorMsg);
+     setRecordingProduct(false);
     }else{
         const TAB = activeTab;
         const tranType = recordTransaction?.editTran? 'UPDATE' :'CREATE';
@@ -106,7 +107,8 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
                         });
                         
                     }else{
-                    toastNotify('error', res?.error || "Error in posting transaction");
+                        toastNotify('error', res?.error || "Error in posting transaction");
+                        setRecordingProduct(false);
                     }
              }
         }else if(activeTab === "TAB3"){
@@ -149,7 +151,7 @@ async function postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, v
      const insertedTransArr = transRes.data;
      const doubleEntryIdArr = [...transRes.data]?.map(()=> generateUniqueDigits('string', 100567039004701)); //generateUniqueDigits('string');
      const {url, body} = prepareQueryTransDetails({transSheetArr:transSheet, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr, doubleEntryIdArr});
-     console.log([body, transSheet])
+     //console.log([body, transSheet])
      return await postRequest(url, body);
     }
 }
@@ -188,12 +190,11 @@ async function updateTransDetails({transSheet, user, chartOfAccounts, controlAcc
             transSheetReset(TAB); 
             runDispatchClientDataCall()
             toastNotify('success', 'Posting successfull');
-            setRecordingProduct(false);
         }else{
         toastNotify('error', res?.error || "Error in updating user record");
-        setRecordingProduct(false);
         }
     }).then(()=> { 
+        setRecordingProduct(false);
         if(transListingPage){
             setTimeout(()=>router.push(transListingPage), 1000)
         }

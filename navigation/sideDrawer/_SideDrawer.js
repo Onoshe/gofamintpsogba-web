@@ -162,3 +162,5 @@ export var navs = [
   {name:'profile', title:"Profile", icon:icons.profile},
   //{name:'company', title:"Company", icon:icons.company}
 ];
+
+export var nav_Coy = {name:'company', title:"Company", icon:icons.company};

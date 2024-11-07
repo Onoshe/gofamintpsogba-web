@@ -44,11 +44,14 @@ const handleAddRemoveRow =(dt, i)=>{
   },0);
 
   const handleSubmit =async ()=>{
+    setUploading(true);
     const perms = await getPermissions({user, act:pmsActs.POST_TRAN, form:transSheet});
-    if(!perms.permit) return toastNotify("error", perms.msg);
+    if(!perms.permit) {
+      setUploading(false);
+      return toastNotify("error", perms.msg)
+    };
 
     //console.log(transSheet)
-    setUploading(true);
     const validateRes = validateTransactionsMulti(transSheet, chartOfAccounts, controlAcctsCode, netAmount)
     //console.log(validateRes)
     if(validateRes?.error){
@@ -201,13 +204,13 @@ const handleAddRemoveRow =(dt, i)=>{
     <br/>
     <br/>
     <div className='px-5 py-3 fixed bottom-0 bg-gray-200 w-full mt-10'>
-        <button onClick={handleSubmit} className='hidden btn btn-info btn-sm px-7'>Record</button>
-        <button onClick={handleSubmit} className='btn btn-info btn-sm px-7 inline-block mr-10 '>
+        <button onClick={handleSubmit} disabled={uploading} className='btn btn-info btn-sm px-7 inline-block mr-10 '>
             {recordTransaction?.editTran? 'Save' :'Record'}
         </button>
         <div className={`inline-flex flex-row flex-wrap gap-4 ${recordTransaction?.editTran? '' : 'hidden'}`}>
             <button onClick={handleDeleteTran} className='btn btn-error btn-sm px-5 inline-flex'>Delete</button>
         </div>
+        {uploading && <span className='text-red-500 inline-flex'>Recording transaction, please wait...</span>}
     </div>
     </>
   )

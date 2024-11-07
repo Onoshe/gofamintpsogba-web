@@ -19,6 +19,7 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
   const [showTransView, setShowTransView] = useState(false);
   const [showBankBalances, setShowBankBalances] = useState(false);
   const [selectedDueDate, setSelectedDueDate] = React.useState({value:30, label:'Select'});
+  const [uploading, setUploading] = React.useState(false);
 
   //console.log(recordTransaction)
   const handleAddRemoveRow =(dt, i)=>{
@@ -32,19 +33,25 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
   }
 
   const submitHandler = async ()=>{
+    setUploading(true);
     //console.log(transSheet)
     const validateRes = validateTransactionsMulti(transSheet, chartOfAccounts, controlAcctsCode, netAmount)
     //console.log(validateRes)
     if(validateRes?.error){
      const errorMsg = getErrorMessage(validateRes?.errorType, validateRes?.key, validateRes?.rowIndex, validateRes?.title);
      //setPostError({msg:errorMsg, error:validateRes?.error});
+     setUploading(false);
      toastNotify('error', errorMsg);
     }else{
       const perms = await getPermissions({user, act:pmsActs.POST_JOURNAL, form:transSheet});
-      if(!perms.permit) return toastNotify("error", perms.msg);
+      if(!perms.permit){ 
+        setUploading(false);
+        return toastNotify("error", perms.msg)};
 
       await handleSubmit({transSheetForm:transSheet, chartOfAccounts, user, vendors, customers,  setTransSheet, runDispatchClientDataCall, notify:toastNotify,
-      recordTransaction, dispatchTranSheetMultiEntryReset,  router })
+      recordTransaction, dispatchTranSheetMultiEntryReset,  router }).then(()=>{
+        setUploading(false);
+      })
       //setPostError({msg:'Posting successfull', error:false});
      //toastNotify('success', 'Posting successfull');
     }  
@@ -200,12 +207,13 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
     <br/>
     
       <div className={`pt-2 px-3 fixed bottom-0 bg-gray-200 w-full mt-10 `}>
-          <button onClick={submitHandler} className='btn btn-info btn-sm px-7 inline-block mr-10 mb-4'>
+          <button onClick={submitHandler} disabled={uploading} className='btn btn-info btn-sm px-7 inline-block mr-10 mb-4'>
             {recordTransaction?.editTran? 'Save' :'Record'}
           </button>
           <div className={`inline-flex flex-row flex-wrap gap-4 ${recordTransaction?.editTran? '' : 'hidden'}`}>
             <button onClick={handleDeleteTran} className='btn btn-error btn-sm px-5 inline-flex'>Delete</button>
           </div>
+          {uploading && <span className='text-red-500 inline-flex'>Recording journal, please wait...</span>}
         </div>
     </>
   )

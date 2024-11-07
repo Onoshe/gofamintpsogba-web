@@ -100,7 +100,7 @@ const TransactionRow = ({styleTitle, hideTitle, index, transSheet, handleOnChang
                     })
                 }
             <div className={`flex flex-row items-center justify-between ${classNameCont} w-[685px]`}>
-                <div className={`flex-row whitespace-nowrap items-center ${controlAcctTest?.isControlAcct? 'flex' : 'invisible'}`}>
+                <div className={`flex-row whitespace-nowrap invisible items-center ${controlAcctTest?.isControlAcct? 'flex' : 'invisible'}`}>
                    <p className='text-red-950 text-right font-bold'>{controlAcctTest?.controlAcct} due date</p> 
                    <DropdownComponent 
                         selectedOption={selectedDueDate} 

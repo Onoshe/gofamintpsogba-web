@@ -39,11 +39,14 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
   
   
   const handleSubmit = async ()=>{
+    setUploading(true);
      const perms = await getPermissions({user, act:pmsActs.POST_TRAN, form:checkedBtn === "BYENTRY"? transSheet: transSheets});
-      if(!perms.permit) return notify("error", perms.msg);
+      if(!perms.permit){
+        setUploading(false);
+        return notify("error", perms.msg)
+      };
 
     if(checkedBtn === "BYENTRY"){
-        setUploading(true);
         const transSheetForm = transSheet?.map((form)=>{ //Purpose?- It's sets sub account to null when accountCode is not a control account
           const drAcct = chartOfAccounts?.find((dt)=> dt.accountCode == form.debitAccount);
           const crAcct = chartOfAccounts?.find((dt)=> dt.accountCode == form.creditAccount);
@@ -77,7 +80,7 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
         return notify('error', postError?.msg);
       }else{
         if(transSheets?.length){
-          setUploading(true);
+          //setUploading(true);
           await handleSubmitTwoEntry({transSheetForm:transSheets, chartOfAccounts, user, vendors, customers,  setTransSheet, runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, 
              router, notify, resetUploadTableCall, setResetUploadTableCall})
              .then(()=>{
@@ -85,7 +88,7 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
                setPostError({msg:'Posting successfull', error:false, color:'text-green-600'});
              });
            //setPostBtn({show:true});
-         }else{notify('error', "Data for posting not available");}
+         }else{setUploading(false); notify('error', "Data for posting not available");}
       }
     }
   }
@@ -267,7 +270,7 @@ const handleTransView =(act)=>{
           <div className={`inline-flex flex-row flex-wrap gap-4 ${recordTransaction?.editTran? '' : 'hidden'}`}>
             <button onClick={handleCancelTran} className='btn btn-sm btn-neutral px-5 inline-flex'>Cancel</button>
           </div>
-          {uploading && <span className='text-red-500'>Uploading, please wait...</span>}
+          {uploading && <span className='text-red-500'>{checkedBtn === "BYENTRY"? "Recording transaction, please wait..." : "Uploading transactions, please wait..."}</span>}
         </div>
     </div>
   )
