@@ -1,8 +1,0 @@
-id,userId,fullName,email,companyDomain,activity,activityDescription,activityDate,createdAt,inactive,deleted
-1,DEMO@sunday.adegboye,"Sunday Adegboye",ozitechstudio@gmail.com,demo,LOGIN,"User login",2024-09-22T21:21:14.737Z,2024-09-22T21:21:14.737Z,0,0
-2,DEMO@sunday.adegboye,"Sunday Adegboye",ozitechstudio@gmail.com,demo,LOGIN,"User login",2024-10-06T18:47:48.884Z,2024-10-06T18:47:48.884Z,0,0
-3,DEMO@sunday.adegboye,"DEMO@sunday.adegboye ",,demo,LOGINATTEMPT,"User login attempted",2024-10-07T14:08:27.764Z,2024-10-07T14:08:27.764Z,0,0
-4,DEMO@sunday.adegboye,"Sunday Adegboye",ozitechstudio@gmail.com,demo,LOGIN,"User login",2024-10-07T14:08:51.781Z,2024-10-07T14:08:51.781Z,0,0
-5,DEMO@sunday.adegboye,"DEMO@sunday.adegboye ",,demo,LOGINATTEMPT,"User login attempted",2024-10-07T14:21:08.808Z,2024-10-07T14:21:08.808Z,0,0
-6,DEMO@sunday.adegboye,"DEMO@sunday.adegboye ",,demo,LOGINATTEMPT,"User login attempted",2024-10-07T14:23:55.156Z,2024-10-07T14:23:55.156Z,0,0
-7,DEMO@sunday.adegboye,"Sunday Adegboye",ozitechstudio@gmail.com,demo,LOGIN,"User login",2024-10-07T14:23:59.718Z,2024-10-07T14:23:59.718Z,0,0

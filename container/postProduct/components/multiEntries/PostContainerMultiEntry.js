@@ -31,6 +31,7 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
   const [productBy, setProductBy] = React.useState({manual:true, });
   const [uploadError, setUploadError] = useState({msg:'', error:false, uploadTable:[]});
   const [resetCall, setResetCall] = useState(0);
+  const [recordingProduct, setRecordingProduct] = useState(false);
 
  //console.log(transSheet)
   const handleAdjustProductBy =(e)=>{
@@ -40,11 +41,12 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
   const handleSubmit =()=>{
     if(productBy.manual){
       submitHandler({transSheet:[transSheet], controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
-        runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:false})
+        runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:false, setRecordingProduct,})
     }else{
       if(!uploadError.error && uploadError.uploadTable.length){
         submitHandler({transSheet:uploadError.uploadTable, controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
-        runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:true, resetCall, setResetCall})
+        runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:true, setRecordingProduct,
+        resetCall, setResetCall})
       }else{toastNotify("error", "Please, upload data.");}
     }
   }
@@ -246,9 +248,11 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
       
 
         <div className={`${showRecordBtn? '' : 'hidden'} px-5 py-2 fixed bottom-0 bg-gray-200 w-full mt-10`}>
-          <button onClick={handleSubmit} className='btn btn-sm btn-info px-7 inline-block mr-10'>
+          <button onClick={handleSubmit} disabled={recordingProduct} 
+              className='btn btn-sm btn-info px-7 inline-block mr-10'>
               {recordTransaction?.editTran? 'Save' :'Record'}
           </button>
+          {recordingProduct && <p className='inline text-red-500'>Recording product...</p>}
           <div className={`inline-flex flex-row flex-wrap gap-4 ${recordTransaction?.editTran? '' : 'hidden'}`}>
               <button onClick={handleCancelTran} className='btn btn-sm btn-neutral px-5 inline-flex'>Cancel</button>
           </div>

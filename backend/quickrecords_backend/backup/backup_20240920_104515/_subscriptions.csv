@@ -1,4 +1,0 @@
-id,companyId,companyDomain,subscriptionDate,subscriptionAmount,subscriptionType,paymentRef,invoiceNo,expiredDate,description,deleted,receivingBank,inactive,updatedAt,createdAt
-1,DEMO,DEMO,2022-02-28,100000,Pro,10349070087676,1000234,2023-02-27,"First subscription",0,GTbank,0,,
-2,DEMO,DEMO,2023-02-28,100000,Pro,10349070087676,1000234,2024-02-27,"Second subscription",0,GTbank,0,,
-3,DEMO,DEMO,2024-02-28,100000,Pro,10349070087676,1000234,2025-02-27,"Second subscription",0,GTbank,0,,

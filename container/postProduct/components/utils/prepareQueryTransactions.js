@@ -123,6 +123,7 @@ export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, contro
             quantityDr,
             quantityCr,
             amount,
+            quantityProduct,
             } =  transSheet;
 
         const insertedTran = insertedTransArr[i];
@@ -146,6 +147,7 @@ export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, contro
             const debitSubAcctChart = personalAcctType[debitSubs].acct?.find((dt)=> dt[personalAcctType[debitSubs].acctCode] == subCodeDr);
             const creditSubAcctChart = personalAcctType[creditSubs].acct?.find((dt)=> dt[personalAcctType[creditSubs].acctCode] == subCodeCr);
 
+            const qtyDr = parseInt(quantityDr)? quantityDr : parseInt(quantityProduct)? quantityProduct : "";
             const transDetailsFieldsDr = [
                 insertedTran.id,
                 "DR",
@@ -154,7 +156,7 @@ export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, contro
                 debitSubAcctChart?.id? debitSubAcctChart?.id : "",
                 debitSubAcctChart?.id? debitSubs.toUpperCase() : 'COA',
                 amount,
-                quantityDr || "",
+                qtyDr,
                 doubleEntryId,
                 debitAcctChart?.dueDate && debitAcctChart?.dueDateType === "REC"? debitAcctChart.dueDate : "",
 
@@ -166,6 +168,7 @@ export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, contro
             ];
             transactionsDetails.push(transDetailsFieldsDr);
             
+            const qtyCr = parseInt(quantityCr)? quantityCr : parseInt(quantityProduct)? quantityProduct : "";
             const transDetailsFieldsCr = [
                 insertedTran.id,
                 "CR",
@@ -174,7 +177,7 @@ export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, contro
                 creditSubAcctChart?.id? creditSubAcctChart?.id : "",
                 creditSubAcctChart?.id?  creditSubs.toUpperCase() : 'COA',
                 amount,
-                quantityCr || "",
+                qtyCr,
                 doubleEntryId,
                 creditAcctChart?.dueDate && creditAcctChart?.dueDateType === "REC"? creditAcctChart.dueDate : "",
 

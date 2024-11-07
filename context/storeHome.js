@@ -2,7 +2,7 @@ import { BsDatabaseAdd, BsDatabaseFillGear, BsFillGearFill, BsFillPeopleFill } f
 import {create} from "zustand";
 import { IoMdHome, IoMdKey } from 'react-icons/io';
 import { BsPersonGear } from 'react-icons/bs';
-import { MdLogout, MdManageAccounts, MdOutgoingMail, MdSettings, MdOutlineDashboard, MdOutlineKeyboardDoubleArrowRight } from 'react-icons/md';
+import { MdLogout, MdManageAccounts, MdOutgoingMail, MdSettings, MdOutlineDashboard, MdOutlineKeyboardDoubleArrowRight, MdOutlineBackup } from 'react-icons/md';
 
 const tabsArrHome = [
     {id:1, name:'DASHBOARD', title:'Dashboard', icon:<MdOutlineDashboard size={20}/>},
@@ -12,7 +12,8 @@ const tabsArrHome = [
     {id:4, name:'MANAGECLIENTS', title:'Manage Clients', icon:<MdManageAccounts size={20}/>},
     {id:5, name:'CREATEACCOUNT', title:'Create Account', icon:<BsFillPeopleFill size={20}/>},
     {id:6, name:'ACCESS', title:'Access', icon:<MdOutlineKeyboardDoubleArrowRight size={20}/>},
-    {id:7, name:'SQLQUERY', title:'SQL Query', icon:<BsDatabaseFillGear size={20}/>},
+    {id:7, name:'BACKUP', title:'Backup', icon:<MdOutlineBackup size={20}/>},
+    {id:8, name:'SQLQUERY', title:'SQL Query', icon:<BsDatabaseFillGear size={20}/>},
     //{id:7, name:'TAB7', title:'Resp Tab 7', icon:<BsFillGearFill size={20}/>},
     //{id:8, name:'TAB8', title:'Resp Tab 8', icon:<BsFillGearFill size={20}/>},
     //{id:9, name:'TAB9', title:'Resp Tab 9', icon:<BsFillGearFill size={20}/>}

@@ -1,2 +1,0 @@
-id,name,description,slug,number1,number2,number3,smallText1,smallText2,smallText3,medText1,medText2,medText3,text1,text2,text3,largeText1,largeText2,largeText3,createdBy,createdAt
-1,"No of Users","Number of users for each package. There are 3 packages- Basic, Pro & Premium and no of users are 5, 10 & 20 respectively",no-of-package-users,5,10,25,BASIC,PRO,PREMIUM,,,,,,,,,,,

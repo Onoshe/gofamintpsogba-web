@@ -13,12 +13,13 @@ import { AccessCard } from './cards/DashboardAccess';
 import CreateUser from './tabs/CreateUser';
 import { getLinksAdmin } from '@/lib/apiRequest/urlLinks';
 import CreateAccount from './tabs/CreateAccount';
+import Backup from './tabs/Backup';
 
 
 
 
 const IndexDashboard = ({}) => {
-    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl, subscriptionsUrl, settingsUrl} = getLinksAdmin();
+    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl, backupUrl, subscriptionsUrl, settingsUrl} = getLinksAdmin();
     const usersAccount = useSWRFetcher(usersAccountUrl);
     const clientsData = useSWRFetcher(clientsDataUr);
     const accessData = useSWRFetcher(accessDataUrl);
@@ -67,6 +68,7 @@ const IndexDashboard = ({}) => {
     CREATEACCOUNT:<CreateAccount clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     CREATEUSER:<CreateUser clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     ACCESS:<Access clientsData={clientsDataFmt} handleRevalidate={handleRevalidate} access={access}/>,
+    BACKUP:<Backup clientsData={clientsDataFmt} backupUrl={backupUrl} handleRevalidate={handleRevalidate} access={access}/>,
  } 
  
   return (

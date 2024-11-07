@@ -1,3 +1,0 @@
-id,name,description,slug,number,smallText,medText,text,largeText,createdBy,createdAt
-1,"Transaction Posting toggle","Transactions cannot be posted when this is ON",transaction-posting-lock,0,ON,,,,DEMO@sunday.adegboye,2024-09-15T22:03:44.798Z
-2,"Posting lock date","Transactions cannot be posted before this date",transaction-lock-date,0,2023-12-31,,,,DEMO@sunday.adegboye,2024-09-15T22:04:10.655Z

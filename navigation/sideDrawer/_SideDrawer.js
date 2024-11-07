@@ -116,7 +116,7 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
               </Link>
             </div>
             <div
-              className={`${showSidebarTitle? 'w-[200px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-2 flex flex-row text-black bg-blue-300   p-2 gap-1 items-center`}
+              className={`${showSidebarTitle? 'w-[200px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-2 flex flex-row text-[#e2dddd] bg-[gray]   p-2 gap-1 items-center`}
               onClick={()=>handleLogout()}
               data-tip={'Logout'}>
               <BiLogOutCircle color='red' className='rotate-180 text-[20px] mr-2  cursor-pointer'/> 
