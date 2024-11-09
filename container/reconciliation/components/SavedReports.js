@@ -6,6 +6,7 @@ import { MdCancel, MdClose, MdDelete } from 'react-icons/md';
 import { deleteQueryRecon } from '../utils/reconQuery';
 import { patchRequest } from '@/lib/apiRequest/patchRequest';
 import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
+import { capitalizeFirstCharOnly } from '@/lib/capitalize/capitalizeString';
 
 
 const SavedReports = ({ reportCont, setReportCont, savedReportView, setSavedReportView, 
@@ -65,27 +66,28 @@ const SavedReports = ({ reportCont, setReportCont, savedReportView, setSavedRepo
 
     return (
     <div className={`absolute w-full z-50 justify-center top-[120px] flex items-center ${reportCont.show? '' : 'hidden'}`}>
-        <div className='bg-white h-fit  w-full max-w-[450px] relative shadow-lg'>
-            <p className='bg-blue-500 p-2 text-center text-white'>Saved Reconciliation Reports</p>
+        <div className='bg-white h-fit mx-2  w-full max-w-[300px] sm:max-w-[350px] md:max-w-[450px] relative shadow-lg'>
+            <p className='bg-blue-500 p-2 text-sm sm:text-base text-center text-white'>Saved Reconciliation Reports</p>
             <MdClose className='absolute right-4 top-2 text-white hover:text-red-600 active:text-red-100 cursor-pointer' size={22}
                 onClick={closeSavedReports}/>
             <div className='p-2 text-sm'>
                 
-                <div className='text-[13px] flex flex-col  border border-gray-200 m-2 p-2 h-[30vh] overflow-auto'>
+                <div className='text-[12px] flex flex-col  border border-gray-200 m-2 p-2 h-[30vh] overflow-auto'>
                     {
                         savedData?.map((dt, i)=>{
                             let by = dt?.updatedBy?.split("@")[1];
                             by = by.split(".");
+                            by = capitalizeFirstCharOnly(by[1]);
 
                             return(
                                 <div key={`${i}key`} className='flex text-gray-600 flex-row px-2 py-1 bg-blue-50 mb-2'
                                   > 
                                     <div className='flex flex-row justify-between flex-1'>
-                                        <p  className="hover:text-blue-700 active:text-blue-300 cursor-pointer"
+                                        <p  className="hover:text-blue-700 active:text-blue-300 md:truncate text-ellipsis md:max-w-[280px] cursor-pointer"
                                             onClick={()=>handleSelected("SELECT", dt, i)}>
                                             {i+1}. {dt.name}</p>
                                         
-                                        <p className="text-teal-500">by {by[1]}</p>
+                                        <p className="text-teal-500">{by}</p>
                                     </div>
                                     <MdDelete className='text-red-500 text-[18px] ml-2 cursor-pointer hover:text-red-600 active:text-red-400'
                                      onClick={()=>handleSelected("DELETE", dt, i)}/>

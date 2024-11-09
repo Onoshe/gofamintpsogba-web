@@ -44,7 +44,9 @@ const IndexPostProduct = ({ssUser}) => {
   //ProductBalance calculation
   let productBalance = {bal:0, price:0};
   if(transSheet?.subCodeProduct && ledgersAcct?.productsLedger[transSheet?.subCodeProduct]?.trans.length){
-   productBalance = ledgersAcct?.productsLedger[transSheet?.subCodeProduct].trans.reduce((cum, dt, i, arr)=>{
+    const transLedger = ledgersAcct?.productsLedger[transSheet?.subCodeProduct].trans;
+    const transLedgerSpecific = transSheet?.date? transLedger.filter((dt)=> new Date(dt.transactionDate).getTime() <= new Date(transSheet.date)) : transLedger;
+   productBalance = transLedgerSpecific.reduce((cum, dt, i, arr)=>{
       cum.bal = cum.bal + parseFloat(dt.quantity);
       let price = dt.prodBal.avgCost; 
       if(i == (arr.length -1)){price = dt.prodBal.avgCost;}
@@ -52,6 +54,8 @@ const IndexPostProduct = ({ssUser}) => {
       return cum
     },{bal:0, price:0});
   }
+
+  //console.log(ledgersAcct.productsLedger, transSheet);
 
   
 

@@ -17,18 +17,23 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
         title: "---Select---"
     };
     /****************************** CHART OF ACCOUNT FILTER *********************************
-     * There MUST be One Receivable & Payable Control Account each. Hence, they will be filtered out if they exist,
+     * There MUST be One Receivable, Payable and Inventory Control Account each. Hence, they will be filtered out if they exist,
      */ 
     const recControl = controlAcctsCode.receivables;
     const payControl = controlAcctsCode.payables;
+    const invControl = controlAcctsCode.inventoryControl;
     const recControlAcct = chartOfAccounts?.find((dt)=> dt.typeCode == recControl);
     const payControlAcct = chartOfAccounts?.find((dt)=> dt.typeCode == payControl);
+    const invControlAcct = chartOfAccounts?.find((dt)=> dt.typeCode == invControl);
     let coaStructureFiltered = coaStructure;
     if(recControlAcct){
         coaStructureFiltered = coaStructureFiltered.filter((dt)=> dt.code != recControl);
     }
     if(payControlAcct){
         coaStructureFiltered = coaStructureFiltered.filter((dt)=> dt.code != payControl);
+    }
+    if(invControlAcct){
+        coaStructureFiltered = coaStructureFiltered.filter((dt)=> dt.code != invControl);
     }
     
     const coaStructureArr = [selectCOA, ...coaStructureFiltered];

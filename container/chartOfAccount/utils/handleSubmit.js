@@ -27,7 +27,8 @@ const handleSubmit = async ({ formInput, setInfoMsg, user, coaStructure, chartOf
 
     const {accountCode, accountName, addToDashboard, description, accountType, typeCode, createdBy, updatedBy} = formInput;
         const acctStructure = coaStructure?.find((dt)=> parseInt(dt.code) === parseInt(typeCode));
-        let form = { 
+        let form = {
+          ...formInput, 
           typeCode:acctStructure.code, 
           typeName:acctStructure.name, 
           accountCode, 
@@ -37,12 +38,12 @@ const handleSubmit = async ({ formInput, setInfoMsg, user, coaStructure, chartOf
           addToDashboard,
           createdBy,
           updatedBy,
-          ...formInput,
           //addToDashboard:addToDashboard? 'Yes' :'No', 
           //edit:<BiEditAlt size={22} className='text-blue-700 cursor-pointer hover:text-[blue]'/>,
           //delete:<BiTrash size={22} className='text-red-700 cursor-pointer hover:text-[red]'/>, 
         }
-  
+       // return console.log(acctStructure, form, formInput, "ENDED");
+
     if(formInput.editAcct){ //Edit
       const {url, body} = coaUpdateQuery(form, user, "chartofaccount");
             if(undeletedAcctExist){ //AccountCode found

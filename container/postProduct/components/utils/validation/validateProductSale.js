@@ -27,8 +27,9 @@ export const validateProductSale = async (forms, controlAcctsCode, activeTab, us
    const products = productsFtch.data;
 
 
-   const mainKeys = ["date", "description", "reference", "accountCodeDr", "accountCodeCr", "subCodeDr", "subCodeCr", "quantityDr", 
+   const mainKeys = ["date", "description", "reference", "accountCodeDr", "accountCodeCr", "subCodeDr", "subCodeCr", "quantityDr","quantityCr", 
         "amount", "accountCodeProduct","subCodeProduct", "quantityProduct", "accountCodeCOS"];
+  
    //For upload
    if(forms.length > 1){
      const row = forms[0];
@@ -41,7 +42,7 @@ export const validateProductSale = async (forms, controlAcctsCode, activeTab, us
            errorType: 'USE_MSG',
            rowIndex: j,
            key:key,
-           title:capitalizeFirstChar(key)+' column is missing in the table!',
+           title:key+' column is missing in the table!',
          };
        }
        const rowKey = rowKeys[j];
@@ -50,8 +51,8 @@ export const validateProductSale = async (forms, controlAcctsCode, activeTab, us
            error: true,
            errorType: 'USE_MSG',
            rowIndex: j,
-           key:key,
-           title:capitalizeFirstChar(key)+' column is not recognised!',
+           key:rowKey,
+           title:rowKey+' column is not recognised!',
          };
        }
      } 

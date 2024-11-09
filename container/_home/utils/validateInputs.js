@@ -13,7 +13,7 @@ function validateInputs(form, type){
             res.error = true
         }
     }else if(type === "REGISTER"){
-        if(!form.firstname || !form.lastname || !form.email || !form.password || !form.confirmPassword){
+        if(!form.firstname || !form.lastname || !form.email){ //|| !form.password || !form.confirmPassword
             res.invalidField = '';
             res.error = true
         }

@@ -82,7 +82,7 @@ const IndexCompany = ({ssUser}) => {
             {tabs.activeTab.name === "home" && <>
                 <BackgroundCard style={''} childContStyle title={clientAccount?.companyName}>
                     <div className='w-full pb-4'>
-                        <div className={`p-[2px] px-3 w-full flex flex-row justify-between ${subcriptionHistory?.lastSub?.active?'bg-[lime] text-[teal]':'bg-red-500 text-gray-700'}`}>
+                        <div className={`p-[2px] px-3 w-full flex flex-row justify-between ${subcriptionHistory?.lastSub?.active?'bg-[lime] text-[seagreen]':'bg-red-500 text-gray-700'}`}>
                         <p className=''><span className='font-bold'>{subcriptionHistory?.lastSub?.active?'ACTIVE':'EXPIRED'} <span>({subcriptionHistory?.lastSub?.subscriptionType})</span></span></p> 
                         <p>Due date: {subcriptionHistory?.lastSub?.subDueDateStr}</p>
                         </div>

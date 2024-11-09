@@ -23,13 +23,10 @@ import { getPlanLimit } from './utils/getPlanLimit';
 import { capitalizeFirstCharOnly } from '@/lib/capitalize/capitalizeString';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import { Modal } from './components/Modal';
-import { BiUpload } from 'react-icons/bi';
 import { FileUploadCustom } from './components/FileUploadCustom';
-import { MdClose } from 'react-icons/md';
 import { getImageLink } from '@/lib/apiRequest/urlLinks';
 import Image from 'next/image';
-import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
-import { getRequest } from '@/lib/apiRequest/getRequest';
+import { getUsers } from './utils/getUsers';
 
 
 
@@ -38,7 +35,10 @@ const updateFormAddUserDef ={firstname:"", lastname:"", title:"", email:"",
 
 const IndexProfile = ({ssUser}) => {
   const { session, signOut, status} = useAuthCustom(ssUser); 
-  const {user, users, subscriptions, coy, dispatchCoy, client_Admin, clientData, generalSettings, quickrecordsLogo, dispatchFetchSettingsCall} = useStoreHeader((state) => state);
+  const headerStore = useStoreHeader((state) => state);
+  const {user, subscriptions, coy, dispatchCoy, client_Admin, clientData, generalSettings, quickrecordsLogo, dispatchFetchSettingsCall} = headerStore;
+  const usersAll = headerStore.users;
+  const users =  getUsers(usersAll, generalSettings); // headerStore.filter((dt)=> );
   const {online,  dispatchUser} = {online:true, user:{}, dispatchUser:()=>console.log()};
   const [changePassword, setChangePassword] = React.useState(false);
   const [changePasswordCode, setChangePasswordCode] = React.useState("");
@@ -61,6 +61,7 @@ const IndexProfile = ({ssUser}) => {
   //userIdImg += ".jpg";
   const [file, setFile] = React.useState(null);
   //console.log(generalSettings)
+  //console.log(users, generalSettings)
 
   const notify = (type, msg) => toast[type](msg, {
     position: "top-right",

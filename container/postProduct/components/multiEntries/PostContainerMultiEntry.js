@@ -102,8 +102,15 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
     }
     setComponentReady(true) //Used to prevent server hydration error
   },[transSheet]);
-
- const handleToggle =()=>{
+ 
+ React.useEffect(()=>{
+  //Reset on mount
+  transSheetReset("TAB1");
+  transSheetReset("TAB2");
+  transSheetReset("TAB3");
+ },[]);
+ 
+  const handleToggle =()=>{
   const val = productBy.manual;
   setProductBy({...productBy, manual:!val})
  }

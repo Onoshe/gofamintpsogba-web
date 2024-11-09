@@ -43,7 +43,7 @@ const RegisterDemoAccount = ({viewPwd, handleViewPwd, form, handleOnChange, hand
                     type="email" 
                     placeholder="Email"
                 />
-                <InputLabel2
+                {/*<InputLabel2
                     name="password"
                     value={form.password}
                     type={viewPwd? 'password' :'text'}
@@ -70,7 +70,7 @@ const RegisterDemoAccount = ({viewPwd, handleViewPwd, form, handleOnChange, hand
                     rightIconB1={eyeOpen1}
                     rightIconB2={eyeOpen2}
                     handleViewIcon={handleViewPwd}
-                />
+                />*/}
                 
                 <div className='flex w-full flex-col md:flex-row justify-center items-center space-y-5 md:space-y-0'>
                     <input className='bg-[#FFA900] hover:bg-[#fbc049]  active:bg-[#af9259] w-full items-center justify-center py-3 px-5 rounded-md cursor-pointer flex flex-1 mr-2 font-bold max-w-96'

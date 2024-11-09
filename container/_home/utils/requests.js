@@ -8,6 +8,7 @@ import { patchRequest } from "@/lib/apiRequest/patchRequest";
 
 
 
+
 async function postQuery(form, client, domain){
     const pwdHarshed =  await bcrypt.hash(form.password, 10);
     let userId = `${form.firstname}.${form.lastname}`.toLowerCase();
@@ -26,7 +27,7 @@ async function postQuery(form, client, domain){
         "act":"INSERT",
         "table":"demo_usersaccount",
         "fields":["userId", "firstname","lastname","email", "secret", "gender", "companyId", "companyDomain", "role", "registeredDate", "createdAt", "updatedAt", "appSlug", "defaultSecret"],
-        "values":[[userId, form.firstname,form.lastname, form.email, pwdHarshed, form.password, client.id, 'demo', 'Admin', dateFmtISO(), dateFmtISO(), dateFmtISO(), "QUICKRECORDS", "1"]],
+        "values":[[userId, form.firstname,form.lastname, form.email, pwdHarshed, form.password, client.id, 'demo', 'Accountant', dateFmtISO(), dateFmtISO(), dateFmtISO(), "QUICKRECORDS", "1"]],
         "types":["VARCHAR", "VARCHAR", "VARCHAR","VARCHAR","VARCHAR","VARCHAR", "INT", "VARCHAR", "VARCHAR", "VARCHAR","VARCHAR","VARCHAR", "VARCHAR", "INT"]
       };
     return {url:postUserLink, body, loginDetails:{userId, password:form.password}}

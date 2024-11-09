@@ -17,7 +17,7 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
     reconAccount, setReconAccount, reconLedger, setReconLedger, reconDataForDislay,handleShowReconOthersCont,
      selAcctCode, setSelAcctCode, ledger, formOthers, reportData,  keys, keyTitles,reconOthers,
      setFormOthers, setReconOthers,resetCalculation,displayReport,setDisplayReport, data,
-     savedReportView, setSavedReportView, user, mutate
+     savedReportView, setSavedReportView, user, mutate,
 }) => {
      
     //const ledger = getDummyLedger(form);
@@ -48,6 +48,12 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
         }
      }
 
+     const handleResetRecon = ()=>{
+        setSelAcctCode("");
+        setReconLedger([]);
+        setReconAccount({coa:{}, ledger:[], openingBalRow:{}});
+        setForm({dateFrom:'', dateTo:'', stmtClosingBalance:''});
+     }
      const handleOnChangeSelectAcct =(e)=>{
         setSelAcctCode(e.target.value)
      }
@@ -240,8 +246,11 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
                             <p className='w-[100px] text-right bg-white py-[2px] border rounded-sm px-2'>{reconTotal? formatToCurrency(reconTotal) : '0.00'}</p>
                         </div>
                     </div>
-                    
                 </div>
+            </div>
+            <div className={`w-full flex justify-end ${reconLedger?.length? '' : 'hidden'}`}>
+                <button className='btn btn-sm px-7 btn-error hover:tooltip-open tooltip tooltip-left' data-tip={'Reset reconciliation'}
+                 onClick={handleResetRecon}>Reset</button>
             </div>
         </div>
     </div>

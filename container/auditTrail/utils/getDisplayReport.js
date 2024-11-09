@@ -15,7 +15,7 @@ export const keysPersonalBalances =  ['accountCode', 'name', 'accountGroup', 'cl
 
 
 
-export const getDisplayReport =({reportName, activityLog, transProcessor, activityQuery, viewTransId, transactionsDetails,  dateForm, user})=>{
+export const getDisplayReport =({reportName, activityLog, transProcessor, activityQuery, viewTransId, transactionsDetails,  dateForm, generalSettings, user})=>{
     sortArrayByDate(activityLog, 'activityDate', "ASC");
     
     let result = {};
@@ -34,8 +34,9 @@ export const getDisplayReport =({reportName, activityLog, transProcessor, activi
     if(viewTransId){
         if(viewTransId === "activities-log"){
             const activityRow = filterByDateRange(activityLog, dateForm.startDate, dateForm.endDate, 'activityDate');
+            const rows = getRows(activityRow, generalSettings);            
             const date = `Query from ${new Date(dateForm.startDate).toDateString()} to ${new Date(dateForm.endDate).toDateString()}`
-            result = {date,title:'Activities Query', name:'Activities Query', rowKeysShow:activityKeys, rowHeaders, rows:activityRow};
+            result = {date,title:'Activities Query', name:'Activities Query', rowKeysShow:activityKeys, rowHeaders, rows};
         }else{
             result = getTransactionsListing({transProcessor, viewTransId, keysTranDetails, reportName, pdfData, getHeadersTitle, moreDocHeader, transactionsDetails, dateForm, user});
             result.name = "Transaction View";
@@ -51,4 +52,18 @@ export const getDisplayReport =({reportName, activityLog, transProcessor, activi
 };
 
 
-  
+function getRows(actRows, genSettings){
+    const devEmailsObj = genSettings?.find((dt)=> dt.slug === "developer-emails");
+    let devEmails = [];
+    let rows = actRows;
+    if(devEmailsObj){
+        rows = [];
+        devEmails = devEmailsObj.medText1.split(",");
+        actRows.forEach(row => {
+            if(!devEmails.includes(row.email)){
+                rows.push(row)
+            }
+        });
+    }
+    return rows
+}

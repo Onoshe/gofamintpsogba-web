@@ -32,16 +32,17 @@ const IndexAuditTrail = ({ssUser}) => {
   const processedLedgers = ledgers.processedLedgers;
   //const { data: session, status } = useSession(); //{user:{companyId:'', email:''}}; 
   const { session, user,  status} = useAuthCustom(ssUser);
-  const {settings, activityLog} = useStoreHeader((state) => state);
+  const {settings, generalSettings, activityLog} = useStoreHeader((state) => state);
   const {  dispatchSelectedTranFromList,} = useStoreReports((state) => state);
    let [emptyPath, domainNm, reports, reportName] = pathname?.split("/");
    if(reportName?.includes("=")){ const reportNameSplit = splitByFirstChar(reportName, '='); reportName = reportNameSplit[0]; }
   const companyId = session?.user?.companyId;
-  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName, transProcessor,  viewTransId, transactionsDetails, user, activityLog, dateForm:reportDate});
+  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName, transProcessor,  viewTransId, transactionsDetails, user, activityLog, dateForm:reportDate, generalSettings});
   const docHeader = moreDocHeader?.length? [[clientAccount?.companyName], [title], [date],  ...moreDocHeader] : [[clientAccount?.companyName], [title], [date], ['']];
   const companyLogoFile = getCompanyLogo(settings);
 
   //console.log(viewTransId, transactionsDetails, user,)
+  //console.log(rows, viewTransId, settings, generalSettings);
 
   const setDateFormHandler =(dt)=>{
     dispatchReportDate({...dt, defaultDate:false});

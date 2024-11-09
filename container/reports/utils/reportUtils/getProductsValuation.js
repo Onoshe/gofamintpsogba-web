@@ -51,8 +51,10 @@ export const getProductsValuation =({reportName,  transProcessor,  dateForm, pro
             const row = !dt.transactionNo? {...updatedRow, transactionNo:dt.description, description:''} : 
                 {...updatedRow, description:isDr? "Purchase" : "Sale"};
             return row
-        })
-    }
+        });
+        productLedgers = productLedgers.filter((dt)=> {return dt.cost && dt.balance});
+    };
+
     const rowKeysShow = viewTransId? keysValuation : keysValuationSum;
     const pdfData = {
         reportRowKeys:[],
@@ -74,8 +76,7 @@ export const getProductsValuation =({reportName,  transProcessor,  dateForm, pro
     result = {name:reportName, title:viewTransId? product?.productName+" "+viewTransId+"- Valuation" : "Products Valuation", 
         clickables:viewTransId? "" : ["productCode"], rowKeysShow, rowHeaders, rows, pdfData, col1WchInDigit:30}
     return result
-}
-
+ };
 
 function getValuationSummary({transProcessor, products}){
     const productLedgersObj = transProcessor.processTransactions().productsLedger;

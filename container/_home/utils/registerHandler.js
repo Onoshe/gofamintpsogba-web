@@ -4,13 +4,19 @@ import { validateInputs } from "./validateInputs";
 import { getRequest } from "@/lib/apiRequest/getRequest";
 import { getLinkClientServer, getLinkUserData, isProduction } from "@/lib/apiRequest/urlLinks";
 import getRegisterUserEmailBody from "@/components/htmlEmail/registerUserEmail";
+import { generatePassword } from "@/lib/generator";
 
 
-export const platformDomain = isProduction? 'https://quick-records.vercel.app/login':"http://localhost:3000/login";
+export const platformDomain = 'https://quick-records.vercel.app/login'; //isProduction? 'https://quick-records.vercel.app/login':"http://localhost:3000/login";
 
 //Register a demo account only.
 //User registration will be done by the client Admin 
+
 const  registerHandler = async (form, dispatchResetForm, alert, setAlert, setModalAlert, setModalAlertCall)=>{
+    const password = generatePassword(7);
+    form.password = password;
+    form.confirmPassword = password;
+
     const res = validateInputs(form, "REGISTER");
     
     if(!res.error){

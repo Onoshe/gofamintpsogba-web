@@ -63,7 +63,7 @@ const Login = ({viewPwd, handleViewPwd, form,loading, handleOnChange, handleLogi
             </div>
             <div onClick={()=>setShowBlind({show:true})}>
                 <div className='w-full justify-center flex items-center text-white mt-10 mb-5'>
-                    <div>{"Don't have an account? "} <Link href={"/register"} className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'>Register</Link></div>
+                    <div><Link href={"/register"} className='font-bold cursor-pointer hover:text-blue-100 active:text-blue-200'>Register a free demo account</Link></div>
                 </div>
             </div>
         </Card>
