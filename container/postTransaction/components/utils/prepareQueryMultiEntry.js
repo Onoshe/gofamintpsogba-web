@@ -86,7 +86,7 @@ function getVoucher(transSheets, chartOfAccounts){
 }
 
 export function prepareQueryMultiTrans({transSheetForm, user, postingFrom, chartOfAccounts}) {
-    const url =  getLinkPostAndRetrieve();
+    const url =  getLinkPostAndRetrieve(user.companyId);
     const {accountCode, amount, debitCredit, date, description, reference} = transSheetForm[0];
     const eachEntrySumTotal = transSheetForm.reduce((cum, el)=>{
         return cum += el.debitCredit == 1? el.amount : 0
@@ -128,7 +128,7 @@ export function prepareQueryMultiTrans({transSheetForm, user, postingFrom, chart
 }
 
 export function prepareQueryMultiTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans}) {
-    const url =  getLinkPostAndRetrieve();
+    const url =  getLinkPostAndRetrieve(user.companyId);
 
     const transactionsDetails = [];
     const insertedTran = insertedTrans[0];

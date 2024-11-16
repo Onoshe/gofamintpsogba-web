@@ -30,7 +30,7 @@ export const handleUpdateUserPassword= async(updateForm, fetchedUser, session)=>
 }
 
  function getUpdateParams(idNo, companyId, values){
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(companyId).patch;
     const body = {
       act: "UPDATE",
       whereField:"id",

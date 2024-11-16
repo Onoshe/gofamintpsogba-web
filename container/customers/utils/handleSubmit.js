@@ -27,7 +27,7 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
         if(validateAcctCode.data.id != formInput.id) return handleInfoMsg('error', "Account code already exist");
       }
       // NO ERROR || FOUND ACCOUNT-ID IS EDITED ACCOUNT-ID: RUN UPDATE
-      const urlLink = getLinkPersoanlAcct({user, personalAcct, accountCodeNew:inputAcctCodeFmt});
+      //const urlLink = getLinkPersoanlAcct({user, personalAcct, accountCodeNew:inputAcctCodeFmt});
       const {url, body} = updatePAQuery(formInput, user, personalAcct);
       await patchRequest(url, body).then((res)=> {
         if(res?.ok){

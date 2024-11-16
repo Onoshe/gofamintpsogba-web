@@ -38,16 +38,28 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
     setTransSheet({ ...transSheet, adjustProductChecked:e});
  }
  
-  const handleSubmit =()=>{
+  const handleSubmit = async ()=>{
     setRecordingProduct(true);
     if(productBy.manual){
+      //return console.log([transSheet])
       submitHandler({transSheet:[transSheet], controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
         runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:false, setRecordingProduct,})
     }else{
       if(!uploadError.error && uploadError.uploadTable.length){
-        submitHandler({transSheet:uploadError.uploadTable, controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
-        runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:true, setRecordingProduct,
-        resetCall, setResetCall})
+        //For TAB2 (Product Sale), post transaction one after the other. Posting at once is giving error.
+        if(activeTab === "TAB2"){
+          for (let index = 0; index < uploadError.uploadTable.length; index++) {
+            const transSht = uploadError.uploadTable[index];
+            const saleLastRow = uploadError.uploadTable.length === index+1;
+            await submitHandler({transSheet:[transSht], controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
+               runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:true, setRecordingProduct,
+               resetCall, setResetCall, saleLastRow})
+          };
+        }else{
+          submitHandler({transSheet:uploadError.uploadTable, controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
+            runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:true, setRecordingProduct,
+            resetCall, setResetCall})
+        }
       }else{toastNotify("error", "Please, upload data.");}
     }
   }

@@ -7,7 +7,7 @@ import { handleSqlQuery } from '@/container/admin/utils/handleSqlQuery';
 
 
 
-const SQLQueryPanel = ({clientsData}) => {
+const SQLQueryPanel = ({user, clientsData}) => {
     const [form, setForm] = useState({db:'', query:'', access:'', passcode:''})
     const [data, setData] = useState([]);
     const [alert, setAlert] = useState({msgTitle:'', msg:'',type:'', show:false});
@@ -20,7 +20,7 @@ const SQLQueryPanel = ({clientsData}) => {
     }
    const handleSubmit = async (e)=>{
     e.preventDefault();
-    handleSqlQuery(form, alert, setAlert, setData);
+    handleSqlQuery(form, alert, setAlert, setData, user);
     
    }
 

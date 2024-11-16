@@ -39,7 +39,7 @@ const transDetailsTypes = [
 
 
 export function prepareQueryJournalTrans({transSheetForm, user, postingFrom, chartOfAccounts}) {
-    const url =  getLinkPostAndRetrieve();
+    const url =  getLinkPostAndRetrieve(user.companyId);
     const {accountCode, amount, debitCredit, date, description, reference} = transSheetForm[0];
 
     let debitAcctChart, creditAcctChart;
@@ -77,7 +77,7 @@ export function prepareQueryJournalTrans({transSheetForm, user, postingFrom, cha
 }
 
 export function prepareQueryJournalTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans}) {
-    const url =  getLinkPostAndRetrieve();
+    const url =  getLinkPostAndRetrieve(user.companyId);
 
     const transactionsDetails = [];
     const insertedTran = insertedTrans[0];

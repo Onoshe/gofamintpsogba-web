@@ -8,8 +8,9 @@ const { prepareQuerySettings, updateQuerySettings } = require("./prepareQuerySet
 
 export const postOrUpdateSettings = async ({slugName, postFields, postValues, postDetails, user, notify, dispatchRefreshSettingsCount})=>{
     const updateLink = `${user?.companyId+"_settings"}&c=slug&v=${slugName}`;
+    const domain = user.companyId.toLowerCase();
 
-    const urlLink = getLinkFetchTable({table:updateLink});
+    const urlLink = getLinkFetchTable({table:updateLink, domain});
     const dataRes = await getRequest(urlLink).then((res)=> res);
 
         if(dataRes?.data?.length){ //Update

@@ -28,7 +28,7 @@ const  forgotPasswordHandler = async (form, setAlert, setModalAlert, setModalAle
                         subject:"Password Reset Initiated on your Account",
                         optMsg: "This OTP Is valid only for 15 mintues, If you haven't requested this OTP Contact us immediately!",
                     });
-                    const sendMailLink = getLinkClientServer().dev;
+                    const sendMailLink = getLinkClientServer(domain).dev;
                     const mailBody = {
                         route:"SENDMAIL",
                         mailObj:{
@@ -62,7 +62,7 @@ const  forgotPasswordHandler = async (form, setAlert, setModalAlert, setModalAle
 function updateResetPassword(user, domain){
     const resetCode = getUniqueRandomNumbers(0, 9, 6, true);
     const expiredTime = getExpirationTime(20, true);
-    const urlLink = getLinkPostUser();
+    const urlLink = getLinkPostUser(domain);
     const body = {
         "act":"UPDATE",
         "table":domain+"_usersaccount",

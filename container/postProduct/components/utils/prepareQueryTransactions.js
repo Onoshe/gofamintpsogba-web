@@ -61,7 +61,7 @@ function getVoucher(typeCode, entry){
 
 
 export function prepareQueryTrans({transSheet, user, chartOfAccounts, postingPlat}) {
-    const url =  getLinkPostAndRetrieve();
+    const url =  getLinkPostAndRetrieve(user.companyId);
     const transactionsArr = [];
     for (let i = 0; i < transSheet.length; i++) {
         const transSht = transSheet[i]; 
@@ -105,7 +105,7 @@ export function prepareQueryTrans({transSheet, user, chartOfAccounts, postingPla
 }
 
 export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr, doubleEntryIdArr}) {
-    const url =  getLinkPostAndRetrieve();
+    const url =  getLinkPostAndRetrieve(user.companyId);
     const {receivables, payables, inventoryControl, inventoryAdj} = controlAcctsCode;
     
     const transactionsDetails = [];

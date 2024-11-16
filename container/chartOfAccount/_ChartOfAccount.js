@@ -86,6 +86,8 @@ const ChartOfAccount = ({ssUser}) => {
   const coaStructureWithoutRetEarnings = coaStructure?.filter((dt)=> dt.name.toLowerCase() !== "retainedearnings");
   const coaAcct = mapChartOfAccountForDisplay(chartOfAccounts, coaStructure);
   //console.log(chartOfAccounts, coaStructure)
+  //console.log(coaAcct);
+
 
   const handleInfoMsg = (type, msg)=>{
     notify(type, msg);

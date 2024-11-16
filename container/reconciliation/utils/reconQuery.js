@@ -28,12 +28,12 @@ const typesArr = [
   "VARCHAR",
   "VARCHAR"
 ];
-const url = getLinkPostTrans().post;
-const urlPatch = getLinkPostTrans().patch;
+
 
 
 export const insertQueryRecon =(form, name, reportSlug) =>{
   const {user, reportDetails, reportKeys, rows} = form;
+  const url = getLinkPostTrans(user.companyId).post;
   const {
     accountTitle,
     asAt, 
@@ -69,6 +69,8 @@ export const insertQueryRecon =(form, name, reportSlug) =>{
 
 
 export const updateQueryRecon =(form, fetchedForm) =>{
+  const urlPatch = getLinkPostTrans(form.user.companyId).patch;
+
   const {
     user, reportDetails, reportKeys, rows
   } = form;
@@ -96,7 +98,7 @@ export const updateQueryRecon =(form, fetchedForm) =>{
 }   
 
 export const deleteQueryRecon =(fetchedForm, user) =>{
-  const urlDelete = getLinkDeleteTran();
+  const urlDelete = getLinkDeleteTran(user.companyId);
     
   let body = {
     act: "DELETE",

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import BackgroundCard from './components/reusableComponents/BackgroundCard';
 import Image from 'next/image';
-import { getLinksAdmin } from '@/lib/apiRequest/urlLinks';
 import useStoreTransactions from '@/context/storeTransactions';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,7 +22,6 @@ import { HeaderTab } from './components/headerTab/HeaderTab';
 
 const IndexCompany = ({ssUser}) => {
     const { session, user,  status} = useAuthCustom(ssUser);
-    const {usersAccountUrl, clientsDataUrl, accessDataUrl, dbTablesUrl, accessUrl} = getLinksAdmin();
     const {settings, dispatchRefreshSettingsCount,  subscriptions,  dispatchSubscriptions,
         client_Admin, clientData, generalSettings, quickrecordsLogo,} = useStoreHeader((state) => state);
     const {clientAccount, } = useStoreTransactions((state) => state);    

@@ -3,7 +3,7 @@ import { getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
 
 
 export const updatePAQuery =(form, user, personalAcct) =>{
-  const url = getLinkPostTrans().patch;
+  const url = getLinkPostTrans(user.companyId).patch;
   const {id, 
     type, 
     title, 
@@ -17,6 +17,7 @@ export const updatePAQuery =(form, user, personalAcct) =>{
     residentialAddress, 
     formNo, 
     position, 
+    occupation,
     nextContactPersonName, 
     nextContactPersonPhoneNo, 
     nextContactPersonEmail, 
@@ -49,6 +50,7 @@ export const updatePAQuery =(form, user, personalAcct) =>{
     `residentialAddress`, 
     `formNo`, 
     `position`, 
+    `occupation`, 
     `nextContactPersonName`, 
     `nextContactPersonPhoneNo`, 
     `nextContactPersonEmail`, 
@@ -86,7 +88,8 @@ export const updatePAQuery =(form, user, personalAcct) =>{
         phoneNo, 
         residentialAddress, 
         formNo, 
-        position, 
+        position,
+        occupation, 
         nextContactPersonName, 
         nextContactPersonPhoneNo, 
         nextContactPersonEmail, 

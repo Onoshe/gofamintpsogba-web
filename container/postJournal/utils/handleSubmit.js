@@ -14,7 +14,7 @@ export async function handleSubmit({transSheetForm, chartOfAccounts, user, vendo
     
    if(recordTransaction?.editTran){
     const transListingPage = recordTransaction.transListingPage;
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(user.companyId).patch;
     const transId = recordTransaction.editDetails.id;
     const updateParams  ={
       act: "UPDATE",
@@ -36,7 +36,7 @@ export async function handleSubmit({transSheetForm, chartOfAccounts, user, vendo
           whereValue:transId,
           whereType: "INT"
         };
-        const urlDelete =  getLinkDeleteTran();
+        const urlDelete =  getLinkDeleteTran(user.companyId);
         const deleteRes = await patchRequest(urlDelete, deleteBody);
   
         if(deleteRes.ok){

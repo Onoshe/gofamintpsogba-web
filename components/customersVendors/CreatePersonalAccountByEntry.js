@@ -6,13 +6,13 @@ import Form from './Form';
 
 const CreatePersonalAccountByEntry = ({formData, setFormData, personalAcctType, handleInfoMsg, handleSubmit, infoMsg, setInfoMsg, handleCancel, 
   personalAcctGroups, selectedOption, setSelectedOption, noGroupValueMsg, group, setGroup}) => {
-      const keysContactPerson = ["accountCode", "title","firstname", "lastname","othernames", "email","dob","phoneNo","formNo", "position","residentialAddress", "nextContactPersonName", "nextContactPersonPhoneNo", "nextContactPersonEmail",];
+      const keysContactPerson = ["accountCode", "title","firstname", "lastname","othernames", "email","dob","phoneNo","formNo", "position","residentialAddress", "occupation", "nextContactPersonName", "nextContactPersonPhoneNo", "nextContactPersonEmail",];
       const keysCompany = ["companyName", "companyEmail", "companyPhoneNo", "companyAddress", "businessType", "region", "country","state", "zip", "registeredDate", "info"]
       const [uploadedData, setUploadedData] = React.useState([]);
       
      
       
-      const onChangeHandler = (e)=>{
+    const onChangeHandler = (e)=>{
           const {name, value} = e.target;
             setFormData({...formData, [name]:value})
             setInfoMsg({error:false, msg:""});
@@ -26,7 +26,7 @@ const CreatePersonalAccountByEntry = ({formData, setFormData, personalAcctType, 
          } else if(!formData.title || formData.title === "Select"){
           errorInfo = {error:true, msg:'Please, select title'}
          }
-
+        
         if(errorInfo.error){
           setInfoMsg(errorInfo)
           handleInfoMsg('error', errorInfo?.msg)

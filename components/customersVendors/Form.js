@@ -43,19 +43,6 @@ const Form = ({ onChangeHandler, basicTextFields, keysCompany, keysContactPerson
                     personalAcctType={personalAcctType}
                     required
                 />
-                {/*<SelectionTag
-                    optArr={[basicTextFields.type.opt1, basicTextFields.type.opt2]}
-                    type={basicTextFields.type.type}
-                    name={'accountGroup'}
-                    title={basicTextFields.type.title}
-                    onChange={onChangeHandler}
-                    contStyle={'mb-4'}
-                    value={formData?.accountGroup}
-                    required="required"
-                    //value
-                    //required, 
-                    //isRequired
-                />*/}
                 <p className='font-bold text-blue-400 mb-3 px-3'>Contact Person details</p>
                 <div  className='grid grid-cols-1 xl:grid-cols-2 px-3'>
                     {

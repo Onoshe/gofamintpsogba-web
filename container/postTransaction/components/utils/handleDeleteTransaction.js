@@ -5,7 +5,7 @@ import { getLinkPostTrans } from '@/lib/apiRequest/urlLinks';
 
 
 export const handleDeleteTransaction = async ({ recordTransaction,  user, setShowConfirm, notify, runDispatchClientDataCall, router})=>{
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(user.companyId).patch;
     const transListingPage = recordTransaction.transListingPage;
     let body = {
       act: "UPDATE",

@@ -12,7 +12,7 @@ const Users = ({users, handleClickCell, handleAddUser, planLimit}) => {
     const adminClass = "bg-gray-200 text-black py-1 px-2 rounded-sm";
     const resetClassName = "bg-red-400 text-white py-1 px-2 rounded-sm cursor-pointer active:bg-red-300 hover:bg-red-500";
 
-
+ 
     if(users?.length){
         rowKeys = Object.keys(users[0]);
         //const rowsFilter = rowKeys.filter(k=> !['userName', 'role', 'nonActive', 'deleted'].includes(k));
@@ -22,13 +22,13 @@ const Users = ({users, handleClickCell, handleAddUser, planLimit}) => {
           return {title:hd==="reset"? "Reset Pwd" :capitalizeFirstCharOnly(hd), className:''}
         });
         
-        rows = users.map((u)=> { 
+        rows = [...users].map((u)=> { 
           return u.role.toLowerCase() !== "admin"? {
             update:'Edit', delete:'Delete', reset:'Reset', updateClassName, resetClassName, status:parseInt(u.nonActive)? 'Non-active': 'Active', statusClassName:parseInt(u.nonActive)? 'text-red-600' :'text-green-500', ...u} :
           {update:'Edit', delete:'Delete', reset:'Reset', updateClassName:adminClass, resetClassName:adminClass, status:parseInt(u.nonActive)? 'Non-active': 'Active', statusClassName:parseInt(u.nonActive)? 'text-red-600' :'text-green-500', ...u}
         });
     }
-    
+   // console.log(rows)
 //console.log(headers, rows, rowKeys)
 
   return (

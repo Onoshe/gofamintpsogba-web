@@ -29,7 +29,8 @@ export const getUploadSampleFile =(coaStructure)=>{
     ];
     const col1MaxW = "";
     const dataTypeCodes = getTypeCodes(coaStructure, ['code', 'title', 'class']);
-    //console.log(dataTypeCodes);
+    
+    //console.log(getTypeCodes(coaStructure, ['code']).flat());
     handleExportTemplate2Excel({docName, dataTemp, dataGuide, dataTypeCodes, col1MaxW,}); 
 }
 
@@ -38,7 +39,7 @@ export const getUploadSampleFile =(coaStructure)=>{
 export function getTypeCodes(arr, keys) {
     //Exclude  classCodes (0) & retainedEarnings 
     const filterArr = arr.filter((dt)=>{
-        return dt.subCode != 0 && dt.name != "retainedEarnings"
+        return dt.subCode != 0 && dt.name != "retainedEarnings" && dt.name != "accountReceivableControl" && dt.name != "accountPayableControl" && dt.name != "inventoryControl"
     })
     const data  = filterArr.map(obj => keys.map(key => obj[key]));
     const header = ["TypeCode", "Account Type", "Account Class"];

@@ -4,7 +4,8 @@ import * as bcrypt from "bcryptjs";
 
 
 export function fetchQuery(form){
-    const url = getLinkUsersAccount();
+    const domain = form.userName.split('@')[0].toLowerCase();
+    const url = getLinkUsersAccount(domain);
     const body = {
         "act":"QUERY",
         "table":"users_account",
@@ -60,7 +61,7 @@ async function updateAccessQuery(form){
 
 
 const manageClientQuery =(form, isClient, type) =>{
-    const url =  getLinkClientServer()[type? type : 'server']; //type = server || dev
+    const url =  getLinkClientServer(form?.domain)[type? type : 'server']; //type = server || dev
     
     let body = {
       "db":form.db,
@@ -73,11 +74,11 @@ const manageClientQuery =(form, isClient, type) =>{
 }   
 
 const createClientQuery =(form, act) =>{
-  const url = getLinkPostClient();
-  const urlClt = getLinkClientServer().server;
   const {companyName, companyDomain, address, email, contactPersonFirstName, contactPersonLastName, contactPersonPhoneNo,
           contactPersonTitle, businessType, packagePlan, } = form;
   const companyDomainStr = companyDomain.trim().toLowerCase();
+  const urlClt = getLinkClientServer(companyDomainStr).server;
+  const url = getLinkPostClient(companyDomainStr);
   let body = {
     act:act? act : "INSERT",
     table:'_clients',
@@ -142,10 +143,10 @@ const createClientQuery =(form, act) =>{
 
 
 export const createClientAccountQuery =(form, act) =>{
-  const url = getLinkPostTrans();
   const {companyName, companyDomain, address, email, contactPersonFirstName, contactPersonLastName, contactPersonPhoneNo,
           contactPersonTitle, businessType, packagePlan, } = form;
   const companyDomainStr = companyDomain.trim().toLowerCase();
+  const url = getLinkPostTrans(companyDomainStr);
   let body = {
     act:act,
     table:'_clients',
@@ -210,10 +211,10 @@ export const createClientAccountQuery =(form, act) =>{
 
 
 const createUserQuery = async (form) =>{
-  const url = getLinkPostClient();
   const {firstname, lastname, email, domain, companyId, role, inactive} = form;
   const pwdHarshed =  await bcrypt.hash(form.password, 10);
-  
+  const url = getLinkPostClient(domain);
+
   let userId = `${form.firstname}.${form.lastname}`.toLowerCase();
     userId = `${form.domain.toUpperCase()}@${userId}`;
 

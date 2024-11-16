@@ -3,7 +3,7 @@ import { dateFmtISO } from "@/lib/date/dateFormats";
 
 
 export const updatePARowsQuery =(whereVal, user, personalAcct) =>{
-  const url =     getLinkPostTrans().patch;
+  const url =     getLinkPostTrans(user.companyId).patch;
   
   const fields = [
     `deleted`, 
@@ -28,7 +28,7 @@ export const updatePARowsQuery =(whereVal, user, personalAcct) =>{
 
 
 export const updateTransDetailsQuery =(whereRows, user) =>{
-  const url =   getLinkPatchRows();
+  const url =   getLinkPatchRows(user.companyId);
   
   const fields = [
     `deleted`, 

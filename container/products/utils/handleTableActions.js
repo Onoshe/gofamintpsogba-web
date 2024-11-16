@@ -41,7 +41,7 @@ const handleClickRow = async ({el, setFormInput, setShowBlind, setInfoMsg, dispa
 export const handleDelete = async (el)=>{
     const {deleteRow, user, handleInfoMsg, setAlertBlind, setDeleteRow, runDispatchClientDataCall} = el;
 
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(user.companyId).patch;
     let body = {
       act: "UPDATE",
       whereField:"id",

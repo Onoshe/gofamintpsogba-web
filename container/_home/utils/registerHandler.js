@@ -43,7 +43,7 @@ const  registerHandler = async (form, dispatchResetForm, alert, setAlert, setMod
                     emailMsg1:'Your account registration on QuickRecords was successful and your login details are:',
                     emailMsg2:'Go to the login page and login to change your one-time password.',
                     loginPage:platformDomain});
-                    const sendMailLink = getLinkClientServer().dev;
+                    const sendMailLink = getLinkClientServer(domain).dev;
                     const mailBody = {
                         route:"SENDMAIL",
                         mailObj:{

@@ -12,8 +12,9 @@ export const handleSaveReport = async ({form, name, notify, dispatchRefreshSetti
     const {user} = form;
     const slugName = getSlug(name);
     const updateLink = `${user?.companyId+"_reconciliation"}&c=slug&v=${slugName}`;
+    const domain = user.companyId.toLowerCase();
 
-    const urlLink = getLinkFetchTable({table:updateLink});
+    const urlLink = getLinkFetchTable({table:updateLink, domain});
     const dataRes = await getRequest(urlLink).then((res)=> res);
     
     //return console.log(dataRes);

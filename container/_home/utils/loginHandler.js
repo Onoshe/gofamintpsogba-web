@@ -85,8 +85,8 @@ export const loginHandler = async({e, loadingBtn, setLoadingBtn, signIn, form, d
 
 
 
-export function updateEmailConfirmed(user){
-    const url = getLinkPostUser();
+export function updateEmailConfirmed(user, domain){
+    const url = getLinkPostUser(domain);
     const body = {
         "act":"UPDATE",
         "table":"_users_account",
@@ -113,7 +113,7 @@ const  loginHandler99 = async (form, setAlert)=>{
         const match = await bcrypt.compare(form.password, user.data[0].secret);
         if(match){
             if(user.data[0].emailConfirmed == "0"){
-                const {url, body } = updateEmailConfirmed(user.data[0]);
+                const {url, body } = updateEmailConfirmed(user.data[0], domain);
                 postRequest(url, body)
                 .then((res)=> {
                     //setAlert({...alert, msgTitle:'Email confirmed successfully', type:'success', show:true});

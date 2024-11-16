@@ -13,7 +13,7 @@ import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, chartOfAccounts, setPostError, 
     toastNotify, user, personalAccounts, runDispatchClientDataCall, transSheetReset, recordTransaction, router, 
-    postByUpload, setRecordingProduct, resetCall, setResetCall})=>{
+    postByUpload, setRecordingProduct, resetCall, setResetCall, saleLastRow})=>{
     const {customers, vendors, products} = personalAccounts;
     let validateRes = {};
     if(activeTab === "TAB1"){
@@ -96,10 +96,14 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
                         
                         await postRequest(url, body).then((result)=>{
                             if(result?.ok){
-                                transSheetReset("TAB2"); 
-                                runDispatchClientDataCall()
-                                toastNotify('success', 'Posting successfull');
-                                setRecordingProduct(false);
+                                if(postByUpload){
+                                    if(saleLastRow){
+                                        notifySuccess()
+                                        if(setResetCall){
+                                            setResetCall(resetCall + 1);
+                                        }
+                                    }
+                                }else{notifySuccess()}
                             }else{
                             toastNotify('error', res?.error || "Error in posting transaction");
                             setRecordingProduct(false);
@@ -110,6 +114,12 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
                         toastNotify('error', res?.error || "Error in posting transaction");
                         setRecordingProduct(false);
                     }
+             }
+             function notifySuccess(){
+                transSheetReset("TAB2"); 
+                runDispatchClientDataCall()
+                toastNotify('success', 'Posting successfull');
+                setRecordingProduct(false);
              }
         }else if(activeTab === "TAB3"){
             const transSheetFmtArr = [];
@@ -210,7 +220,7 @@ async function processUpdateSalesTrans({transSheet, user, chartOfAccounts, contr
     
     if(recordTransaction?.editTran){
         const transListingPage = recordTransaction.transListingPage;
-        const url = getLinkPostTrans().patch;
+        const url = getLinkPostTrans(user.companyId).patch;
         const transId = recordTransaction.editDetails.id;
         const updateParams  ={
         act: "UPDATE",
@@ -232,7 +242,7 @@ async function processUpdateSalesTrans({transSheet, user, chartOfAccounts, contr
             whereValue:transId,
             whereType: "INT"
             };
-            const urlDelete = getLinkDeleteTran();
+            const urlDelete = getLinkDeleteTran(user.companyId);
             const deleteRes = await patchRequest(urlDelete, deleteBody);
 
             if(deleteRes.ok){
@@ -298,7 +308,7 @@ async function processTransForPosting({
     //return console.log(url, body)
     if(recordTransaction?.editTran){
         const transListingPage = recordTransaction.transListingPage;
-        const url = getLinkPostTrans().patch;
+        const url = getLinkPostTrans(user.companyId).patch;
         const transId = recordTransaction.editDetails.id;
         const updateParams  ={
         act: "UPDATE",
@@ -320,7 +330,7 @@ async function processTransForPosting({
             whereValue:transId,
             whereType: "INT"
             };
-            const urlDelete = getLinkDeleteTran();
+            const urlDelete = getLinkDeleteTran(user.companyId);
             const deleteRes = await patchRequest(urlDelete, deleteBody);
 
             //console.log(deleteRes);

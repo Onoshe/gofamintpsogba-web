@@ -16,6 +16,7 @@ const basicTextFields = {
     residentialAddress:{name:"residentialAddress", title:'Residential Address', pholder:"Enter address", type:"text"},
     formNo:{name:"formNo", title:'Form number', pholder:"Enter form number", type:"text"},
     position:{name:"position", title:'position', pholder:"Enter position", type:"text"},
+    occupation:{name:"occupation", title:'Occupation', pholder:"Occupation", type:"text"},
     nextContactPersonName: {name:"nextContactPersonName", pholder:"Next contact person name", title:'Next contact person name', type: 'text',},
     nextContactPersonPhoneNo: {name:"nextContactPersonPhoneNo", pholder:"Next contact person phone number", title:'Next contact person phone number', type: 'text',},
     nextContactPersonEmail: {name:"nextContactPersonEmail", pholder:"Next contact person email", title:'Next contact person email', type: 'text',},

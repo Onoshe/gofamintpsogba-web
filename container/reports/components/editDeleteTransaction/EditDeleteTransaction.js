@@ -62,7 +62,7 @@ export default EditDeleteTransaction;
 
 
 const handleDeleteTransaction = async ({ selectedTranFromList,  user, notify, runDispatchClientDataCall, router, setShowConfirm})=>{
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(user.companyId).patch;
     const route = `/${user.companyId}/reports`;
     let body = {
       act: "UPDATE",

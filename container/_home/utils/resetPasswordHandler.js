@@ -55,7 +55,7 @@ const  resetPasswordHandler = async (form, setAlert, setModalAlert, setModalAler
 
 function updateResetPassword(user, domain, pwd){
     //console.log(resetCode);
-    const url = getLinkPostUser();
+    const url = getLinkPostUser(domain);
     const body = {
         "act":"UPDATE",
         "table":domain+"_usersaccount",

@@ -13,7 +13,7 @@ export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, use
 
    if(recordTransaction?.editTran){
     const transListingPage = recordTransaction.transListingPage;
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(user.companyId).patch;
     const transId = recordTransaction.editDetails.id;
     const updateParams  ={
       act: "UPDATE",

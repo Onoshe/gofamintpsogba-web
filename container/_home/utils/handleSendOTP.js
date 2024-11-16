@@ -4,7 +4,6 @@ import * as bcrypt from "bcryptjs";
 import { getRequest } from "@/lib/apiRequest/getRequest";
 import { dateFmtISO } from "@/lib/date/dateFormats";
 import { postRequest } from "@/lib/apiRequest/postRequest";
-import { getLinkLogin, } from "@/lib/apiRequest/urlLinks";
 import { patchRequest } from "@/lib/apiRequest/patchRequest";
 import { getUniqueRandomNumbers } from "@/lib/radomNos/getRandomNumbers";
 import { getExpirationTime } from "@/lib/time/getTime";
@@ -27,7 +26,7 @@ import getOTPEmailBody from "@/components/htmlEmail/otpEmail";
             subject:"Password Reset Initiated on your Account",
             optMsg: "This OTP Is valid only for 15 mintues, If you haven't requested this OTP Contact us immediately!",
         });
-        const sendMailLink = getLinkClientServer().dev;
+        const sendMailLink = getLinkClientServer(domain).dev;
         const mailBody = {
             route:"SENDMAIL",
             mailObj:{
@@ -48,7 +47,6 @@ export function updateResetPassword(user, domain){
     const resetCode = getUniqueRandomNumbers(0, 9, 6, true);
     const expiredTime = getExpirationTime(20, true);
     const url = getLinkPostTrans().patch;
-    //const url = getLinkPostUser();
     const info = "Password reset initiated by "+user?.userName || user?.userId;
     const body = {
         "act":"UPDATE",
@@ -68,7 +66,9 @@ export async function postOTPMail({resetCode, userId, email}){
         subject:"Password Reset Initiated on your Account",
         optMsg: "This OTP Is valid only for 15 mintues, If you haven't requested this OTP Contact us immediately!",
     });
-    const sendMailLink = getLinkClientServer().dev;
+    let domain = userId.split("@")[0];
+    domain = domain.toLowerCase();
+    const sendMailLink = getLinkClientServer(domain).dev;
     const mailBody = {
         route:"SENDMAIL",
         mailObj:{

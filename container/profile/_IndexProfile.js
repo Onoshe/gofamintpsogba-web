@@ -61,7 +61,7 @@ const IndexProfile = ({ssUser}) => {
   //userIdImg += ".jpg";
   const [file, setFile] = React.useState(null);
   //console.log(generalSettings)
-  //console.log(users, generalSettings)
+  //console.log(usersAll, generalSettings, planLimit);
 
   const notify = (type, msg) => toast[type](msg, {
     position: "top-right",

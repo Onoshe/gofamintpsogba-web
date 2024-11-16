@@ -146,7 +146,7 @@ export const validateProductSale = async (forms, controlAcctsCode, activeTab, us
         }
 
           //Validate subCode
-          const acct = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeDr);
+          const acct = chartOfAccounts?.find((dt)=> dt.accountCode == accountCodeDr);
           if([parseInt(receivables), parseInt(payables), parseInt(inventoryControl)].includes(parseInt(acct.typeCode)) && !subCodeDr){
             return {
               error: true,

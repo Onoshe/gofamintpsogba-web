@@ -6,7 +6,7 @@ import { BiEditAlt, BiTrash } from 'react-icons/bi';
 import { coaCreateQuery, coaQuery, coaUpdateQuery } from './coaQuery';
 import { getRequest } from '@/lib/apiRequest/getRequest';
 import { patchRequest } from '@/lib/apiRequest/patchRequest';
-import { getLinkCOA, getLinkFetchTable, getLinkFetchTableWithConds } from '@/lib/apiRequest/urlLinks';
+import {  getLinkFetchTableWithConds } from '@/lib/apiRequest/urlLinks';
 import { validateCOACode } from '@/lib/validation/validateCOACode';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 

@@ -33,7 +33,7 @@ const typesArr = [
 ];
 
 export const coaCreateQuery =(form, user, table) =>{
-  const url = getLinkPostTrans().post;
+  const url = getLinkPostTrans(user.companyId).post;
   const {
     accountName,
     accountCode, 
@@ -77,7 +77,7 @@ export const coaCreateQuery =(form, user, table) =>{
 
 
 export const coaUpdateQuery =(form, user, table) =>{
-  const url = getLinkPostTrans().patch;
+  const url = getLinkPostTrans(user.companyId).patch;
   const {id,
     accountName,
     accountCode, 

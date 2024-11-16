@@ -23,6 +23,7 @@ const IndexAdmin = ({ssUser}) => {
   if(!loginAdmin){
     //return <AdminLogin setAdmin={setLoginAdmin}/>
   }
+  //console.log(ssUser)
   return (
     <Layout tabsArr={tabsArrHome} 
       activeTab={activeTabHome}
@@ -31,7 +32,7 @@ const IndexAdmin = ({ssUser}) => {
       ssUser={ssUser}
       dispatchCoy={dispatchCoy}
       >
-      <IndexDashboard/>
+      <IndexDashboard ssUser={ssUser}/>
     </Layout>
   )
 }

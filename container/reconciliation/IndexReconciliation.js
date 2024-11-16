@@ -20,7 +20,7 @@ import { handleExport2Pdf } from './utils/handleExport2Pdf';
 import { handleSaveReport } from './utils/handleSaveReport';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
-import { getLinkFetchTable, getLinksAdmin } from '@/lib/apiRequest/urlLinks';
+import { getLinkFetchTable } from '@/lib/apiRequest/urlLinks';
 import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
 import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
@@ -53,7 +53,8 @@ const IndexReconciliation = ({ssUser}) => {
     const chartOfAccountSelection = mapChartOfAccount(chartOfAccounts, coaStructure);
     //const [reportData, setReportData] = React.useState({show:true, data:[]});
     const [reconOthers, setReconOthers] = React.useState({show:false, amount:0, diff:0, add:0, less:0});
-    const tableUrl = getLinkFetchTable({table:"demo"+"_reconciliation"});
+    const domain = user.companyId.toLowerCase();
+    const tableUrl = getLinkFetchTable({table:domain+"_reconciliation", domain});
      const {data, mutate} = useSWRFetcher(tableUrl); 
 
     const [selAcctCode, setSelAcctCode] = React.useState("");

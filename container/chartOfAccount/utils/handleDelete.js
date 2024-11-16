@@ -7,7 +7,7 @@ import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 
 
 export const handleDelete = async ({ formInput,  user, setShowConfirm, setShowBlind,handleInfoMsg, runDispatchClientDataCall, setFormInput})=>{
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(user.companyId).patch;
     let body = {
       act: "UPDATE",
       whereField:"id",

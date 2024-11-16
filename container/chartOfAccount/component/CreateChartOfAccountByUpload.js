@@ -10,7 +10,7 @@ import Table from '@/components/tables/Table';
 import { validateCOAUploads } from '@/lib/validation/validateCOAUpload';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
 import { handleSubmitUpload } from '../utils/handleSubmitUpload';
-import { getUploadSampleFile } from '../utils/getUploadSampleFile';
+import { getTypeCodes, getUploadSampleFile } from '../utils/getUploadSampleFile';
 import { getLinkFetchTableWithConds } from '@/lib/apiRequest/urlLinks';
 import { getRequest } from '@/lib/apiRequest/getRequest';
 
@@ -43,11 +43,25 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
       const chartOfAccts = await getRequest(fetchTableUrl);
 
       const validateRes = validateCOAUploads(table?.rows, chartOfAccts?.data, coaStructure, controlAcctsCode);
+        let typeCodeModified = getTypeCodes(coaStructure, ['code']).flat();
+        typeCodeModified = typeCodeModified.reduce((cum, code)=> {return isNaN(code)? cum : [...cum, parseInt(code)]},[]);
+        //Only TypeCodes in the sampleFile guide are allowed
+        let typeCode = {invalid:false, code:''};
+        table?.rows.map((dt)=> {
+          if(!typeCodeModified.includes(parseInt(dt.typeCode))){
+            typeCode = {invalid:true, code:dt.typeCode}
+          }
+        });
         if(validateRes?.error){
          const errorMsg = getErrorMessage(validateRes?.errorType, validateRes?.key, validateRes?.rowIndex, validateRes?.title);
          setPostError({msg:errorMsg, error:validateRes?.error});
         }else{
-         setPostError({msg:'Upload successfull', error:false});
+          if(typeCode.invalid){
+            setPostError({msg:`Type code '${typeCode.code}' is not recognised!`, error:true});
+          }else{
+            setPostError({msg:'Upload successfull', error:false});
+          }
+         
         }
     }
 

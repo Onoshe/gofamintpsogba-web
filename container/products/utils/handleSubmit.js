@@ -5,7 +5,7 @@ import { patchRequest } from '@/lib/apiRequest/patchRequest';
 import { productInsertQuery, productUpdateQuery } from './productQuery';
 import { validateAndFormatProducts } from '@/lib/validation/validateProductsUpload';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
-import { getLinkFetchTableWithConds, getLinkProduct } from '@/lib/apiRequest/urlLinks';
+import { getLinkFetchTableWithConds } from '@/lib/apiRequest/urlLinks';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 
 

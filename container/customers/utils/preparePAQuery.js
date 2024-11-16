@@ -4,7 +4,7 @@ import { dateFmtISO } from "@/lib/date/dateFormats";
 
 
 export const preparePAQuery =(form, user, personalAcct) =>{
-  const url = getLinkPostTrans().post;
+  const url = getLinkPostTrans(user.companyId).post;
   const {id, 
     type, 
     title, 
@@ -18,6 +18,7 @@ export const preparePAQuery =(form, user, personalAcct) =>{
     residentialAddress, 
     formNo, 
     position, 
+    occupation,
     nextContactPersonName, 
     nextContactPersonPhoneNo, 
     nextContactPersonEmail, 
@@ -56,6 +57,7 @@ export const preparePAQuery =(form, user, personalAcct) =>{
       `residentialAddress`, 
       `formNo`, 
       `position`, 
+      `occupation`, 
       `nextContactPersonName`, 
       `nextContactPersonPhoneNo`, 
       `nextContactPersonEmail`, 
@@ -89,6 +91,7 @@ export const preparePAQuery =(form, user, personalAcct) =>{
         residentialAddress, 
         formNo, 
         position, 
+        occupation,
         nextContactPersonName, 
         nextContactPersonPhoneNo, 
         nextContactPersonEmail, 
@@ -108,6 +111,7 @@ export const preparePAQuery =(form, user, personalAcct) =>{
         createdAt || dateFmtISO(),  
         dateFmtISO()]],
     types:[
+      "VARCHAR",
       "VARCHAR",
       "VARCHAR",
       "VARCHAR",

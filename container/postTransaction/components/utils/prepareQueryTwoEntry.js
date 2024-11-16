@@ -98,7 +98,7 @@ function getVoucher(typeCodeDr, typeCodeCr, tranSheet){
 
 
 export function prepareQueryTwoEntryTrans({transSheetForm, user, postingFrom, chartOfAccounts}) {
-    const url =  getLinkPostAndRetrieve();
+    const url =  getLinkPostAndRetrieve(user.companyId);
     const transactions = [];
     const transactionsDetails = [];
     
@@ -138,7 +138,7 @@ export function prepareQueryTwoEntryTrans({transSheetForm, user, postingFrom, ch
 
     
 export function prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans}) {
-    const url =  getLinkPostAndRetrieve();
+    const url =  getLinkPostAndRetrieve(user.companyId);
 
 
     const transactionsDetails = [];

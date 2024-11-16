@@ -66,7 +66,7 @@ export const handleResetUserPassword= async(updateForm, fetchedUser, session)=>{
     const defaultSecret =  generatePassword(8);
     const pwdHarshed =  await bcrypt.hash(defaultSecret, 10);
 
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(companyId).patch;
     const body = {
       act: "UPDATE",
       whereField:"id",

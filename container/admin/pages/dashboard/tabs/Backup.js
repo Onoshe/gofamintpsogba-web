@@ -15,11 +15,11 @@ const Backup = ({backupUrl}) => {
   }
   async function getFiles(url){
     const data = {
-      "act": "BACKUP_DB",
+      "act": "DB_BACKUP",
       "type": "GETFILES_SQL"
     };
     const data_csv = {
-      "act": "BACKUP_DB",
+      "act": "DB_BACKUP",
       "type": "GETFILES_CSV"
     };
   
@@ -34,7 +34,7 @@ const Backup = ({backupUrl}) => {
   const handleBackup = async (act)=>{
     const data = {
       "desc":"For backup, type = MYSQL || CSV. To fetch backups: type = GETFILES_CSV || GETFILES_SQL",
-      "act": "BACKUP_DB",
+      "act": "DB_BACKUP",
       "type": act,
       "dir":act === "CSV"? "backup_csv" : "backup_sql"
     }

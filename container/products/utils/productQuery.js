@@ -26,11 +26,11 @@ const typesArr = [
   "VARCHAR",
   "VARCHAR"
 ];
-const url = getLinkPostTrans().post;
-const urlPatch = getLinkPostTrans().patch;
+
 
 
 export const productInsertQuery =(form, user) =>{
+  const url = getLinkPostTrans(user.companyId).post;
   const {
     productName,
     productCode, 
@@ -69,6 +69,8 @@ export const productInsertQuery =(form, user) =>{
 
 
 export const productUpdateQuery =(form, user) =>{
+  const urlPatch = getLinkPostTrans(user.companyId).patch;
+
   const {id,
     productName,
     productCode, 

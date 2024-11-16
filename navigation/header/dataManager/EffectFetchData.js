@@ -34,12 +34,12 @@ const EffectFetchData = ({ session}) => {
 
   const fetchSettings = async ()=>{
       //Dispatch Client Settings
-      const url = getLinkFetchTable({table:domain+"_settings"});
+      const url = getLinkFetchTable({table:domain+"_settings", domain});
       const settings = await getRequest(url).then((res)=> res);
       dispatchSettings(settings);
 
       //Dispatch client activities
-      const urlLinkAct = getLinkFetchTable({table:domain+"_activitylog"});
+      const urlLinkAct = getLinkFetchTable({table:domain+"_activitylog", domain});
       const activityLog = await getRequest(urlLinkAct);
       if(activityLog?.data?.length){
         dispatchActivityLog(activityLog.data)
@@ -64,7 +64,7 @@ const EffectFetchData = ({ session}) => {
   const fetchBasicData = async ()=>{
     //Dispatch subscriptions
     const urlLink = `_subscriptions&c=companyDomain&v=${domain}`;
-    const urlSub = getLinkFetchTable({table:urlLink});
+    const urlSub = getLinkFetchTable({table:urlLink, domain});
     const subHistory = await getRequest(urlSub);
     if(subHistory?.data?.length){
       dispatchSubscriptions(subHistory.data)
@@ -72,14 +72,14 @@ const EffectFetchData = ({ session}) => {
 
     //Dispatch settings
     const st = `_settings`;
-    const urlSt = getLinkFetchTable({table:st});
+    const urlSt = getLinkFetchTable({table:st, domain});
     const stData = await getRequest(urlSt);
     if(stData?.data?.length){
       dispatchGeneralSettings(stData.data)
     }
     //Fetch clients- companyDomain: ADMIN (which hold QuickRecords info) & Others
     const admin = `_clients&c=companyDomain&v=ADMIN`;
-    const urlAdmin = getLinkFetchTable({table:admin});
+    const urlAdmin = getLinkFetchTable({table:admin, domain});
     const adminData = await getRequest(urlAdmin);
     if(adminData?.data?.length){
       dispatchClientAdmin(adminData.data[0])
@@ -87,7 +87,7 @@ const EffectFetchData = ({ session}) => {
 
     //Fetch clients- companyDomain: ADMIN (which hold QuickRecords info) & Others
     const cl = `_clients&c=companyDomain&v=${domain}`;
-    const urlCl = getLinkFetchTable({table:cl});
+    const urlCl = getLinkFetchTable({table:cl, domain});
     const clData = await getRequest(urlCl);
     if(clData?.data?.length){
       dispatchClientData(clData.data[0])

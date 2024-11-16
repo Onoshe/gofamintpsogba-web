@@ -33,7 +33,7 @@ function updateResetPassword(user, domain){
     const resetCode = getUniqueRandomNumbers(0, 9, 6, true);
     const expiredTime = getExpirationTime(20, true);
     //console.log(resetCode);
-    const url = getLinkPostUser();
+    const url = getLinkPostUser(domain);
     const body = {
         "act":"UPDATE",
         "table":domain+"_usersaccount",

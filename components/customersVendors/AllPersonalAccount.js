@@ -18,7 +18,7 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
 
   const [showAllRows, setShowAllRows] = React.useState(false);
 
-  const rowKeysMain = ['edit', 'type', 'title', 'accountCode', 'firstname', 'lastname', 'othernames',  'formNo', 'dob', 'phoneNo', 'email', 'accountGroup', 'residentialAddress'];
+  const rowKeysMain = ['edit', 'type', 'title', 'accountCode', 'firstname', 'lastname', 'othernames',  'formNo', 'dob', 'phoneNo', 'email', 'occupation', 'accountGroup', 'residentialAddress'];
   const rowKeysOthers = ['position', 'nextContactPersonName', 'nextContactPersonPhoneNo', 'nextContactPersonEmail', 'companyName', 'companyPhoneNo', 'companyEmail', 'companyAddress', 
   'businessType', 'region', 'country', 'state', 'zip', 'registeredDate', 'info'];
 
@@ -31,7 +31,7 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
                       {title:'Next Contact Person Email', name:'nextContactPersonEmail'}, {title:'Company Name', name:'companyName'}, {title:'Company Phone No', name:'companyPhoneNo'}, {title:'Company Email', name:'companyEmail'}, 
                       {title:'Company Address', name:'companyAddress'}, {title:'Buisness Type', name:'businessType'}, {title:'Region', name:'region'}, {title:'Country', name:'country'}, {title:'State', name:'state'}, {title:'Zip Code', name:'zip'},
                       {title:'Registered Date', name:'registeredDate'}, {title:'Additional Information', name:'info'},
-                      {title:'Group', name:'accountGroup'}];
+                      {title:'Group', name:'accountGroup'}, {title:'Occupation', name:'occupation'}];
 
   return (
     <div className='w-[lg:w-[calc(100vw-300px)] mx-4 overflow-x-auto overflow-hidden'>

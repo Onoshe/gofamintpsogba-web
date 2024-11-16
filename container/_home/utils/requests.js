@@ -14,7 +14,7 @@ async function postQuery(form, client, domain){
     let userId = `${form.firstname}.${form.lastname}`.toLowerCase();
      userId = `${client.companyDomain.toUpperCase()}@${userId}`;
     
-    const {postUserLink} = getLinkRegisterDemoAcct(userId);
+    const {postUserLink} = getLinkRegisterDemoAcct(userId, client.companyDomain);
     const {verifyUserIdLink} = getLinkUserData({form:{userId}, domain});
     const userIdExist = await getRequest(verifyUserIdLink).then((res)=> res);
 

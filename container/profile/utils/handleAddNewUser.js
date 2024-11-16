@@ -46,7 +46,7 @@ export const handleAddNewUser= async(updateForm, session)=>{
 }
 
  async function getInsertParams(companyId, values){
-    const url = getLinkPostTrans().post;
+    const url = getLinkPostTrans(companyId).post;
     const companyDomain = companyId.toLowerCase();
     const defaultSecret =  generatePassword(8);
     const pwdHarshed =  await bcrypt.hash(defaultSecret, 10);

@@ -14,12 +14,15 @@ import CreateUser from './tabs/CreateUser';
 import { getLinksAdmin } from '@/lib/apiRequest/urlLinks';
 import CreateAccount from './tabs/CreateAccount';
 import Backup from './tabs/Backup';
+import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 
 
 
 
-const IndexDashboard = ({}) => {
-    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl, backupUrl, subscriptionsUrl, settingsUrl} = getLinksAdmin();
+const IndexDashboard = ({ssUser}) => {
+    const {user} = useAuthCustom(ssUser);
+    const domain = user.companyId?.split('@')[0]?.toLowerCase();
+    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl, backupUrl, subscriptionsUrl, settingsUrl} = getLinksAdmin(domain);
     const usersAccount = useSWRFetcher(usersAccountUrl);
     const clientsData = useSWRFetcher(clientsDataUr);
     const accessData = useSWRFetcher(accessDataUrl);
@@ -63,7 +66,7 @@ const IndexDashboard = ({}) => {
  const displayTabMain = {
     DASHBOARD:<Dashboard/>,
     MANAGECLIENTS:<ManageClients clientsData={clientsDataFmt} handleRevalidate={handleRevalidate} clientTables={clientTables}/>,
-    SQLQUERY:<SQLQuery clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
+    SQLQUERY:<SQLQuery user={user} clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     CREATECLIENT:<CreateClient clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     CREATEACCOUNT:<CreateAccount clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     CREATEUSER:<CreateUser clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,

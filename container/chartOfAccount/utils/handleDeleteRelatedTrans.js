@@ -24,7 +24,7 @@ export const handleDeleteAffectedTransactions = async ({user, t, c})=>{
     const fetchedData = await getDeleteAffectedTransactions({user, t, c});
 
     if(fetchedData?.transIds?.length){
-        const multiRowsUpdate = getLinkMultiRowsUpdate();
+        const multiRowsUpdate = getLinkMultiRowsUpdate(user.companyId);
         const body = {
             "act":"PUT",
             "table":user.companyId+"_transactions",

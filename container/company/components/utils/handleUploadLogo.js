@@ -9,8 +9,9 @@ const { prepareQuerySettings, updateQuerySettings } = require("./prepareQuerySet
 export const handleUploadLogo = async ({base64String, user, notify, handleReset, dispatchRefreshSettingsCount})=>{
     const logoLink = `${user?.companyId+"_settings"}&c=slug&v=company-logo`;
     const logoLinkQR = `_settings&c=slug&v=quickrecords-logo`;
+    const domain = user.companyId.toLowerCase();
 
-    const urlLink = getLinkFetchTable({table:logoLink});
+    const urlLink = getLinkFetchTable({table:logoLink, domain});
     const dataRes = await getRequest(urlLink).then((res)=> res);
     //console.log(dataRes, base64String, user);
     //return
@@ -52,7 +53,7 @@ export const handleUploadQuickRecordsLogo = async ({base64String, notify, handle
     const logoLink = `_settings&c=slug&v=quickrecords-logo`;
 
         //Update
-        const url = getLinkPostTrans().patch; 
+        const url = getLinkPostTrans('demo').patch; 
         const imgBlob = base64String.file;           
         let body = {
             act: "UPDATE",

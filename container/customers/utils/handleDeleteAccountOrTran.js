@@ -14,7 +14,7 @@ import {  getLinkPostTrans } from '@/lib/apiRequest/urlLinks';
 
 export const handleDeleteAccountOrTran = async ({user, whereVal, tableName, showConfirm, notify, deletedAcct, showConfirmObj, setShowConfirm, runDispatchClientDataCall})=>{
 
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(user.companyId).patch;
     let body = {
       act: "UPDATE",
       whereField:"id",

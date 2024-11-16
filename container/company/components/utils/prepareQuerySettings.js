@@ -18,7 +18,7 @@ const postFields = [
 export function prepareQuerySettings({user, postFields, postValues}) {
     const postFieldsFmt = [...postFields, "createdBy", "createdAt"];
     const postValuesFmt = [...postValues,  user.userId, dateFmtISO()];
-    const url =  getLinkPostAndRetrieve();
+    const url =  getLinkPostAndRetrieve(user.companyId);
     const postTypes = postFieldsFmt.map((dt)=> "VARCHAR");
     
     let body = {
@@ -34,7 +34,7 @@ export function prepareQuerySettings({user, postFields, postValues}) {
 export function updateQuerySettings({user, postFields, postValues, id}) {
     const postFieldsFmt = [...postFields, "createdBy", "createdAt"];
     const postValuesFmt = [...postValues,  user.userId, dateFmtISO()];
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(user.companyId).patch;
     const postTypes = postFieldsFmt.map((dt)=> "VARCHAR");
     
     let body = {
