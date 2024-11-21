@@ -63,7 +63,7 @@ const ManageClients = ({clientsData, handleRevalidate, clientTables}) => {
     const createTables = ['COASTRUCTURE', 'CHARTOFACCOUNT', 'CUSTOMERS', 'VENDORS', 'PRODUCTS', 'TRANSACTIONSDETAILS', 'TRANSACTIONS', 'ACTIVITYLOG', 'USERSACCOUNT','SETTINGS', 'RECONCILIATION'];
     const insertTables = ['COASTRUCTURE', 'CHARTOFACCOUNT', 'CUSTOMERS', 'VENDORS', 'PRODUCTS', ];
     const dropTables = ['COASTRUCTURE', 'CHARTOFACCOUNT', 'CUSTOMERS', 'VENDORS', 'PRODUCTS', 'TRANSACTIONSDETAILS', 'TRANSACTIONS', 'ACTIVITYLOG', 'USERSACCOUNT', 'SETTINGS', 'RECONCILIATION'];
-    if(form.actType === "CREATE"){
+    if(form.actType === "CREATE" || form.actType === "ALTER"){
         const tables = createTables.map((el)=> {return {title:el}});
         setCheckboxData(tables);
     }else if(form.actType === "INSERT"){
@@ -110,7 +110,13 @@ const ManageClients = ({clientsData, handleRevalidate, clientTables}) => {
                                 checked={form.actType === "DEACTIVATE"}
                                 onChange={onChangeHandler}
                             />
-                            <RadioBtn title="REMOVE"
+                            <RadioBtn title="ALTER"
+                                name="RADIOACT"
+                                value="ALTER"
+                                checked={form.actType === "ALTER"}
+                                onChange={onChangeHandler}
+                            />
+                            <RadioBtn title="DROP"
                                 name="RADIOACT"
                                 value="REMOVE"
                                 checked={form.actType === "REMOVE"}
@@ -134,6 +140,7 @@ const ManageClients = ({clientsData, handleRevalidate, clientTables}) => {
                         />
                          {!["ACTIVATE", "DEACTIVATE"].includes(form?.actType) &&
                          <><CheckboxSingle
+                            contStyle={`${form?.actType === "ALTER" || form?.actType === "CREATE"? 'hidden' : ''}`}
                             title="Remove all Client Tables"
                             form={form}
                             name="autoRemoveTables"
@@ -182,6 +189,7 @@ var actTypeMsg = {
     INSERT: "Insert default data into new Client's Table",
     ACTIVATE: "Activate Client's account",
     DEACTIVATE: "Deactivate Client's account",
-    REMOVE: "Delete Client's account",
+    REMOVE: "Drop/Delete Client's account and database",
+    ALTER: "Delete a Table",
     DROP: "Delete Client's Table(s)",
 };

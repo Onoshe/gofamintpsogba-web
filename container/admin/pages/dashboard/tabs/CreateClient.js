@@ -34,8 +34,9 @@ const CreateClient = ({clientsData, handleRevalidate}) => {
   
    const handleSubmit = async (e)=>{
         e.preventDefault();
-       await handleCreateClient(form, alert, setAlert, handleRevalidate)
-       .then((res)=> {if(res.ok)setForm({autoCreateTables:true})});
+       //return console.log(form);
+       await handleCreateClient(form, alert, setAlert, handleRevalidate, setForm);
+       //setAlert({...alert, msg:'', msgTitle:"Client with domain name '"+resData.body.domain+"' and tables created successfully", type:'success', show:true});
    }
 
 

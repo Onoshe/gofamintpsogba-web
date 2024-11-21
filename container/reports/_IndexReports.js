@@ -61,8 +61,8 @@ const IndexReports = ({ssUser}) => {
   const currentReportTab = getCurrentReportName(reportName);
   const companyLogoFile = getCompanyLogo(settings);
   const windowDimen = useWindowDimensions();  
-  
-
+    
+  //console.log(ledgerAccts)
   const handleReport =(report)=>{
       //console.log(report);
   }

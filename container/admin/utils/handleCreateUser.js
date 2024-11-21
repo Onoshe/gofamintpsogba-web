@@ -8,7 +8,6 @@ import { getLinkForgotPassword } from "@/lib/apiRequest/urlLinks";
 
 export const handleCreateUser = async (form, alert, setAlert, handleRevalidate, clientsData)=>{
 
-
     if(!form.firstname || !form.lastname || !form.domain || !form.email || !form.role || !form.inactive ||
         !form.password || !form.passcode || !form.passcodeSlug){
             setAlert({...alert, msg:'Please enter all the required fields', type:'error', show:true});

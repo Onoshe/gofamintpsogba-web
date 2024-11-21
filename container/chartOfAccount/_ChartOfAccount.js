@@ -77,7 +77,10 @@ const ChartOfAccount = ({ssUser}) => {
 
   const handleClickRowFunction = async (el)=>{
     const {key, row} = el;
+    //return console.log(row, key);
     if(row.createdBy === "DEMO") return;
+    if(row.typeCode == controlAcctsCode.retainedEarnings && key === "delete") return;
+
     const perms = await getPermissions({user, act:pmsActs.EDIT_COA, form:[row]});
     if(!perms.permit) return notify("error", perms.msg);
 
@@ -86,7 +89,7 @@ const ChartOfAccount = ({ssUser}) => {
   const coaStructureWithoutRetEarnings = coaStructure?.filter((dt)=> dt.name.toLowerCase() !== "retainedearnings");
   const coaAcct = mapChartOfAccountForDisplay(chartOfAccounts, coaStructure);
   //console.log(chartOfAccounts, coaStructure)
-  //console.log(coaAcct);
+  //console.log(coaAcct, chartOfAccounts)
 
 
   const handleInfoMsg = (type, msg)=>{

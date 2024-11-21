@@ -8,7 +8,9 @@ function LedgerSelect({showLedgers, handleSelectedLedger, isReportPage,  handleC
 
     const genLedgerCodesArr = genLedgerCodes.filter(code=> code !== "TOTAL");
     
-  const showPage = isReportPage? 'flex' : showLedgers? 'flex z-50' :'hidden';
+    const showPage = isReportPage? 'flex' : showLedgers? 'flex z-50' :'hidden';
+
+   // console.log(genLedgerCodesArr, processedLedgers);
   return (
     <div className={`fixed w-full bg-blue-100/70 pt-3 h-full justify-center  ${showPage}`} >
         <div className={`bg-sky-100 text-[12px] smc:text-sm  relative shadow-lg p-4 h-fit border border-blue-600 text-gray-600 rounded-md lg:-ml-[250px]`}>

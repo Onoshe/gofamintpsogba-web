@@ -16,13 +16,15 @@ import ToolsBarUpload from './ToolsBarUpload'
 
 
 const CreatePersonalAccount = ({ handleUpload, useUploadedForm, setUploadedForm, formData, setFormData,personalAcctType, handleSubmit, 
-    infoMsgByEntry, setInfoMsgByEntry, uploadInfo, editForm,  handleInfoMsg, handleCancel, showCreateBtn, handleCreateMultiPersonalAccts, accountGroups}) => {
+    infoMsgByEntry, setInfoMsgByEntry, uploadInfo, editForm,  handleInfoMsg, handleCancel, showCreateBtn, handleCreateMultiPersonalAccts, accountGroups, uploading}) => {
     const [stateCreate, dispatchCreate] = useReducer(reducerCreateByUpload,  initStateCreateByUpload);
     const {file,table, infoMsg, checkedBtn, checkedEditBtn, isDropped, isDragging, selected} = stateCreate;
     const [selectedOption, setSelectedOption] = React.useState({});
     const [group, setGroup] = React.useState("NEW");
     const [editFormCheck, setEditFormCheck] = React.useState(editForm);
     
+   
+
     const handleGetFileExtension=()=>{
       return getFileExtension(file);
     }
@@ -155,12 +157,13 @@ const CreatePersonalAccount = ({ handleUpload, useUploadedForm, setUploadedForm,
                 />
                   
                   <br/><br/><br/><br/><br/>
-
+                 
                   {showCreateBtn && 
                     <div className='fixed bottom-0 bg-blue-50 w-full'>
                       <div className='flex flex-row gap-4 p-4 '>
-                            <input type='submit' className="btn btn-info btn-sm px-10" value="Create" 
+                            <input type='submit' disabled={uploading} className="btn btn-info btn-sm px-10" value="Create" 
                               onClick={handleCreateMultiPersonalAccts}/>
+                            {uploading? <p className='inline-flex px-3'>Uploading, please wait ....</p> : <></>}
                       </div>
                     </div>}
               </div>

@@ -56,12 +56,11 @@ const IndexProfile = ({ssUser}) => {
   const userId = session?.user?.userId;
   let userIdImg = userId?.replace(".", "_");
   const userPhoto = getImageLink(userIdImg);
-  const showRegUsers = user.role.toLowerCase() === "admin";
+  const showRegUsers = user?.role?.toLowerCase() === "admin";
   //console.log(userPhoto)
   //userIdImg += ".jpg";
   const [file, setFile] = React.useState(null);
-  //console.log(generalSettings)
-  //console.log(usersAll, generalSettings, planLimit);
+  //console.log(subscriptions, generalSettings, planLimit);
 
   const notify = (type, msg) => toast[type](msg, {
     position: "top-right",

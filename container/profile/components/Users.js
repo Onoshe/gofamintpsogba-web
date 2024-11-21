@@ -12,6 +12,7 @@ const Users = ({users, handleClickCell, handleAddUser, planLimit}) => {
     const adminClass = "bg-gray-200 text-black py-1 px-2 rounded-sm";
     const resetClassName = "bg-red-400 text-white py-1 px-2 rounded-sm cursor-pointer active:bg-red-300 hover:bg-red-500";
 
+    //console.log(users, planLimit)
  
     if(users?.length){
         rowKeys = Object.keys(users[0]);
@@ -50,8 +51,10 @@ const Users = ({users, handleClickCell, handleAddUser, planLimit}) => {
             classNameRowsTd="py-2"
         />
         <br/>
-        <button className={`btn btn-sm text-[12px]  ${users?.length >= planLimit? 'btn-disabled' : 'btn-accent'}`} onClick={handleAddUser}>Add New User</button>
-        <p className={`text-sm text-red-700 italic py-2 ${users?.length >= planLimit? '' : 'hidden'}`}>You have reach your maximum quota. To be able to add more users, kindly upgrade to a higher plan</p>
+        <div className={`${!users?.length || !planLimit? 'hidden' : ''}`}>
+          <button className={`btn btn-sm text-[12px]  ${users?.length >= planLimit? 'btn-disabled' : 'btn-accent'}`} onClick={handleAddUser}>Add New User</button>
+          <p className={`text-sm text-red-700 italic py-2 ${users?.length >= planLimit? '' : 'hidden'}`}>You have reach your maximum quota. To be able to add more users, kindly upgrade to a higher plan</p>
+        </div>
     </div>
   )
 }

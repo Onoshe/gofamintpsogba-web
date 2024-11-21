@@ -35,7 +35,7 @@ const Header = ({ssUser}) => {
   //const pathname = usePathname();
 
   let userInit = 'NA';
-  //console.log(pathname)
+  //console.log(session)
   
   const handleDropdown =()=>{
     if(userDropdown) setUserDropdown(false)
@@ -95,9 +95,11 @@ const Header = ({ssUser}) => {
     const companyIdUrl = pathname?.split("/")[1];
     //console.log(companyIdUrl !== session.user.companyId || !allowedPaths.includes(pathname))
     if(session?.user?.companyId && companyIdUrl){
-      const allowedPaths = ["/register", "/forgot-password", "/change-password", "/reset-password", "login-new=user"];
+      const allowedPaths = ["/register", "/forgot-password", "/change-password", "/reset-password", "login-new-user"];
       if(!allowedPaths.includes(pathname)){
-        if(companyIdUrl !== session.user.companyId){
+        //console.log(companyIdUrl, session.user.companyId);
+        //return
+        if(companyIdUrl.toLowerCase() !== session.user.companyId.toLowerCase()){
            router.push("/");
            handleLogout()
           //console.log(companyIdUrl, session.user.companyId)
@@ -124,7 +126,7 @@ const Header = ({ssUser}) => {
   },[]);
 
 
-  //console.log(status)
+  //console.log(user)
 
   //if(isProduction && !isOnline) return <NetworkError/>;
   //console.log(transReady)

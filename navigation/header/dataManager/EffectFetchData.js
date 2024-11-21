@@ -15,6 +15,7 @@ const EffectFetchData = ({ session}) => {
     const {settings, dispatchSettings, fetchSettingsCall, dispatchFetchSettingsCall, dispatchUser, dispatchUsers, refreshSettingsCount, dispatchSubscriptions, 
       dispatchActivityLog, generalSettings, client_Admin, clientData, dispatchGeneralSettings, dispatchClientAdmin, dispatchClientData} = useStoreHeader((state) => state);
   
+  const genDomain = "demo";
     
   const domain = session?.user?.companyId;
   const userId = session?.user?.userId;
@@ -64,7 +65,7 @@ const EffectFetchData = ({ session}) => {
   const fetchBasicData = async ()=>{
     //Dispatch subscriptions
     const urlLink = `_subscriptions&c=companyDomain&v=${domain}`;
-    const urlSub = getLinkFetchTable({table:urlLink, domain});
+    const urlSub = getLinkFetchTable({table:urlLink, domain:genDomain});
     const subHistory = await getRequest(urlSub);
     if(subHistory?.data?.length){
       dispatchSubscriptions(subHistory.data)
@@ -72,14 +73,14 @@ const EffectFetchData = ({ session}) => {
 
     //Dispatch settings
     const st = `_settings`;
-    const urlSt = getLinkFetchTable({table:st, domain});
+    const urlSt = getLinkFetchTable({table:st, domain:genDomain});
     const stData = await getRequest(urlSt);
     if(stData?.data?.length){
       dispatchGeneralSettings(stData.data)
     }
     //Fetch clients- companyDomain: ADMIN (which hold QuickRecords info) & Others
     const admin = `_clients&c=companyDomain&v=ADMIN`;
-    const urlAdmin = getLinkFetchTable({table:admin, domain});
+    const urlAdmin = getLinkFetchTable({table:admin, domain:genDomain});
     const adminData = await getRequest(urlAdmin);
     if(adminData?.data?.length){
       dispatchClientAdmin(adminData.data[0])
@@ -87,7 +88,7 @@ const EffectFetchData = ({ session}) => {
 
     //Fetch clients- companyDomain: ADMIN (which hold QuickRecords info) & Others
     const cl = `_clients&c=companyDomain&v=${domain}`;
-    const urlCl = getLinkFetchTable({table:cl, domain});
+    const urlCl = getLinkFetchTable({table:cl, domain:genDomain});
     const clData = await getRequest(urlCl);
     if(clData?.data?.length){
       dispatchClientData(clData.data[0])

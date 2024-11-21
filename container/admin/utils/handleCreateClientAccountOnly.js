@@ -3,7 +3,7 @@ import { createClientAccountQuery, createClientQuery, manageClientQuery } from "
 import { patchRequest } from "@/lib/apiRequest/patchRequest";
 import { getRequest } from "@/lib/apiRequest/getRequest";
 import { handlePasscode } from "./handlePasscode";
-import { getLinkAdminCreateClient, getLinkClientServer, getLinkFetchTableWithConds } from "@/lib/apiRequest/urlLinks";
+import { getLinkFetchTableWithConds } from "@/lib/apiRequest/urlLinks";
 
 
 export const dbTables = ["COASTRUCTURE",  "CHARTOFACCOUNT",  "PRODUCTS" ,  "CUSTOMERS", "VENDORS","TRANSACTIONS","TRANSACTIONSDETAILS", "USERSACCOUNT","ACTIVITYLOG", "SETTINGS"];

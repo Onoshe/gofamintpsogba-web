@@ -5,7 +5,8 @@ function getEditClass(dt){
   return  dt.createdBy==="DEMO"? 'text-gray-400' :'cursor-pointer text-blue-700 hover:text-[blue]'
 }
 function getDeleteClass(dt){
-    return  dt.createdBy==="DEMO"? 'text-gray-400' :'text-red-700 cursor-pointer hover:text-[red]'
+    //Disable retainedEarnings & DEMO data from deletion
+    return  dt.createdBy==="DEMO" || dt.typeCode =="321"? 'text-gray-400' :'text-red-700 cursor-pointer hover:text-[red]'
   }
 
 export const getDefaultCOA = (chartOfAccounts)=>{

@@ -37,7 +37,8 @@ const Vendors = ({ssUser}) => {
   const [searchValue, setSearchValue] = React.useState('');
   const [vendorsDisplay, setVendorsDisplay] = React.useState([...vendors]);
   const [showConfirm, setShowConfirm] = React.useState({show:false, cell:{}, title:'', msg:'', showInput:false, inputVal:""});
-  
+  const [uploading, setUploading] = React.useState(null);
+
   //Uploaded file accountCode is of type accountCode:00007. Format to accountCode:C-00007
   if(uploadedForm?.rows?.length){
     uploadedForm.rows = uploadedForm.rows.map((dt)=> {
@@ -70,8 +71,14 @@ const Vendors = ({ssUser}) => {
         setEditForm(act==='EDIT');
         if(act !=="EDIT"){setFormInput({});}
   }
-  const  handleCreateMultiPersonalAccts =()=>{
-    handleSubmitMultiAccts({forms:uploadedForm,  handleInfoMsg,  personalAcct:"vendors", runDispatchClientDataCall, setFormInput, user, setActiveTab});
+  const  handleCreateMultiPersonalAccts = async ()=>{ 
+    setUploading('uploading');
+    const perms = await getPermissions({user, act:pmsActs.CREATE_PERSONAL_ACCOUNT, form:[formInput]});
+    if(!perms.permit) return notify("error", perms.msg);
+
+   await  handleSubmitMultiAccts({forms:uploadedForm,  handleInfoMsg,  personalAcct:"vendors", runDispatchClientDataCall, setFormInput, user, setActiveTab})
+     .then(()=>{ setUploading(null);});
+
   };
 
   const handleUpload =(e)=>{
@@ -116,6 +123,7 @@ const handleConfirm = (act)=>{
 
    handleSubmit({e, formInput, setInfoMsg, handleInfoMsg,  personalAccts:vendors, handleActiveTab, dispatchVendors, setFormInput,
      user, runDispatchClientDataCall, setActiveTab, setFormInput, personalAcct:"vendors", handleClear});
+     
   }
 
   const handleSearch =(el)=>{
@@ -200,6 +208,7 @@ const handleConfirm = (act)=>{
         showCreateBtn={!uploadInfo?.error}
         handleCreateMultiPersonalAccts={handleCreateMultiPersonalAccts}
         accountGroups={accountGroups}
+        uploading={uploading}
       />
      } 
 

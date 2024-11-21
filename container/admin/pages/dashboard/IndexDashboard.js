@@ -11,10 +11,13 @@ import Access from './tabs/Access';
 import { ClientsCard, ClientsTablesCard, ExistingUsers, ExistingUsersCard, GeneralTablesCard } from './cards/DashboardCards';
 import { AccessCard } from './cards/DashboardAccess';
 import CreateUser from './tabs/CreateUser';
-import { getLinksAdmin } from '@/lib/apiRequest/urlLinks';
+import { getLinkFetchTable, getLinksAdmin } from '@/lib/apiRequest/urlLinks';
 import CreateAccount from './tabs/CreateAccount';
 import Backup from './tabs/Backup';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import { ClientsDatabase } from './cards/DashboardCards_More';
+import { sortArrayByKey } from '@/lib/sort/sortArrayByKey';
+import { getRequest } from '@/lib/apiRequest/getRequest';
 
 
 
@@ -22,10 +25,11 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 const IndexDashboard = ({ssUser}) => {
     const {user} = useAuthCustom(ssUser);
     const domain = user.companyId?.split('@')[0]?.toLowerCase();
-    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl, backupUrl, subscriptionsUrl, settingsUrl} = getLinksAdmin(domain);
+    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl, backupUrl, databasesUrl, subscriptionsUrl, settingsUrl} = getLinksAdmin(domain);
     const usersAccount = useSWRFetcher(usersAccountUrl);
     const clientsData = useSWRFetcher(clientsDataUr);
     const accessData = useSWRFetcher(accessDataUrl);
+    const databases = useSWRFetcher(databasesUrl);
     const dbTables = useSWRFetcher(dbTablesUrl); //t must be a valid table in the db
     //const dbSubscriptions = useSWRFetcher(subscriptionsUrl);
     //const dbSettings = useSWRFetcher(settingsUrl);
@@ -35,13 +39,29 @@ const IndexDashboard = ({ssUser}) => {
    const clientsDataFmt = clientsData?.data?.data || [];
    const accessDataFmt = accessData?.data?.data || [];
     const generalTables = dbTables?.data?.data?.filter((tb=> {return tb.TABLE_NAME.slice(0,1) == "_"}));
+    const demoTables = dbTables?.data?.data?.filter((tb=> {return tb.TABLE_NAME.slice(0,1) !== "_"}));
     const clientTables = dbTables?.data?.data?.filter((tb=> {return tb.TABLE_NAME.slice(0,1) != "_"}));
     const clientTablesGroup = groupByPrefix(clientTables, 'TABLE_NAME');
     const clientsKeys = Object.keys(clientTablesGroup);
     const usersAccountKeys = usersAccount?.data?.data? Object.keys(usersAccount?.data?.data) : [];
+    const databases_clients = databases.data;
+    sortArrayByKey(demoTables);
+    const companyDomains = clientsDataFmt?.reduce((cum, dt)=>{return [...cum, dt.companyDomain.toLowerCase()]},[]);
+    const companyDomainsOthers = companyDomains?.filter((dt)=> dt !== "demo" && dt !== "admin");
     //const [clientTableExist, setClientTableExist] = React.useState(false);   
+    const [usersAccountOthers, setUsersAccountOthers] = useState([]);
     
-    
+    const fetchUsersAccounts = async ()=>{
+        const accts = [];
+        for (let i = 0; i < companyDomainsOthers.length; i++) {
+            const dm = companyDomainsOthers[i];
+            const url =  getLinkFetchTable({table:dm+"_usersaccount", domain:dm, select:'userId,firstname,lastname,email,companyId,companyDomain,role'});
+            const dt = await getRequest(url);
+            accts.push(dt.data);
+            setUsersAccountOthers(accts)
+        }
+      };
+
    const handleRevalidate = (table) => {
         switch (table) {
             case table = 'USERSACCOUNT':
@@ -56,13 +76,21 @@ const IndexDashboard = ({ssUser}) => {
             case table = 'ACCESS':
                 accessData.mutate({ revalidate: true });
             break;
+            case table = 'DBS':
+                dbTables.mutate({ revalidate: true });
+            break;
             default:
                 break;
         }
+        fetchUsersAccounts();
   };
 
-  
 
+  React.useEffect(()=>{
+    if(companyDomainsOthers?.length && !usersAccountOthers.length)
+        fetchUsersAccounts();
+  },[companyDomainsOthers]);
+  
  const displayTabMain = {
     DASHBOARD:<Dashboard/>,
     MANAGECLIENTS:<ManageClients clientsData={clientsDataFmt} handleRevalidate={handleRevalidate} clientTables={clientTables}/>,
@@ -87,21 +115,34 @@ const IndexDashboard = ({ssUser}) => {
                     handleRevalidate={handleRevalidate}
                 />
                 <ExistingUsersCard
+                    title="Users Account"
                     handleRevalidate={handleRevalidate}
                     clientsKeys={usersAccountKeys}
                     clientTablesGroup={usersAccount?.data?.data}
                     activeTab={activeTabHome?.tab?.name}
+                    data={usersAccountOthers}
                 />
                 <GeneralTablesCard
+                    title="Demo Database"
                     activeTab={activeTabHome?.tab?.name}
                     handleRevalidate={handleRevalidate}
                     generalTables={generalTables}
+                    data={demoTables}
                 />
                 <ClientsTablesCard
+                    contStyle="hidden"
                     handleRevalidate={handleRevalidate}
                     clientsKeys={clientsKeys}
                     clientTablesGroup={clientTablesGroup}
                     activeTab={activeTabHome?.tab?.name}
+                />
+                <ClientsDatabase
+                    title="Clients Databases"
+                    handleRevalidate={handleRevalidate}
+                    clientsKeys={clientsKeys}
+                    clientTablesGroup={clientTablesGroup}
+                    activeTab={activeTabHome?.tab?.name}
+                    data={databases_clients}
                 />
                 <AccessCard
                     activeTab={activeTabHome?.tab?.name}

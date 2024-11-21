@@ -26,4 +26,29 @@ const AccordionClientsTables = ({title, titleStyle, clientTab, contentsStyle, co
 }
 
 
+export const AccordionClientsTables_Str = ({title, titleStyle, clientTab, contentsStyle, type, contStyle, table}) => {
+  return (
+    <div className={`collapse mb-3 collapse-arrow bg-white border border-gray-400 rounded-md ${contStyle}`}>
+        <input type="checkbox"/> 
+        <div className={`collapse-title bg-[#eee] ${titleStyle}`}>
+            {title}
+        </div>
+        <div className={`collapse-content ${contentsStyle}`}> 
+        {clientTab?.map((el, i)=>{
+            //const key = Object.keys(el);
+            //console.log(key)
+            return(
+                <div key={`${i}key`} className={`py-1 ${i===0? 'pt-3' :''}`}>
+                  {type !== "obj"? <>{i+1}. {el}</>
+                  :  <> {i+1}. {el.TABLE_NAME} - {el.TABLE_ROWS}</>
+                  }
+                </div>
+            )
+          })}
+        </div>
+    </div>
+  )
+}
+
+
 export default AccordionClientsTables

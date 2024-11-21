@@ -17,7 +17,7 @@ export function fetchQuery(form){
  
 
 async function createAccessQuery(form){
-  const url = getLinkPostAccess();
+  const url = getLinkPostAccess('demo');
   const pwdHarshed =  await bcrypt.hash(form.column1, 10);
   const {name, description, slug} = form;
   
@@ -38,7 +38,7 @@ async function createAccessQuery(form){
 
 
 async function updateAccessQuery(form){
-  const url = getLinkPostAccess();
+  const url = getLinkPostAccess('demo');
   const pwdHarshed =  await bcrypt.hash(form.newAccess, 10);
   
   let fields = ["column1", "updatedAt"];
@@ -61,7 +61,7 @@ async function updateAccessQuery(form){
 
 
 const manageClientQuery =(form, isClient, type) =>{
-    const url =  getLinkClientServer(form?.domain)[type? type : 'server']; //type = server || dev
+    const url =  getLinkClientServer('demo')[type? type : 'server']; //type = server || dev
     
     let body = {
       "db":form.db,
@@ -77,8 +77,9 @@ const createClientQuery =(form, act) =>{
   const {companyName, companyDomain, address, email, contactPersonFirstName, contactPersonLastName, contactPersonPhoneNo,
           contactPersonTitle, businessType, packagePlan, } = form;
   const companyDomainStr = companyDomain.trim().toLowerCase();
-  const urlClt = getLinkClientServer(companyDomainStr).server;
-  const url = getLinkPostClient(companyDomainStr);
+  const db = "demo";
+  const urlClt = getLinkClientServer(db).server;
+  const url = getLinkPostClient(db);
   let body = {
     act:act? act : "INSERT",
     table:'_clients',
@@ -146,7 +147,8 @@ export const createClientAccountQuery =(form, act) =>{
   const {companyName, companyDomain, address, email, contactPersonFirstName, contactPersonLastName, contactPersonPhoneNo,
           contactPersonTitle, businessType, packagePlan, } = form;
   const companyDomainStr = companyDomain.trim().toLowerCase();
-  const url = getLinkPostTrans(companyDomainStr);
+  const db = "demo";
+  const url = getLinkPostTrans(db);
   let body = {
     act:act,
     table:'_clients',

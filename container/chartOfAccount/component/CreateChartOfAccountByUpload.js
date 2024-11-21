@@ -161,7 +161,7 @@ const CreateChartOfAccountByUpload = ({stateCreate, dispatchCreate, chartOfAccou
           
           <div className='fixed bottom-0 bg-blue-50 w-full mt-100'>
               <div className='flex flex-row gap-4 p-4 '>
-                    <input type='submit' className={`btn  px-10  ${isLoading? 'btn-disabled' : 'btn-info'}`} value="Create" 
+                    <input type='submit' disabled={isLoading? 'disabled' : ''} className={`btn btn-sm  px-10 btn-info `} value="Create" 
                       onClick={handleSubmit}/>                
               </div>
           </div> 

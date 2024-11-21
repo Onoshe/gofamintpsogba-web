@@ -1,6 +1,6 @@
 
 import DashboardCard from '../../../components/reusableComponents/DashboardCard'
-import AccordionClientsTables from '../../../components/reusableComponents/AccordionClientsTables';
+import AccordionClientsTables, { AccordionClientsTables_Str } from '../../../components/reusableComponents/AccordionClientsTables';
 
 
 
@@ -31,13 +31,13 @@ export const ClientsCard = ({clientsData, handleRevalidate, activeTab}) => {
     )
   }
 
- export const ExistingUsers = ({handleRevalidate,data, activeTab}) => {
+ export const ExistingUsers = ({title, handleRevalidate,data, activeTab}) => {
    
     const displayOnTabs = ["DASHBOARD", "MANAGECLIENTS", "CREATECLIENT",];
 
     return (    
         <DashboardCard style={`flex-col gap-3 ${displayOnTabs.includes(activeTab)? 'flex' :'hidden'}`}
-              title="Existing Users">
+              title={title}>
               <p>List of Existing Users: Firstname Lastname - Username</p>
               <div className='flex flex-col gap-3 max-h-[40vh] overflow-y-auto'>
                 {data?.demo.map((el, i)=>{
@@ -58,23 +58,31 @@ export const ClientsCard = ({clientsData, handleRevalidate, activeTab}) => {
     )
   }
 
- export const GeneralTablesCard = ({handleRevalidate, generalTables, activeTab}) => {
+ export const GeneralTablesCard = ({handleRevalidate, generalTables, activeTab, title, data}) => {
    
     const displayOnTabs = ["DASHBOARD", "MANAGECLIENTS", "CREATECLIENT",];
 
     return (    
         <DashboardCard style={`flex-col gap-3 ${displayOnTabs.includes(activeTab)? 'flex' :'hidden'}`}
-              title="General Tables">
-              <p>List of Database General Tables: Table Name - Rows count</p>
+              title={title}>
+              <p className='text-blue-800'>List of General Tables: Table Name - Rows count</p>
               {generalTables?.map((el, i)=>{
                   //const key = Object.keys(el);
                   //console.log(key)
                   return(
-                      <div key={`${i}key`}>
+                      <div key={`${i}key`} className='pl-3'>
                       {i+1}. {el.TABLE_NAME} - {el.TABLE_ROWS}
                       </div>
                   )
               })}
+               <AccordionClientsTables_Str
+                    title={"List of Other Tables: "+data?.length+" tables"}
+                    titleStyle=""
+                    type="obj" 
+                    clientTab={data} 
+                    contentsStyle="" 
+                    contStyle=""
+                />
               <div className='flex justify-start mt-5'> 
                   <p className='bg-gray-200  active:bg-gray-100 hover:border-gray-500 hover:shadow-md cursor-pointer text-gray-800 py-2 px-5 w-fit border 
                       border-gray-400 rounded-md'
@@ -86,13 +94,13 @@ export const ClientsCard = ({clientsData, handleRevalidate, activeTab}) => {
   }
 
 
- export const ClientsTablesCard = ({handleRevalidate, clientsKeys, clientTablesGroup, activeTab}) => {
+ export const ClientsTablesCard = ({handleRevalidate, clientsKeys, clientTablesGroup, activeTab,contStyle}) => {
    
 
     const displayOnTabs = ["DASHBOARD", "MANAGECLIENTS", "CREATECLIENT",];
 
     return (    
-        <DashboardCard style={`flex-col gap-3 ${displayOnTabs.includes(activeTab)? 'flex' :'hidden'}`}
+        <DashboardCard style={`flex-col gap-3 ${displayOnTabs.includes(activeTab)? 'flex' :'hidden'} ${contStyle}`}
               title="Clients Tables">
               <p>List of Database Clients Tables: Table Name - Rows count</p>
               <div className='max-h-[600px] overflow-auto bg-slate-50 p-3'>
@@ -120,13 +128,12 @@ export const ClientsCard = ({clientsData, handleRevalidate, activeTab}) => {
   }
 
 
-  export const ExistingUsersCard = ({handleRevalidate, clientsKeys, clientTablesGroup, activeTab}) => {
+  export const ExistingUsersCard = ({title, data, handleRevalidate, clientsKeys, clientTablesGroup, activeTab}) => {
    
     const displayOnTabs = ["DASHBOARD", "MANAGECLIENTS", "CREATECLIENT",];
-
     return (    
         <DashboardCard style={`flex-col gap-3 ${displayOnTabs.includes(activeTab)? 'flex' :'hidden'}`}
-              title="Users Account">
+              title={title}>
               <p>List of Users Account: Table Name - Rows count</p>
               <div className='max-h-[600px] overflow-auto bg-slate-50 p-3'>
                   {
@@ -136,6 +143,22 @@ export const ClientsCard = ({clientsData, handleRevalidate, activeTab}) => {
                                   title={`${client?.toUpperCase()} Tables - ${clientTablesGroup[client].length} [${client}.] `}
                                   titleStyle="" 
                                   clientTab={clientTablesGroup[client]} 
+                                  contentsStyle="" 
+                                  contStyle=""
+                                  table="USERS"
+                              />
+                          )
+                      })
+                  }
+              </div>
+              <div className='max-h-[600px] overflow-auto bg-slate-50 p-3'>
+                  {
+                      data?.map((userArr, i)=>{
+                          return(
+                              <AccordionClientsTables key={`${i}`}
+                                  title={`${userArr[0]?.companyDomain?.toUpperCase()} Tables - ${userArr.length} [${userArr[0]?.companyDomain}.] `}
+                                  titleStyle="" 
+                                  clientTab={userArr} 
                                   contentsStyle="" 
                                   contStyle=""
                                   table="USERS"

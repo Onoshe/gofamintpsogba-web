@@ -19,13 +19,16 @@ const handleClickRow = async ({el, user, setFormInput, setShowBlind, setShowConf
     if(key === 'delete'){
 
       const affectedTrans = await getDeleteAffectedTransactions({user, t:'m', c:row?.accountCode});
+      
       if(affectedTrans?.transIds?.length){
-        const title = `${row?.accountCode}- ${row?.accountName} account affected ${affectedTrans.transIds.length} transactions!`
-        const msg= `${row?.accountCode} Account and all associated transactions will be deleted. Enter ${row.accountName}'s account code if you really want to continue`;
+        const acctCode = row?.accountCode || row?.productCode;
+        const acctName = row?.accountName || row?.productName;
+        const title = `${acctCode}- ${acctName} account affected ${affectedTrans.transIds.length} transactions!`
+        const msg= `${acctCode} Account and all associated transactions will be deleted. Enter ${acctName}'s account code if you really want to continue`;
         setShowConfirm({show:true, cell:el, title, msg, titleRed:true, showInput:true});
         setFormInput({...row, accountType:acctStructure.name, deleteAcct:true});
        }else{
-        const title = `Do you really want to delete account: ${row?.productCode}- ${row?.productName}?`
+        const title = `Do you really want to delete account: ${row?.productCode || row?.accountCode}- ${row?.productName || row?.accountName}?`
         const msg= "Please note that all transactions associated with this account will also be deleted.";
         setShowConfirm({show:true, showInput:false, cell:el, title, msg});
         setFormInput({...row, accountType:acctStructure.name, deleteAcct:true});

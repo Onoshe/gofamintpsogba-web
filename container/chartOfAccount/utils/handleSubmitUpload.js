@@ -37,7 +37,7 @@ const handleSubmitUpload = async ({formInput, user, coaStructure, runDispatchCli
               }else{
                 handleInfoMsg('error', res?.error || "Error in posting data");
               }
-            })
+            }).then(()=>{setIsLoading(false);})
        }
 }
 

@@ -46,7 +46,7 @@ import getOTPEmailBody from "@/components/htmlEmail/otpEmail";
 export function updateResetPassword(user, domain){
     const resetCode = getUniqueRandomNumbers(0, 9, 6, true);
     const expiredTime = getExpirationTime(20, true);
-    const url = getLinkPostTrans().patch;
+    const url = getLinkPostTrans(domain).patch;
     const info = "Password reset initiated by "+user?.userName || user?.userId;
     const body = {
         "act":"UPDATE",

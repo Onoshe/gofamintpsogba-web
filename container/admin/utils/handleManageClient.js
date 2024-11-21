@@ -3,6 +3,7 @@ import { manageClientQuery } from "./queries";
 import { patchRequest } from "@/lib/apiRequest/patchRequest";
 import { handlePasscode } from "./handlePasscode";
 import { dbTables,dbTablesRemove } from "./handleCreateClient";
+import { getLinkClientServer } from "@/lib/apiRequest/urlLinks";
 
 
 export const handleManageClient = async (form, alert, setAlert, handleRevalidate, clientTables)=>{
@@ -12,7 +13,7 @@ export const handleManageClient = async (form, alert, setAlert, handleRevalidate
             setAlert({...alert, msg:'Please enter all the required fields', type:'error', show:true});
         }else{
             
-        if(form.actType === "ACTIVATE" || form.actType === "DEACTIVATE" || form.actType === "REMOVE"){
+        if(form.actType === "ACTIVATE" || form.actType === "DEACTIVATE" || form.actType === "REMOVE" ){
             const {url, body} = manageClientQuery(form, 'ISCLIENT');
             const passcodeRes = await handlePasscode(form);
             if(!passcodeRes?.ok){
@@ -20,79 +21,65 @@ export const handleManageClient = async (form, alert, setAlert, handleRevalidate
             }else{
              //If table Exist for client domain
              if(form.actType === "REMOVE"){
-                if(form?.autoRemoveTables){
-                    //First remove tables
-                        const bodyFmt = {act:"DROP", tables:dbTablesRemove, "domain":form?.domain,};
-                        //console.log(bodyFmt)
-                        
-                        const coyTableExist = checkIfClientTableExist(clientTables, form.domain);
-                        //console.log(url, bodyFmt)
-                        if(coyTableExist){
-                            await patchRequest(url, bodyFmt)
-                            .then((res)=> {
-                                console.log(res)
-                                setAlert({...alert, msgTitle:'Tables for client with domain '+form.domain+' deleted successully', msg:'', type:'success', show:true});
-                                handleRevalidate('DBTABLES');
-                            });         
-                        }else{
-                           await runRemoveClient(url, body, alert, setAlert, handleRevalidate);   
-                        }
-                }else{
-                    const coyTableExist = checkIfClientTableExist(clientTables, form.domain);
-                    //console.log(coyTableExist)
-                    if(coyTableExist){
-                        return setAlert({...alert, msgTitle:'Client cannot be deleted.  Tables exist for client', msg:'', type:'error', show:true});     
-                    }else{
-                       await runRemoveClient(url, body, alert, setAlert, handleRevalidate);   
+                const domain = form.domain.toLowerCase();
+                const urlDrop = getLinkClientServer(domain).server;
+                const body = {
+                    "act":"DROP_CLIENT",
+                    "domain":domain,
+                    "clientId":form.clientId,
+                    "table":"_clients"
+                  };
+                await postRequest(urlDrop, body)
+                .then((res)=> {
+                    if(res.ok){
+                        setAlert({...alert, msgTitle:"Client, '"+domain+"' dropped successfully", msg:'', type:'success', show:true});
+                        handleRevalidate('DBS');
+                        handleRevalidate('CLIENTS');
+                        handleRevalidate('DBTABLES');
                     }
-                }
-                
+                }); 
              }else{
-                await runRemoveClient(url, body, alert, setAlert, handleRevalidate);
+                //await runRemoveClient(url, body, alert, setAlert, handleRevalidate);
              }    
             }
-        }else if(form.actType === "DROP"){
-            //First remove tables
-            form.domain = "DEMO";
-            const bodyFmt = {act:"DROP", tables:dbTablesRemove, "domain":form?.domain,};
-            //console.log(bodyFmt)
-            
-            const coyTableExist = checkIfClientTableExist(clientTables, form.domain);
-            //return console.log(coyTableExist, dbTablesRemove, form)
-            if(coyTableExist){
-                await patchRequest(url, bodyFmt)
-                .then((res)=> {
-                    //console.log(res)
-                    setAlert({...alert, msgTitle:'Tables for client with domain '+form.domain+' deleted successully', msg:'', type:'success', show:true});
-                    handleRevalidate('DBTABLES');
-                });         
-            }else{
-                await runRemoveClient(url, body, alert, setAlert, handleRevalidate);   
-            }
-        }else{ //CREATE
-               if(!form.tables.length){form.tables = []}; 
-                const {url, body} = manageClientQuery(form);
-                //return
+        }else if(form.actType === "CREATE" || form.actType === "ALTER"){ //Create tables if not exist
+               
+                if(!form.tables.length){
+                  return  setAlert({...alert, msgTitle:'Please, set tables to create', msg:'', type:'error', show:true});
+                }; 
+                const tablesToCreate = [];
+                form.tables.forEach(el => {
+                    if(el){tablesToCreate.push(el)}
+                });
                 const passcodeRes = await handlePasscode(form);
-                
                 if(!passcodeRes?.ok){
                     setAlert({...alert, msgTitle:'Incorrect passcode', msg:'', type:'error', show:true});
                 }else{
-                    await patchRequest(url, body)
-                        .then((res)=> {
-                            //console.log(res)
-                            if(!res?.ok){
-                                setAlert({...alert, msgTitle:res.error, type:'error', show:true});
-                            }else{
-                                setAlert({...alert, msgTitle:res?.msg? res?.msg : typeof res?.data == "string"? res.data : '', type:'success', show:true});
-                                handleRevalidate('DBTABLES');
-                                setAlert({...alert, msgTitle:"Tables created successfully", type:'success', show:true});
-                            }
-                        });
+                    const domain = form.domain.toLowerCase();
+                    const url = getLinkClientServer(domain).server;
+                    //if(form.actType === "CREATE"){
+                        const body = {
+                            "act":form.actType,
+                            "domain":domain,
+                            "tables":tablesToCreate
+                            //"table":domain+"_usersaccount"
+                        };
+                        await postRequest(url, body)
+                            .then((res)=> {
+                            // console.log(res)
+                                if(!res?.ok){
+                                    setAlert({...alert, msgTitle:res.error, type:'error', show:true});
+                                }else{
+                                    const msgTitle = form.actType==="CREATE"? "Tables created successfully" : "Tables deleted successfully";
+                                    setAlert({...alert, msgTitle:res?.msg? res?.msg : typeof res?.data == "string"? res.data : '', type:'success', show:true});
+                                    handleRevalidate('DBTABLES');
+                                    setAlert({...alert, msgTitle, type:'success', show:true});
+                                }
+                            });
+                    
                 }
-           // }else{
-           //     setAlert({...alert, msg:'Please select tables', type:'error', show:true});
-           // }
+        }else{
+            setAlert({...alert, msgTitle:'Unknown actType', msg:'', type:'error', show:true});
         }  
   }
 }
