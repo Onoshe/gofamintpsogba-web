@@ -1,6 +1,5 @@
 import React from 'react';
 import TransactionEntryRow from './TransactionEntryRow';
-import { getSubAccounts } from '../utils/getSubAccounts';
 import { getSubAccountsMultiEntry } from '../utils/getSubAccountsMultiEntry';
 import DropdownComponent from '@/components/forms/DropdownComponent';
 

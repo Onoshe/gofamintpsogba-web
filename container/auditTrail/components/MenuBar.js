@@ -11,7 +11,7 @@ import { GrTransaction } from 'react-icons/gr';
 
 
 
-const MenuBarBar = ({handleReportNav, handleExportToExcel, viewTransId, handleDetailReport, reportName, reportRows, reportRowKeys, 
+const MenuBarBar = ({handleReportNav, handleExportToExcel, handleExportAllToExcel, viewTransId, handleDetailReport, reportName, reportRows, reportRowKeys, 
     reportHeader, showBar, pdfData, pdfHeader, user, toastNotify, dateForm, setDateForm, handleActivityToggle, 
     handleMonthlySummaryToggle, headerRowsColsArr, companyLogoFile}) => {
     const [showDate, setShowDate] = React.useState(false);
@@ -75,6 +75,7 @@ const handleCustomDate =()=>{
                 handleOnChange={handleOnChangeDate}
                 handleCustomDate={handleCustomDate}
                 />:<></>}
+                
             <div className={`flex-row gap-3 items-center ${showBtns? 'flex' : 'hidden'}`}>
                 <div className='hover:tooltip-open tooltip tooltip-bottom' data-tip={'Export to Excel'}>
                     <ExcelIcon className={'fill-green-700  h-5 w-5 cursor-pointer hover:fill-green-500 active:fill-green-800'}
@@ -88,11 +89,17 @@ const handleCustomDate =()=>{
                 
              </div>
             </div>
-            <div>
-                <div className='hover:tooltip-open mx-2 tooltip tooltip-left' data-tip={'Posted Transactions'}>
-                    <GrTransaction className='text-[22px] text-red-900 cursor-pointer hover:text-red-600 active:text-red-700'
-                        onClick={()=>handleActivityToggle("TRAN")}
-                    />
+            <div className='flex flex-row gap-2 items-center'>   
+                  <div className='flex flex-row gap-2 border border-gray-300 px-2 py-[2px]'>  
+                    {!viewTransId && <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Export All Transactions'}>
+                        <ExcelIcon className={'fill-green-700  h-5 w-5 cursor-pointer hover:fill-green-500 active:fill-green-800'}
+                        onClick={handleExportAllToExcel}/>
+                    </div>}
+                    <div className='hover:tooltip-open mx-2 tooltip tooltip-left' data-tip={'Posted Transactions'}>
+                        <GrTransaction className='text-[22px] text-red-900 cursor-pointer hover:text-red-600 active:text-red-700'
+                            onClick={()=>handleActivityToggle("TRAN")}
+                        />
+                    </div>
                 </div>
                 <div className='hover:tooltip-open tooltip tooltip-left mx-2' data-tip={'Activities'}>
                     <AiOutlineHistory className='text-[22px] text-red-900 cursor-pointer hover:text-red-600 active:text-red-700'

@@ -137,7 +137,7 @@ export function prepareQueryTwoEntryTrans({transSheetForm, user, postingFrom, ch
 }
 
     
-export function prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans}) {
+export function prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans, jVoucher=''}) {
     const url =  getLinkPostAndRetrieve(user.companyId);
 
 
@@ -155,7 +155,7 @@ export function prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccount
         
         const debitSubAcctChart = debitSubs.find((dt)=> dt.accountCode == debitSub);
         const creditSubAcctChart = creditSubs.find((dt)=> dt.accountCode == creditSub);
-        const voucher = getVoucher(parseInt(debitAcctChart.typeCode),parseInt(creditAcctChart.typeCode), tranSheet);
+        const voucher = jVoucher === "JOURNAL"? "Journal" : getVoucher(parseInt(debitAcctChart.typeCode),parseInt(creditAcctChart.typeCode), tranSheet);
 
         const transDetailsFieldsDr = [
             insertedTran.id,

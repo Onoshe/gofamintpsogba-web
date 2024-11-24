@@ -1,4 +1,5 @@
 import { getHeadersTitle } from "@/container/reports/utils/ledgers/getHeaders"; 
+import { sortTableData } from "@/container/reports/utils/others/sortTableData";
 import { getStartAndEndDate } from "@/lib/dummyData/getStartAndEndDate";
 import { sortArrayByKey } from "@/lib/sort/sortArrayByKey";
 
@@ -9,7 +10,7 @@ const keysRecordTransSummary = ["date", "entryType", "account", "accountSub", "d
 
 
 
- export const getRecordedTransactionsForDisplay =({dateForm, reportName,  transProcessor, query})=>{
+ export const getRecordedTransactionsForDisplay =({dateForm, reportName,  transProcessor, query, clickedHeader})=>{
     const dateFormFmt = dateForm?.defaultDate? getStartAndEndDate("THIS-MONTH") : dateForm;
     const res = transProcessor.getRecordedTransactions(dateFormFmt);
 
@@ -35,7 +36,9 @@ const keysRecordTransSummary = ["date", "entryType", "account", "accountSub", "d
     let rows = res.recordedTransArr; 
     sortArrayByKey(rows, 'transId', 'ASC');       
 
-    result =  {date, name:reportName, title:"Transactions Query", clickables:"ALL", rowKeysShow, rowHeaders:getHeadersTitle(rowKeysShow), rows, pdfData}
+    const rowsDt = clickedHeader.name? sortTableData([...rows], clickedHeader.name) : rows;
+
+    result =  {date, name:reportName, title:"Transactions Query", clickables:"ALL", rowKeysShow, rowHeaders:getHeadersTitle(rowKeysShow), rows:rowsDt, pdfData}
 
     
 

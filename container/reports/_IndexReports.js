@@ -50,10 +50,11 @@ const IndexReports = ({ssUser}) => {
   const {settings} = useStoreHeader((state) => state);
   const {activeTab, headerTab, headerTabsArr, dispatchActiveTab, dispatchSelTab, selTab,  currentReport, dispatchCurrentReport, selectedTranFromList, dispatchSelectedTranFromList, allAccountCodesInitDb} = useStoreReports((state) => state);
   const [showLedgers, setShowLedgers] = useState(false);
+  const [clickedHeader, setClickedHeader] = useState({name:'', title:'', clickable:true});
   let [emptyPath, domainNm, reports, reportName] = pathname?.split("/");
    if(reportName?.includes("=")){ const reportNameSplit = splitByFirstChar(reportName, '='); reportName = reportNameSplit[0]; }
   const companyId = session?.user?.companyId;
-  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName, pathname, transProcessor, customers, vendors, products, viewTransId, ledgerCode, monthlyQuery, coaStructure, transactionsDetails, user, chartOfAccounts, dateForm:reportDate});
+  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName, pathname, transProcessor, customers, vendors, products, viewTransId, ledgerCode, monthlyQuery, coaStructure, transactionsDetails, user, chartOfAccounts, dateForm:reportDate, clickedHeader});
   const isReportPage = !reportName || pathname === "/demo/reports" || pathname === "/demo/reports/"; 
   //const genLedgerCodes = Object.keys(processedLedgers);
   const {ledgerCodes, ledgerAccts, ledgerTitle} = getDisplayPersonalLedgers(transProcessor, currentReport, reportDate);
@@ -61,12 +62,14 @@ const IndexReports = ({ssUser}) => {
   const currentReportTab = getCurrentReportName(reportName);
   const companyLogoFile = getCompanyLogo(settings);
   const windowDimen = useWindowDimensions();  
-    
-  //console.log(ledgerAccts)
+  
+   //console.log(clientAccount)
+
   const handleReport =(report)=>{
       //console.log(report);
   }
 
+   /*
     //console.log(rows)
     //console.log(ledgers.processedLedgers);
     //let ledgersAcct = transProcessor.processTransactions();
@@ -87,7 +90,7 @@ const IndexReports = ({ssUser}) => {
     //console.log(resss);
     //console.log(cusLedgers);
 
-    
+    */
     
   const setDateFormHandler =(dt)=>{
     dispatchReportDate({...dt, defaultDate:false});
@@ -199,6 +202,15 @@ const IndexReports = ({ssUser}) => {
     handleRefresh();
   },[]);
 
+  useEffect(()=>{
+    const sortables = ['personal-ledgers-customers-balances', 'personal-ledgers-vendors-balances',
+      'personal-ledgers-products-balances','account-list-customers','account-list-vendors','account-list-products'
+    ];
+    if(sortables.includes(reportName)){
+      setClickedHeader({name:'', title:'', clickable:true})
+    }else{setClickedHeader({name:'', title:'', clickable:false})}
+  },[reportName]);
+
   const showReport = typeof rows === "object" || rows?.length ? true : false;
   //  console.log(rows)
   return (
@@ -283,6 +295,8 @@ const IndexReports = ({ssUser}) => {
               transactionsDetails={transactionsDetails}
               subTitle={subTitle}
               windowDimen={windowDimen}
+              clickedHeader={clickedHeader}
+              setClickedHeader={setClickedHeader}
             />
               <EditDeleteTransaction 
                 selectedTranFromList={selectedTranFromList}

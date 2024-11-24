@@ -21,7 +21,7 @@ function LedgerSelect({showLedgers, handleSelectedLedger, isReportPage,  handleC
             <div className='h-[63vh] overflow-y-auto bg-white p-3 min-w-[250px]'>
                 {genLedgerCodesArr?.map((code, i)=>{
                 return(
-                    <p key={`${i}key`} className='cursor-pointer w-fit hover:text-[blue]'
+                    <p key={`${i}key`} className='cursor-pointer w-fit hover:text-[blue] pb-2'
                     onClick={()=>handleSelectedLedger(code)}>
                         {code} {processedLedgers[code].name}
                     </p>

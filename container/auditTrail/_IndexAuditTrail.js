@@ -37,12 +37,13 @@ const IndexAuditTrail = ({ssUser}) => {
    let [emptyPath, domainNm, reports, reportName] = pathname?.split("/");
    if(reportName?.includes("=")){ const reportNameSplit = splitByFirstChar(reportName, '='); reportName = reportNameSplit[0]; }
   const companyId = session?.user?.companyId;
-  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName, transProcessor,  viewTransId, transactionsDetails, user, activityLog, dateForm:reportDate, generalSettings});
+  const [clickedHeader, setClickedHeader] = useState({name:'', title:'', clickable:true});
+  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName, transProcessor,  viewTransId, transactionsDetails, user, activityLog, dateForm:reportDate, generalSettings, clickedHeader});
   const docHeader = moreDocHeader?.length? [[clientAccount?.companyName], [title], [date],  ...moreDocHeader] : [[clientAccount?.companyName], [title], [date], ['']];
   const companyLogoFile = getCompanyLogo(settings);
 
   //console.log(viewTransId, transactionsDetails, user,)
-  //console.log(rows, viewTransId, settings, generalSettings);
+  //console.log(activityLog);
 
   const setDateFormHandler =(dt)=>{
     dispatchReportDate({...dt, defaultDate:false});
@@ -56,6 +57,17 @@ const IndexAuditTrail = ({ssUser}) => {
       //console.log({data, docName:title, docHeader, rowsHeader, styleRows})
       handleExcelExport({data, docName:title, docHeader, rowsHeader, styleRows, col1WchInDigit, noFmtCols:[4]});
       postActivity(user, activities.DOWNLOAD, title+" excel report")
+    }
+
+    const handleExportAllToExcel =async ()=>{
+      const rows = transactionsDetails.map((dt, i)=> {return {sn:i+1, ...dt}});
+      const row = rows[0];
+      const rowKeysShow = Object.keys(row);
+      //return console.log(rows, rowKeysShow)
+      let data = objectToArray(rows, rowKeysShow);
+      data = [rowKeysShow, ...data];
+      handleExcelExport({data, docName:"All Transactions Query", docHeader, rowsHeader:rowKeysShow});
+      postActivity(user, activities.DOWNLOAD, "All Transactions excel report")
     }
 
     const handleReportNav =(act)=>{
@@ -87,6 +99,7 @@ const IndexAuditTrail = ({ssUser}) => {
           showBar={showReport}
           handleReportNav={handleReportNav}
           handleExportToExcel={excelExportHandler}
+          handleExportAllToExcel={handleExportAllToExcel}
           reportName={reportName}
           reportRows={rows}
           reportRowKeys={rowKeysShow}
@@ -132,6 +145,8 @@ const IndexAuditTrail = ({ssUser}) => {
               viewTransId={viewTransId}
               transactionsDetails={transactionsDetails}
               subTitle={subTitle}
+              clickedHeader={clickedHeader}
+              setClickedHeader={setClickedHeader}
             />
              
             </Suspense>

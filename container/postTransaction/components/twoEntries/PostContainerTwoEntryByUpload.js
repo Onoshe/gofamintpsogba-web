@@ -14,7 +14,8 @@ import { getErrorMessage } from '@/lib/validation/getErrorMessage';
 import { getUploadSampleFile } from '../utils/getUploadSampleFile';
 
 
-const PostContainerTwoEntryByUpload = ({postError,setUploading, setPostError, chartOfAccounts, personalAcctsList, controlAcctsCode, postBtn, setPostBtn, setTransSheets, resetUploadTableCall}) => {
+const PostContainerTwoEntryByUpload = ({postError,setUploading, setPostError, chartOfAccounts, personalAcctsList, controlAcctsCode, postBtn, setPostBtn, setTransSheets, 
+  resetUploadTableCall, checkedSelect, setCheckedSelect}) => {
     const [statePostTwoTrans, dispatchPost] = useReducer(reducerPostTwoTrans, initStatePostTwoTrans);
     const {isDropped, isDragging, selected, uploadedData, resetFileUploadCount, file, infoMsg, table} = statePostTwoTrans;
     const transSheets = table?.rows;
@@ -48,7 +49,9 @@ const PostContainerTwoEntryByUpload = ({postError,setUploading, setPostError, ch
         setPostBtn({show:false});
         setUploading(false);
       }
-
+      const handleUploadSelector =()=>{
+        setCheckedSelect(!checkedSelect)
+      }
       //console.log(postError)
       React.useEffect(()=>{
         if(table?.show && table?.rows?.length){
@@ -88,10 +91,18 @@ const PostContainerTwoEntryByUpload = ({postError,setUploading, setPostError, ch
       
   return (
     <div >
-        <div className='bg-gray-200 px-2 py-1 text-gray-700'>
+        <div className='bg-gray-200 px-2 py-1 text-gray-700 flex flex-row gap-3'>
             <div className='flex flex-row gap-1 hover:bg-white px-2 py-[2px] hover:text-blue-600 active:bg-gray-100 rounded-sm w-fit cursor-pointer'
               onClick={()=>getUploadSampleFile()}>
               <MdDownload size={22} className=''/> Sample File
+            </div>
+            
+            <div className='hover:tooltip-open tooltip tooltip-top -mr-2' data-tip="Select 2-Entries Journal">
+                <input type="checkbox" checked={checkedSelect} className='checkbox checkbox-sm checkbox-error'
+                onChange={handleUploadSelector}/>
+            </div>
+            <div>
+               <p className='text-blue-700'>Select Upload: <span className={`${checkedSelect? 'text-red-500 font-bold': ''}`}>{checkedSelect? 'Journal':'Transactions (Default)'}</span></p>
             </div>
         </div>
         <div className='p-3'>

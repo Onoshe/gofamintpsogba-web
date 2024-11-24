@@ -6,7 +6,8 @@ import React, {useState, useEffect} from 'react';
 
 
 
-const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, clickables, handleClickCell, companyName, reportName, reportDate, viewTransId, subTitle, windowDimen, transactionsDetails, toastNotify }) => {
+const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, clickables, handleClickCell, companyName, reportName, reportDate, viewTransId, subTitle, windowDimen, 
+  transactionsDetails, toastNotify, clickedHeader, setClickedHeader }) => {
    let rowsForDisplay = rows;
 
 
@@ -46,8 +47,10 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
                 rows={rowsForDisplay}
                 classNameHeaderTR="bg-blue-50" 
                 classNameRowsTR="border border-gray-200 hover:bg-blue-50"
-                clickableHeader={false}
-                //onClickHeader={(e)=>console.log(e)}
+                clickableHeader={clickedHeader.clickable}
+                onClickHeader={(e)=>setClickedHeader({...clickedHeader, ...e})}
+                clickedHeader={clickedHeader}
+                setClickedHeader={setClickedHeader}
                 //clickableRowCell={clickables?.length}
                 clickableRowCellKeys ={clickables?.length? clickables : clickables === "ALL"? "ALL" : []} //['name']
                 onClickRowCell={handleClickCell}

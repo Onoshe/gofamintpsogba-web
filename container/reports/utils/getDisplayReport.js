@@ -10,7 +10,7 @@ import { getReceiptsAndPaymentsForDisplay } from "./reportUtils/getReceiptsAndPa
 
 
 export const getDisplayReport =({reportName, pathname, transProcessor, customers, vendors, products, coaStructure, viewTransId, transactionsDetails, ledgerCode, monthlyQuery, 
-    dateForm, user, chartOfAccounts})=>{
+    dateForm, user, chartOfAccounts, clickedHeader})=>{
     const startDateFmt = new Date(dateForm?.startDate).toDateString();
     const endDateFmt = new Date(dateForm?.endDate).toDateString();
     const date = 'Report from '+startDateFmt+" to "+endDateFmt;
@@ -47,7 +47,7 @@ export const getDisplayReport =({reportName, pathname, transProcessor, customers
         result = getProductsValuation({reportName,  transProcessor,  dateForm, products, viewTransId});
         //console.log(result)
     }else{
-        result = getLedgersAndPersonalAcctsForDisplay({reportName,  transProcessor, customers, vendors, products, dateForm, transactionsDetails, viewTransId, user});
+        result = getLedgersAndPersonalAcctsForDisplay({reportName,  transProcessor, customers, vendors, products, dateForm, transactionsDetails, viewTransId, user, clickedHeader});
     }
 
     

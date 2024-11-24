@@ -36,7 +36,7 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
   let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
   const processedLedgers = ledgers.processedLedgers;
-  
+  const [checkedSelect, setCheckedSelect] = React.useState(false);
   
   const handleSubmit = async ()=>{
     setUploading(true);
@@ -82,7 +82,7 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
         if(transSheets?.length){
           //setUploading(true);
           await handleSubmitTwoEntry({transSheetForm:transSheets, chartOfAccounts, user, vendors, customers,  setTransSheet, runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, 
-             router, notify, resetUploadTableCall, setResetUploadTableCall})
+             router, notify, resetUploadTableCall, setResetUploadTableCall, jVoucher:checkedSelect? 'JOURNAL' : ''})
              .then(()=>{
                setUploading(false);
                setPostError({msg:'Posting successfull', error:false, color:'text-green-600'});
@@ -190,6 +190,7 @@ const handleTransView =(act)=>{
             {transSheet?.map((dt, i)=>{
                 const personalAcctsSelDr =  getSubAccounts(dt.debitAccount, chartOfAccounts, personalAccts);
                 const personalAcctsSelCr =  getSubAccounts(dt.creditAccount, chartOfAccounts, personalAccts);
+                //console.log(personalAcctsSelDr, personalAcctsSelCr)
                 return(
                     <TransactionRow hideTitle={i > 0} key={`${i}row`}
                         classNameRowCont={`${i%2==0? '' : 'bg-[#fff]'} pb-6`}
@@ -234,6 +235,8 @@ const handleTransView =(act)=>{
             setTransSheets={setTransSheets}
             resetUploadTableCall={resetUploadTableCall}
             setUploading={setUploading}
+            checkedSelect={checkedSelect}
+            setCheckedSelect={setCheckedSelect}
          />
         }
          <div className={`w-full flex justify-center items-center ${showBankBalances? '' : 'hidden'}`}>

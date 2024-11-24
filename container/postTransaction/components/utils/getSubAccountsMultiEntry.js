@@ -10,10 +10,17 @@ function getSubAccountsMultiEntry(accountCode, chartOfAccounts, personalAccts, p
         //console.log(coa)
         if(coa?.accountCode){
             const {typeName} = coa;
+            const customersSorted = [...personalAccts.customers];
+            const vendorsSorted = [...personalAccts.vendors];
+            const productsSorted = [...products];
+            sortArrayByKey(customersSorted, 'accountCode');
+            sortArrayByKey(vendorsSorted, 'accountCode');
+            sortArrayByKey(productsSorted, 'productCode');
+
             const coaStr = {
-                "accountReceivableControl":personalAccts.customers,
-                "accountPayableControl":personalAccts.vendors,
-                "inventoryControl":products
+                "accountReceivableControl":customersSorted,
+                "accountPayableControl":vendorsSorted,
+                "inventoryControl":productsSorted
             };
             subAccts = coaStr[typeName];
         }

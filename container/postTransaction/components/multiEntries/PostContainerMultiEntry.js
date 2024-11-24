@@ -12,6 +12,7 @@ import { handleSubmitMultiEntry } from '../utils/handleSubmitMultiEntry';
 import { useRouter } from 'next/navigation';
 import { controlAcctChecker } from '../utils/controlAccountChecker';
 import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
+import { getVoucherMod } from '../utils/prepareQueryMultiEntry';
 
 
 const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, personalAcctsList, personalAccts, 
@@ -26,7 +27,9 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
   const [selectedDueDate, setSelectedDueDate] = React.useState({value:30, label:'Select'});
   const [uploading, setUploading] = React.useState(false);
   
- //console.log(transSheet);
+ if(transSheet.length){
+ // console.log(getVoucherMod(transSheet, chartOfAccounts));
+ }
 
 
 const handleAddRemoveRow =(dt, i)=>{
@@ -163,7 +166,7 @@ const handleAddRemoveRow =(dt, i)=>{
           </p>
         </div>
         <div className='flex flex-row gap-3 items-center py-4'>
-            <p className={`text-red-800 font-bold ${controlAcctTest.isControlAcct? 'flex' : 'hidden'}`}>
+            <p className={`hidden text-red-800 font-bold ${controlAcctTest.isControlAcct? 'flex' : 'hidden'}`}>
                 Default {controlAcctTest.controlAcct} due date is 30 days.
             </p>
             <div className='px-4 flex-row gap-2 hidden'>

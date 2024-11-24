@@ -7,8 +7,8 @@ import { activities, postActivity } from "@/lib/apiRequest/postActivity";
 
 
 export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, user, vendors, customers,  setTransSheet, 
-    runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, router, notify, resetUploadTableCall, setResetUploadTableCall}) {
-   const {url, body} =  prepareQueryTwoEntryTrans({transSheetForm, user, chartOfAccounts, postingFrom:"TWOENTRY"});
+    runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, router, notify, resetUploadTableCall, setResetUploadTableCall, jVoucher}) {
+   const {url, body} =  prepareQueryTwoEntryTrans({transSheetForm, user, chartOfAccounts, postingFrom: jVoucher === "JOURNAL"? jVoucher :"TWOENTRY"});
    //return console.log(body, transSheetForm, recordTransaction) 
 
    if(recordTransaction?.editTran){
@@ -25,9 +25,9 @@ export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, use
       const transRes = await patchRequest(url, updatedBody)
       if(transRes?.data?.length){ 
         const insertedTrans = [{id:transId}];
-        const {body} = prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans});
+        const {body} = prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans, jVoucher});
         runUpdate({url, body, transSheetForm, notify, setTransSheet, runDispatchClientDataCall, 
-          dispatchTranSheetTwoEntryReset, router, transListingPage});
+          dispatchTranSheetTwoEntryReset, router, transListingPage, user});
       }
     }else{ //POST TRANS
       //return console.log(transSheetForm)
@@ -58,7 +58,7 @@ export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, use
 
 
 async function runUpdate({url, body, transSheetForm, notify, setTransSheet, runDispatchClientDataCall, 
-  dispatchTranSheetTwoEntryReset, router, transListingPage}){
+  dispatchTranSheetTwoEntryReset, router, transListingPage, user}){
     /**************************************** 
       PrepareQueryTwoEntryTransDetails function arranges return body in such a way that debit 
       transaction comes first before credit transaction. Hence, debit transDetailsId to be updated 
@@ -67,7 +67,7 @@ async function runUpdate({url, body, transSheetForm, notify, setTransSheet, runD
     //return console.log(body)
     const values = body.values;
     let tranDetailsId = [transSheetForm[0].idDr, transSheetForm[0].idCr]; 
-    console.log(values, transSheetForm);
+    //console.log(values, transSheetForm);
     for (let i = 0; i < values.length; i++) {
         const lastItem = (values.length-1) == i;
         const value = values[i];

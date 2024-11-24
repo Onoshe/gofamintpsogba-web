@@ -58,6 +58,7 @@ export function generateBSData(transProcessor, coaStructure, dateFormQuery) {
   sortArrayByKey(customersLedgers, "closingBal", "DSC");
   sortArrayByKey(productsLedgers, "closingBal", "DSC");
   
+
   //Products
   const highest7Prods =  getObjects(productsLedgers, 7);
   highest7Prods.forEach(prod => {
@@ -108,13 +109,16 @@ export function generateBSData(transProcessor, coaStructure, dateFormQuery) {
   const select4GroupCus = getObjects(customersGroupArrs, 4);
   const select4GroupVed = getObjects(vendorsGroupArrs, 4);
   
+  //console.log(select4GroupVed);
+
+
   select4GroupCus?.forEach(group => {
     sortArrayByKey(group, "closingBal", "DSC");
     chartData.cusGroup.push(getObjects(group, 7));
     chartData.groupObj.cus.groups.push(group[0]?.group);
   });
   select4GroupVed?.forEach(group => {
-    sortArrayByKey(group, "closingBal", "ASC");
+    sortArrayByKey(group, "closingBal", "DSC");
     chartData.vedGroup.push(getObjects(group, 7));
     chartData.groupObj.ved.groups.push(group[0]?.group);
   });

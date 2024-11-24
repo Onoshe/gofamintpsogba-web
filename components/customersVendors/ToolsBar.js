@@ -19,9 +19,9 @@ const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctTy
     const data = objectToArray(personalAccounts, ['edit', 'editedAt', 'updatedBy', 'updatedAt', 'createdBy', 'createdAt', 'deleted', 'inactive'], 'exclude');
     const docHeader = [[clientAccount?.companyName], [`All ${personalAcctType} Data`], ["Report as at "+new Date().toDateString()], ['']];
 
- //console.log(data)
+  //console.log(data)
   const handleExportToExcel =()=>{
-    handleExport2Excel({docName:'All Customers', docHeader, col1MaxW:false, data:data.dataWithHeader, styleRows:[], styleCells:[]});
+    handleExport2Excel({docName:"All_"+personalAcctType+"_Excel_report", docHeader, col1MaxW:false, data:data.dataWithHeader, styleRows:[], styleCells:[]});
     postActivity(user, activities.DOWNLOAD, "All "+personalAcctType+" Excel report")
   }
 
@@ -30,7 +30,7 @@ const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctTy
     const pdfForm =  {reportRows:rows, pdfHeader:docHeader, reportHeader, pdfData, headerRowsColsArr:'', companyLogoFile};
     //console.log(data);
     handleExport2Pdf(pdfForm);
-    postActivity(user, activities.DOWNLOAD, "All "+personalAcctType+" Pdf report")
+    postActivity(user, activities.DOWNLOAD, "All_"+personalAcctType+"_Pdf_report")
   }
 
   const handleRefreshData = async ()=>{
@@ -68,30 +68,30 @@ const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctTy
 export default ToolsBar;
 
 
-const keysMain =["sn", "type", " title", " accountCode", "firstname", "lastname", "othernames",  "email", " phoneNo", "accountGroup",  "formNo",  "nextContactPersonName", "companyName",  "businessType", "registeredDate"].map((ky)=> ky.trim()); 
+const keysMain =["sn","id", "type", " title", " accountCode", "firstname", "lastname", "othernames",  "email", " phoneNo", "accountGroup",  "formNo",  "nextContactPersonName", "companyName",  "businessType", "registeredDate"].map((ky)=> ky.trim()); 
 function objectToArray(arr, keys, exclude) {
     //if(arr?.length) return {};
-
     const returnVal = {keys:keys || [],  data:[], dataWithHeader:[], pdfForm:{}};
     
     if(arr?.length){
+        const arrWithSN = arr.map((dt, i)=> {return {sn:(i+1)+'', ...dt}});
         if(keys?.length){
             if(exclude){
-                const specKeysData  = arr.map(obj => {
+                const specKeysData  = arrWithSN.map(obj => {
                     return Object.entries(obj)
                         .filter(([key, value]) => !keys.includes(key))
                         .map(([key, value]) => value)
                 });
-                returnVal.keys = Object.keys(arr[0]).filter((key) => !keys.includes(key)),
+                returnVal.keys = Object.keys(arrWithSN[0]).filter((key) => !keys.includes(key)),
                 returnVal.data = specKeysData;
             }else{
-                const specKeysData  = arr.map(obj => keys.map(key => obj[key]));
+                const specKeysData  = arrWithSN.map(obj => keys.map(key => obj[key]));
                 returnVal.keys = keys,
                 returnVal.data = specKeysData;
             }
             
         }else{
-            const allKeysData = arr.map(obj => Object.keys(arr[0]).map(key => obj[key]));
+            const allKeysData = arrWithSN.map(obj => Object.keys(arrWithSN[0]).map(key => obj[key]));
             returnVal.data = allKeysData;
         }
         const fmtHeader = tableHeaderFormater(returnVal?.keys);        
@@ -103,7 +103,7 @@ function objectToArray(arr, keys, exclude) {
         reportHeader: getHeadersTitle(displayKeys),
         rows:arr.map((dt, i)=> {
             const regDate = dt.registeredDate? new Date(dt.registeredDate).toISOString().split("T")[0] : "";
-            return {...dt, sn:i, registeredDate:regDate}
+            return {...dt, sn:i+1, registeredDate:regDate}
          }),
         pdfData:{
             reportRowKeys:displayKeys,

@@ -50,7 +50,8 @@ const DashboardIndex = ({ssUser}) => {
             cusGroup, vedGroup, prodTotal, groupObj, groupData, prodSumData, prodSumLabel} = generateBSData(transProcessor, coaStructure,  reportDateForm);
   const periodEndInit = new Date(reportDateAnal).toDateString().split(" ");
   const periodEnd = `${periodEndInit[2]} ${periodEndInit[1]} ${periodEndInit[3]}`
-  
+
+
   let coyLogo = "";
     if(settings?.data?.length){
         const coyLogoFound = settings.data.find((dt)=> dt.slug === "company-logo");

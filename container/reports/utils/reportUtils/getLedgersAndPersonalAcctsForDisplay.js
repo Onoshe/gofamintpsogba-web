@@ -1,5 +1,6 @@
 import { getTransactionsListing } from "./moreFunctions/getTransactionsListing";
 import { getHeadersTitle } from "../ledgers/getHeaders";
+import { sortTableData } from "../others/sortTableData";
 
 
 export const keysTB = ['accountCode', 'name', 'debit', 'credit', ];
@@ -15,7 +16,7 @@ export const keysPersonalBalances =  ['accountCode', 'name', 'group', 'closingBa
 
 
 
-export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor, customers, vendors, products, viewTransId, transactionsDetails, user, dateForm})=>{
+export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor, customers, vendors, products, viewTransId, transactionsDetails, user, dateForm, clickedHeader})=>{
         let result = {};
         let moreDocHeader = [];
         const clickables = ['accountCode', 'name']; //For personal-ledgers-******-balances
@@ -34,9 +35,13 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
         //console.log(rowsTb);
 
         const date = "Report as at "+new Date().toDateString(); //For personal account list and balances
-       // console.log(transProcessor.getGeneralLedgers());
-        //clickables:['edit', 'view']  clickables,
-        //{...transaction, classNameTD:'hover:text-blue-700 cursor-pointer'}
+        
+        //Sort data
+        const customersStd = clickedHeader.name? sortTableData([...customers], clickedHeader.name) : customers;
+        const vendorsStd =  clickedHeader.name? sortTableData([...vendors], clickedHeader.name) : vendors;
+        const productsStd =  clickedHeader.name? sortTableData([...products], clickedHeader.name) : products;
+        //console.log(customers, customersStd);
+
         switch (reportName) {
             case 'trial-balance':
                 pdfData.reportRowKeys = keysTB;
@@ -83,7 +88,9 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
                 let ledgersCus = transProcessor.processTransactions(dateForm?.startDate, dateForm?.endDate);
                 ledgersCus = ledgersCus.customersLedger;
 
-                const cusBal = getSubAcctBalances(ledgersCus);
+                const cusBalance = getSubAcctBalances(ledgersCus);
+                const cusBal = clickedHeader.name? sortTableData([...cusBalance], clickedHeader.name) : cusBalance;
+
                 result = {name:reportName, date, title:"Customers Balances", rowKeysShow:keysPersonalBalances, rowHeaders:getHeadersTitle(keysPersonalBalances), clickables, rows:cusBal,  pdfData}
                 break;
              case 'personal-ledgers-vendors-balances':
@@ -92,7 +99,9 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
                     let ledgersVed = transProcessor.processTransactions(dateForm?.startDate, dateForm?.endDate);
                     ledgersVed = ledgersVed.vendorsLedger;
                     //console.log(ledgersVed)
-                    const vedBal = getSubAcctBalances(ledgersVed);
+                    const vedBalance = getSubAcctBalances(ledgersVed);
+                    const orderBy = clickedHeader.name === "closingBal"? "ASC" : "";
+                    const vedBal = clickedHeader.name? sortTableData([...vedBalance], clickedHeader.name, orderBy) : vedBalance;
                     result = {name:reportName, date, title:"Vendors Balances", rowKeysShow:keysPersonalBalances, rowHeaders:getHeadersTitle(keysPersonalBalances), clickables, rows:vedBal,  pdfData}
                     break;
 
@@ -102,7 +111,9 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
                     let ledgersProd = transProcessor.processTransactions(dateForm?.startDate, dateForm?.endDate);
                     ledgersProd = ledgersProd.productsLedger;
                     //console.log(ledgersProd)
-                    const prodBal = getSubAcctBalances(ledgersProd);
+                    const prodBalance = getSubAcctBalances(ledgersProd);
+                    const prodBal = clickedHeader.name? sortTableData([...prodBalance], clickedHeader.name) : prodBalance;
+
                     result = {name:reportName, date, title:"Products Balances", rowKeysShow:keysPersonalBalances, rowHeaders:getHeadersTitle(keysPersonalBalances), clickables, rows:prodBal,  pdfData}
                 break;
 
@@ -113,7 +124,8 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
                 pdfData.tableColsWch = ["", "", "", "", "",  20, "", "", "",  "","",  "",];
                 pdfData.tableColsFSize= 6;
                 pdfData.tableHeaderFSize=6,
-                result = {name:reportName, date, title:"Customers List", rowKeysShow:keysPersonalAcct, rowHeaders:getHeadersTitle(keysPersonalAcct), rows:customers, pdfData}
+
+                result = {name:reportName, date, title:"Customers List", rowKeysShow:keysPersonalAcct, rowHeaders:getHeadersTitle(keysPersonalAcct), rows:customersStd, pdfData}
                 break;
             case 'account-list-vendors':
                 pdfData.reportRowKeys = keysPersonalAcct;
@@ -121,13 +133,13 @@ export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor
                 pdfData.tableColsWch = ["", "", "", "", "",  20, "", "", "",  "","",  "",];
                 pdfData.tableColsFSize= 6;
                 pdfData.tableHeaderFSize=6,
-                result = {name:reportName, date, title:"Vendors List", rowKeysShow:keysPersonalAcct, rowHeaders:getHeadersTitle(keysPersonalAcct), rows:vendors, pdfData}
+                result = {name:reportName, date, title:"Vendors List", rowKeysShow:keysPersonalAcct, rowHeaders:getHeadersTitle(keysPersonalAcct), rows:vendorsStd, pdfData}
                 break;
             case 'account-list-products':
                 pdfData.reportRowKeys = keysProductsAcct;
                 pdfData.noFmtCols = [];
                 pdfData.tableColsWch = [];
-                result = {name:reportName, title:"Products List", rowKeysShow:keysProductsAcct, rowHeaders:getHeadersTitle(keysProductsAcct), rows:products, pdfData}
+                result = {name:reportName, title:"Products List", rowKeysShow:keysProductsAcct, rowHeaders:getHeadersTitle(keysProductsAcct), rows:productsStd, pdfData}
                 break;
             default:
                 result = {name:'trial-balance', date, title:'Trial Balance', rowKeysShow:keysTB, rowHeaders:getHeadersTitle(keysTB), rows:rowsTb, pdfData}

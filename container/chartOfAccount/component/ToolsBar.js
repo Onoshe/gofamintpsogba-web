@@ -18,7 +18,7 @@ const ToolsBar = ({excelData, runDispatchClientDataCall, notify, user, companyLo
     });
     const data = objectToArray(excelDataWithClass);
 
-  //console.log(data) 
+ // console.log(data) 
   const title = "Chart of Account"
   const excelDt = {
     docName:'Chart of Account', 
@@ -66,7 +66,7 @@ const ToolsBar = ({excelData, runDispatchClientDataCall, notify, user, companyLo
 
 export default ToolsBar;
 
-const keysMain =["sn", "accountCode", "accountClass", "accountName", "accountType", "description", "productCat"]; 
+const keysMain =["sn", "id", "accountCode", "accountClass", "accountName", "accountType", "description", "productCat"]; 
 function objectToArray(arr, keys=keysMain, exclude) {
   const returnVal = {keys:keys || [],  data:[], dataWithHeader:[], pdfForm:{}};
   

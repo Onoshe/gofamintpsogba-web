@@ -67,6 +67,46 @@ const transDetailsTypes = [
 ];
 */
 
+export function getVoucherMod(transSheet, chartOfAccounts){
+   // console.log(transSheet)
+   // chartOfAccounts.find((dt)=> dt.accountCode == accountCode);
+   const bankCode = 131; 
+    const cashCode = 132;
+    const clearingCode = 133;
+    const recCode = 141;
+    const recCtrCode = 142;
+    const payCode = 231;
+    const payCtrCode = 232;
+
+
+    const len = transSheet.length;
+    let val = "";
+    let typeCodeDr = ""; 
+    let typeCodeCr = "";
+    if(len === 2){
+        
+        const debitAccount = transSheet?.find((dt)=> dt.debitCredit == 1)?.accountCode;
+        const creditAccount = transSheet?.find((dt)=> dt.debitCredit == 2)?.accountCode;
+        const debitAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == debitAccount);
+        const creditAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == creditAccount);
+        typeCodeDr = parseInt(debitAcctChart?.typeCode); 
+        typeCodeCr = parseInt(creditAcctChart?.typeCode);
+
+        if([bankCode, cashCode, clearingCode]?.includes(typeCodeDr)){
+            val = "Receipt"
+        }else if([bankCode, cashCode, clearingCode]?.includes(typeCodeCr)){
+            val =  "Payment"
+        }else if([recCode, recCtrCode, payCode, payCtrCode]?.includes(typeCodeDr) && ![bankCode, cashCode, clearingCode]?.includes(typeCodeCr)){
+            val =  "Debit Note"
+        }else if([recCode, recCtrCode, payCode, payCtrCode]?.includes(typeCodeCr) && ![bankCode, cashCode, clearingCode]?.includes(typeCodeDr)){
+            val = "Credit Note"
+        }
+    }else{
+        val = "SPLIT"
+    }
+    return val
+}
+
 function getVoucher(transSheets, chartOfAccounts){
     let voucher ="";
     for (let i = 0; i < transSheets.length; i++) {
@@ -132,8 +172,10 @@ export function prepareQueryMultiTransDetails({transSheetForm, chartOfAccounts, 
 
     const transactionsDetails = [];
     const insertedTran = insertedTrans[0];
-    const voucherType = getVoucher(transSheetForm, chartOfAccounts); //debitAcctChart.typeCode, "DR"
-     for (let i = 0; i < transSheetForm.length; i++) {
+    //const voucherType = getVoucher(transSheetForm, chartOfAccounts); //debitAcctChart.typeCode, "DR"
+    const voucherType = getVoucherMod(transSheetForm, chartOfAccounts);
+
+    for (let i = 0; i < transSheetForm.length; i++) {
         const tranSheet = transSheetForm[i];
         const {accountCode, amount, debitCredit, subCode} = tranSheet;
 

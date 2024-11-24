@@ -71,7 +71,7 @@ const ToolsBar = ({excelData, notify, runDispatchClientDataCall,user, companyLog
 export default ToolsBar;
 
 
-const keysMain =["sn", "productCode", "productCat", "productName", "description"]; 
+const keysMain =["sn", "id", "productCode", "productCat", "productName", "description"]; 
 function objectToArray(array, keys, exclude) {
   const returnVal = {keys:keys || [],  data:[], dataWithHeader:[]};
   

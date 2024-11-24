@@ -10,6 +10,7 @@ const Backup = ({backupUrl}) => {
   const [backupSQLFiles, setBackupSQLFiles] = useState([]);
   const [refreshData, setRefreshData] = useState(0);
   
+  //console.log(backupUrl)
   const handleSelected =(dt)=>{
     setBackupCSVFile(backupCSVFile? "" : dt)
   }
@@ -22,9 +23,10 @@ const Backup = ({backupUrl}) => {
       "act": "DB_BACKUP",
       "type": "GETFILES_CSV"
     };
-  
-    const result = await postRequest(url, data);
-    const result_csv = await postRequest(url, data_csv);
+    
+   // console.log(url)
+    const result = {}//await postRequest(url, data);
+    const result_csv ={} //await postRequest(url, data_csv);
     if(result.ok){setBackupSQLFiles(result.res)}
     if(result_csv.ok){
       const folders = Object.keys(result_csv.res);
@@ -32,6 +34,7 @@ const Backup = ({backupUrl}) => {
   }
 
   const handleBackup = async (act)=>{
+    return console.log(act, backupUrl)
     const data = {
       "desc":"For backup, type = MYSQL || CSV. To fetch backups: type = GETFILES_CSV || GETFILES_SQL",
       "act": "DB_BACKUP",

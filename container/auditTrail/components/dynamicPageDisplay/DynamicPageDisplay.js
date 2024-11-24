@@ -8,7 +8,8 @@ import { MdCancel, MdClear } from 'react-icons/md';
 
 
 
-const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, clickables, handleClickCell,  reportDate, viewTransId, subTitle, transactionsDetails, toastNotify }) => {
+const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, clickables, handleClickCell,  reportDate, viewTransId, subTitle, transactionsDetails,
+   toastNotify, clickedHeader, setClickedHeader }) => {
   const [searchValue, setSearchValue] = React.useState(""); 
   let rowsForDisplay = rows;
   
@@ -52,10 +53,13 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
                 rows={rowsForDisplay}
                 classNameHeaderTR="bg-blue-50" 
                 classNameRowsTR="border border-gray-200 hover:bg-blue-50"
-                clickableHeader={false}
+                clickableHeader={true}
+                onClickHeader={(e)=>setClickedHeader({...clickedHeader, ...e})}
                 clickableRowCellKeys ={clickables?.length? clickables : clickables === "ALL"? "ALL" : []} //['name']
                 onClickRowCell={handleClickCell}
                 pinRow
+                clickedHeader={clickedHeader}
+                setClickedHeader={setClickedHeader}
               />
        </div>
     </div>
