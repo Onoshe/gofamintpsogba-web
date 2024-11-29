@@ -154,9 +154,10 @@ export const ClientsCard = ({clientsData, handleRevalidate, activeTab}) => {
               <div className='max-h-[600px] overflow-auto bg-slate-50 p-3'>
                   {
                       data?.map((userArr, i)=>{
+                          const userAr = userArr?.length? userArr[0] : {companyDomain: "noDomain"};
                           return(
                               <AccordionClientsTables key={`${i}`}
-                                  title={`${userArr[0]?.companyDomain?.toUpperCase()} Tables - ${userArr.length} [${userArr[0]?.companyDomain}.] `}
+                                  title={`${userAr.companyDomain?.toUpperCase()} Tables - ${userArr?.length} [${userAr?.companyDomain}.] `}
                                   titleStyle="" 
                                   clientTab={userArr} 
                                   contentsStyle="" 
@@ -175,3 +176,6 @@ export const ClientsCard = ({clientsData, handleRevalidate, activeTab}) => {
         </DashboardCard>
     )
   }
+
+
+

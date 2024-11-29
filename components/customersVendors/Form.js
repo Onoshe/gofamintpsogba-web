@@ -1,17 +1,22 @@
 'use client'
 import React from 'react';
-import {InputComponent, RadioInputComponent, SelectionTag, SelectionTagNew, TextAreaInputComponent} from "@/components/forms/InputComponents"
+import {CheckboxComponent, InputComponent, RadioInputComponent, SelectionTag, SelectionTagNew, TextAreaInputComponent} from "@/components/forms/InputComponents"
 import Hideable from '../collapsible/Hideable';
 import { BiError } from 'react-icons/bi';
 
 
 const Form = ({ onChangeHandler, basicTextFields, keysCompany, keysContactPerson, formData, groupValue,options,
         handleSubmit, infoMsg, personalAcctType, handleCancel, selectedOption, setSelectedOption, 
-        handleSelectedGroup, noGroupValueMsg}) => {
+        handleSelectedGroup, noGroupValueMsg,personalAcctLen}) => {
     const requiredFields = ['title', 'firstname', 'lastname', 'accountCode' ];
     
+    const accountCodePHolderDef = personalAcctType ==="CUSTOMERS"? "Numbers; 001 -> C-001" : "Numbers; 001 -> V-001";
+    let accountCodePHolder = accountCodePHolderDef;
+    if(formData.assignAcctNo){
+        accountCodePHolder = "Assign account code";
+    }else{accountCodePHolder = accountCodePHolderDef};
 
-  return (
+   return (
         <form className='max-w-[1200px] bg-slate-50 text-gray-500 py-3 pb-24'
             onSubmit={handleSubmit}>
                 <RadioInputComponent               
@@ -25,26 +30,51 @@ const Form = ({ onChangeHandler, basicTextFields, keysCompany, keysContactPerson
                     contStyle={'mb-4 px-3'}
                     required
                 />
-                <SelectionTagNew               
-                    opt1={basicTextFields.type.opt1}
-                    opt2={basicTextFields.type.opt2}
-                    name={'accountGroup'}
-                    title={basicTextFields.type.title}
-                    onChange={onChangeHandler}
-                    selectedOption={selectedOption}
-                    setSelectedOption={setSelectedOption}
-                    handleSelected={handleSelectedGroup}
-                    value={formData?.accountGroup}
-                    groupValue={groupValue}
-                    subTitle=""
-                    contStyle={'mb-4 pl-3'}
-                    options={options}
-                    noGroupValueMsg={noGroupValueMsg}
-                    personalAcctType={personalAcctType}
-                    required
-                />
+                <div className='grid grid-cols-1 xl:grid-cols-2'>
+                    <SelectionTagNew               
+                        opt1={basicTextFields.type.opt1}
+                        opt2={basicTextFields.type.opt2}
+                        name={'accountGroup'}
+                        title={basicTextFields.type.title}
+                        onChange={onChangeHandler}
+                        selectedOption={selectedOption}
+                        setSelectedOption={setSelectedOption}
+                        handleSelected={handleSelectedGroup}
+                        value={formData?.accountGroup}
+                        groupValue={groupValue}
+                        subTitle=""
+                        contStyle={'mb-4 pl-3'}
+                        options={options}
+                        noGroupValueMsg={noGroupValueMsg}
+                        personalAcctType={personalAcctType}
+                        required
+                    />
+                    <CheckboxComponent
+                        title="Assign Account No"
+                        name={'assignAcctNo'}
+                        onChange={onChangeHandler}
+                        //value={formData.assignAcctNo}
+                        label="Automatically assign account number"
+                        checked={formData.assignAcctNo}
+                        subTitle=""
+                        contStyle={'mb-4 px-3'}
+                    />
+                </div>
                 <p className='font-bold text-blue-400 mb-3 px-3'>Contact Person details</p>
                 <div  className='grid grid-cols-1 xl:grid-cols-2 px-3'>
+                    <InputComponent
+                        name={"accountCode"}               
+                        title={basicTextFields["accountCode"].title}
+                        type={basicTextFields["accountCode"].type}
+                        value={formData["accountCode"]}
+                        onChange={onChangeHandler}
+                        pholder={accountCodePHolder}
+                        contStyle={`mb-4`}
+                        titleStyle={''}
+                        inputStyle={`py-3 text-sm ${formData.assignAcctNo? 'bg-green-100' : ''}`}
+                        readOnly={formData.assignAcctNo}
+                        required={formData.assignAcctNo? "" :"required"}
+                    />
                     {
                         keysContactPerson.map((item, i)=>{
                             const isRadio = basicTextFields[item].type === 'radio';

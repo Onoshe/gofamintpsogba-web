@@ -22,4 +22,16 @@ const TextInput = ({contStyle, title, name, value, type, onChange, placeholder, 
   )
 }
 
+
+export const Viewer = ({contStyle, title, children}) => {
+
+  return (
+    <div className={`border relative border-gray-600 p-3 py-5 rounded-md text-[13px] text-gray-700 bg-[#eee]
+        w-full mb-3 ${contStyle}`}>
+            <p className='ml-1'>{title}</p>
+            {children}
+    </div>
+  )
+}
+
 export default TextInput

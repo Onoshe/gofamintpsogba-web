@@ -13,12 +13,19 @@ import { validateInputs } from '@/lib/validation/validateInput';
 const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAccts,  personalAcct,
   runDispatchClientDataCall, setFormInput, user, setActiveTab, handleClear})=>{
 
+    const personalAcctsUrl = getLinkFetchTableWithConds({table:user.companyId+'_'+personalAcct.toLowerCase(), conds:'deleted', values:'0'});
+    let personalAcctsFecthed = await getRequest(personalAcctsUrl);
+    //Auto assign accountCode if assignAcctCode is true. This is for Create-By-Entry NOT Create-By_Upload
+    if(formInput?.assignAcctNo){
+      const acctCode = autoAssignAccountCode(personalAcctsFecthed?.data);
+      //console.log(formInput, acctCode)
+      formInput.accountCode = acctCode;
+    }
+    
    const validateFieldVal = validateInputs({type:'FIELDVALUE', form:formInput, test:{reqFields:['type', 'accountCode', 'firstname', 'lastname', 'title']}});
    if(!validateFieldVal.error){
     const acctCodePref = personalAcct==="vendors"? "V-" : "C-";
     const inputAcctCodeFmt = acctCodePref+parseInt(formInput.accountCode).toString().padStart(6,0);
-    const personalAcctsUrl = getLinkFetchTableWithConds({table:user.companyId+'_'+personalAcct.toLowerCase(), conds:'deleted', values:'0'});
-    let personalAcctsFecthed = await getRequest(personalAcctsUrl);
     let validateAcctCode = validateInputs({form:personalAcctsFecthed.data, type:'VALUEEXIST', test:{key:'accountCode', value:inputAcctCodeFmt}});
     
     //return console.log(validateAcctCode, personalAcctsFecthed.data, inputAcctCodeFmt)
@@ -63,7 +70,7 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
     
    }else{
     setInfoMsg({msg:"Enter the require fields!", error:true});
-    handleInfoMsg("error", "Enter the require fields!")
+    handleInfoMsg("error", validateFieldVal?.field? capitalizeFirstChar(validateFieldVal.field)+" is required!" : "Enter the require fields!")
    }
 
    //Run update incase some deleted or created account have not populated on the display table
@@ -72,4 +79,25 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
 
 
 
-  export {handleSubmit}
+  export {handleSubmit};
+
+
+  function autoAssignAccountCode(fetchedPAcct){
+     //Get the last highest accountCode
+     let highest = 0;
+     let acctPref = "";
+     let acctCodeLen = 0;
+     if(fetchedPAcct?.length){
+        fetchedPAcct?.forEach(el => {
+          const acctSplit = el.accountCode.split('-');
+          acctPref = acctSplit[0];
+          acctCodeLen = acctSplit[1].length;
+          const no = parseInt(acctSplit[1]);
+          highest = highest > no? highest : no; 
+      });
+     }
+     let nextAcctNo = highest +1;
+     //let accountCode = nextAcctNo.toString().padStart(acctCodelen, '0');
+     //accountCode = `${acctPref}-${accountCode}`;
+     return nextAcctNo.toString(); //It will be padded to 
+  }

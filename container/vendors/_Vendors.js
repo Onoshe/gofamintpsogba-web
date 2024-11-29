@@ -209,6 +209,7 @@ const handleConfirm = (act)=>{
         handleCreateMultiPersonalAccts={handleCreateMultiPersonalAccts}
         accountGroups={accountGroups}
         uploading={uploading}
+        personalAcctLen={vendors?.length}
       />
      } 
 

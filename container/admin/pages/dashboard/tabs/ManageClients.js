@@ -10,7 +10,7 @@ import TextInputPasscode from '@/container/admin/components/reusableComponents/T
 
 
 
-const ManageClients = ({clientsData, handleRevalidate, clientTables}) => {
+const ManageClients = ({clientsData,databases_clients, handleRevalidate, clientTables}) => {
     const [form, setForm] = useState({db:'', tables:[], domain:'', autoRemoveTables:true, passcode:'',passcodeSlug:'', clientId:'', actType:'CREATE'})
     const [checkboxData, setCheckboxData] = useState([]);
     const [alert, setAlert] = useState({msgTitle:'', msg:'',type:'', show:false});
@@ -18,12 +18,11 @@ const ManageClients = ({clientsData, handleRevalidate, clientTables}) => {
     const [disableClients, setDisableClients] = useState(false);
     let clientsFmt = [...clientsData].map((tb)=> { return {...tb, value:tb.companyDomain, title:`${tb.id} ${tb.companyName}- (${tb.companyDomain}) [${parseInt(tb.inactive)? 'INACTIVE' :'ACTIVE'}]`, name:tb.companyDomain}})
     clientsFmt = [{value:'', title: '--- Select Client ---', name:'SELECT',  }, ...clientsFmt];
+    const databases = Object?.keys(databases_clients);
 
-    //console.log(form);
-
+   // console.log(databases)
    const onChangeHandler =(e)=>{
         const {name, value} = e.target;
-        //console.log(name, value)
         if(name==="RADIOACT"){
             if(value === "ACTIVATE" || value === "DEACTIVATE" || value === "REMOVE"){
                 setDisableTables(true)
@@ -41,6 +40,14 @@ const ManageClients = ({clientsData, handleRevalidate, clientTables}) => {
             setForm({...form, [name]:value})
         }
    }
+
+React.useEffect(()=>{
+    if(form.actType === "CREATE"){
+        if(form.autoRemoveTables){
+            setDisableTables(true);
+        }
+    }
+},[form]);   
 
    const onChangeCheckbox =(el)=>{
     const {title, checked} = el;
@@ -140,11 +147,11 @@ const ManageClients = ({clientsData, handleRevalidate, clientTables}) => {
                         />
                          {!["ACTIVATE", "DEACTIVATE"].includes(form?.actType) &&
                          <><CheckboxSingle
-                            contStyle={`${form?.actType === "ALTER" || form?.actType === "CREATE"? 'hidden' : ''}`}
-                            title="Remove all Client Tables"
+                            contStyle={`${form?.actType === "ALTER"? 'hidden' : ''}`}
+                            title={`${form?.actType === "CREATE"? "Create All Client Tables" : "Remove all Client Tables"}`}
                             form={form}
                             name="autoRemoveTables"
-                            label = "Auto remove Client database Tables"
+                            label = {`${form?.actType === "CREATE"? "Auto add all tables to Client database": "Auto remove Client database Tables"}`}
                             onChangeHandler={onChangeHandler}
                             //disable={disableTables}
                         />                

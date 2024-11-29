@@ -13,7 +13,15 @@ const Users = ({users, handleClickCell, handleAddUser, planLimit}) => {
     const resetClassName = "bg-red-400 text-white py-1 px-2 rounded-sm cursor-pointer active:bg-red-300 hover:bg-red-500";
 
     //console.log(users, planLimit)
- 
+    let disableAddBtn = false;
+    let showAddBtn = false;
+    if(users?.length){  
+     disableAddBtn = users?.length >= planLimit;
+    };
+    if(planLimit){
+      showAddBtn = true;
+    }
+
     if(users?.length){
         rowKeys = Object.keys(users[0]);
         //const rowsFilter = rowKeys.filter(k=> !['userName', 'role', 'nonActive', 'deleted'].includes(k));
@@ -51,9 +59,11 @@ const Users = ({users, handleClickCell, handleAddUser, planLimit}) => {
             classNameRowsTd="py-2"
         />
         <br/>
-        <div className={`${!users?.length || !planLimit? 'hidden' : ''}`}>
-          <button className={`btn btn-sm text-[12px]  ${users?.length >= planLimit? 'btn-disabled' : 'btn-accent'}`} onClick={handleAddUser}>Add New User</button>
-          <p className={`text-sm text-red-700 italic py-2 ${users?.length >= planLimit? '' : 'hidden'}`}>You have reach your maximum quota. To be able to add more users, kindly upgrade to a higher plan</p>
+        <div className={`${showAddBtn? '' : 'hidden'}`}>
+          <button className={`btn btn-sm text-[12px]  ${disableAddBtn? 'btn-disabled' : 'btn-accent'}`} onClick={handleAddUser}>Add New User</button>
+          <p className={`text-sm text-red-700 italic py-2 ${disableAddBtn? '' : 'hidden'}`}>
+              You have reach your maximum quota. To be able to add more users, kindly upgrade to a higher plan
+          </p>
         </div>
     </div>
   )

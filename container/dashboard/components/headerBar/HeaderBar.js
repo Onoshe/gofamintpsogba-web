@@ -4,10 +4,12 @@ import { MdClose, MdDateRange, MdOutlineReport, MdReport, MdSearch } from 'react
 import { BiRefresh } from 'react-icons/bi';
 import SearchBar from './SearchBar';
 import Link from 'next/link';
+import Spinner from '@/components/misc/Spinner';
+import { sortArrayByKey } from '@/lib/sort/sortArrayByKey';
 
 
 
-const HeaderBar = ({chartOfAccounts,handleSelAccount, listOfAccounts, setListOfAccounts, companyId, 
+const HeaderBar = ({chartOfAccounts,handleSelAccount, loadingReportPage, setLoadingReportPage, listOfAccounts, setListOfAccounts, companyId, 
     router,user, handleRefreshData, reportDate, onChangeReportDate, customers, vendors, products}) => {
 
     const handleSelectedLedger =(ledger)=>{
@@ -18,14 +20,26 @@ const HeaderBar = ({chartOfAccounts,handleSelAccount, listOfAccounts, setListOfA
         router.push(route);
     }
    
+    const handleReportPage =()=>{
+        setLoadingReportPage(true);
+    }
+    sortArrayByKey(chartOfAccounts, 'accountCode')
+    //console.log(chartOfAccounts);
 
   return (
     <div className='bg-white -mt-[11px] smc:mt-0'>
         <div className='justify-between px-4 hidden bg-white smc:flex'>
             <p className='text-blue-500 font-bold invisible'>Dashboard</p>
             <div className='flex-row gap-3 py-2 flex'>
-                <Link href={`/${companyId}/reports`} className='flex flex-row active:bg-blue-50 cursor-pointer hover:shadow-lg items-center border shadow-md border-gray-300 w-fit px-2 py-[3px] text-[12px] rounded-sm'
+                <Link href={`/${companyId}/reports`} onClick={handleReportPage} className='flex flex-row active:bg-blue-50 cursor-pointer hover:shadow-lg items-center border shadow-md border-gray-300 w-fit px-2 py-[3px] text-[12px] rounded-sm'
                  >
+                    <Spinner 
+                        showSpinner={loadingReportPage} 
+                        showMsg={false}
+                        msg="Loading report, please wait..."
+                        contStyle={`flex flex-col`}
+                        spinnerStyle={'mr-1 dark:text-[red] fill-[blue] h-3 w-3'}
+                    />
                     <MdOutlineReport/><p>Reports</p><IoMdArrowRoundForward/>
                 </Link>
                 <div className='flex flex-row items-center active:bg-blue-50 cursor-pointer hover:shadow-lg border shadow-md border-gray-300 w-fit px-2 py-[3px] text-[12px] rounded-sm'

@@ -7,7 +7,7 @@ import { MdClose } from 'react-icons/md';
 
 
 export const UpdatedUser = ({ updateForm, setUpdateForm,
-    user, selectedUser, handleClose, handleUpdateUser,handleDeleteUser, handleDeleteUserContinue,  handleEditUser, deleteUser}) => {
+    user, selectedUser, handleClose, roles, handleUpdateUser,handleDeleteUser, handleDeleteUserContinue,  handleEditUser, deleteUser}) => {
     
     
     
@@ -33,10 +33,14 @@ export const UpdatedUser = ({ updateForm, setUpdateForm,
                 <div className='pt-1'>
                     <p className='text-gray-600'>Change user role</p>
                     <div>
-                        <select className='border-b text-blue-800 border-b-blue-400 w-full' value={updateForm.role} name="role" onChange={onChangeHandler} required>
+                        
+                        <select className='border-b border-b-blue-400 w-full' name="role" value={updateForm.role} onChange={onChangeHandler} required>
                             <option value="">---Select---</option>
-                            <option value="Accountant">Accountant</option>
-                            <option value="Viewer">Viewer</option>
+                            {roles?.map((role, i)=>{
+                                return(
+                                    <option key={`${i}role`} value={role}>{role}</option>
+                                )
+                            })}
                         </select>
                     </div>
                 </div>

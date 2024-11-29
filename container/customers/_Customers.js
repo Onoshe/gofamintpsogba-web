@@ -204,6 +204,7 @@ const Customers = ({ssUser}) => {
           handleCreateMultiPersonalAccts={handleCreateMultiPersonalAccts}
           accountGroups={accountGroups}
           uploading={uploading}
+          personalAcctLen={customers?.length}
       />
      } 
 

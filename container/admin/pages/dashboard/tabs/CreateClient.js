@@ -57,10 +57,13 @@ const CreateClient = ({clientsData, handleRevalidate}) => {
     <div className='p-4 w-full'>
         <div className='flex flex-col w-full'>
                 <BackgroundCard
-                    title={"New Client Details (Database Tables will also be created authomaticatlly)"}
+                    title={"Create New Client"}
                     style={'flex flex-col gap-3 mr-5 h-fit mb-5'}
                 >
-                    <p className='text-blue-700'></p>
+                    <div className='pb-3'>
+                        <p className='text-blue-700'>New Client details will be inserted on _clients Table.</p>
+                        <p className='text-blue-700'>Database for new client is however not created. Database can only be created manually in CPANEL</p>
+                    </div>
                     <form onSubmit={handleSubmit}>
                     {textInputs?.map((el, i)=>{
                         return(

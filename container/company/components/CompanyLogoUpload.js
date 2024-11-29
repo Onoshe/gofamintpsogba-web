@@ -13,7 +13,6 @@ export const CompanyLogoUpload = ({coyLogo, base64String, setBase64String,notify
     //const fileInputRefs = useRef(null);
     //const [base64String, setBase64String] = useState('');
     //const [fileName, setFileName] = useState('');
-  
 
   
   const handleReset =()=>{
@@ -71,6 +70,14 @@ export const CompanyLogoUpload = ({coyLogo, base64String, setBase64String,notify
       }
   }
 
+  const handleOnSelectLogo =()=>{
+    const isAdmin = user?.role?.toUpperCase() === "ADMIN";
+    if(isAdmin){
+      inputRef.current.click()
+    }else{
+      notify('error', "Only Admin can change the Company's Logo" )
+    }
+  }
 
   //console.log(file);
 
@@ -101,7 +108,7 @@ export const CompanyLogoUpload = ({coyLogo, base64String, setBase64String,notify
              </div>
              : 
             <p className='bg-blue-400 text-white mt-3 text-[12px] smc:text-base  w-fit py-2 px-5 rounded-md active:bg-blue-300 hover:bg-blue-500 cursor-pointer'
-            onClick={()=>inputRef.current.click()}>
+            onClick={handleOnSelectLogo}>
               {coyLogo? 'Change logo' : 'Select logo'}
             </p>
             }

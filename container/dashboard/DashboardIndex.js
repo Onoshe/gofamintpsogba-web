@@ -36,6 +36,7 @@ const DashboardIndex = ({ssUser}) => {
   //const user = session?.user;
   const [listOfAccounts, setListOfAccounts] = useState(false);
   const [reportDateAnal, setReportDateAnal] = useState(reportDateAnalDef);
+  const [loadingReportPage, setLoadingReportPage] = useState(false);
 
   //const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const {showNotificationBar,settings, dispatchShowNotificationBar} = useStoreHeader((state) => state);
@@ -103,6 +104,8 @@ const DashboardIndex = ({ssUser}) => {
                 customers={customers}
                 vendors={vendors}
                 products={products}
+                loadingReportPage={loadingReportPage}
+                setLoadingReportPage={setLoadingReportPage}
             />
         </div>
         {/*<br/><br/><br/> */}

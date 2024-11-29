@@ -13,11 +13,13 @@ const SearchBar = ({chartOfAccounts, user, customers, vendors, products}) => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = React.useState("");
     const [searchFound, setSearchFound] = React.useState([]);
+    const [searchLoading, setSearchLoading] = React.useState(false);
     
     
     //console.log(customers, vendors, products)
     const handleOnChange = (e)=>{
-        setSearchTerm(e.target.value)
+        setSearchTerm(e.target.value);
+        setSearchLoading(false);
     }
     
     const handleClickCell =(nav)=>{
@@ -45,6 +47,7 @@ const SearchBar = ({chartOfAccounts, user, customers, vendors, products}) => {
             const route = `/${user.companyId}/reports/account-list-products`;
             router.push(route);
         }
+        setSearchLoading(true);
     }
     //console.log(tabsDropdownsArr) account-list-vendors
     React.useEffect(()=>{
@@ -76,13 +79,18 @@ const SearchBar = ({chartOfAccounts, user, customers, vendors, products}) => {
             <MdSearch size={22}/>
         </label>
         <div className={`fixed pl-3 pt-1 ${searchFound?.length? '' :'hidden'}`}>
-            <div className={`bg-gray-200/85 py-3 border rounded-md border-blue-400 shadow-lg text-sm min-w-[250px] max-w-[450px]  max-h-[60vh] overflow-y-auto ${searchFound?.length? '' :'hidden'}`}>
+            <div className={`relative bg-gray-200/85 py-3 border rounded-md border-blue-400 shadow-lg text-sm min-w-[250px] max-w-[450px]  max-h-[60vh] overflow-y-auto ${searchFound?.length? '' :'hidden'}`}>
+                {searchLoading? <div className='absolute w-full  top-0 bottom-0 text-center flex justify-center items-center text-gray-600 bg-white/60'>
+                    <p className='text-[blue]'>Loading, please wait...</p>
+                </div>
+                :<>
                 {searchFound?.map((dt, i)=>{
                     return(
                         <p key={`${i}key`} className='px-5 py-1 cursor-pointer hover:text-[blue] hover:bg-blue-200 active:text-blue-300'
                          onClick={()=>handleClickCell(dt)}>{dt.title}</p>
                     )
                 })}
+                </>}
             </div>
         </div>
     </div>

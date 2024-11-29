@@ -113,7 +113,7 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
  function objectToArray(arr, keys, noFmtCols, fontSize) {
   let agingOrder = ["OVER_DAYS_180", "DAYS_90_180", "DAYS_60_90", "DAYS_30_60", "LESS_DAYS_30", "stockin", "stockout", "stockopening", "stockclosing", "costPerUnit", "valuation", "unitcost", 'avgCost'];
   agingOrder = agingOrder.map((dt)=> dt.toLocaleLowerCase());
-    const likelyCurrencyCol = [...agingOrder, "debit", "credit", "openingbal", "openingbalance", "closingbal", "closingbalance", "amount", "balance", "total"];
+    const likelyCurrencyCol = [...agingOrder, "debit", "credit", "openingbal", "openingbalance", "closingbal", "closingbalance", "forThePeriod", "amount", "balance", "total"];
    
     return arr.map(obj => {
        return keys.map((key, colNo) =>{

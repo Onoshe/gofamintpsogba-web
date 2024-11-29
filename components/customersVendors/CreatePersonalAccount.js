@@ -16,14 +16,14 @@ import ToolsBarUpload from './ToolsBarUpload'
 
 
 const CreatePersonalAccount = ({ handleUpload, useUploadedForm, setUploadedForm, formData, setFormData,personalAcctType, handleSubmit, 
-    infoMsgByEntry, setInfoMsgByEntry, uploadInfo, editForm,  handleInfoMsg, handleCancel, showCreateBtn, handleCreateMultiPersonalAccts, accountGroups, uploading}) => {
+    infoMsgByEntry, setInfoMsgByEntry, uploadInfo, editForm,  handleInfoMsg, handleCancel, showCreateBtn, handleCreateMultiPersonalAccts, accountGroups, 
+    uploading, personalAcctLen}) => {
     const [stateCreate, dispatchCreate] = useReducer(reducerCreateByUpload,  initStateCreateByUpload);
     const {file,table, infoMsg, checkedBtn, checkedEditBtn, isDropped, isDragging, selected} = stateCreate;
     const [selectedOption, setSelectedOption] = React.useState({});
     const [group, setGroup] = React.useState("NEW");
     const [editFormCheck, setEditFormCheck] = React.useState(editForm);
-    
-   
+  
 
     const handleGetFileExtension=()=>{
       return getFileExtension(file);
@@ -122,6 +122,7 @@ const CreatePersonalAccount = ({ handleUpload, useUploadedForm, setUploadedForm,
                   noGroupValueMsg={noGroupValueMsg}
                   group={group}
                   setGroup={setGroup}
+                  personalAcctLen={personalAcctLen}
                 />
                 :<CreatePersonalAccountByUpload
                   classNameCont={`pt-16 ${table.show? 'hidden' :''}`}

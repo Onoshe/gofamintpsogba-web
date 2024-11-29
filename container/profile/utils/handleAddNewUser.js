@@ -13,7 +13,7 @@ import { platformDomain } from "@/container/_home/utils/registerHandler";
 
 export const handleAddNewUser= async(updateForm, session)=>{
     const user = session?.user;
-
+    //return console.log(updateForm);
     let result = {};
     const pwdOk =  await verifyPassword(updateForm, user);
     const userName = updateForm.userId1.toLowerCase()+"."+updateForm.userId2.toLowerCase();
@@ -22,7 +22,6 @@ export const handleAddNewUser= async(updateForm, session)=>{
         const coyId = await getCoyIdNo(user);
         const updatedParams = [userId, updateForm.firstname, updateForm.lastname, updateForm.title, 
             updateForm.email, updateForm.phoneNo, updateForm.role, coyId[0].id];
-        
         const userEmailExist =  await checkUserExist(user, "email", updateForm.email);
         const userIdExist =  await checkUserExist(user, "userId", userId);
         if(userEmailExist){
@@ -32,16 +31,18 @@ export const handleAddNewUser= async(updateForm, session)=>{
         }else{
             const {url, body, defaultSecret} = await getInsertParams(user.companyId, updatedParams);
             //return console.log(body, userForm)
+             const domain =user.companyId.toLowerCase();
             result = await postRequest(url, body);
             if(result.ok){
-                await postNewUserMail({form:{firstname:updateForm.firstname, lastname:updateForm.lastname, email:updateForm.email}, loginDetails:{password:defaultSecret, userId}});
+              const addRes =  await postNewUserMail({domain, form:{firstname:updateForm.firstname, lastname:updateForm.lastname, email:updateForm.email}, loginDetails:{password:defaultSecret, userId}});
+              console.log(addRes);
+              result = addRes;
             }
             //result = {ok:true}
         }
         
         
     }else {result = {ok:false, msg:"Your password is incorrect!"}}  
-    
     return result
 }
 
@@ -106,7 +107,7 @@ const getCoyIdNo = async (user)=>{
 }
 
 
-const postNewUserMail = async ({form, loginDetails})=>{
+const postNewUserMail = async ({domain, form, loginDetails})=>{
     const mailHtml = getRegisterUserEmailBody({
         name:'Dear: '+form.firstname+' '+form.lastname, 
         subject:"QuickRecords Login Details", 
@@ -116,7 +117,7 @@ const postNewUserMail = async ({form, loginDetails})=>{
         emailMsg1:'Your account registration on QuickRecords was successful and your login details are:',
         emailMsg2:'Go to the login page and login to change your one-time password.',
         loginPage:platformDomain});
-        const sendMailLink = getLinkClientServer().dev;
+        const sendMailLink = getLinkClientServer(domain).dev;
         const mailBody = {
             route:"SENDMAIL",
             mailObj:{

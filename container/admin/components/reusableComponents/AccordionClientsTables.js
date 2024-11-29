@@ -50,5 +50,4 @@ export const AccordionClientsTables_Str = ({title, titleStyle, clientTab, conten
   )
 }
 
-
 export default AccordionClientsTables

@@ -11,10 +11,10 @@ export function generateBSData(transProcessor, coaStructure, dateFormQuery) {
     
   const ledgersObj = transProcessor.getSectionLedgers(dateFormQuery);
   const balanceSheetObj = ledgersObj.balanceSheet;
-
-  const customersObj = transProcessor.getPersonalAccounts("customersLedger");
-  const vendorsObj = transProcessor.getPersonalAccounts("vendorsLedger");
-  const productsObj = transProcessor.getPersonalAccounts("productsLedger");
+  
+  const customersObj = transProcessor.getPersonalAccounts("customersLedger", dateFormQuery);
+  const vendorsObj = transProcessor.getPersonalAccounts("vendorsLedger", dateFormQuery);
+  const productsObj = transProcessor.getPersonalAccounts("productsLedger", dateFormQuery);
   const customersLedgers = Object.values(customersObj);
   const vendorsLedgers = Object.values(vendorsObj);
   const productsLedgers = Object.values(productsObj);

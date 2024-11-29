@@ -47,7 +47,7 @@ const  verifyPassword = async (updateForm, user)=>{
        const urlLink = getLinkLogin({domain:user.companyId, form});
        const userData = await getRequest(urlLink).then((res)=> res);
        if(userData?.data?.length){
-        const match = await bcrypt.compare(updateForm.password, userData.data[0].secret);
+        const match = await bcrypt?.compare(updateForm.password, userData.data[0].secret);
         if(match){
             passwordOk = true;
         }

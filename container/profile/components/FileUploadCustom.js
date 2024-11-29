@@ -4,19 +4,21 @@ import { getPostImageLink } from "@/lib/apiRequest/urlLinks";
 import React, { Children } from "react";
 import { BiCloudUpload, BiUpload } from "react-icons/bi";
 import { BsImage } from "react-icons/bs";
-import { MdClose } from "react-icons/md";
+import { IoMdTrash } from "react-icons/io";
+import { MdClose, MdDelete } from "react-icons/md";
 /* eslint-disable @next/next/no-img-element */
 
 
-export const FileUploadCustom = ({file, setFile, session,userId, className, notify}) => {
+export const FileUploadCustom = ({file, setFile, session,userId, userPhotoCheck, className, notify}) => {
     const inputRef = React.useRef();
-    
+    const postUrl = getPostImageLink();
     //const [file, setFile] = React.useState(null);
    
 
   const handleReset =()=>{
     setFile(null);
     inputRef.current.value = null;
+    userPhotoCheck.mutate();
   }
 
   async function handleFileChange(e) {
@@ -44,7 +46,6 @@ export const FileUploadCustom = ({file, setFile, session,userId, className, noti
   const handleSaveImage = async ()=>{
     //return console.log(userId)
      try {
-      const postUrl = getPostImageLink();
       const formData = new FormData();
       const newImageName = userId?.replace(".", "_");
       formData.append('image', file);
@@ -55,7 +56,7 @@ export const FileUploadCustom = ({file, setFile, session,userId, className, noti
           notify("success", res.msg);
           handleReset();
         }else{
-          notify("error", res.msg);
+          notify("error", res.msg || res.error);
         }
       });
 
@@ -65,7 +66,28 @@ export const FileUploadCustom = ({file, setFile, session,userId, className, noti
     }
 
   };
-  
+
+const handleDeletePhoto = async ()=>{
+    try {
+      const formData = new FormData();
+      const userIdFmt = userId.replace('.', '_');
+      formData.append('imageDelete', userIdFmt);
+      await postRequestFormData(postUrl, formData)
+      .then((res)=>{
+        if(res.ok){
+          notify("success", res.msg);
+          handleReset();
+        }else{
+          notify("error", res.msg || res.error);
+        }
+      });
+
+    } catch (error) {
+      notify("error", "Error deleting file");
+      console.error('Error uploading file:', error);
+    }
+}
+
 
 //  const userPhoto = getImageLink("https://quickrecords.gofamintpsogba.org/image_server.php?image=DEMO@sundaycom");
 
@@ -74,10 +96,19 @@ export const FileUploadCustom = ({file, setFile, session,userId, className, noti
         <input ref={inputRef}  type='file' onChange={handleFileChange} className='hidden'/>
         
         {!file?.name? 
-            <div className='bg-red-200 group'>
-                 <p className="text-[12px] hidden group-hover:block absolute bg-slate-300 bottom-10 text-nowrap px-1 py-[2px] rounded-sm">Change Image</p>
-                <BsImage className="absolute -right-3 bottom-0 font-bold text-blue-600 cursor-pointer hover:text-[blue] active:text-blue-400"  size={24}
-                onClick={()=>inputRef.current.click()}/>
+            <div className=''>
+                <div className='bg-red-200 group/img peer/img peer-hover/trash:hidden'>
+                    <p className="text-[12px] hidden group-hover/img:block peer-hover/trash:hidden absolute bg-slate-300 bottom-10 text-nowrap px-1 py-[2px] rounded-sm">
+                      {userPhotoCheck?.data?.ok? 'Change Image' : 'Upload photo'}
+                    </p>
+                    <BsImage className="absolute  -right-3 bottom-0 font-bold text-blue-600 cursor-pointer hover:text-[blue] active:text-blue-400"  size={24}
+                    onClick={()=>inputRef.current.click()}/>
+                </div>
+                <div className=' group/trash peer/trash peer-hover/img:hidden'>
+                  <p className="text-[12px] hidden group-hover/trash:block absolute text-red-700 bg-slate-300 bottom-10 text-nowrap px-1 py-[2px] rounded-sm">Delete Photo</p>
+                 {userPhotoCheck?.data?.ok && <IoMdTrash className="absolute hidden group-hover/parent:block group-hover/img:hidden -right-0 bottom-[70px] z-20  font-bold text-red-600 cursor-pointer hover:text-[red] active:text-red-400"  size={30}
+                    onClick={handleDeletePhoto}/>}
+                </div>
             </div>
           :
           <>
@@ -91,6 +122,7 @@ export const FileUploadCustom = ({file, setFile, session,userId, className, noti
             </div>
           </>
         }
+       
     </div>
   )
 }

@@ -20,15 +20,16 @@ export const handleManageClient = async (form, alert, setAlert, handleRevalidate
                 setAlert({...alert, msgTitle:'Incorrect passcode', msg:'', type:'error', show:true});
             }else{
              //If table Exist for client domain
+             const domain = form.domain.toLowerCase();
+             let body = {
+                "act":"DROP_CLIENT",
+                "domain":domain,
+                "clientId":form.clientId,
+                "table":"_clients"
+              };
+              const urlDrop = getLinkClientServer(domain).server;
+
              if(form.actType === "REMOVE"){
-                const domain = form.domain.toLowerCase();
-                const urlDrop = getLinkClientServer(domain).server;
-                const body = {
-                    "act":"DROP_CLIENT",
-                    "domain":domain,
-                    "clientId":form.clientId,
-                    "table":"_clients"
-                  };
                 await postRequest(urlDrop, body)
                 .then((res)=> {
                     if(res.ok){
@@ -38,17 +39,26 @@ export const handleManageClient = async (form, alert, setAlert, handleRevalidate
                         handleRevalidate('DBTABLES');
                     }
                 }); 
-             }else{
-                //await runRemoveClient(url, body, alert, setAlert, handleRevalidate);
+             }else {
+                body = {...body, "act": form.actType};
+                await postRequest(urlDrop, body)
+                .then((res)=> {
+                    if(res.ok){
+                        setAlert({...alert, msgTitle:res.msg, type:res.ok? 'success' : 'error', show:true});
+                        handleRevalidate('DBS');
+                        handleRevalidate('CLIENTS');
+                        handleRevalidate('DBTABLES');
+                    }
+                });
              }    
             }
         }else if(form.actType === "CREATE" || form.actType === "ALTER"){ //Create tables if not exist
                
-                if(!form.tables.length){
+                if(!form.autoRemoveTables && !form.tables.length){
                   return  setAlert({...alert, msgTitle:'Please, set tables to create', msg:'', type:'error', show:true});
                 }; 
-                const tablesToCreate = [];
-                form.tables.forEach(el => {
+                let tablesToCreate = [];
+                form?.tables?.forEach(el => {
                     if(el){tablesToCreate.push(el)}
                 });
                 const passcodeRes = await handlePasscode(form);
@@ -57,18 +67,34 @@ export const handleManageClient = async (form, alert, setAlert, handleRevalidate
                 }else{
                     const domain = form.domain.toLowerCase();
                     const url = getLinkClientServer(domain).server;
+                    //let autoCreateAllTables = form.utoRemoveTables;
                     //if(form.actType === "CREATE"){
+                    if(form.actType === "CREATE"){
+                        //Create new client tables
+                        const body = {
+                            "act":"CREATE_CLIENT_TABLES",
+                            "domain":domain,
+                            "clientId":form?.clientId,
+                            "tables":tablesToCreate,
+                             "autoCreateAllTables":form.autoRemoveTables,
+                            "table":domain+"_usersaccount" //Dommy 
+                          };
+                        await postRequest(url, body)
+                        .then((res)=> console.log(res));
+                    }else{
                         const body = {
                             "act":form.actType,
                             "domain":domain,
-                            "tables":tablesToCreate
+                            "tables":tablesToCreate,
+                             "autoCreateAllTables":form.autoRemoveTables
                             //"table":domain+"_usersaccount"
                         };
                         await postRequest(url, body)
                             .then((res)=> {
-                            // console.log(res)
+                                console.log(res)
                                 if(!res?.ok){
-                                    setAlert({...alert, msgTitle:res.error, type:'error', show:true});
+                                    const msg = typeof(res.msg) === "object"? "Error in performing action" : res.msg;
+                                    setAlert({...alert, msg:res.msg?.error, msgTitle:msg, type:'error', show:true});
                                 }else{
                                     const msgTitle = form.actType==="CREATE"? "Tables created successfully" : "Tables deleted successfully";
                                     setAlert({...alert, msgTitle:res?.msg? res?.msg : typeof res?.data == "string"? res.data : '', type:'success', show:true});
@@ -76,6 +102,7 @@ export const handleManageClient = async (form, alert, setAlert, handleRevalidate
                                     setAlert({...alert, msgTitle, type:'success', show:true});
                                 }
                             });
+                        }
                     
                 }
         }else{

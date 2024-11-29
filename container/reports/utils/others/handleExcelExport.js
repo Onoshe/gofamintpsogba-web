@@ -102,7 +102,7 @@ import * as XLSX from 'xlsx-js-style';
                     const colNo = k +1;
                     const colValue = row[k];
                     //console.log(dataHeaderRowValue?.toString().toLowerCase())
-                    if(['amount', 'balance', 'debit', 'credit', 'total'].some((dt)=>dataHeaderRowValue?.toString().toLowerCase().includes(dt))){
+                    if(['amount', 'balance', 'debit', 'credit', 'total', 'openingBal', 'forThePeriod', 'closingBal'].some((dt)=>dataHeaderRowValue?.toString().toLowerCase().includes(dt))){
                         const colLabel = getExcelColumnLabel(colNo);
                         const cell = `${colLabel}${rowNo}`;
                         if(ws[cell] && !isNaN(colValue)){

@@ -24,9 +24,11 @@ import { capitalizeFirstCharOnly } from '@/lib/capitalize/capitalizeString';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import { Modal } from './components/Modal';
 import { FileUploadCustom } from './components/FileUploadCustom';
-import { getImageLink } from '@/lib/apiRequest/urlLinks';
+import { getImageCheckLink, getImageLink } from '@/lib/apiRequest/urlLinks';
 import Image from 'next/image';
 import { getUsers } from './utils/getUsers';
+import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
+import { getRequest } from '@/lib/apiRequest/getRequest';
 
 
 
@@ -50,17 +52,25 @@ const IndexProfile = ({ssUser}) => {
   const [deleteUser, setDeleteUser] = React.useState({user:{}, delete:false});
   const [updateForm, setUpdateForm] = React.useState({});
   const [signingOut, setSigningOut] = React.useState({show:false});
+  const [addingUser, setAddingUser] = React.useState(false);
   const [updateFormAddUser, setUpdateFormAddUser] = React.useState(updateFormAddUserDef);
   const [updateUserForm, setUpdateUserForm] = React.useState({role:"", nonActive:"", password:"", passwordDelete:"", passwordReset:""});
   let planLimit = getPlanLimit(subscriptions, generalSettings);
   const userId = session?.user?.userId;
   let userIdImg = userId?.replace(".", "_");
   const userPhoto = getImageLink(userIdImg);
+  const imgCheckUrl = getImageCheckLink(userIdImg);
   const showRegUsers = user?.role?.toLowerCase() === "admin";
-  //console.log(userPhoto)
+  const userPhotoCheck = useSWRFetcher(imgCheckUrl);
+
+  //getRequest(userId).then((res)=>console.log(res));
+  //console.log(userPhotoCheck?.data)
+
+
   //userIdImg += ".jpg";
   const [file, setFile] = React.useState(null);
-  //console.log(subscriptions, generalSettings, planLimit);
+  const rolesObj = generalSettings?.find((dt)=> dt.slug === "account-user-roles");
+  const usersRoles = rolesObj?.slug? rolesObj?.smallText1?.split(',')?.slice(1) : [];
 
   const notify = (type, msg) => toast[type](msg, {
     position: "top-right",
@@ -123,7 +133,8 @@ const IndexProfile = ({ssUser}) => {
 
 const handleAddUser =async (e, updateForm)=>{
   e.preventDefault();
-  //console.log(updateForm)
+  setAddingUser(true);
+  //console.log(updateForm);
   if(users?.length < planLimit){
     setUpdateFormAddUser(updateFormAddUser)
     await handleAddNewUser(updateFormAddUser, session)
@@ -133,8 +144,10 @@ const handleAddUser =async (e, updateForm)=>{
         setUpdateFormAddUser(updateFormAddUserDef);
         setAddUser({user:{}, add:false})
         dispatchFetchSettingsCall();
+        setAddingUser(false)
       }else{
         notify("error", res.msg);
+        setAddingUser(false);
         if(res.type === "USERID"){
           setUpdateFormAddUser({...updateFormAddUser, defaultUserId:false})
         }
@@ -200,14 +213,13 @@ const handleResetUserPwd =async (e)=>{
     setAddUser({user:{}, add:false})
   };
   
-  //console.log(userPhoto)
 
   React.useEffect(()=>{
     setUpdateForm({title:user.title, phoneNo:user.phoneNo, recoveryEmail:user.recoveryEmail, password:''})
   },[user]);
   
 
-  const userPhotoRender = (userPhoto?
+  const userPhotoRender = (userPhotoCheck?.data?.ok?
   <Image width={100} height={100} src={userPhoto} alt='photo' className='size-[100px]'/>
   :<BsPerson color='seagreen' className='text-[100px] text-center'/>);
 
@@ -220,7 +232,7 @@ const handleResetUserPwd =async (e)=>{
         <div className='font-bold  flex-row items-center gap-2 header1 text-sm text-teal-800 mt-2'>{capitalizeFirstCharOnly(user?.role)}</div>
         <div className='flex justify-center items-center my-3 '>
           {!user?.imageUrl?
-            <div className="avatar online relative">
+            <div className="avatar online relative group/parent">
                 <div className="w-24 rounded-full flex justify-center items-center ring ring-primary ring-offset-base-100 ring-offset-2">
                     {file?.name? 
                       <img src={URL.createObjectURL(file)} alt="Uploade image" className='size-[50px]'/>
@@ -228,7 +240,7 @@ const handleResetUserPwd =async (e)=>{
                     }
                 </div>   
                 <FileUploadCustom file={file} setFile={setFile} session={session} 
-                  className={'hidden'} notify={notify} userId={userId}/>
+                  className={'hidden'} notify={notify} userId={userId} userPhotoCheck={userPhotoCheck}/>
             </div>
             :<div className='flex justify-center items-center pt-4 pb-6'>
                 <div className="avatar">
@@ -254,9 +266,10 @@ const handleResetUserPwd =async (e)=>{
         <HorizontalLine widths={100} margTop={20} margBot={15} bColor={'dodgerblue'}/>
         {showRegUsers && 
             <Users users={users} 
-            handleClickCell={handleUser} 
-            handleAddUser={()=>setAddUser({user:{}, add:true})}
-            planLimit={planLimit}
+              handleClickCell={handleUser} 
+              handleAddUser={()=>setAddUser({user:{}, add:true})}
+              planLimit={planLimit}
+              generalSettings={generalSettings}
             />
           }
         {updateUser.update && 
@@ -271,6 +284,7 @@ const handleResetUserPwd =async (e)=>{
                 handleDeleteUserContinue={handleDeleteUserContinue}
                 updateForm={updateUserForm}
                 setUpdateForm={setUpdateUserForm}
+                roles={usersRoles}
                 />
         }
         {updateUser.reset && 
@@ -299,14 +313,18 @@ const handleResetUserPwd =async (e)=>{
             <UpdatedPassword user={user} 
               handleClose={handleCloseUpdate} 
               handleUpdateUser={handleUpdateUser}
-              handleUpdatePwd={handleUpdatePwd}/>
+              handleUpdatePwd={handleUpdatePwd}
+              />
           }
         {addUser.add && 
             <AddUser user={session?.user} handleClose={handleCloseUpdate} 
-            handleAddUser={handleAddUser}
-            onChangeHandler={onChangeAddForm}
-            updateForm={updateFormAddUser}
-            setUpdateForm={setUpdateFormAddUser}
+              handleAddUser={handleAddUser}
+              onChangeHandler={onChangeAddForm}
+              updateForm={updateFormAddUser}
+              setUpdateForm={setUpdateFormAddUser}
+              generalSettings={generalSettings}
+              roles={usersRoles}
+              addingUser={addingUser}
             />
         }
         {signingOut.show && <Modal />}

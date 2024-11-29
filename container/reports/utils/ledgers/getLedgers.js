@@ -1,11 +1,12 @@
 import { calculateCumBalanceArray } from "./calculateBalances";
 
-export function getTrialBalanceAcct(processedLedgers){
+export function getTrialBalanceAcct(processedLedgers, coa){
      //console.log(processedLedgers)
     //const {processedLedgers} = this.processTransactions();
     let values = Object.values(processedLedgers);
     values = values.map((el)=> {
-      return el.name.toUpperCase() == "TOTAL"? el : {...el, classNameTD:'hover:text-blue-700 cursor-pointer hover:underline'}
+      const acctType = coa?.find((dt)=> dt.code == el?.typeCode);
+      return el.name.toUpperCase() == "TOTAL"? el : {...el, acctType:acctType?.title, classNameTD:'hover:text-blue-700 cursor-pointer hover:underline'}
     })
     const keys = Object.keys(processedLedgers);
     return {keys, values}

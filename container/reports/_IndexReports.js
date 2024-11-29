@@ -55,7 +55,8 @@ const IndexReports = ({ssUser}) => {
    if(reportName?.includes("=")){ const reportNameSplit = splitByFirstChar(reportName, '='); reportName = reportNameSplit[0]; }
   const companyId = session?.user?.companyId;
   const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName, pathname, transProcessor, customers, vendors, products, viewTransId, ledgerCode, monthlyQuery, coaStructure, transactionsDetails, user, chartOfAccounts, dateForm:reportDate, clickedHeader});
-  const isReportPage = !reportName || pathname === "/demo/reports" || pathname === "/demo/reports/"; 
+  const ledgerAcctsDisplay = ["general-ledger-accounts", "customers-ledger-accounts", "vendors-ledger-accounts", "products-ledger-accounts"];
+  const isReportPage = !reportName || ledgerAcctsDisplay.includes(reportName) || (pathname === `/${user?.companyId?.toLowerCase()}/reports` || pathname === `/${user?.companyId?.toLowerCase()}/reports/`); 
   //const genLedgerCodes = Object.keys(processedLedgers);
   const {ledgerCodes, ledgerAccts, ledgerTitle} = getDisplayPersonalLedgers(transProcessor, currentReport, reportDate);
   const docHeader = moreDocHeader?.length? [[clientAccount?.companyName], [title], [date],  ...moreDocHeader] : [[clientAccount?.companyName], [title], [date], ['']];
@@ -63,7 +64,7 @@ const IndexReports = ({ssUser}) => {
   const companyLogoFile = getCompanyLogo(settings);
   const windowDimen = useWindowDimensions();  
   
-   //console.log(clientAccount)
+  //console.log(user, pathname, reportName)
 
   const handleReport =(report)=>{
       //console.log(report);
@@ -147,9 +148,17 @@ const IndexReports = ({ssUser}) => {
     }
 
     const handleSelectedLedger =(ledgerCode)=>{
+      let ldg = ledgerCode?.slice(0,2);
+      ldg = ldg === "C-"? "customers" : ldg === "V-"? "vendors" : "general";
+      const ledgerAcct = {
+        general:"gl",
+        customers:"customers",
+        vendors:"vendors",
+        products:"products",
+      }
       setShowLedgers(false);
-      //return console.log(ledgerCode)
-      const route = `/${companyId}/reports/gl?l=${ledgerCode}`;
+      const ledger = ledgerAcct[ldg];
+      const route = `/${companyId}/reports/${ledger}?l=${ledgerCode}`;
       router.push(route);
     }
     const handleSelReport =(rep)=>{
@@ -158,7 +167,7 @@ const IndexReports = ({ssUser}) => {
       if(searchLeadgers.includes(rep.name)){
          setShowLedgers(true);
          dispatchCurrentReport(rep);
-         router.push(`/${companyId}/reports?${rep.name}`);
+         router.push(`/${companyId}/reports/${rep.name}`);
       }else{
         router.push(`/${companyId}/reports/${rep.name}`);
         dispatchCurrentReport(rep);

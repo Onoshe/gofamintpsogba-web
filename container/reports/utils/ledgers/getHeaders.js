@@ -59,6 +59,8 @@ export const keysList = {
     type:{name:'type', title:'Type'},
     position:{name:'position', title:'Position'},
     sn:{name:'sn', title:'SN'},
+
+    acctType:{name:'acctType', title:'Group'},
 }
 
 

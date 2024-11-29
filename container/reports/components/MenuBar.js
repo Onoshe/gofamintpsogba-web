@@ -62,8 +62,8 @@ const handleCustomDate =(e)=>{
     }else{toastNotify('error', 'Please, set the date range')}
 }
   let hideDateComponent = false;
-    const reportDateExcl = ["account-list-customers", "account-list-vendors", "account-list-products", "personal-ledgers-customers-balances", "personal-ledgers-vendors-balances", 
-        "personal-ledgers-products-balances", "transaction-view"];
+    const reportDateExcl = ["account-list-customers", "account-list-vendors", "account-list-products", "transaction-view"];
+        //"personal-ledgers-customers-balances", "personal-ledgers-vendors-balances","personal-ledgers-products-balances", ];
     if(reportDateExcl.includes(reportName) || (reportName == "products-valuation" && !viewTransId)){
        hideDateComponent = true;
      }

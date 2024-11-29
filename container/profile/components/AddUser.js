@@ -10,7 +10,7 @@ import { MdClose } from 'react-icons/md';
 
 
 export const AddUser = ({
-    user, updateForm, setUpdateForm,   handleClose,  handleAddUser}) => {
+    user, updateForm, setUpdateForm,   handleClose,  handleAddUser, addingUser, generalSettings, roles}) => {
     
 
     const onChangeHandler = (e)=>{
@@ -69,8 +69,11 @@ export const AddUser = ({
                         <div>
                             <select className='border-b border-b-blue-400 w-full' name="role" value={updateForm.role} onChange={onChangeHandler} required>
                                 <option value="">---Select---</option>
-                                <option value="Accountant">Accountant</option>
-                                <option value="Viewer">Viewer</option>
+                                {roles?.map((role, i)=>{
+                                    return(
+                                        <option key={`${i}role`} value={role}>{role}</option>
+                                    )
+                                })}
                             </select>
                         </div>
                     </div>
@@ -92,7 +95,7 @@ export const AddUser = ({
                         <input name="password" value={updateForm.password} className='w-full border-b border-b-blue-400 outline-none' onChange={onChangeHandler} placeholder='Your login password' required/>
                     </div> 
                 </div>
-                <button className='btn btn-info my-3' type='submit'>Add User</button>
+                <button className={`btn btn-info my-3 ${addingUser? 'btn-disabled' : ''}`} type='submit'>{addingUser? "Adding User, please wait..." : "Add User"}</button>
                 <p className='text-teal-900 italic'>A default login password together with login details will be sent to the new user email when new user is added successfully</p>
 
                 

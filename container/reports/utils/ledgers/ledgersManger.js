@@ -274,7 +274,7 @@ export class LedgersManager {
     }
     getTrialBalance(dateForm){
       const  {processedLedgers} = this.processTransactions(dateForm?.startDate, dateForm?.endDate);
-      return getTrialBalanceAcct(processedLedgers)
+      return getTrialBalanceAcct(processedLedgers, this.coaStructure)
     }
     getGeneralLedgers(dateForm){
       const  {processedLedgers} = this.processTransactions(dateForm?.startDate, dateForm?.endDate);

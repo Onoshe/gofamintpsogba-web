@@ -29,7 +29,8 @@ const IndexCompany = ({ssUser}) => {
     const [appB64Image, setAppBase64Image] = React.useState(''); 
     const subcriptionHistory = getSubscriptionHistory({subscriptions});
     const [tabs, setTabs] = React.useState({activeTab:{name:'home', title:'Home'}});
-
+    
+    const lockPosting = user?.role?.toUpperCase() !== "ADMIN";
     let quickRecordsLogo = "";
     if(generalSettings?.length){
         quickRecordsLogo = generalSettings.find((dt)=>dt.slug === "quickrecords-logo")?.largeText1;
@@ -68,9 +69,6 @@ const IndexCompany = ({ssUser}) => {
         theme: "colored",
       //transition: 'Bounce',
       });
-    
-   
-  
 
   return (
     <div className=''>
@@ -106,8 +104,10 @@ const IndexCompany = ({ssUser}) => {
                     
                     </div>
                 </BackgroundCard>
-                <div className='flex w-full flex-col lg:flex-row mt-10'>
-                
+                <div className='relative flex w-full flex-col lg:flex-row mt-10 pt-5 border border-[maroon] bg-red-50'>
+                    <p className={`font-[600] px-2 pb-10 text-center text-red-800 ${lockPosting? '' : 'hidden'}`}>
+                        Posting can only be Locked or Unlocked by the Admin</p>
+                    <div name="PeusdoCover" className={`${lockPosting? 'absolute z-20' : 'hidden'} top-0 bottom-0 w-full bg-blue-200/10`}></div>
                     <div className='w-full flex-wrap flex flex-row gap-5 justify-around items-center'>
                         <AuditedYearLock
                             dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}

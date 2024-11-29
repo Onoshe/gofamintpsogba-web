@@ -40,10 +40,22 @@ export const handleCreateClient = async (form, alert, setAlert, handleRevalidate
                     if(user?.data?.length){
                         setAlert({...alert, msg:'', msgTitle:"Client with '"+form.companyDomain+"' domain already exist", type:'error', show:true});
                     }else{  //act:  CREATE_CLIENT
+                        //Only new client data will be inserted in _clients table and database will not be created. This is bcos Database can only be created manually in cpanel  
                         const {url, body} = createClientQuery(form, "CREATE_CLIENT"); 
 
                         //Insert new client in _clients and create new client database 
                         const resData = await postRequest(url, body);
+                        if(resData.ok){
+                            setAlert({...alert, msg:resData.db.msg, msgTitle:resData.msg, type:'success', show:true});
+                            handleRevalidate('DBTABLES');
+                            handleRevalidate('DBS');
+                            isError = false;
+                            setForm({autoCreateTables:true});
+                        }else{
+                            setAlert({...alert, msg:'', msgTitle:resData.msg, type:'error', show:true});
+                        }
+                        
+                        /* Insert Tables on new database codes
                         if(!resData.ok){
                             setAlert({...alert, msg:'', msgTitle:resData.msg, type:'error', show:true});
                         }{
@@ -69,7 +81,7 @@ export const handleCreateClient = async (form, alert, setAlert, handleRevalidate
                                     setAlert({...alert, msg:'', msgTitle:resData.msg, type:'error', show:true});
                                 }
                              })
-                        }  
+                        }*/  
                     }
                 
             }

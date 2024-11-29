@@ -18,14 +18,17 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import { ClientsDatabase } from './cards/DashboardCards_More';
 import { sortArrayByKey } from '@/lib/sort/sortArrayByKey';
 import { getRequest } from '@/lib/apiRequest/getRequest';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import DashboardCard from '../../components/reusableComponents/DashboardCard';
+import { MdClose } from 'react-icons/md';
 
 
 
 const IndexDashboard = ({ssUser}) => {
     const {user} = useAuthCustom(ssUser);
     const domain = user.companyId?.split('@')[0]?.toLowerCase();
-    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl, backupUrl, databasesUrl, subscriptionsUrl, settingsUrl} = getLinksAdmin(domain);
+    const {usersAccountUrl, clientsDataUr, accessDataUrl, dbTablesUrl, accessUrl, backupUrl, backupUrlBase, databasesUrl, subscriptionsUrl, settingsUrl} = getLinksAdmin(domain);
     const usersAccount = useSWRFetcher(usersAccountUrl);
     const clientsData = useSWRFetcher(clientsDataUr);
     const accessData = useSWRFetcher(accessDataUrl);
@@ -50,6 +53,9 @@ const IndexDashboard = ({ssUser}) => {
     const companyDomainsOthers = companyDomains?.filter((dt)=> dt !== "demo" && dt !== "admin");
     //const [clientTableExist, setClientTableExist] = React.useState(false);   
     const [usersAccountOthers, setUsersAccountOthers] = useState([]);
+    const [selectedClient, setSelectedClient] = useState({});
+    const selClientKeys = selectedClient?.row?.companyName? Object.keys(selectedClient.row) : [];
+    
     
     const fetchUsersAccounts = async ()=>{
         const accts = [];
@@ -61,6 +67,20 @@ const IndexDashboard = ({ssUser}) => {
             setUsersAccountOthers(accts)
         }
       };
+
+
+      const notify = (type, msg) => toast[type](msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        theme: "colored",
+      //transition: 'Bounce',
+      });
 
    const handleRevalidate = (table) => {
         switch (table) {
@@ -92,23 +112,41 @@ const IndexDashboard = ({ssUser}) => {
   },[companyDomainsOthers]);
   
  const displayTabMain = {
-    DASHBOARD:<Dashboard/>,
-    MANAGECLIENTS:<ManageClients clientsData={clientsDataFmt} handleRevalidate={handleRevalidate} clientTables={clientTables}/>,
+    DASHBOARD:<Dashboard databases_clients={databases_clients?.db} clientsDataFmt={clientsDataFmt} selectedClient={selectedClient} setSelectedClient={setSelectedClient}/>,
+    MANAGECLIENTS:<ManageClients databases_clients={databases_clients?.db} clientsData={clientsDataFmt} handleRevalidate={handleRevalidate} clientTables={clientTables}/>,
     SQLQUERY:<SQLQuery user={user} clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     CREATECLIENT:<CreateClient clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     CREATEACCOUNT:<CreateAccount clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     CREATEUSER:<CreateUser clientsData={clientsDataFmt} handleRevalidate={handleRevalidate}/>,
     ACCESS:<Access clientsData={clientsDataFmt} handleRevalidate={handleRevalidate} access={access}/>,
-    BACKUP:<Backup clientsData={clientsDataFmt} backupUrl={backupUrl} handleRevalidate={handleRevalidate} access={access}/>,
+    BACKUP:<Backup clientsData={clientsDataFmt} notify={notify} backupUrlBase={backupUrlBase} backupUrl={backupUrl} handleRevalidate={handleRevalidate} access={access}/>,
  } 
- 
+
+  const fullTabs = ['BACKUP']; 
+  const hideSideCards = fullTabs.includes(activeTabHome?.tab?.name);
   return (
     <div className='p-4'>
         <div className='flex w-full flex-col lg:flex-row'>
-        <div className='flex justify-center  lg:w-[70%]'>
+        <div className={`flex justify-center ${hideSideCards? 'lg:w-[100%]' : 'lg:w-[70%]'}`}>
         {displayTabMain[activeTabHome?.tab?.name]}
         </div>
-            <div className='flex flex-col  lg:w-[30%] items-center'>
+            <div className={`flex flex-col  lg:w-[30%] items-center ${hideSideCards? 'hidden' : ''}`}>
+                
+                {selectedClient?.row?.companyName && 
+                    <DashboardCard style={`flex-col relative gap-3 ${activeTabHome?.tab?.name === 'DASHBOARD'? 'flex' :'hidden'}`}
+                    title={"Client Info"}>
+                 <MdClose size={22} className='absolute right-3 top-1 cursor-pointer text-red-500 hover:text-red-800 active:text-red-300'
+                  onClick={()=>setSelectedClient({})}/>
+
+                  <p className='text-blue-800 font-[500] underline'>{selectedClient?.row?.companyName}</p>
+                  <div>
+                        {selClientKeys?.map((key, i)=>{
+                            return(
+                                <p key={`${i}selCl`}><span className='text-blue-500 underline'>{key}:</span> <span>{selectedClient.row[key]}</span></p>
+                            )
+                        })}
+                  </div>  
+                </DashboardCard>}
                 <ClientsCard
                     activeTab={activeTabHome?.tab?.name}
                     clientsData={clientsData}
@@ -148,6 +186,17 @@ const IndexDashboard = ({ssUser}) => {
                     activeTab={activeTabHome?.tab?.name}
                     clientsData={accessDataFmt}
                     handleRevalidate={handleRevalidate}
+                />
+                <ToastContainer 
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={true}
+                    newestOnTop={false}
+                    closeOnClick={true}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
                 />
             </div>
         </div>
