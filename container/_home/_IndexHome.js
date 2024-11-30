@@ -126,15 +126,27 @@ const IndexHome = ({ssUser}) => {
     dispatchResetForm(); //Reset form on page change
    },[pathname]);
 
-   
-  
+   //console.log(user, form);
 
    const handleLogin = async(e)=>{
     e.preventDefault();
-    loginHandler({loadingBtn, setLoadingBtn, signIn, form, dispatchCoy, dispatchActivePage,
+    //First logout the user in session if any
+    if(user?.userId){
+        console.log(user, form)
+        signOut({dispatchCoy, user})
+        .then(()=>{
+            loginHandler({loadingBtn, setLoadingBtn, signIn, form, dispatchCoy, dispatchActivePage,
+            runDispatchClientData, setAlert, goToPage, postActivity,dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts,
+            dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, activities,
+            dispatchResetPwdInfo})
+        })
+    }else{
+        loginHandler({loadingBtn, setLoadingBtn, signIn, form, dispatchCoy, dispatchActivePage,
         runDispatchClientData, setAlert, goToPage, postActivity,dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts,
         dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, activities,
         dispatchResetPwdInfo})
+    }
+
     }
 
   

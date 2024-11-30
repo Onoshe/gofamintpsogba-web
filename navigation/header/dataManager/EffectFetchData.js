@@ -17,7 +17,7 @@ const EffectFetchData = ({ session}) => {
   
   const genDomain = "demo";
     
-  const domain = session?.user?.companyId;
+  const domain = session?.user?.companyId?.toLowerCase();
   const userId = session?.user?.userId;
 
     const firstDataFetch = async()=>{

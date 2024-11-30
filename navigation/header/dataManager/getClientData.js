@@ -5,14 +5,18 @@ import { productsLedgerProcessor } from "./productsLedgersProcessor";
 
 
 
-export function getDataUrl(domain){
+export function getDataUrl(dom){
+   const domain = dom?.toLowerCase();
    const url =  getLinkClientData({domain});
+   //console.log(url, domain)
    return url;
 }
 
 export const  getClientData = async (domain, userId)=>{
        const dataUrl =  getDataUrl(domain);
-       const res = await getRequest(dataUrl).then((res)=> res);
+       //console.log(dataUrl, domain)
+       const res = await getRequest(dataUrl);
+       //console.log(res, dataUrl)
        if(res?.data?.tables?.length){
          //Set secret as ""
          const usersAcct = res.data[domain+'_usersaccount']?.map((dt)=> {return {...dt, secret:""}})
@@ -47,7 +51,7 @@ export const runDispatchClientData = async ({fetchedData, domain, dispatchCOAStr
    dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, userId})=>{
    
    const res = fetchedData?.tables?.length? fetchedData : await getClientData(domain, userId).then((res)=> res);
-   //console.log(res)
+   //console.log(res, domain)
    if(!res?.tables?.length) return console.log("Error! Unable to fetch data");
    const coaStruc = res.data[domain+"_coastructure"];
    const defaultCOA = getDefaultCOA(res.data[domain+"_chartofaccount"]);

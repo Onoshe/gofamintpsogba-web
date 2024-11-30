@@ -11,7 +11,7 @@ function getDeleteClass(dt){
 
 export const getDefaultCOA = (chartOfAccounts)=>{
 
-    return chartOfAccounts.map((dt)=>{
+    return chartOfAccounts?.map((dt)=>{
         const editBtn = <BiEditAlt size={22} className={`${getEditClass(dt)}`}/>;
         const deleteBtn = <BiTrash size={22} className={`${getDeleteClass(dt)}`}/>;
 
@@ -24,7 +24,7 @@ export const getDefaultCOA = (chartOfAccounts)=>{
 }
 
 export const getDefaultProductList = (productsList)=>{
-    return productsList.map((dt)=>{
+    return productsList?.map((dt)=>{
         return {...dt, 
             edit:<BiEditAlt size={22} className={`${getEditClass(dt)}`}/>,
             delete:<BiTrash size={22} className={`${getDeleteClass(dt)}`}/>, 
@@ -35,7 +35,7 @@ export const getDefaultProductList = (productsList)=>{
 
 export const getDefaultPersonalAcct = (el, personalAccount)=>{
     //console.log(personalAccount)
-    return personalAccount.map((dt)=>{
+    return personalAccount?.map((dt)=>{
         return {
             ...dt,
             accountCode:dt.accountCode?.replace('V-', el), 

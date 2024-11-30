@@ -64,7 +64,7 @@ const IndexReports = ({ssUser}) => {
   const companyLogoFile = getCompanyLogo(settings);
   const windowDimen = useWindowDimensions();  
   
-  //console.log(user, pathname, reportName)
+
 
   const handleReport =(report)=>{
       //console.log(report);
