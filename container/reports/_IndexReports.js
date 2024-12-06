@@ -64,7 +64,7 @@ const IndexReports = ({ssUser}) => {
   const companyLogoFile = getCompanyLogo(settings);
   const windowDimen = useWindowDimensions();  
   
-
+  //console.log(transProcessor.getTransactions());
 
   const handleReport =(report)=>{
       //console.log(report);
@@ -103,6 +103,7 @@ const IndexReports = ({ssUser}) => {
       data = [rowsHeader, ...data];
       const offsetRows = 3; //Date row, Table header row & empty row after table header row.
       const {styleRows} =  getStyleRows(rows, docHeader.length + offsetRows);
+      //console.log(styleRows, rows)
       //console.log({data, docName:title, docHeader, rowsHeader, styleRows})
       handleExcelExport({data, docName:title, docHeader, rowsHeader, styleRows, col1WchInDigit, noFmtCols:[4]});
       postActivity(user, activities.DOWNLOAD, title+" excel report")
@@ -115,7 +116,8 @@ const IndexReports = ({ssUser}) => {
     const handleClickCell =(cell)=>{
       //console.log(cell, reportName)
       // cell = {key:'edit'||'view', row:{}, i:0}
-      const keyWords = ["gl", "trial-balance", "general-ledger", "personal-ledgers", "recorded-transactions", "receipts-and-payments", "products-valuation"];
+      const keyWords = ["gl", "trial-balance", "general-ledger", "personal-ledgers", "recorded-transactions", "receipts-and-payments", 
+        "products-valuation", "journals"];
       const isMatch = keyWords.some(keyword => reportName.includes(keyword));
       if(isMatch){
         handleClickCellNav({cell, reportName, companyId, router, transactions, dispatchSelectedTranFromList,
@@ -358,12 +360,17 @@ export function extractKeysFomObject(arr, key) {
 }
 
 export function getStyleRows(arr, offset) {
-  //classNameTD:true is added on the row that will be styled
+  /*classNameTD:true is added on the row that will be styled
+   classNameTD:{text-[blue], ...} in some cases. So, there should be control  
+  */
   const styleRows = [];
   for (let i = 0; i < arr.length; i++) {
     const el = arr[i];
     const row = (i + offset || 0);
-    if(el?.classNameTD){styleRows.push(row)}
+
+    if((typeof(el?.classNameTD)=== "boolean" && el?.classNameTD) || el?.classNameTD?.includes('font-bold')){
+      styleRows.push(row)
+    }
   }
   return {styleRows}
 }

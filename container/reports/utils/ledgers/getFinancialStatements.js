@@ -1,4 +1,5 @@
 import { convertToTitleCase } from "@/lib/capitalize/capitalizeString";
+import { groupTransToLedgersNew } from "./cashflow/getCashflowStatements";
 
 
 
@@ -19,8 +20,9 @@ export const getFinancialStatementData99 = ({tb, tbBalances, incomeClassCode})=>
     return {plRowsFmt, plRowsFmtDetails, bsRowsFmt, bsRowsFmtDetails}
 };
 
-export const getFinancialStatementData = ({tb, coaSMapped, retEarningsTypeCode, incomeClassCode})=>{
+export const getFinancialStatementData = ({tb, coaSMapped, retEarningsTypeCode,transactionsDetails, incomeClassCode})=>{
 
+    const coaSMappedValues = Object.values(coaSMapped);
     //Filter out class rows
     coaSMapped = Object.values(coaSMapped).reduce((cum, dt)=> {
         if(!dt.subClass.toLowerCase().includes('class')){
@@ -43,9 +45,9 @@ export const getFinancialStatementData = ({tb, coaSMapped, retEarningsTypeCode, 
 
     const bsRows = Object.values(groupedTbs).filter((dt)=> {return dt.class !=="income" && dt.class !=="expenses"});
     const plRows = Object.values(groupedTbs).filter((dt)=> {return dt.class === "income" || dt.class ==="expenses"});
- 
+
     const plRowsFmt = formatForTablePL(plRows);
-    //console.log(plRows, plRowsFmt);
+    
        
     const netProfit = plRowsFmt.find((dt)=> dt?.classTitleName === "NETPROFITORLOSS")?.closingBal;
     const bsRowsFmt = formatForTableBS(bsRows, retEarningsTypeCode, netProfit);
@@ -53,8 +55,20 @@ export const getFinancialStatementData = ({tb, coaSMapped, retEarningsTypeCode, 
     //console.log([netProfit, retEarningsTypeCode])
     
     const plRowsFmtDetails = getDetailsRows(plRowsFmt);
-    //console.log(plRowsFmt); 
-    return {plRowsFmt, plRowsFmtDetails, bsRowsFmt, bsRowsFmtDetails}
+
+    //Cashflow
+    const cashAndCashEqvCodes = coaSMappedValues.reduce((cum, dt)=>{
+        const isCOA = ['cash','bank','paymentClearing'].includes(dt.name);
+        return isCOA? [...cum, dt.code] : cum;
+    },[]); 
+    const cashAndCashEqvLgs = tb.filter((dt)=>{return cashAndCashEqvCodes.includes(dt.typeCode)});
+    const cashflowObj = groupTransToLedgersNew(cashAndCashEqvLgs, coaSMapped, transactionsDetails)
+    const cashflow = cashflowObj.result;
+    //console.log(cashflow);
+
+    
+    
+    return {plRowsFmt, plRowsFmtDetails, bsRowsFmt, bsRowsFmtDetails, cashflow}
 };
 
 
@@ -197,31 +211,6 @@ function getDetailsRows(fmtRows){
     return detailsRows
 }
 
-function getDetailsRows99(fmtRows){
-    console.log(fmtRows)
-    if(!fmtRows?.length) return fmtRows;
 
-    const detailsRows = [];
-    for (let i = 0; i < fmtRows.length; i++) {
-        const row = fmtRows[i];
-        let newRow = {...row};
-        let lstRowCode = "";
-        if(row?.group?.length){
-            for (let j = 0; j < row.group.length; j++) {
-                const groupRow = row.group[j];
-                newRow = {...row, ...groupRow, title:groupRow.name, classTitle:''};
-                detailsRows.push(newRow);
-                lstRowCode = newRow.accountCode;   
-            }
-        }
-        
-        if(newRow?.emptyRow || newRow?.closingBal){
-            //Prevent duplicate insertion
-            if(lstRowCode !== newRow.accountCode){
-                detailsRows.push(newRow)
-            }
-        }
-    }
-    return detailsRows
-}
+
 

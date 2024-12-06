@@ -23,7 +23,7 @@ const HomeHeader = ({session, signOut}) => {
    }
 
   return (
-    <div className="text-white text-center bg-white fixed w-full top-0">
+    <div className="text-white text-center bg-white fixed w-full top-0 z-50">
         <div data-theme="aqua" 
           className='py-1 z-50 px-3 flex items-center justify-between h-[60px]'
          >

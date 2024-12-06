@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import TableWithPinnedView from '@/components/tables/TableWithPinnedView';
 import { MdClear, MdSearch } from 'react-icons/md';
 import { ExcelIcon } from '../icons/iconsSvg';
@@ -7,6 +7,9 @@ import ToolsBar from './ToolsBar';
 import useStoreTransactions from '@/context/storeTransactions';
 import { getCompanyLogo } from '@/container/company/components/utils/getSubscriptionHistory';
 import useStoreHeader from '@/context/storeHeader';
+import PersonalAccountsReportTable from './PersonalAccountsReportTable';
+import { sortArrayByKey } from '@/lib/sort/sortArrayByKey';
+import { sortTableData } from '@/container/reports/utils/others/sortTableData';
 
 
 
@@ -15,6 +18,10 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
     const  {clientAccount, runDispatchClientDataCall} = useStoreTransactions((state) => state);
     const {settings} = useStoreHeader((state) => state);
     const companyLogoFile = getCompanyLogo(settings);
+    const [clickedHeader, setClickedHeader] = useState({name:'', title:'', clickable:true});
+    const clickables = "ALL";
+    
+    let personalAccountsForDisplay = clickedHeader.name? sortTableData([...personalAccounts], clickedHeader.name) : personalAccounts;
 
   const [showAllRows, setShowAllRows] = React.useState(false);
 
@@ -45,7 +52,7 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
             showAllRows={showAllRows}
             setShowAllRows={setShowAllRows}
             handleExportToExcel={handleExportToExcel}
-            personalAccounts={personalAccounts}
+            personalAccounts={personalAccountsForDisplay}
             personalAcctType={personalAcctType}
             clientAccount={clientAccount}
             companyLogoFile={companyLogoFile}
@@ -53,6 +60,26 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
             runDispatchClientDataCall={runDispatchClientDataCall}
             notify={notify}
           />
+           <div className='w-[98%] overflow-x-auto mr-10'>
+              <PersonalAccountsReportTable
+                    classNameTable={"overflow-x-auto overflow-y-auto max-h-[calc(100vh_-_200px)]"}
+                    header={[{className:'bg-blue-50 py-5', title:''}, ...rowHeaders]}
+                    rowKeys={rowKeysShow}
+                    rows={personalAccountsForDisplay}
+                    classNameHeaderTR="bg-blue-50" 
+                    classNameRowsTR="border border-gray-200 hover:bg-blue-50"
+                    clickableHeader={clickedHeader?.clickable}
+                    onClickHeader={(e)=>setClickedHeader({...clickedHeader, ...e})}
+                    clickedHeader={clickedHeader}
+                    setClickedHeader={setClickedHeader}
+                    //clickableRowCell={clickables?.length}
+                    clickableRowCellKeys ={clickables?.length? clickables : clickables === "ALL"? "ALL" : []} //['name']
+                    onClickRowCell={handleClickCell}
+                    //windowDimen={windowDimen}
+                    pinRow
+                  />
+          </div>
+          {/* Former
           <TableWithPinnedView
             classNameTable={"overflow-x-auto h-[70vh] overflow-y-auto resize-y"}
             header={[{className:'bg-blue-50 py-5', title:''}, ...rowHeaders]}
@@ -65,7 +92,7 @@ const AllPersonalAccount = ({personalAccounts,handleClickCell, searchName, searc
             clickableRowCell={true}
             clickableRowCellKeys ={['edit', 'delete']}
             onClickRowCell={handleClickCell}
-          />
+          />*/}
       </div>
   )
 }

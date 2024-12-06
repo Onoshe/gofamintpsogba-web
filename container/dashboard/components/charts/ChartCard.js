@@ -28,8 +28,9 @@ export const data = {
 
 
 //Total Expenses: $25,000.00 //[12, 20, 3, 5, 2, 3, 8] "Expenses summary"
-export function DoughnutChart({name, dataArr, titleChart, titleTotal, titleAmount, lebelArr}) {
+export function DoughnutChart({name, hideChart, dataArr, titleChart, titleTotal, titleAmount, lebelArr}) {
   
+  //console.log(dataArr, lebelArr)
   const randColors1 =   ["#138d75", "#ec7063", "#FFC300", "#bb8fce", "#c0392b", "#aab7b8",  "#5dade2", "#e67e22", ];
   const randColors2 =   ["#5dade2", "#e67e22", "#FFC300", "#bb8fce", "#c0392b","#138d75", "#ec7063", "#aab7b8",  "#af7ac5",  ];
   const randomColors = name === "PAYABLES"? randColors1 : randColors2;
@@ -76,7 +77,10 @@ export function DoughnutChart({name, dataArr, titleChart, titleTotal, titleAmoun
       display: true,
       position: "right",
       align: "center",
+      fullWidth:true,
       labels: {
+        boxWith:300,
+        fontSize: 12,
         //padding: 10 // Adjust spacing between legends
     },
     
@@ -88,7 +92,7 @@ export function DoughnutChart({name, dataArr, titleChart, titleTotal, titleAmoun
   },
 };
   return (
-    <div className="w-[330px] h-[300px] lg:w-[430px] lg:h-[400px] p-3 cardShodow ">
+    <div className={`w-[300px] h-[300px] lg:w-[430px] lg:h-[400px] p-3 cardShodow  ${hideChart? 'hidden' : ''}`}>
       <Doughnut data={data} options={options}/>
       <p className={`text-[14px] -mt-12 md:-mt-10 pl-2 ${name==="INCOME"? 'text-[#1cac88]' : name==="RECEIVABLES" || name==="PAYABLES"? 'text-blue-800' : 'text-[#f26c6c]'}`}>{titleTotal} {titleAmount}</p>
     </div>

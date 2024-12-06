@@ -24,6 +24,7 @@ const MenuBarBar = ({handleReportNav, handleExportToExcel, handleDetailReport, r
 const handleSelDate = (date)=>{
     setShowDate(false)
     const res = getStartAndEndDate(date?.name);
+    //console.log(date, res)
     setDateForm(res);
 }
 const handlePdfExport =()=>{

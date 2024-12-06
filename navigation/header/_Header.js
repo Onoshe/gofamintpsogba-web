@@ -113,7 +113,7 @@ const Header = ({ssUser}) => {
     //This graps the current path and dispatch it as Active Page in order to align the active current tab agree with the current page
     if(pathname){
         const path = pathname.split("/")[2];
-        console.log(pathname, path);
+        //console.log(pathname, path);
         if(path){
           const nav = [...navs, nav_Coy]?.find((dt)=> dt?.name == path);
           if(nav){

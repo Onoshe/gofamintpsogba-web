@@ -133,7 +133,8 @@ export function generateBSData(transProcessor, coaStructure, dateFormQuery) {
     chartData.groupData.cus[groupName] = {data:[], label:[]}; //Initialize
     groupArr?.forEach(el => {
       const {name, closingBal} = el;
-      const nameFmt =  name?.split(" ")[0]+"- "+(closingBal/1000000)?.toFixed(3)+"m"
+      //const nameFmt =  name?.split(" ")[0]+"- "+(closingBal/1000000)?.toFixed(3)+"m"
+      const nameFmt =  formatName(name);
       chartData.groupData.cus[groupName]['data'].push(closingBal);
       chartData.groupData.cus[groupName]['label'].push(nameFmt);
     });
@@ -146,14 +147,24 @@ export function generateBSData(transProcessor, coaStructure, dateFormQuery) {
       chartData.groupData.ved[groupName] = {data:[], label:[]}; //Initialize
       groupArr?.forEach(el => {
         const {name, closingBal} = el;
-        const nameFmt =  name?.split(" ")[0]+" "+(closingBal/1000000)?.toFixed(3)+"m"
+        //const nameFmt =  name?.split(" ")[0]+" "+(closingBal/1000000)?.toFixed(3)+"m"
+        const nameFmt =  formatName(name);
         chartData.groupData.ved[groupName]['data'].push(closingBal);
         chartData.groupData.ved[groupName]['label'].push(nameFmt);
       });
     });
   
 
- return chartData
+ return chartData;
+
+
+ function formatName(name) {
+  return name
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 
 }
 

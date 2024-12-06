@@ -31,7 +31,8 @@ export const data = {
 
 
 //Total Expenses: $25,000.00 //[12, 20, 3, 5, 2, 3, 8] "Expenses summary"
-export function ChartProfit({name, titleChart, titleChartSub, incomeData,  expensesData, label,incomeExpRef, total1, total2}) {
+export function ChartProfit({name, hideChart, titleChart, titleChartSub, incomeData,  expensesData, label,incomeExpRef, total1, total2}) {
+  //console.log(incomeData, expensesData, label)
   const data = {
     labels:label, //['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
@@ -98,7 +99,7 @@ export function ChartProfit({name, titleChart, titleChartSub, incomeData,  expen
   },
 };
   return (
-    <div className="w-[350px] h-[250px] lg:w-[450px] lg:h-[250px] p-3 cardShodow">
+    <div className={`w-[350px] h-[250px] lg:w-[450px] lg:h-[250px] p-3 cardShodow ${hideChart? 'hidden' : ''}`}>
       <Line ref={incomeExpRef} data={data} options={options}/>      
     </div>
   );

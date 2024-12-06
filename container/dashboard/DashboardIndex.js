@@ -18,6 +18,9 @@ import { handleExportStatement } from '../company/components/utils/handleExportS
 import { handleExportReceipt } from '../company/components/utils/handleExportReceipt';
 import { useRouter } from 'next/navigation';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import ReChart from './components/charts/recharts/ReChart';
+import ReChart_Line from './components/charts/recharts/ReChart_Line';
+import useContainerDimension from '@/lib/hooks/useContainerDimension';
 
 
 
@@ -26,17 +29,17 @@ const DashboardIndex = ({ssUser}) => {
   const router = useRouter();
   const incomeExpRef = useRef(null);
   const reportDateAnalDef = new Date().toISOString().split("T")[0];
-
+  
   const {coaStructure, transactions, transactionsDetails,controlAcctsCode, chartOfAccounts, customers, vendors, products, runDispatchClientDataCall, clientAccount,  dispatchReportDate} = useStoreTransactions((state) => state);
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
-  //let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
-  //const {processedLedgers, customersLedger, vendorsLedger, productsLedger} = ledgers;
-  //const { data: session, status } = useSession(); //{user:{companyId:'', email:''}}; 
   const { session, user, userRendering, status} = useAuthCustom(ssUser);
   //const user = session?.user;
   const [listOfAccounts, setListOfAccounts] = useState(false);
   const [reportDateAnal, setReportDateAnal] = useState(reportDateAnalDef);
   const [loadingReportPage, setLoadingReportPage] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const contRef = React.useRef();
+  const contDimen = useContainerDimension(contRef);
 
   //const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const {showNotificationBar,settings, dispatchShowNotificationBar} = useStoreHeader((state) => state);
@@ -87,9 +90,18 @@ const DashboardIndex = ({ssUser}) => {
           });
       }
   }
+
+  React.useEffect(()=>{
+    //To prevent hydration error
+    setMounted(true)
+  },[]);
+
+
+ // console.log(groupObj, groupData)
+
   return (
     <div className={`text-gray-600 ${showNotificationBar? 'mt-10' : ''}`}>
-        <div className='fixed w-full lg:w-[calc(100%_-_200px)]'>
+        <div className='fixed w-full lg:w-[calc(100%_-_200px)] z-10'>
             <HeaderBar
                 chartOfAccounts={chartOfAccounts}
                 handleSelAccount={handleSelAccount}
@@ -122,7 +134,9 @@ const DashboardIndex = ({ssUser}) => {
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-5 pt-[30px]'>
                     <p className='text-teal-800 font-bold text-center'>Profit or Loss Summary Report for the period ending {periodEnd}</p>
                 </div>
-                    <div className='flex flex-row justify-around flex-wrap gap-4'>
+               
+                    <div className='flex flex-row justify-around flex-wrap gap-4' ref={contRef}>
+                        {/*mounted && <ReChart dataArr={expensesSumData} lebelArr={expensesSumLabel}/>*/}
                         <Card3  
                                 title="Income & Expenses Total for the Period"
                                 title1="Income Total"
@@ -131,6 +145,7 @@ const DashboardIndex = ({ssUser}) => {
                                 amount2={totalExp}
                             />
                         <ChartProfit
+                            hideChart
                             name="Net Profit" 
                             titleChart={"Income & Expense movement for the Period"}
                             titleChartSub={""}
@@ -141,12 +156,24 @@ const DashboardIndex = ({ssUser}) => {
                             total1={totalIn}
                             total2={totalExp}
                             incomeExpRef={incomeExpRef}
-                            /> 
+                            />
+                         {mounted && 
+                            <ReChart_Line 
+                                titleChart={"Monthly Income & Expenses Trends"}
+                                titleChartSub={""}
+                                dataArr={expensesSumData} 
+                                lebelArr={expensesSumLabel}
+                                incomeData={incomeData}
+                                expensesData={expensesData}
+                                label={dataLabel}
+                                contDimen={contDimen}
+                          />} 
                     </div>
                 </div>
                 
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-3'>
                     <DoughnutChart
+                        hideChart
                         name="INCOME"
                         dataArr={incomeSumData}
                         titleChart="Income summary for the Period"
@@ -154,9 +181,34 @@ const DashboardIndex = ({ssUser}) => {
                         titleAmount={`$`+formatToCurrency(totalIn)}
                         lebelArr={incomeSumLabel}
                     />
+                    {mounted && 
+                        <ReChart 
+                            name="INCOME"
+                            dataArr={incomeSumData}
+                            lebelArr={incomeSumLabel}
+                            titleChart="Income summary for the Period"
+                            titleTotal={"Total Income: "}
+                            //titleAmount={`$`+formatToCurrency(totalIn)}
+                            titleAmount={totalIn<1? `-$`+formatToCurrency(Math.abs(totalIn)) : `$`+formatToCurrency(Math.abs(totalIn))}
+                            contDimen={contDimen}
+                        />
+                    }
+                    {mounted && 
+                        <ReChart 
+                            name="EXPENSES"
+                            dataArr={expensesSumData} 
+                            lebelArr={expensesSumLabel}
+                            titleChart="Expenses summary for the Period"
+                            titleTotal={"Total Expenses: "}
+                            //titleAmount={`$`+formatToCurrency(totalExp)}
+                            titleAmount={totalExp<1? `-$`+formatToCurrency(Math.abs(totalExp)) : `$`+formatToCurrency(Math.abs(totalExp))}
+                            contDimen={contDimen}
+                        />
+                    }
                     <DoughnutChart
+                        hideChart
                         name="EXPENSES"
-                        dataArr={expensesSumData}
+                        dataArr={expensesSumData} 
                         titleChart="Expenses summary for the Period"
                         titleTotal={"Total Expenses: "}
                         titleAmount={`$`+formatToCurrency(totalExp)}
@@ -169,9 +221,9 @@ const DashboardIndex = ({ssUser}) => {
                 </div>
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-3'>
                     <Card1
-                        title1="Cash Account"
+                        title1="Cash Account Total"
                         amount1={`$`+formatToCurrency(cashTotal)}
-                        title2="Bank Account"
+                        title2="Bank Account Total"
                         amount2={`$`+formatToCurrency(bankTotal)}
                     />
                     <Card2
@@ -214,10 +266,11 @@ const DashboardIndex = ({ssUser}) => {
                     />
                 </div>
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-3'>
-                    {groupObj.cus.groups?.map((grp, i)=>{
+                        {/*groupObj.cus.groups?.map((grp, i)=>{
                         const {data, label} = groupData?.cus[grp]
                         return(
                             <DoughnutChart key={`${i}key`}
+                                hideChart
                                 name="RECEIVABLES"
                                 dataArr={data}
                                 titleChart={`Top Receivables (${grp})`}
@@ -226,13 +279,31 @@ const DashboardIndex = ({ssUser}) => {
                                 lebelArr={label}
                             />
                         )
-                    })}
+                        })*/}
+                        {mounted && groupObj.cus.groups?.map((grp, i)=>{
+                            const {data, label} = groupData?.cus[grp]
+                            return(
+                                
+                                <ReChart  key={`${i}key`}
+                                    name="RECEIVABLES"
+                                    dataArr={data}
+                                    titleChart={`Top Receivables (${grp})`}
+                                    lebelArr={label}
+                                    titleTotal={"Total: "}
+                                    //titleAmount={`$`+formatToCurrency(groupObj.cus[grp])}
+                                    titleAmount={groupObj.cus[grp]<1? `-$`+formatToCurrency(Math.abs(groupObj.cus[grp])) : `$`+formatToCurrency(Math.abs(groupObj.cus[grp]))}
+                                    contDimen={contDimen}
+                                />
+                                )
+                            })}
+                        
                 </div>
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-3'>
-                 {groupObj.ved.groups?.map((grp, i)=>{
+                 {/*groupObj.ved.groups?.map((grp, i)=>{
                         const {data, label} = groupData?.ved[grp]
                         return(
                             <DoughnutChart key={`${i}key`}
+                                hideChart
                                 name="PAYABLES"
                                 dataArr={data}
                                 titleChart={`Top Payables (${grp})`}
@@ -241,19 +312,49 @@ const DashboardIndex = ({ssUser}) => {
                                 lebelArr={label}
                             />
                         )
-                    })}
+                    })*/}
+                    {mounted && groupObj.ved.groups?.map((grp, i)=>{
+                        const {data, label} = groupData?.ved[grp]
+                        return(
+                            
+                            <ReChart  key={`${i}key`}
+                                name="PAYABLES"
+                                dataArr={data}
+                                titleChart={`Top Payables (${grp})`}
+                                lebelArr={label}
+                                titleTotal={"Total: "}
+                                titleAmount={groupObj.ved[grp]<1? `-$`+formatToCurrency(Math.abs(groupObj.ved[grp])) : `$`+formatToCurrency(Math.abs(groupObj.ved[grp]))}
+                                contDimen={contDimen}
+                            />
+                            )
+                        })}
                 </div>
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-3'>
                  {prodSumData?.length?
                     <DoughnutChart 
+                        hideChart
                         name="PRODUCTS"
                         dataArr={prodSumData}
                         titleChart={`Products balance`}
                         titleTotal={"Total: "}
-                        titleAmount={`$`+formatToCurrency(prodTotal)}
+                        //titleAmount={`$`+formatToCurrency(prodTotal)}
+                        titleAmount={prodTotal<1? `-$`+formatToCurrency(Math.abs(prodTotal)) : `$`+formatToCurrency(Math.abs(prodTotal))}
                         lebelArr={prodSumLabel}
                     />: <></>
                  }
+                 {mounted && prodSumData?.length?
+                            
+                    <ReChart 
+                        name="PRODUCTS"
+                        dataArr={prodSumData}
+                        titleChart={`Products balance`}
+                        lebelArr={prodSumLabel}
+                        titleTotal={"Total: "}
+                        //titleAmount={`$`+formatToCurrency(prodTotal)}
+                        titleAmount={prodTotal<1? `-$`+formatToCurrency(Math.abs(prodTotal)) : `$`+formatToCurrency(Math.abs(prodTotal))}
+                        contDimen={contDimen}
+                    />: <></>
+                    }
                 </div>
             </div>
         </div>

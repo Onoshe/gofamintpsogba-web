@@ -34,7 +34,7 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
     if(!reportRows?.length) return;
 
     let noOfColsDef = 2;
-    let data = objectToArray(reportRows, reportRowKeys, noFmtCols, tableColsFSize);
+    let data = objectToArray(reportRows, reportRowKeys, tableColsFSize, noFmtCols);
 
     const {rowsHeader} = extractKeysFomObject(reportHeader, reportRowKeys, 'name');
     const noOfCols = rowsHeader?.length || noOfColsDef;
@@ -110,24 +110,23 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
       doc.save(reportName+".pdf");
  };
 
- function objectToArray(arr, keys, noFmtCols, fontSize) {
+ function objectToArray(arr, keys, fontSize, noFmtCols,) {
   let agingOrder = ["OVER_DAYS_180", "DAYS_90_180", "DAYS_60_90", "DAYS_30_60", "LESS_DAYS_30", "stockin", "stockout", "stockopening", "stockclosing", "costPerUnit", "valuation", "unitcost", 'avgCost'];
   agingOrder = agingOrder.map((dt)=> dt.toLocaleLowerCase());
-    const likelyCurrencyCol = [...agingOrder, "debit", "credit", "openingbal", "openingbalance", "closingbal", "closingbalance", "forThePeriod", "amount", "balance", "total"];
-   
+    const likelyCurrencyCol = [...agingOrder, "debit", "credit", "openingbal", "openingbalance", "closingbal", "closingbalance", "forThePeriod", "amount", "balance", "total", "cashamount"];
+  
     return arr.map(obj => {
        return keys.map((key, colNo) =>{
             let content = obj[key] || "";
             if(likelyCurrencyCol.includes(key.toLowerCase()) && parseFloat(content)){
-              content =  formatToCurrency(parseFloat(content))
+              content =  formatToCurrency(parseFloat(content));
             }
             const styles = fontSize? {fontStyle: obj?.classNameTD? 'bold' :'normal', fontSize} : {fontStyle: obj?.classNameTD? 'bold' :'normal'};
             return { content, styles}
-            //return { content, styles: {fontStyle: obj?.classNameTD? 'bold' :'normal'} }
         })
     });
   }
-  
+
  
 function extractKeysFomObject(arr, keys, key) {
     const rowsHeader = [];

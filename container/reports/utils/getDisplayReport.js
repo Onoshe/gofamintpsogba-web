@@ -7,6 +7,7 @@ import { getRecordedTransactionsForDisplay } from "./reportUtils/getRecordedTran
 import { getAgingReport } from "./others/generateAging";
 import { getProductsValuation } from "./reportUtils/getProductsValuation";
 import { getReceiptsAndPaymentsForDisplay } from "./reportUtils/getReceiptsAndPaymentsForDisplay";
+import { getJournalEntries } from "./reportUtils/getJournalEntries";
 
 
 export const getDisplayReport =({reportName, pathname, transProcessor, customers, vendors, products, coaStructure, viewTransId, transactionsDetails, ledgerCode, monthlyQuery, 
@@ -34,7 +35,7 @@ export const getDisplayReport =({reportName, pathname, transProcessor, customers
         result = getIndividualLedgersForDisplay({transProcessor, subReports, rows,  selLedgerCode, dateForm, user, monthlyQuery, chartOfAccounts, products, vendors, customers});
 
     }else if (['fs'].includes(reportName.split('-')[0])){ 
-        result = getFinancialStatementForDisplay({reportName,  transProcessor, coaStructure, dateForm, user});
+        result = getFinancialStatementForDisplay({reportName,  transProcessor, coaStructure, dateForm, user, transactionsDetails});
     }else if (reportName === "receipts-and-payments"){ 
         result = getReceiptsAndPaymentsForDisplay(({dateForm, reportName,  transProcessor, query:viewTransId}));
     }else if (reportName === "recorded-transactions"){ 
@@ -45,6 +46,9 @@ export const getDisplayReport =({reportName, pathname, transProcessor, customers
         //console.log(result)
     }else if(reportName === "products-valuation"){
         result = getProductsValuation({reportName,  transProcessor,  dateForm, products, viewTransId});
+        //console.log(result)
+    }else if(reportName === "journals"){
+        result = getJournalEntries({dateForm, reportName,  transProcessor, query:'', clickedHeader})
         //console.log(result)
     }else{
         result = getLedgersAndPersonalAcctsForDisplay({reportName,  transProcessor, customers, vendors, products, dateForm, transactionsDetails, viewTransId, user, clickedHeader});

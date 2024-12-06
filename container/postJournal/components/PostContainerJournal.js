@@ -21,7 +21,7 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
   const [selectedDueDate, setSelectedDueDate] = React.useState({value:30, label:'Select'});
   const [uploading, setUploading] = React.useState(false);
 
-  //console.log(recordTransaction)
+  //console.log(transSheet, recordTransaction)
   const handleAddRemoveRow =(dt, i)=>{
     //console.log(dt, i);
     if(i===0){
@@ -88,6 +88,10 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
   console.log(acv)
  }
 
+ const handleCancelTran =()=>{
+  dispatchTranSheetMultiEntryReset();
+  setNetAmount('Total')
+ }
 
   const controlAcctTest = controlAcctChecker(transSheet, chartOfAccounts, controlAcctsCode);
   const updateTransSheetDueDate = (val, idx, type)=>{
@@ -105,11 +109,17 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
     }else{updateTransSheetDueDate("", controlAcctTest.i, "")}
   },[controlAcctTest.isControlAcct,controlAcctTest.type, selectedDueDate]);
 
+
   React.useEffect(() => {
-    //Set dueDate from transSheet on mounted, especially during edit 
-    transSheet?.forEach(tran => {
-      if(tran?.dueDate){ setSelectedDueDate({value:tran.dueDate, label:`${tran.dueDate} Days`}) }});
-  }, []);
+    //Update netAmount if not updated and there are transactions. Default netAmount state is "Total" 
+    if(transSheet?.length && netAmount === "Total"){
+        const netAmount = transSheet.reduce((cum, row)=>{
+          const amount = row?.debitCredit == 1? row?.amount : row?.debitCredit == 2? row?.amount*-1 : 0;
+          return cum += isNaN(parseFloat(row.amount))? 0 : parseFloat(amount);
+        },0);
+        setNetAmount(netAmount);
+    }
+  },[transSheet]);
 
  React.useEffect(()=>{
     const row1 = transSheet[0];
@@ -206,12 +216,15 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
     <br/>
     <br/>
     
-      <div className={`pt-2 px-3 fixed bottom-0 bg-gray-200 w-full mt-10 `}>
-          <button onClick={submitHandler} disabled={uploading} className='btn btn-info btn-sm px-7 inline-block mr-10 mb-4'>
+      <div className={`pt-2 px-3 fixed bottom-0 bg-gray-200 w-full mt-10`}>
+          <button onClick={submitHandler} disabled={uploading} className='btn btn-info btn-sm px-7 inline-block mb-4 mr-7'>
             {recordTransaction?.editTran? 'Save' :'Record'}
           </button>
           <div className={`inline-flex flex-row flex-wrap gap-4 ${recordTransaction?.editTran? '' : 'hidden'}`}>
             <button onClick={handleDeleteTran} className='btn btn-error btn-sm px-5 inline-flex'>Delete</button>
+          </div>
+          <div className={`inline-flex flex-row flex-wrap gap-4 mx-7 ${transSheet[0].amount && transSheet[1].amount? '' : 'hidden'}`}>
+            <button onClick={handleCancelTran} className='btn btn-neutral btn-sm px-5 inline-flex'>Cancel</button>
           </div>
           {uploading && <span className='text-red-500 inline-flex'>Recording journal, please wait...</span>}
         </div>

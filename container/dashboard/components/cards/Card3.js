@@ -7,8 +7,8 @@ export const Card3 = ({title, title1, amount1, title2, amount2, title3, amount3}
    
 
   return (
-        <div className='p-3 w-[330px] text-[12px] cardShodow'>
-            <p className='text-sm text-blue-400 font-[500]'>{title}</p>
+        <div className='p-3 pt-10 w-[330px] text-[12px] cardShodow'>
+            <p className='text-sm text-blue-500 font-[500]'>{title}</p>
             <br/>
             <br/>
             <div className='flex flex-row justify-between py-1 text-[#1cac88]'>

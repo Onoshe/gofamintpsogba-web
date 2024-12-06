@@ -130,11 +130,12 @@ import * as XLSX from 'xlsx-js-style';
                         if(numFmtCells?.includes(cell) && typeof ws[cell].v === "number"){
                             //New format will over-ride the previous number formt, hence, need to reformat 
                             ws[cell].s = {
-                                font: { bold: true, color: { rgb: "333333" }, sz:12}, 
+                                 font: { bold: true, color: { rgb: "333333" }, sz:12}, 
                                  numFmt: '#,##0.00; (#,##0.00); "-"',
                                  alignment: { horizontal: 'right' }
                             };
-                        }else{ws[cell].s = {font: { bold: true, color: { rgb: "333333" }, sz:12}};}
+                        }else{ws[cell].s = {font: { bold: true, color: { rgb: "333333" }, sz:12}};} //Formats all the rows to bold font
+                        //}else{ws[cell].s = {font: {color: { rgb: "333333" }, sz:12}};}
                     }
                 }
             }   

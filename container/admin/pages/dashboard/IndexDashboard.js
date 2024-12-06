@@ -41,8 +41,8 @@ const IndexDashboard = ({ssUser}) => {
 
    const clientsDataFmt = clientsData?.data?.data || [];
    const accessDataFmt = accessData?.data?.data || [];
-    const generalTables = dbTables?.data?.data?.filter((tb=> {return tb.TABLE_NAME.slice(0,1) == "_"}));
-    const demoTables = dbTables?.data?.data?.filter((tb=> {return tb.TABLE_NAME.slice(0,1) !== "_"}));
+    const generalTables = dbTables?.data?.data?.filter((tb=> {return tb.TABLE_NAME.slice(0,1) == "_" || tb.TABLE_NAME.split("_")[0] !== "demo"}));
+    const demoTables = dbTables?.data?.data?.filter((tb=> {return tb.TABLE_NAME.split('_')[0] === "demo"}));
     const clientTables = dbTables?.data?.data?.filter((tb=> {return tb.TABLE_NAME.slice(0,1) != "_"}));
     const clientTablesGroup = groupByPrefix(clientTables, 'TABLE_NAME');
     const clientsKeys = Object.keys(clientTablesGroup);
@@ -56,7 +56,7 @@ const IndexDashboard = ({ssUser}) => {
     const [selectedClient, setSelectedClient] = useState({});
     const selClientKeys = selectedClient?.row?.companyName? Object.keys(selectedClient.row) : [];
     
-    
+    //console.log(generalTables, demoTables)
     const fetchUsersAccounts = async ()=>{
         const accts = [];
         for (let i = 0; i < companyDomainsOthers.length; i++) {
