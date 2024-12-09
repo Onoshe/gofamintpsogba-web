@@ -46,10 +46,12 @@ export const  fetchAndDispatchClientAccount = async (domain, dispatchClientAccou
 }
 
 
+
 //const data ={fetchedData, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails}
 export const runDispatchClientData = async ({fetchedData, domain, dispatchCOAStructure, dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, 
    dispatchTransReady, dispatchTransactions, dispatchTransactionsDetails, userId})=>{
    
+
    const res = fetchedData?.tables?.length? fetchedData : await getClientData(domain, userId).then((res)=> res);
    //console.log(res, domain)
    if(!res?.tables?.length) return console.log("Error! Unable to fetch data");

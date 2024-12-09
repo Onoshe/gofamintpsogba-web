@@ -251,13 +251,3 @@ function getCashFlowStatement({ledgerEntry, coaStrt, fmtRowsOpAct, fmtRowsInvAct
             }
 }
 
-const coaStructureNames =[
-    'propertyPlant&Equipment', 'otherNonCurrentAsset',
-    'accountReceivable', 'accountReceivableControl','otherCurrentAsset', 
-    'inventory','inventoryControl','inventoryAdjustment',
-    'accountPayable', 'accountPayableControl','accruals','otherCurrentLiability',
-    'income','otherIncome',
-    'costOfGoodsSold','operatingExpenses','otherExpenses'
-
-]
-

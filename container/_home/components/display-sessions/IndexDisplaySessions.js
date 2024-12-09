@@ -1,6 +1,7 @@
 'use client'
 import React, {useState, useEffect} from 'react';
 import CardTopText, { CustomCard } from '../CardTopText';
+import { GrNext, GrPrevious } from 'react-icons/gr';
 const imgPath = '/dashboard.png';
 
 export const imagesArr = [
@@ -11,54 +12,132 @@ export const imagesArr = [
     '/slideImages/background_5a.png',
     '/slideImages/background_6a.png',
     '/slideImages/background_7a.png',
-    '/slideImages/background_8a.jpg',
+    '/slideImages/background_8a.jpeg',
     '/slideImages/background_9a.png',
     '/slideImages/background_1a.png',
     '/slideImages/background_2a.png',
 ];
 
 
-const IndexDisplaySessions = ({currentIndex, isSliding}) => {
+const IndexDisplaySessions = ({currentIndex, setCurrentIndex, incomingIndex, setIncomingIndex, isSliding, manualControl, setManualControl,  
+  setIsSliding, isPrevious, setIsPrevious}) => {
+    const currentImage = imagesArr[currentIndex];
 
-    const currentImage = imagesArr[currentIndex]
+
+    const handleManualNext = () => {
+      setManualControl(true);
+      slideToNext();
+      resetAutoSlide();
+    };
+  
+    const handleManualPrev = () => {
+      setManualControl(true);
+      slideToPrev();
+      resetAutoSlide();
+    };
+  
+    const resetAutoSlide = () => {
+      setTimeout(() => {
+        setManualControl(false);
+      }, 20000); // Resume auto-slide after 20 seconds
+    };
+
+    
+    const slideToNext = () => {
+      setIsPrevious(false);
+      setIsSliding(true);
+      setIncomingIndex((currentIndex + 1) % appHighlights.length);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % appHighlights.length);
+        setIsSliding(false);
+      }, 500); // Duration of slide-out animation
+    };
+
+  
+    const slideToPrev = () => {
+      setIsPrevious(true);
+      setIsSliding(true);
+      setIncomingIndex((currentIndex - 1 + appHighlights.length) % appHighlights.length);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev - 1 + appHighlights.length) % appHighlights.length);
+        setIsSliding(false);
+      }, 500); // Duration of slide-out animation
+    };
+
+
+
+    useEffect(() => {
+      if (manualControl) return; // Pause auto-slide during manual interaction
+      const interval = setInterval(() => {
+        slideToNext();
+      }, 15000); //15-secs interval
+      return () => clearInterval(interval);
+    }, [manualControl, appHighlights.length]);
+  
 
   return (
     <div className="flex flex-1 p-5 overflow-hidden h-[800px] lg:h-[70vh] flex-col lg:flex-row-reverse gap-16 bg-white">
         <section className='flex-1 lg:max-w-[650px]'>
-            <TextCarousel   currentIndex={currentIndex} isSliding={isSliding}/>
+            <TextCarousel   currentIndex={currentIndex} isSliding={isSliding} incomingIndex={incomingIndex}
+              isPrevious={isPrevious}/>
         </section>
-        <div  className='flex  w-full flex-1 flex-col h-[100vh] transform transition-transform duration-500'
-            style={{
-                backgroundImage: `url(${currentImage})`,
-                backgroundSize: "100% 100%",
-                backgroundPosition: "center",
-                height: "100%",
-                width: "100%",
-              }}>
-                
+        
+          <div className='flex relative w-full flex-1 flex-col h-[100vh] transform transition-transform duration-500'
+              style={{
+                  backgroundImage: `url(${currentImage})`,
+                  backgroundSize: "100% 100%",
+                  backgroundPosition: "center",
+                  height: "100%",
+                  width: "100%",
+                }}>
+          <div className={`bg-transparent absolute h-full flex justify-center items-center`}>
+            <GrPrevious size={32} className='cursor-pointer text-blue-500 hover:text-blue-700 active:text-blue-400'
+              onClick={handleManualPrev}/>
+          </div>
+          <div className={`bg-transparent absolute h-full right-5 flex justify-center items-center`}>
+            <GrNext size={32} className='cursor-pointer text-blue-500 hover:text-blue-700 active:text-blue-400'
+              onClick={handleManualNext}/>
+          </div>
         </div>
     </div>
   )
 }
 
-export default IndexDisplaySessions;
 
 
-const TextCarousel = ({currentIndex, isSliding}) => {
-
+const TextCarousel = ({currentIndex, isSliding, isPrevious}) => {
+  //isSliding ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100"
+  //isSliding ? "translate-x-0" : "-translate-x-full"
+  const currentAnim = isPrevious? "translate-x-full opacity-0" : "-translate-x-full opacity-0";
+  const outGoingAnim = isPrevious? "-translate-x-full opacity-100 transform transition-transform duration-500" : "translate-x-full opacity-100 transform transition-transform duration-500";
+  
+  
   return (
     <div className="relative w-full h-[40vh] overflow-hidden flex justify-center items-center">
+      
       <div
-        className={`absolute w-full text-center text-lg font-medium text-gray-700 transform transition-transform duration-700 ${
-          isSliding ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100"
+        className={`absolute w-full text-center text-lg font-medium text-gray-700 transform transition-transform duration-500 ${
+          isSliding ? currentAnim : "translate-x-0 opacity-100"
         }`}
       >
-        <CustomCard title={appHighlights[currentIndex].title} text={appHighlights[currentIndex].text}/>
+         <CustomCard title={appHighlights[currentIndex].title} text={appHighlights[currentIndex].text}/>
       </div>
+      <div
+        className={`absolute w-full text-center text-lg font-medium text-gray-700  ${
+          isSliding ? "translate-x-0 opacity-100" : outGoingAnim
+        }`}
+      >
+         <CustomCard title={appHighlights[currentIndex].title} text={appHighlights[currentIndex].text}/>
+      </div>
+
+
     </div>
   );
 };
 
+
+
+export default IndexDisplaySessions;
 
 export const appHighlights = [
     {title:"Streamlined Financial Management",

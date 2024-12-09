@@ -4,7 +4,7 @@ import React from "react";
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer, LineChart, Line, YAxis, XAxis, CartesianGrid } from "recharts";
 
 
-export default function ReChart_Line({label,titleChart, contDimen, titleChartSub, incomeData, expensesData}) {
+export default function ReChart_Line({label,titleChart, contDimen, titleChartSub, incomeData, expensesData, cu}) {
    const {width, height} = contDimen;
   
   const dimens = {
@@ -60,7 +60,7 @@ export default function ReChart_Line({label,titleChart, contDimen, titleChartSub
               </span>
               <span className="text-white">{payload[1].dataKey} ${formatToCurrency(payload[1].value)}</span>
           </p>
-          <p className="flex flex-row items-center hidden">
+          <p className="flex-row items-center flex">
               <span className={`w-7 h-3  mr-2 text-white font-bold`}
                 >NET
               </span>

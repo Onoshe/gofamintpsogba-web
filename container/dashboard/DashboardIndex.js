@@ -30,7 +30,7 @@ const DashboardIndex = ({ssUser}) => {
   const incomeExpRef = useRef(null);
   const reportDateAnalDef = new Date().toISOString().split("T")[0];
   
-  const {coaStructure, transactions, transactionsDetails,controlAcctsCode, chartOfAccounts, customers, vendors, products, runDispatchClientDataCall, clientAccount,  dispatchReportDate} = useStoreTransactions((state) => state);
+  const {coaStructure, transactions, currencySymbol, transactionsDetails,controlAcctsCode, chartOfAccounts, customers, vendors, products, runDispatchClientDataCall, clientAccount,  dispatchReportDate} = useStoreTransactions((state) => state);
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
   const { session, user, userRendering, status} = useAuthCustom(ssUser);
   //const user = session?.user;
@@ -40,6 +40,7 @@ const DashboardIndex = ({ssUser}) => {
   const [mounted, setMounted] = useState(false);
   const contRef = React.useRef();
   const contDimen = useContainerDimension(contRef);
+
 
   //const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const {showNotificationBar,settings, dispatchShowNotificationBar} = useStoreHeader((state) => state);
@@ -54,7 +55,7 @@ const DashboardIndex = ({ssUser}) => {
             cusGroup, vedGroup, prodTotal, groupObj, groupData, prodSumData, prodSumLabel} = generateBSData(transProcessor, coaStructure,  reportDateForm);
   const periodEndInit = new Date(reportDateAnal).toDateString().split(" ");
   const periodEnd = `${periodEndInit[2]} ${periodEndInit[1]} ${periodEndInit[3]}`
-
+  const cu = currencySymbol;
 
   let coyLogo = "";
     if(settings?.data?.length){
@@ -143,6 +144,7 @@ const DashboardIndex = ({ssUser}) => {
                                 amount1={totalIn}
                                 title2="Expenses Total"
                                 amount2={totalExp}
+                                cu={cu}
                             />
                         <ChartProfit
                             hideChart
@@ -156,6 +158,7 @@ const DashboardIndex = ({ssUser}) => {
                             total1={totalIn}
                             total2={totalExp}
                             incomeExpRef={incomeExpRef}
+                            cu={cu}
                             />
                          {mounted && 
                             <ReChart_Line 
@@ -167,6 +170,7 @@ const DashboardIndex = ({ssUser}) => {
                                 expensesData={expensesData}
                                 label={dataLabel}
                                 contDimen={contDimen}
+                                cu={cu}
                           />} 
                     </div>
                 </div>
@@ -178,8 +182,9 @@ const DashboardIndex = ({ssUser}) => {
                         dataArr={incomeSumData}
                         titleChart="Income summary for the Period"
                         titleTotal={"Total Income: "}
-                        titleAmount={`$`+formatToCurrency(totalIn)}
+                        titleAmount={cu+formatToCurrency(totalIn)}
                         lebelArr={incomeSumLabel}
+                        cu={cu}
                     />
                     {mounted && 
                         <ReChart 
@@ -188,9 +193,10 @@ const DashboardIndex = ({ssUser}) => {
                             lebelArr={incomeSumLabel}
                             titleChart="Income summary for the Period"
                             titleTotal={"Total Income: "}
-                            //titleAmount={`$`+formatToCurrency(totalIn)}
-                            titleAmount={totalIn<1? `-$`+formatToCurrency(Math.abs(totalIn)) : `$`+formatToCurrency(Math.abs(totalIn))}
+                            //titleAmount={cu+formatToCurrency(totalIn)}
+                            titleAmount={totalIn<1? `-`+cu+formatToCurrency(Math.abs(totalIn)) : cu+formatToCurrency(Math.abs(totalIn))}
                             contDimen={contDimen}
+                            cu={cu}
                         />
                     }
                     {mounted && 
@@ -200,9 +206,10 @@ const DashboardIndex = ({ssUser}) => {
                             lebelArr={expensesSumLabel}
                             titleChart="Expenses summary for the Period"
                             titleTotal={"Total Expenses: "}
-                            //titleAmount={`$`+formatToCurrency(totalExp)}
-                            titleAmount={totalExp<1? `-$`+formatToCurrency(Math.abs(totalExp)) : `$`+formatToCurrency(Math.abs(totalExp))}
+                            //titleAmount={cu+formatToCurrency(totalExp)}
+                            titleAmount={totalExp<1? `-`+cu+formatToCurrency(Math.abs(totalExp)) : cu+formatToCurrency(Math.abs(totalExp))}
                             contDimen={contDimen}
+                            cu={cu}
                         />
                     }
                     <DoughnutChart
@@ -211,8 +218,9 @@ const DashboardIndex = ({ssUser}) => {
                         dataArr={expensesSumData} 
                         titleChart="Expenses summary for the Period"
                         titleTotal={"Total Expenses: "}
-                        titleAmount={`$`+formatToCurrency(totalExp)}
+                        titleAmount={cu+formatToCurrency(totalExp)}
                         lebelArr={expensesSumLabel}
+                        cu={cu}
                     />
                 </div>
                 
@@ -222,9 +230,10 @@ const DashboardIndex = ({ssUser}) => {
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-3'>
                     <Card1
                         title1="Cash Account Total"
-                        amount1={`$`+formatToCurrency(cashTotal)}
+                        amount1={cu+formatToCurrency(cashTotal)}
                         title2="Bank Account Total"
-                        amount2={`$`+formatToCurrency(bankTotal)}
+                        amount2={cu+formatToCurrency(bankTotal)}
+                        cu={cu}
                     />
                     <Card2
                         title1="Bank balances"
@@ -233,36 +242,39 @@ const DashboardIndex = ({ssUser}) => {
                         subTitle2={topBanks.label[2] || "Bank"}
                         subTitle3={topBanks?.label[1] || "Bank"}
                         subTitle4={topBanks?.label[3] || "Bank"}
-                        amount1={`$`+formatToCurrency(topBanks?.data[0] || 0)|| "$0.00"}
-                        amount2={`$`+formatToCurrency(topBanks?.data[2] || 0)|| "$0.00"}
-                        amount3={`$`+formatToCurrency(topBanks?.data[1] || 0)|| "$0.00"}
-                        amount4={`$`+formatToCurrency(topBanks?.data[3] || 0)|| "$0.00"}
+                        amount1={cu+formatToCurrency(topBanks?.data[0] || 0)|| cu+"0.00"}
+                        amount2={cu+formatToCurrency(topBanks?.data[2] || 0)|| cu+"0.00"}
+                        amount3={cu+formatToCurrency(topBanks?.data[1] || 0)|| cu+"0.00"}
+                        amount4={cu+formatToCurrency(topBanks?.data[3] || 0)|| cu+"0.00"}
+                        cu={cu}
                     />
               </div>
               <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-3'>
                     <Card2
                         title1="Receivables total-"
-                        title2={`$`+formatToCurrency(revTotal)}
+                        title2={cu+formatToCurrency(revTotal)}
                         subTitle1={groupObj.cus.groups[0]? `(${groupObj.cus.groups[0]}) Total` : "Group Total"}
                         subTitle2={groupObj.cus.groups[1]? `(${groupObj.cus.groups[1]}) Total` : "Group Total"}
                         subTitle3={groupObj.cus.groups[2]? `(${groupObj.cus.groups[2]}) Total` : "Group Total"}
                         subTitle4={groupObj.cus.groups[3]? `(${groupObj.cus.groups[3]}) Total` : "Group Total"}
-                        amount1={groupObj.cus.groups[0]? `$`+formatToCurrency(groupObj.cus[groupObj.cus.groups[0]]) : "$ 0.00"}
-                        amount2={groupObj.cus.groups[1]? `$`+formatToCurrency(groupObj.cus[groupObj.cus.groups[1]]) : "$ 0.00"}
-                        amount3={groupObj.cus.groups[2]? `$`+formatToCurrency(groupObj.cus[groupObj.cus.groups[2]]) : "$ 0.00"}
-                        amount4={groupObj.cus.groups[3]? `$`+formatToCurrency(groupObj.cus[groupObj.cus.groups[3]]) : "$ 0.00"}
+                        amount1={groupObj.cus.groups[0]? cu+formatToCurrency(groupObj.cus[groupObj.cus.groups[0]]) : cu+" 0.00"}
+                        amount2={groupObj.cus.groups[1]? cu+formatToCurrency(groupObj.cus[groupObj.cus.groups[1]]) : cu+" 0.00"}
+                        amount3={groupObj.cus.groups[2]? cu+formatToCurrency(groupObj.cus[groupObj.cus.groups[2]]) : cu+" 0.00"}
+                        amount4={groupObj.cus.groups[3]? cu+formatToCurrency(groupObj.cus[groupObj.cus.groups[3]]) : cu+" 0.00"}
+                        cu={cu}
                     />
                     <Card2
                         title1="Payables total-"
-                        title2={`$`+formatToCurrency(payTotal)}
+                        title2={cu+formatToCurrency(payTotal)}
                         subTitle1={groupObj.ved.groups[0]? `(${groupObj.ved.groups[0]}) Total` : "Group Total"}
                         subTitle2={groupObj.ved.groups[1]? `(${groupObj.ved.groups[1]}) Total` : "Group Total"}
                         subTitle3={groupObj.ved.groups[2]? `(${groupObj.ved.groups[2]}) Total` : "Group Total"}
                         subTitle4={groupObj.ved.groups[3]? `(${groupObj.ved.groups[3]}) Total` : "Group Total"}
-                        amount1={groupObj.ved.groups[0]? `$`+formatToCurrency(groupObj.ved[groupObj.ved.groups[0]]) : "$ 0.00"}
-                        amount2={groupObj.ved.groups[1]? `$`+formatToCurrency(groupObj.ved[groupObj.ved.groups[1]]) : "$ 0.00"}
-                        amount3={groupObj.ved.groups[2]? `$`+formatToCurrency(groupObj.ved[groupObj.ved.groups[2]]) : "$ 0.00"}
-                        amount4={groupObj.ved.groups[3]? `$`+formatToCurrency(groupObj.ved[groupObj.ved.groups[3]]) : "$ 0.00"}
+                        amount1={groupObj.ved.groups[0]? cu+formatToCurrency(groupObj.ved[groupObj.ved.groups[0]]) : cu+" 0.00"}
+                        amount2={groupObj.ved.groups[1]? cu+formatToCurrency(groupObj.ved[groupObj.ved.groups[1]]) : cu+" 0.00"}
+                        amount3={groupObj.ved.groups[2]? cu+formatToCurrency(groupObj.ved[groupObj.ved.groups[2]]) : cu+" 0.00"}
+                        amount4={groupObj.ved.groups[3]? cu+formatToCurrency(groupObj.ved[groupObj.ved.groups[3]]) : cu+" 0.00"}
+                        cu={cu}
                     />
                 </div>
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-3'>
@@ -275,7 +287,7 @@ const DashboardIndex = ({ssUser}) => {
                                 dataArr={data}
                                 titleChart={`Top Receivables (${grp})`}
                                 titleTotal={"Total: "}
-                                titleAmount={`$`+formatToCurrency(groupObj.cus[grp])}
+                                titleAmount={cu+formatToCurrency(groupObj.cus[grp])}
                                 lebelArr={label}
                             />
                         )
@@ -290,9 +302,10 @@ const DashboardIndex = ({ssUser}) => {
                                     titleChart={`Top Receivables (${grp})`}
                                     lebelArr={label}
                                     titleTotal={"Total: "}
-                                    //titleAmount={`$`+formatToCurrency(groupObj.cus[grp])}
-                                    titleAmount={groupObj.cus[grp]<1? `-$`+formatToCurrency(Math.abs(groupObj.cus[grp])) : `$`+formatToCurrency(Math.abs(groupObj.cus[grp]))}
+                                    //titleAmount={cu+formatToCurrency(groupObj.cus[grp])}
+                                    titleAmount={groupObj.cus[grp]<1? `-`+cu+formatToCurrency(Math.abs(groupObj.cus[grp])) : cu+formatToCurrency(Math.abs(groupObj.cus[grp]))}
                                     contDimen={contDimen}
+                                    cu={cu}
                                 />
                                 )
                             })}
@@ -308,7 +321,7 @@ const DashboardIndex = ({ssUser}) => {
                                 dataArr={data}
                                 titleChart={`Top Payables (${grp})`}
                                 titleTotal={"Total: "}
-                                titleAmount={`$`+formatToCurrency(groupObj.ved[grp])}
+                                titleAmount={cu+formatToCurrency(groupObj.ved[grp])}
                                 lebelArr={label}
                             />
                         )
@@ -323,8 +336,9 @@ const DashboardIndex = ({ssUser}) => {
                                 titleChart={`Top Payables (${grp})`}
                                 lebelArr={label}
                                 titleTotal={"Total: "}
-                                titleAmount={groupObj.ved[grp]<1? `-$`+formatToCurrency(Math.abs(groupObj.ved[grp])) : `$`+formatToCurrency(Math.abs(groupObj.ved[grp]))}
+                                titleAmount={groupObj.ved[grp]<1? `-`+cu+formatToCurrency(Math.abs(groupObj.ved[grp])) : cu+formatToCurrency(Math.abs(groupObj.ved[grp]))}
                                 contDimen={contDimen}
+                                cu={cu}
                             />
                             )
                         })}
@@ -337,9 +351,10 @@ const DashboardIndex = ({ssUser}) => {
                         dataArr={prodSumData}
                         titleChart={`Products balance`}
                         titleTotal={"Total: "}
-                        //titleAmount={`$`+formatToCurrency(prodTotal)}
-                        titleAmount={prodTotal<1? `-$`+formatToCurrency(Math.abs(prodTotal)) : `$`+formatToCurrency(Math.abs(prodTotal))}
+                        //titleAmount={cu+formatToCurrency(prodTotal)}
+                        titleAmount={prodTotal<1? `-`+cu+formatToCurrency(Math.abs(prodTotal)) : cu+formatToCurrency(Math.abs(prodTotal))}
                         lebelArr={prodSumLabel}
+                        cu={cu}
                     />: <></>
                  }
                  {mounted && prodSumData?.length?
@@ -350,9 +365,10 @@ const DashboardIndex = ({ssUser}) => {
                         titleChart={`Products balance`}
                         lebelArr={prodSumLabel}
                         titleTotal={"Total: "}
-                        //titleAmount={`$`+formatToCurrency(prodTotal)}
-                        titleAmount={prodTotal<1? `-$`+formatToCurrency(Math.abs(prodTotal)) : `$`+formatToCurrency(Math.abs(prodTotal))}
+                        //titleAmount={cu+formatToCurrency(prodTotal)}
+                        titleAmount={prodTotal<1? `-`+cu+formatToCurrency(Math.abs(prodTotal)) : cu+formatToCurrency(Math.abs(prodTotal))}
                         contDimen={contDimen}
+                        cu={cu}
                     />: <></>
                     }
                 </div>

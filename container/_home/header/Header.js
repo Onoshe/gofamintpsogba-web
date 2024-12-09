@@ -6,8 +6,7 @@ import { useRouter } from 'next/navigation';
 import useStoreHeader from '@/context/storeHeader';
 
 
-
-const HomeHeader = ({session, signOut}) => {
+const HomeHeader = ({session, signOut, style, styleInner, theme, appTextColor}) => {
   //const { data: session, status } = useSession();
   const [userDropdown, setUserDropdown] = React.useState(false);
   const router = useRouter(); 
@@ -22,19 +21,23 @@ const HomeHeader = ({session, signOut}) => {
     router.push("/"+coy);
    }
 
+   const handleGoHome =()=>{
+      router.push("/")
+   }
+
   return (
-    <div className="text-white text-center bg-white fixed w-full top-0 z-50">
-        <div data-theme="aqua" 
-          className='py-1 z-50 px-3 flex items-center justify-between h-[60px]'
+    <div className={`fixed w-full top-0 z-50 ${style? style : 'text-white text-center bg-white'}`}>
+        <div data-theme={theme || "aqua"} 
+          className={`py-1 z-50 px-3 flex items-center justify-between h-[60px] ${styleInner}`}
          >
-            <div className='flex flex-col w-fit'
-              >
+            <div className='flex flex-col w-fit cursor-pointer'
+              onClick={handleGoHome}>
               <FastRecordLogo
                     width={120} height={30}
                     className={'py-2 pl-3 hidden sm:flex bg-[aliceblue]'}
                     dynamicPage={"/"}
                 />
-              <p className='text-[10px] md:text-[12px] text-[yellow] italic hidden sm:flex'>...simplifying your financial records</p>
+              <p className={`text-[10px] md:text-[12px] ${appTextColor || 'text-[yellow]'} italic hidden sm:flex`}>...simplifying your financial records</p>
             </div>
             <div className={`flex flex-col items-end ${session?.user?.userId && coy? '' : 'hidden'}`}>
               <HeaderUser 

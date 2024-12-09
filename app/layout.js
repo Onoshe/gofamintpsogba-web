@@ -14,8 +14,10 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "QuickRecords App",
-  description: "...simplifying your financial records",
+  title: "QuickRecords Accounting Bookkeeping",
+  description: "QuickRecords Accounting Bookkeeping helps you to record all your transactions such as Sale, Purchase, Payments and Expenses in an extremely simple manner.",
+  keywordds:"QuickRecords, Accounting, Bookkeeping, Sale, Purchase, Payments, Expenses, Journals, Reports, Profit, Loss, Capital, Transaction, Inventory, Pdf, receipt, payments, Online, store, device, management",
+  author:"OziTech Studio",
 };
 
 
@@ -31,8 +33,8 @@ export default function RootLayout({ children }) {
       </>
     </html>
   );
-}
 
+}
 
 
 /*

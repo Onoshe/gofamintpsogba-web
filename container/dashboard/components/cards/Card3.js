@@ -3,7 +3,7 @@ import React from 'react';
 
 
 
-export const Card3 = ({title, title1, amount1, title2, amount2, title3, amount3}) => {
+export const Card3 = ({title, title1, amount1, title2, amount2, cu, title3, amount3}) => {
    
 
   return (
@@ -13,12 +13,12 @@ export const Card3 = ({title, title1, amount1, title2, amount2, title3, amount3}
             <br/>
             <div className='flex flex-row justify-between py-1 text-[#1cac88]'>
                 <p>{title1}</p>
-                <p className='font-bold'>{`$`+formatToCurrency(amount1)}</p>
+                <p className='font-bold'>{cu+formatToCurrency(amount1)}</p>
             </div>
             <div className='w-full mb-3 border-b bottom-1 border-gray-200'/>
             <div className='flex flex-row justify-between py-1 text-[#f26c6c]'>
                 <p>{title2}</p>
-                <p  className='font-bold'>{`$`+formatToCurrency(amount2)}</p>
+                <p  className='font-bold'>{cu+formatToCurrency(amount2)}</p>
             </div>
             <div className='w-full mb-5 border-b bottom-1 border-gray-200'/>
 
@@ -26,8 +26,8 @@ export const Card3 = ({title, title1, amount1, title2, amount2, title3, amount3}
                 <p>{amount2 > amount1? "NET LOSS" : "NET PROFIT"}</p>
                 
                 {amount2 > amount1?
-                    <p  className=''>({`$`+formatToCurrency(Math.abs(amount2 - amount1))})</p>:
-                    <p  className=''>{`$`+formatToCurrency(Math.abs(amount2 - amount1))}</p>
+                    <p  className=''>({cu+formatToCurrency(Math.abs(amount2 - amount1))})</p>:
+                    <p  className=''>{cu+formatToCurrency(Math.abs(amount2 - amount1))}</p>
                 }
             </div>
             <div className='w-full  border-b bottom-1 border-gray-200'/>

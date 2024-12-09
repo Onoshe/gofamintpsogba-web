@@ -18,14 +18,13 @@ const ContactUs = ({alert, setAlert}) => {
         //return console.log(body, url)
         await postRequest(url, body)
         .then((res)=>{
-            console.log(res)
             setForm({userName:'', email:'', phoneNo:'', message:''});
             setAlert({msg:'Message posted successfully. You will receive our feedback',msgTitle:'', type:'success', show:true});
         })
     }
 
   return (
-    <div className="flex flex-1 py-16 relative overflow-hidden h-[100vh] lg:h-[70vh] flex-col lg:flex-row gap-16 "  
+    <div className="flex flex-1 py-16 relative overflow-hidden h-[100vh] lg:h-[70vh] lg:pb-32 flex-col lg:flex-row gap-16 "  
         style={{
             backgroundImage: `url('/slideImages/background_pattern.png')`,
             //backgroundSize: "content",
@@ -96,7 +95,8 @@ const ContactUs = ({alert, setAlert}) => {
                 value={form.message}
                 onChange={handleOnChange}
                 placeholder="I am interest in your app. Please, send your different packages."
-                className="textarea textarea-bordered textarea-md w-full">
+                className="textarea textarea-bordered textarea-md w-full"
+                rows={6}>
             </textarea>  
             <div className="">
                 <input type="submit" className="w-full sm:w-[200px] btn bg-blue-400 text-white hover:bg-blue-600 active:bg-blue-500" value="Send" />

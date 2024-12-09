@@ -15,6 +15,7 @@ import { handleExportReceipt } from './components/utils/handleExportReceipt';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import convertImageToBase64 from '@/lib/image/convertImageToBase64';
 import { HeaderTab } from './components/headerTab/HeaderTab';
+import CurrencySign from './components/homeComponents/CurrencySign';
 //import { AccessCard } from './cards/DashboardAccess';
 
 
@@ -24,7 +25,7 @@ const IndexCompany = ({ssUser}) => {
     const { session, user,  status} = useAuthCustom(ssUser);
     const {settings, dispatchRefreshSettingsCount,  subscriptions,  dispatchSubscriptions,
         client_Admin, clientData, generalSettings, quickrecordsLogo,} = useStoreHeader((state) => state);
-    const {clientAccount, } = useStoreTransactions((state) => state);    
+    const {clientAccount, currencySymbol} = useStoreTransactions((state) => state);    
     const [base64Image, setBase64Image] = React.useState('');
     const [appB64Image, setAppBase64Image] = React.useState(''); 
     const subcriptionHistory = getSubscriptionHistory({subscriptions});
@@ -48,7 +49,6 @@ const IndexCompany = ({ssUser}) => {
             });
     },[]);
   
-
 
     let coyLogo = "";
     if(settings?.data){
@@ -104,6 +104,16 @@ const IndexCompany = ({ssUser}) => {
                     
                     </div>
                 </BackgroundCard>
+                <div className='relative flex w-full flex-col lg:flex-row mt-10 p-5 border border-[dodgerblue]'>
+                    <CurrencySign
+                        title="Currency Sign"
+                        dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
+                        notify={notify} 
+                        user={user}
+                        currentSymbol={currencySymbol}
+                        settings={settings}
+                    />
+                </div>
                 <div className='relative flex w-full flex-col lg:flex-row mt-10 pt-5 border border-[maroon] bg-red-50'>
                     <p className={`font-[600] px-2 pb-10 text-center text-red-800 ${lockPosting? '' : 'hidden'}`}>
                         Posting can only be Locked or Unlocked by the Admin</p>

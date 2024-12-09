@@ -18,6 +18,7 @@ const useStoreTransactions = create((set) => ({
     transReady:false,
     clientsDataCall: 0,
     reportDate:{...getStartAndEndDate(), defaultDate:true},
+    currencySymbol:"$",
 
     dispatchCOAStructure: (act) => set((state) => ({
         coaStructure: act.coaStructure,
@@ -56,6 +57,9 @@ const useStoreTransactions = create((set) => ({
     dispatchReportDate: (act) => set((state) => ({
         reportDate: act,
     })),
+    dispatchCurrencySymbol: (act) => set((state) => ({
+        currencySymbol: act,
+    }))
 
 }));
 

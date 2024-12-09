@@ -45,14 +45,14 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, payload, innerRadius, outerRa
 
 
 
-export default function ReChart({dataArr, lebelArr, titleChart, titleTotal, name, contDimen, titleAmount}) {
+export default function ReChart({dataArr, lebelArr, titleChart, titleTotal, name, contDimen, titleAmount, cu}) {
   const {width, height} = contDimen;
 
   const data = lebelArr?.map((dt, i)=>{
     return {name:dt, value:Math.abs(dataArr[i]), fill:name==="INCOME"? colArrIncome[i] : name==="BS"? colArrBS[i] : colArr[i]}
   })
   const dimensSsm = {
-    wdt:250,
+    wdt:300,
     hgt:420,
     cx:250/2,
     cy:100,
@@ -141,7 +141,7 @@ export default function ReChart({dataArr, lebelArr, titleChart, titleTotal, name
     if(!dt?.name && dt?.value) return "";
     const {name, value} = dt;
     const resName = name.length > dimens.leg.slice? name.slice(0,dimens.leg.slice)+"... " : name+" ";
-    return resName+(name.length < dimens.leg.slice/2? "      -":"")+'$'+formatToCurrency(value)
+    return resName+(name.length < dimens.leg.slice/2? "      -":"")+cu+formatToCurrency(value)
   }
   const CustomTooltip = ({ active, payload, label }) => {
     //console.log(payload, label)

@@ -1,5 +1,6 @@
 'use client'
 import { Checkbox,  Selection, TextArea, TextInput } from '@/components/forms/InputComponentsDaisy';
+import { sortArrayByKey } from '@/lib/sort/sortArrayByKey';
 import PageBlind from '@/navigation/pageBlind/PageBlind';
 import { BiSolidError } from 'react-icons/bi';
 import { MdCancel, MdClose } from 'react-icons/md';
@@ -16,6 +17,8 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
         subCode:"",
         title: "---Select---"
     };
+    sortArrayByKey(coaStructure, "code");
+
     /****************************** CHART OF ACCOUNT FILTER *********************************
      * There MUST be One Receivable, Payable and Inventory Control Account each. Hence, they will be filtered out if they exist,
      */ 
@@ -37,6 +40,7 @@ const CreateChartOfAccount = ({handleSubmit, selectedOpt="999", showBlind, handl
     }
     
     const coaStructureArr = [selectCOA, ...coaStructureFiltered];
+    //console.log(coaStructureArr)
     //console.log(recControl, payControl, recControlAcct, payControlAcct)
 
     return (

@@ -11,7 +11,7 @@ import { getRequest } from '@/lib/apiRequest/getRequest';
 
 const EffectFetchData = ({ session}) => {
     const {coaStructure, transactions, clientsDataCall, transReady, clientAccount, dispatchClientAccount, dispatchTransReady, dispatchCOAStructure,  dispatchProducts, dispatchChartOfAccounts, 
-          dispatchCustomers, dispatchVendors, dispatchTransactions, dispatchTransactionsDetails} = useStoreTransactions((state) => state);
+      dispatchCurrencySymbol, dispatchCustomers, dispatchVendors, dispatchTransactions, dispatchTransactionsDetails} = useStoreTransactions((state) => state);
     const {settings, dispatchSettings, fetchSettingsCall, dispatchFetchSettingsCall, dispatchUser, dispatchUsers, refreshSettingsCount, dispatchSubscriptions, 
       dispatchActivityLog, generalSettings, client_Admin, clientData, dispatchGeneralSettings, dispatchClientAdmin, dispatchClientData} = useStoreHeader((state) => state);
   
@@ -30,14 +30,17 @@ const EffectFetchData = ({ session}) => {
       .then(()=>{ dispatchTransReady(true)});
     }
 
-
-  
-
   const fetchSettings = async ()=>{
       //Dispatch Client Settings
       const url = getLinkFetchTable({table:domain+"_settings", domain});
       const settings = await getRequest(url).then((res)=> res);
       dispatchSettings(settings);
+      if(settings?.ok){
+        const currencySymbol = settings.data.find((dt)=> dt.slug === "currency-symbol");
+        if(currencySymbol && currencySymbol?.smallText){
+          dispatchCurrencySymbol(currencySymbol?.smallText)
+        }
+      }
 
       //Dispatch client activities
       const urlLinkAct = getLinkFetchTable({table:domain+"_activitylog", domain});

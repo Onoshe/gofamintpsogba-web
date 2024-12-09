@@ -29,13 +29,14 @@ import IndexDisplaySessions, { appHighlights } from './components/display-sessio
 import ContactUs from './components/contactUs/ContactUs';
 import Footer from './components/Footer';
 import { getRequest } from '@/lib/apiRequest/getRequest';
+import { getLinkFetchTable } from '@/lib/apiRequest/urlLinks';
 
 const IndexHome = ({ssUser}) => {
     const pathname = usePathname();
     const router = useRouter();
     const {form, dispatchForm, dispatchResetForm, resetPwdInfo, dispatchResetPwdInfo} = useStoreHome((state) => state);
     const {dispatchActivePage, dispatchCoy, dispatchPageLoading } = useStoreHeader((state) => state);
-    const {transReady, dispatchTransReady, dispatchCOAStructure,  dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransactions, dispatchTransactionsDetails} = useStoreTransactions((state) => state);
+    const { transReady, dispatchTransReady, dispatchCOAStructure,  dispatchProducts, dispatchChartOfAccounts, dispatchCustomers, dispatchVendors, dispatchTransactions, dispatchTransactionsDetails} = useStoreTransactions((state) => state);
     const [viewPwd, setViewPwd] = useState(false);
     const [resendOpt, setResendOpt] = useState(false);
     const [showBlind, setShowBlind] = useState({show:false, loadingMsg:''});
@@ -48,7 +49,11 @@ const IndexHome = ({ssUser}) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isSliding, setIsSliding] = useState(false);
-
+    const [manualControl, setManualControl] = useState(false);
+    const [settings, setSettings] = useState([]);
+    const [incomingIndex, setIncomingIndex] = useState(0);
+    const [isPrevious, setIsPrevious] = useState(false);
+    
 
     //const { data: session, status } = useSession(); //{status:'', data:{seeeion:''}}; //useSession();
     const { signIn, signOut, session, user, status} = useAuthCustom(ssUser);
@@ -62,10 +67,8 @@ const IndexHome = ({ssUser}) => {
         //setResendOpt(true);
         //dispatchForm({...form, password:'', otp:''});
     };
+  
 
-
-    
-    
     const handleViewPwd =()=>{
         setViewPwd(!viewPwd);
     };
@@ -160,21 +163,25 @@ const IndexHome = ({ssUser}) => {
   if(!isOnline){
     //return <NetworkError/>
   }
+ 
+  const fetchAndDispatchSettings =async ()=>{
+    await getRequest(url).then((res)=> {
+        if(res?.ok)(setSettings(res.data))
+    });
+  }
 
-  //getRequest();
+
+  useEffect(()=>{
+    if(!settings?.length){
+        fetchAndDispatchSettings('demo')
+    };   
+  },[settings]);
 
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsSliding(true); // Start slide-out animation
-      setTimeout(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % appHighlights.length);
-        setIsSliding(false); // Start slide-in animation
-      }, 700); // Duration of slide-out animation
-    }, 20000); //20-secs interval
-    return () => clearInterval(interval);
-  }, [appHighlights.length]);
-
+  const handleCarousel =(act)=>{
+    console.log(act)
+  }
+  
 
   return (
     <>
@@ -302,9 +309,19 @@ const IndexHome = ({ssUser}) => {
                             }
                     </section>
                 </div>
+
                 <IndexDisplaySessions
                     currentIndex={currentIndex}
                     isSliding={isSliding}
+                    handleCarousel={handleCarousel}
+                    setIsSliding={setIsSliding}
+                    setCurrentIndex={setCurrentIndex}
+                    manualControl={manualControl}
+                    setManualControl={setManualControl}
+                    incomingIndex={incomingIndex}
+                    setIncomingIndex={setIncomingIndex}
+                    isPrevious={isPrevious}
+                    setIsPrevious={setIsPrevious}
                 />
                 <ContactUs
                     alert={alert}
@@ -318,10 +335,11 @@ const IndexHome = ({ssUser}) => {
                 handleClose={()=>handleModalAlert('CLOSE')}
             />
             <LoadingModal showBlind={showBlind.show} loadingMsg={showBlind.loadingMsg}/>
-            <Footer/>
+            <Footer settings={settings}/>
         </div>
     </>
   )
 }
 
 export default IndexHome;
+var url = getLinkFetchTable({table:"_settings", domain:'demo'});

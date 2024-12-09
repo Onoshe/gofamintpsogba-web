@@ -23,7 +23,7 @@ export const CardTopTextCustom = ({title, text}) => {
               >
                 {title}
             </p>
-            <p className='text-justify z-10 font-[400] text-gray-800'>
+            <p className='text-justify z-10 mg:text-lg font-[400] text-gray-800 px-4'>
               {text}  
             </p>
         </div>
