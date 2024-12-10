@@ -43,8 +43,8 @@ const DashboardIndex = ({ssUser}) => {
 
 
   //const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const {showNotificationBar,settings, dispatchShowNotificationBar} = useStoreHeader((state) => state);
-   
+  const {showNotificationBar,settings,expiration, expirationMsg, dispatchShowNotificationBar} = useStoreHeader((state) => state);
+  const { expired} = expirationMsg;
   const startDate = `${new Date(reportDateAnal)?.getFullYear()}-01-01`;
   const endDate = new Date(reportDateAnal)?.toISOString()?.split('T')[0];
    // console.log({startDate, endDate});
@@ -101,7 +101,7 @@ const DashboardIndex = ({ssUser}) => {
  // console.log(groupObj, groupData)
 
   return (
-    <div className={`text-gray-600 ${showNotificationBar? 'mt-10' : ''}`}>
+    <div className={`text-gray-600 ${showNotificationBar? '' : ''}`}>
         <div className='fixed w-full lg:w-[calc(100%_-_200px)] z-10'>
             <HeaderBar
                 chartOfAccounts={chartOfAccounts}
@@ -119,6 +119,7 @@ const DashboardIndex = ({ssUser}) => {
                 products={products}
                 loadingReportPage={loadingReportPage}
                 setLoadingReportPage={setLoadingReportPage}
+                expired={expired}
             />
         </div>
         {/*<br/><br/><br/> */}

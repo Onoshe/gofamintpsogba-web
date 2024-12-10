@@ -10,7 +10,7 @@ import { sortArrayByKey } from '@/lib/sort/sortArrayByKey';
 
 
 const HeaderBar = ({chartOfAccounts,handleSelAccount, loadingReportPage, setLoadingReportPage, listOfAccounts, setListOfAccounts, companyId, 
-    router,user, handleRefreshData, reportDate, onChangeReportDate, customers, vendors, products}) => {
+    router,user, handleRefreshData, reportDate, onChangeReportDate, customers, vendors, products, expired}) => {
 
     const handleSelectedLedger =(ledger)=>{
         const ledgerCode = ledger.accountCode;
@@ -27,7 +27,8 @@ const HeaderBar = ({chartOfAccounts,handleSelAccount, loadingReportPage, setLoad
     //console.log(chartOfAccounts);
 
   return (
-    <div className='bg-white -mt-[11px] smc:mt-0'>
+    <div className='relative bg-white -mt-[11px] smc:mt-0'>
+        {expired && <div className='absolute top-0 w-full bottom-0 bg-red-50/60 z-20'></div>}
         <div className='justify-between px-4 hidden bg-white smc:flex'>
             <p className='text-blue-500 font-bold invisible'>Dashboard</p>
             <div className='flex-row gap-3 py-2 flex'>

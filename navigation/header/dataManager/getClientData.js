@@ -22,13 +22,13 @@ export const  getClientData = async (domain, userId)=>{
          const usersAcct = res.data[domain+'_usersaccount']?.map((dt)=> {return {...dt, secret:""}})
          res.data[domain+'_usersaccount'] = usersAcct;
          
-         //Filter out transactions not posted by User for demo account
+         //Filter out transactions not posted by User for demo account. Ie, fetch User created transactions + DEMO + DEFAULT@ (for default Retained Earnings)
          if(domain === "demo"){
             const tablesList = [domain+'_chartofaccount', domain+'_customers', domain+'_vendors',domain+'_transactions',domain+'_transactionsdetails', domain+'_products',];
             tablesList?.forEach(tb => {
                if(res?.data[tb]){
                   const tbTrans = res.data[tb];
-                  const defaultAndUserTrans = tbTrans.filter((dt)=> dt.createdBy === "DEMO" || dt.createdBy === userId);
+                  const defaultAndUserTrans = tbTrans.filter((dt)=> dt.createdBy === "DEMO" || dt.createdBy === "DEFAULT@" || dt.createdBy === userId);
                   res.data[tb] = defaultAndUserTrans;
                }  
             });

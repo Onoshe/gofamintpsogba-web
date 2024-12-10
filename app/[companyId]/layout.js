@@ -16,7 +16,7 @@ export const metadata = {
 const RootLayout = ({params, children}) => {
   //SideDrawer width = 250px
   const user = getUserSession();
-
+  
   return (
     <div>
         <Header ssUser={user}/>

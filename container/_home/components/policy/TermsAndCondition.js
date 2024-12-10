@@ -55,9 +55,9 @@ const TermsAndCondition = () => {
             <Header1 text={tmc.f1} />
             <div className=''>
             QuickRecords Bookkeeping’s current Privacy Policy is available at
-                <Link href={'/privacy-policy'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> www.quick-records.app.vercel/privacy-policy</Link>
+                <Link href={'/privacy-policy'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> www.quick-records.vercel.app/privacy-policy</Link>
                 which shall apply to any use of the Service, and which may be modified by OziTech Studio in its discretion from time to time pursuant to the procedures set forth therein
-                <Link href={'/privacy-policy'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> www.quick-records.app.vercel/privacy-policy</Link>
+                <Link href={'/privacy-policy'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> www.quick-records.vercel.app/privacy-policy</Link>
                 which shall apply to any use of the Service, and which may be modified by 
                 <span className='font-bold mx-1'>{company}</span>
                 in its discretion from time to time pursuant to the procedures set forth therein.    

@@ -88,7 +88,7 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
           const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
           doc.setFontSize(10);
           doc.text(`Page ${data.pageNumber}`, 20, pageHeight - 5, { align: 'center' });
-          doc.text(`Exported on ${new Date()}`, pageWidth - 10, pageHeight - 5, { align: 'right' });
+          doc.text(`Exported on ${new Date()}`, pageWidth - 10, pageHeight - 5, { align: 'right', fontSize:8 });
         }, 
       });
 

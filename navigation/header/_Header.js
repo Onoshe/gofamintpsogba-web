@@ -16,20 +16,22 @@ import useStoreTransactions from '@/context/storeTransactions';
 import PageFetchingData from '@/loadingPage/PageFetchingData';
 import PageLogOut from '@/loadingPage/PageLogOut';
 import NotificationHeaderBar from '../notificationHeaderBar/NotificationHeaderBar';
+import SubscriptionMonitor from './SubscriptionMonitor';
 //import { usePathname, useRouter } from 'next/navigation';
 /* eslint-disable @next/next/no-img-element */
 
 
 const Header = ({ssUser}) => {
-  const {pageIsOpen, activePage, isOpen, coy, dispatchCoy, dispatchActivePage, dispatchIsOpen, dynamicPage, showLoadingNavPage, dispatchShowLoadingNavPage} = useStoreHeader((state) => state);
+  const {pageIsOpen, activePage, isOpen, coy, dispatchCoy, dispatchActivePage, dispatchIsOpen, expiration, dynamicPage, expirationMsg, showLoadingNavPage, dispatchShowLoadingNavPage} = useStoreHeader((state) => state);
   const {transReady} = useStoreTransactions((state) => state);
+  const { expired} = expirationMsg;
   //const { data: session, status } = useSession(); //{status:'', data:{session:''}}; //useSession();
   const {  signOut, session, user, status} = useAuthCustom(ssUser);
   const [userDropdown, setUserDropdown] = React.useState(false);
   const [scrollPos] = useOnScroll();
   const pathname = usePathname();
   const router = useRouter();
-  const companyId = session?.user?.companyId;
+  const companyId = session?.user?.companyId?.toLowerCase();
   const isOnline = useOnline();
   const [mounted, setMounted] = useOnScroll({ready:false});
   //const pathname = usePathname();
@@ -126,7 +128,9 @@ const Header = ({ssUser}) => {
     }
   },[]);
 
-
+  
+  //console.log(expirationMsg)
+  
   //console.log(user)
 
   //if(isProduction && !isOnline) return <NetworkError/>;
@@ -136,19 +140,22 @@ const Header = ({ssUser}) => {
   return (
     <div className={`fixed w-full z-50`} onClick={handleDropdown}>
         <EffectFetchData session={session}/>
+        <SubscriptionMonitor user={user}/>
         {!transReady && <PageFetchingData/>}
         {transReady && isProduction && !isOnline && <NetworkError/>}
         {status === "logout" && <PageLogOut/>}
         
-        <div className='absolute w-full  bottom-[20px]'><NotificationHeaderBar user={user}/></div>
+        <div className='absolute w-full  bottom-[20px]'>
+          <NotificationHeaderBar user={user} expirationMsg={expirationMsg} companyId={companyId}/>
+        </div>
         
         <div data-theme="aqua" 
           className='py-2 z-50 px-3 flex items-center justify-between'
          >
           <div className='flex flex-row gap-2 items-center h-[40px]'>
             {!isOpen?
-              <IoMdMenu size={24} onClick={()=>dispatchIsOpen(!isOpen)} color='white' className='cursor-pointer lg:hidden'/>
-              : <IoMdClose size={24} onClick={()=>dispatchIsOpen(!isOpen)} color='white' className='cursor-pointer lg:hidden'/>
+              <IoMdMenu size={24} onClick={()=>dispatchIsOpen(!isOpen)} color='white' className={`${expired? 'hidden' : 'cursor-pointer lg:hidden'}`}/>
+              : <IoMdClose size={24} onClick={()=>dispatchIsOpen(!isOpen)} color='white' className={`${expired? 'hidden' : 'cursor-pointer lg:hidden'}`}/>
             }
             <div className='hidden md:flex flex-col w-fit'
               >
@@ -178,12 +185,14 @@ const Header = ({ssUser}) => {
                 session={session}
                 handleClickCompany={handleClickCompany}
                 handleClickProfile={handleClickProfile}
+                expired={expired}
               /> 
           </div>
           
         </div>
+        
         <div className={`${isOpen? 'lg:hidden' : 'hidden'} z-50 animate-slide-In fixed h-full -top-16`}>
-         <SideDrawer closeDrawer={()=>dispatchIsOpen(!isOpen)}/>
+         <SideDrawer closeDrawer={()=>dispatchIsOpen(!isOpen)} hasExpired={expired}/>
         </div>
         <div className={`${isOpen? 'lg:hidden' : 'hidden'} w-full h-screen bg-[#ade0f438] fixed top-0 bottom-0`}
          onClick={()=>dispatchIsOpen(false)}>

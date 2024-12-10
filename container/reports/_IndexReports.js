@@ -65,6 +65,7 @@ const IndexReports = ({ssUser}) => {
   const windowDimen = useWindowDimensions();  
   
   //console.log(transProcessor.getTransactions());
+   // console.log(chartOfAccounts)
 
   const handleReport =(report)=>{
       //console.log(report);

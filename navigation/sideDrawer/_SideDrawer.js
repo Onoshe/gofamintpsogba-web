@@ -22,10 +22,12 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 const SideDrawer = ({closeDrawer, ssUser, params}) => {
   const router = useRouter();
   const [localStorageValue, setLocalStorageValue] = useLocalStorage("FASTRECORD", {});
-  const {activePage, dispatchActivePage, dispatchIsOpen, showSidebarTitle, coy,  dispatchCoy, dispatchPageLoading} = useStoreHeader((state) => state);
+  const {activePage, dispatchActivePage, dispatchIsOpen, showSidebarTitle, coy,  dispatchCoy, expirationMsg, dispatchPageLoading} = useStoreHeader((state) => state);
+  const { expired} = expirationMsg;
   const pathname = usePathname();
   const {signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
   
+  const hasExpired = expired;
   //const currentActivePage = navs?.find((dt)=> "/"+coy+"/"+dt.name == pathname);
   const pathnameSplits = pathname.split('/');
   const domainAndPage = pathnameSplits.slice(1,3); //E.g ['demo', 'reports']
@@ -72,9 +74,10 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
   },[]);*/
 
   //<div className={`h-full z-50 min-h-screen mt-[60px] ${showSidebarTitle? 'w-[220px]': 'w-[70px]'} transition-width duration-500 bg-[aliceblue] lg:bg-[#c5dcf0] shadow-[gray_1px_0px_8px_0px]`}>
- 
+
   return (
-    <div className={`h-full z-50 min-h-screen mt-[55px] ${showSidebarTitle? 'w-[200px]': 'w-[70px]'} transition-width duration-500 bg-[aliceblue] lg:bg-[#c5dcf0] shadow-[gray_1px_0px_8px_0px]`}>
+    <div className={`h-full relative z-50 min-h-screen mt-[55px] ${showSidebarTitle? 'w-[200px]': 'w-[70px]'} transition-width duration-500 bg-[aliceblue] lg:bg-[#c5dcf0] shadow-[gray_1px_0px_8px_0px]`}>
+          <div className={`absolute top-0 bottom-0 w-full bg-red-100/60 ${hasExpired? '' : 'hidden'}`}></div>
           <div className='bg-[#192d51] px-3 pt-2 relative flex flex-col w-full  lg:bg-transparent'>
             <AiOutlineClose className='font-bold right-2 mt-2 absolute cursor-pointer text-white lg:hidden text-[20px] hover:text-[red] animate-text'
             onClick={closeDrawer}/>

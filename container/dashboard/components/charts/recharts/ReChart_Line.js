@@ -61,11 +61,12 @@ export default function ReChart_Line({label,titleChart, contDimen, titleChartSub
               <span className="text-white">{payload[1].dataKey} ${formatToCurrency(payload[1].value)}</span>
           </p>
           <p className="flex-row items-center flex">
-              <span className={`w-7 h-3  mr-2 text-white font-bold`}
+              <span className={`w-7 h-3 hidden  mr-2 text-white font-bold`}
                 >NET
               </span>
-              <span className="text-white"
-                style={{color:payload[0].isProfit? "lime" : "red"}}>{payload[0].isProfit? "Net Profit" : "Net Loss"} ${formatToCurrency(payload[0].net)}</span>
+              <span className="text-white pt-2"
+                style={{color:payload[0].payload.isProfit? "lime" : "red"}}>{payload[0].payload.isProfit? "NET PROFIT" : "NET LOSS"} ${formatToCurrency(payload[0].payload.net)}
+              </span>
           </p>
         </div>
       );

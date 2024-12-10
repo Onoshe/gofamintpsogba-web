@@ -6,7 +6,7 @@ import { MdLogout } from "react-icons/md";
 import { capitalizeFirstCharOnly } from '@/lib/capitalize/capitalizeString';
 
 const User = ({userInit, userEmail, userRole, userDropdown, setUserDropdown, handleLogout,
-    handleClickCompany, handleClickProfile
+    handleClickCompany, handleClickProfile,expired
 }) => {
     const handleDropdown = ()=>{
         setUserDropdown(true)
@@ -39,23 +39,24 @@ const User = ({userInit, userEmail, userRole, userDropdown, setUserDropdown, han
             handleLogout={handleLogout}
             handleClickCompany={handleClickCompany}
             handleClickProfile={handleClickProfile}
+            expired={expired}
             />}
     </div>
   )
 }
 
 
-const UserDropdown =({handleLogout, handleClickCompany, handleClickProfile})=>{
+const UserDropdown =({handleLogout, handleClickCompany, handleClickProfile,expired})=>{
 
     return(
         <div className='flex flex-col gap-3 rounded-md absolute right-2 shadow-md text-gray-600 bg-sky-100 p-3 w-[200px]'>
-            <div className='flex flex-row gap-2 items-center w-fit cursor-pointer hover:text-blue-600'
-                onClick={handleClickProfile}>
+            <div className={`flex flex-row gap-2 items-center w-fit ${expired? '' : 'cursor-pointer hover:text-blue-600'}`}
+                onClick={expired? ()=>console.log() :handleClickProfile}>
                 <MdPerson size={25}/>
                 <p>Profile</p>
             </div>
-            <div className='flex flex-row gap-2 items-center w-fit cursor-pointer hover:text-blue-600'
-                onClick={handleClickCompany}>
+            <div className={`flex flex-row gap-2 items-center w-fit ${expired? '' : 'cursor-pointer hover:text-blue-600'}`}
+                onClick={expired? ()=>console.log(): handleClickCompany}>
                 <BsGearFill size={20}/>
                 <p>Company</p>
             </div>

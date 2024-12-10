@@ -35,7 +35,7 @@ const PrivacyPolicy = () => {
           Privacy Policy
         </div>
         <div className='py-10 px-5 sm:px-10 md:px-20 lg:px-[10rem] text-gray-800'>
-            <Text1 text={privPol.b1} style={'pt-8 pb-5'}/>
+            <Text1 text={privPol.b1} style={'font-bold pt-8 pb-5'}/>
             <Text1 text={privPol.b2} style={''}/>
             <Text1 text={privPol.b3} style={''}/>
 
@@ -94,7 +94,7 @@ const PrivacyPolicy = () => {
             </p>
             <p className='pb-2'>
               <span className='font-bold mx-1'>- Data Portability:</span>
-               Request a copy of your data in a portable format."
+               Request a copy of your data in a portable format.
             </p>
             <p className='pb-2'>
               <span className='font-bold mx-1'>- Deletion:</span>
@@ -128,7 +128,7 @@ const PrivacyPolicy = () => {
             
             <div className=''>
               This Privacy Policy is an integral part of the QuickRecords Terms of Use found at
-                <Link href={'/terms-and-conditions'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> www.quick-records.app.vercel/terms-and-conditions.</Link>
+                <Link href={'/terms-and-conditions'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> www.quick-records.vercel.app/terms-and-conditions.</Link>
                  By using the App, you agree to both documents.    
             </div>
         </div>

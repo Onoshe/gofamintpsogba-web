@@ -81,7 +81,7 @@ export function groupTransToLedgersNew(caceLedgersArr, coaSMapped, transactionsD
         }
     };
 
-    //Get double entries for slit transactions
+    //Get double entries for split transactions
     const splitTransEntries = [];
     const splitTransEntriesFmt = [];
     if(caceLedgersInfo.splitTrans.length){
@@ -162,7 +162,7 @@ export function groupTransToLedgersNew(caceLedgersArr, coaSMapped, transactionsD
 }
 
 
-function checkAndPush(arr, obj, showAll=true){
+function checkAndPush(arr, obj, showAll=false){ //If showAll = true, all formats will be show whether they have value or not
     const hasValue = parseFloat(obj?.cashAmount);
     const toShow = showAll? true : hasValue;
     if(toShow){

@@ -8,7 +8,7 @@ const CardTopText = () => {
               >
                 QuickRecords Bookkeeping & Accounting
             </p>
-            <p className='text-justify z-10 font-[500] md:text-lg text-gray-800'>QuickRecords Bookkeeping & Accounting helps you to record all your transactions such as Sale, Purchase, Payments , Expenses, Products, etc. in an extremely simple manner. With your knowledge of just debit and credit, you will be able to record any transaction.</p>
+            <p className='text-justify z-10 font-[500] md:text-lg text-gray-800'>QuickRecords Bookkeeping & Accounting helps you to record all your transactions such as Sale, Purchase, Payments, Expenses, Products, etc. in an extremely simple manner. With your knowledge of just debit and credit, you will be able to record any transaction.</p>
         </div>
     
   )
@@ -23,7 +23,7 @@ export const CardTopTextCustom = ({title, text}) => {
               >
                 {title}
             </p>
-            <p className='text-justify z-10 mg:text-lg font-[400] text-gray-800 px-4'>
+            <p className='text-justify z-10 md:text-lg  font-[400] text-gray-800 px-4'>
               {text}  
             </p>
         </div>

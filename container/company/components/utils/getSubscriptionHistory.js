@@ -14,8 +14,14 @@ export const getSubscriptionHistory =({subscriptions})=>{
             const todayTime = todayDate.getTime();
             const subDate = new Date(dt.subscriptionDate);
             const subDateStr = subDate.toDateString();
-            const subDueDate = new Date(dt.subscriptionDate);
-                subDueDate.setDate(subDate.getDate() + 366);
+            //const subDueDate = new Date(dt.subscriptionDate);
+            //    subDueDate.setDate(subDate.getDate() + 366);
+            //const subDueDateStr = new Date(subDueDate).toDateString();
+            const subDueDateObj = new Date(dt.subscriptionDate);
+            const nextSubDueYr = subDueDateObj.getFullYear() + 1;
+            const subDueDateSplit = dt?.subscriptionDate?.split("-");
+            const subDueDateFmt = `${nextSubDueYr}-${subDueDateSplit[1]}-${subDueDateSplit[2]}`;
+            const subDueDate = new Date(subDueDateFmt);
             const subDueDateStr = new Date(subDueDate).toDateString();
             const subDueDateTime = subDueDate.getTime();
             const active = subDueDateTime > todayTime;
