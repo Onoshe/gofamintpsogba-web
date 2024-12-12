@@ -6,11 +6,13 @@ import { patchRequest } from '@/lib/apiRequest/patchRequest';
 import { getLinkPostTrans } from '@/lib/apiRequest/urlLinks';
 
 
-const EditDeleteTransaction = ({reportName, viewTransId,  selectedTranFromList, handleClickCell, transactions, recordTransaction,  user, notify, runDispatchClientDataCall, router}) => {
+const EditDeleteTransaction = ({reportName, viewTransId,  selectedTranFromList, handleClickCell, transactions, recordTransaction,  user, notify, runDispatchClientDataCall, settings, router}) => {
     const [showConfirm, setShowConfirm] = React.useState(false);
   
    const viewTran =  transactions?.find((dt)=> parseInt(dt.id) == parseInt(viewTransId));
    const isEditable = viewTran?.createdBy !== "DEMO";
+   const editDeleteLock = settings?.data?.find((dt)=> dt.slug === "transaction-edit-delete-lock");
+    //console.log(editDeleteLock);
 
     const handleDeleteTran =()=>{
         setShowConfirm(true)
@@ -24,12 +26,17 @@ const EditDeleteTransaction = ({reportName, viewTransId,  selectedTranFromList, 
     }
 
     const handleTransaction =(act)=>{
-        if(isEditable)
-        if(act === "EDIT" && selectedTranFromList?.row){
-            //console.log(selectedTranFromList)
-            handleClickCell({...selectedTranFromList, key:'edit'});
-        }else if(act === "DELETE" && selectedTranFromList?.row){
-            handleDeleteTran();
+        if(editDeleteLock?.smallText === "ON"){
+          notify('error', "Transaction Edit or Delete has been locked!. Please, contact the Admin to unlock");
+        }else{
+          if(isEditable){
+            if(act === "EDIT" && selectedTranFromList?.row){
+                //console.log(selectedTranFromList)
+                handleClickCell({...selectedTranFromList, key:'edit'});
+            }else if(act === "DELETE" && selectedTranFromList?.row){
+                handleDeleteTran();
+            }
+          }
         }
     }
 

@@ -20,11 +20,13 @@ import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
 import { handleDeleteAccountOrTran} from '../customers/utils/handleDeleteAccountOrTran';
 import { getLinkFetchTableWithConds } from '@/lib/apiRequest/urlLinks';
 import { getRequest } from '@/lib/apiRequest/getRequest';
+import useStoreHeader from '@/context/storeHeader';
 
 
 const Vendors = ({ssUser}) => {
   const { session, user,  status} = useAuthCustom(ssUser);
   const {vendors, dispatchVendors, runDispatchClientDataCall} = useStoreTransactions((state) => state);
+  const {settings} = useStoreHeader((state) => state);
   //const {data, mutate} = useSWRFetcher(getPersonalAcctUrl(user, 'vendors'));
   //const vendors = data.data;
   const [activeTab, setActiveTab] = React.useState('DISPLAY');
@@ -86,12 +88,17 @@ const Vendors = ({ssUser}) => {
   }
  
 
-  const handleClickCell = async (el)=>{     
-    if(el?.row?.createdBy !== "DEMO"){
-      const perms = await getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, form:[el.row]});
-      if(perms.permit){
-       await handleClickRow({el, user, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
-      }else{notify("error", perms.msg)}
+  const handleClickCell = async (el)=>{
+    const editDeleteLock = settings?.data?.find((dt)=> dt.slug === "transaction-edit-delete-lock");
+    if(editDeleteLock?.smallText === "ON"){
+      notify('error', "Transaction Edit or Delete has been locked!. Please, contact the Admin to unlock");
+    }else{     
+      if(el?.row?.createdBy !== "DEMO"){
+        const perms = await getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, form:[el.row]});
+        if(perms.permit){
+        await handleClickRow({el, user, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
+        }else{notify("error", perms.msg)}
+      }
     }
 }
 const handleConfirm = (act)=>{

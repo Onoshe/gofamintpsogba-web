@@ -10,7 +10,7 @@ import { findUser } from "@/lib/authActions/findUser";
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 1 week in seconds
 
 // JWT secret and expiration settings
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey"; // Use environment variables in production
+const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "supersecretkey"; // Use environment variables in production
 const JWT_EXPIRATION = "7d"; // Token is valid for 7 days
 
 export const POST = async (req, res) => {

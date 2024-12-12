@@ -16,6 +16,7 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import convertImageToBase64 from '@/lib/image/convertImageToBase64';
 import { HeaderTab } from './components/headerTab/HeaderTab';
 import CurrencySign from './components/homeComponents/CurrencySign';
+import EditDeleteLock from './components/homeComponents/EditDeleteLock';
 //import { AccessCard } from './cards/DashboardAccess';
 
 
@@ -24,7 +25,7 @@ import CurrencySign from './components/homeComponents/CurrencySign';
 const IndexCompany = ({ssUser}) => {
     const { session, user,  status} = useAuthCustom(ssUser);
     const {settings, dispatchRefreshSettingsCount,  subscriptions,  dispatchSubscriptions,
-        client_Admin, clientData, generalSettings, quickrecordsLogo,} = useStoreHeader((state) => state);
+        client_Admin, clientData, generalSettings, expirationMsg, quickrecordsLogo,} = useStoreHeader((state) => state);
     const {clientAccount, currencySymbol} = useStoreTransactions((state) => state);    
     const [base64Image, setBase64Image] = React.useState('');
     const [appB64Image, setAppBase64Image] = React.useState(''); 
@@ -36,7 +37,7 @@ const IndexCompany = ({ssUser}) => {
     if(generalSettings?.length){
         quickRecordsLogo = generalSettings.find((dt)=>dt.slug === "quickrecords-logo")?.largeText1;
     }
-    //console.log(generalSettings);
+    //console.log(expirationMsg);
 
     useEffect(()=>{
         const imageUrl = 'https://media.istockphoto.com/id/1496615469/photo/serene-latin-woman-enjoy-sunset-with-gratitude.jpg?s=612x612&w=is&k=20&c=hrdwKW5CMjVXlB_k39AnXHb-_Bm4epQPXRRTxhCDQpc=';
@@ -81,9 +82,9 @@ const IndexCompany = ({ssUser}) => {
             {tabs.activeTab.name === "home" && <>
                 <BackgroundCard style={''} childContStyle title={clientAccount?.companyName}>
                     <div className='w-full pb-4'>
-                        <div className={`p-[2px] px-3 w-full flex flex-row justify-between ${subcriptionHistory?.lastSub?.active?'bg-[lime] text-[seagreen]':'bg-red-500 text-gray-700'}`}>
-                        <p className=''><span className='font-bold'>{subcriptionHistory?.lastSub?.active?'ACTIVE':'EXPIRED'} <span>({subcriptionHistory?.lastSub?.subscriptionType})</span></span></p> 
-                        <p>Due date: {subcriptionHistory?.lastSub?.subDueDateStr}</p>
+                        <div className={`p-[2px] px-3 w-full flex flex-row justify-between ${!expirationMsg?.expired?'bg-[lime] text-[seagreen]':'bg-red-500 text-gray-700'}`}>
+                        <p className=''><span className='font-bold'>{!expirationMsg?.expired?'ACTIVE':'EXPIRED'} <span>({subcriptionHistory?.lastSub?.subscriptionType})</span></span></p> 
+                        <p>Due date: {expirationMsg?.dueDate}</p>
                         </div>
                         <Image
                                 //src={coyLogo}
@@ -109,9 +110,9 @@ const IndexCompany = ({ssUser}) => {
                 </BackgroundCard>
                 
                 <div className='relative flex w-full flex-col lg:flex-row mt-10 p-5 border border-[dodgerblue]'>
-                <div name="PeusdoCover" className={`${lockPosting? 'absolute z-20' : 'hidden'} top-0 bottom-0 w-full bg-blue-200/10`}></div>
+                 <div name="PeusdoCover" className={`${lockPosting? 'absolute z-20' : 'hidden'} top-0 bottom-0 w-full bg-blue-200/10`}></div>
                     <CurrencySign
-                        title="Currency Sign"
+                        title="Change Currency Sign"
                         dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
                         notify={notify} 
                         user={user}
@@ -123,6 +124,12 @@ const IndexCompany = ({ssUser}) => {
                     
                     <div name="PeusdoCover" className={`${lockPosting? 'absolute z-20' : 'hidden'} top-0 bottom-0 w-full bg-blue-200/10`}></div>
                     <div className='w-full flex-wrap flex flex-row gap-5 justify-around items-center'>
+                        <EditDeleteLock
+                            dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
+                            notify={notify} 
+                            user={user}
+                            settings={settings}
+                        />
                         <AuditedYearLock
                             dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
                             notify={notify} 

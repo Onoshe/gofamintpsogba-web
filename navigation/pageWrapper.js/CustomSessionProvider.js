@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 
 // JWT secret (must match what you use when signing tokens in the API route)
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
+const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "supersecretkey";
 
 export default function CustomSessionProvider({ user, children }) {
   return (

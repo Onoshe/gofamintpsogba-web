@@ -25,7 +25,7 @@ const User = ({userInit, userEmail, userRole, userDropdown, setUserDropdown, han
                     <span className="text-[16px] text-transparent">{userInit}</span>
                 </div> 
             </div>
-            <div className='text-[10px] sm:text-[12px]'>
+            <div className='text-[11px] smc:text-[13px] pt-1'>
                 <p className=''>{userEmail}</p>
                 <p className='text-right text-cyan-300'>{capitalizeFirstCharOnly(userRole)}</p>
             </div>

@@ -25,6 +25,7 @@ import { getDeleteAffectedTransactions } from '../chartOfAccount/utils/handleDel
 const Customers = ({ssUser}) => {
   const { session, user,  status} = useAuthCustom(ssUser);
   const {customers, dispatchCustomers, runDispatchClientDataCall} = useStoreTransactions((state) => state);
+  const {settings} = useStoreHeader((state) => state);
   const [activeTab, setActiveTab] = React.useState('DISPLAY');
   const [editForm, setEditForm] = React.useState(false);
   const [formInput, setFormInput] = React.useState({});
@@ -83,11 +84,18 @@ const Customers = ({ssUser}) => {
   const handleUpload =(e)=>{
     //console.log(e)
   }
-  const handleClickCell = async (el)=>{     
-        const perms = await getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, form:[el.row]});
-        if(perms.permit){
-         await handleClickRow({el, user, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
-        }else{notify("error", perms.msg)}
+  const handleClickCell = async (el)=>{ 
+        const editDeleteLock = settings?.data?.find((dt)=> dt.slug === "transaction-edit-delete-lock");
+        if(editDeleteLock?.smallText === "ON"){
+          notify('error', "Transaction Edit or Delete has been locked!. Please, contact the Admin to unlock");
+        }else{    
+          if(el?.row?.createdBy !== "DEMO"){
+            const perms = await getPermissions({user, act:pmsActs.EDIT_PERSONAL_ACCOUNT, form:[el.row]});
+            if(perms.permit){
+            await handleClickRow({el, user, setFormInput,  setInfoMsg, handleActiveTab, setSelectedOpt, setShowConfirm});
+            }else{notify("error", perms.msg)}
+          }
+        }
       
   }
   const handleConfirm = (act)=>{

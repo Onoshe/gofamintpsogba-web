@@ -326,6 +326,7 @@ const IndexReports = ({ssUser}) => {
                 runDispatchClientDataCall={runDispatchClientDataCall}
                 router={router}
                 transactions={transactions}
+                settings={settings}
                 />
             </Suspense>
             }

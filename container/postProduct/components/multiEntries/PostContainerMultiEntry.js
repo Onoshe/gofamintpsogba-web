@@ -151,7 +151,7 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
         <input type='checkbox' className='bg-white size-4 checkbox border border-blue-600' checked={showBankBalances} onChange={()=>setShowBankBalances(!showBankBalances)}/>
         <BsBank2 size={20} color='dodgerblue'/>
       </div>
-      <div className='flex flex-row justify-self-end ml-10 text-blue-800 items-center gap-2'>
+      <div className='hidden flex-row justify-self-end ml-10 text-blue-800 items-center gap-2'>
         <input type='checkbox' className='checkbox checkbox-error checkbox-xs'
           checked={productBy.manual} onChange={handleToggle}/>
         <label>Record by {productBy.manual? 'Manual' : 'Upload'}</label>

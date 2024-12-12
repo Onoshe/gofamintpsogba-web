@@ -33,18 +33,21 @@ const SubscriptionMonitor = ({user}) => {
      }
   },[user, regDate.def]);
 
+  let dueDate = "";
   let version = "Trial Version";  //For Demo account
   if(companyId === "DEMO"){
     const today = new Date().toISOString().split("T")[0];
     const stDate = addDaysToDate(regDate.date?.split("T")[0], trialPeriod);
+    dueDate = stDate;
     daysToExpire = getDaysDifference(stDate, today); //(start, end): start-end
-    //console.log(daysToExpire, regDate, trialPeriod)
+    //console.log(stDate)
   }else{
     if(subscriptions?.length){
       if(subscriptions?.length){
         lastSub = subscriptions[0];
         const today = new Date()?.toISOString().split("T")[0];
         daysToExpire = getDaysDifference(lastSub?.expiredDate, today);
+        dueDate = lastSub?.expiredDate;
         version = "Subscription";
       }
     }
@@ -71,7 +74,7 @@ const SubscriptionMonitor = ({user}) => {
   let notExpiredMsgMini =  `Expires in ${daysToExpire} ${daysInfo}`;
   
   React.useEffect(()=>{
-    dispatchExpirationMsg({expiredMsg, notExpiredMsg, expiredMsgMini, notExpiredMsgMini, showNotificationBar, expired});
+    dispatchExpirationMsg({expiredMsg, notExpiredMsg, expiredMsgMini, notExpiredMsgMini, showNotificationBar, expired, daysToExpire, dueDate});
   },[version, daysToExpire]);
 
 

@@ -76,13 +76,18 @@ const Products = ({ssUser}) => {
     notify(type, msg);
   }
   const handleClickRowFunction = async (el)=>{
-    const {key, row} = el;
-    if(row.createdBy === "DEMO") return;
-    const perms = await getPermissions({user, act:pmsActs.EDIT_PRODUCT, form:[row]});
-    if(!perms.permit) return notify("error", perms.msg);
+    const editDeleteLock = settings?.data?.find((dt)=> dt.slug === "transaction-edit-delete-lock");
+    if(editDeleteLock?.smallText === "ON"){
+      notify('error', "Transaction Edit or Delete has been locked!. Please, contact the Admin to unlock");
+    }else{
+      const {key, row} = el;
+      if(row.createdBy === "DEMO") return;
+      const perms = await getPermissions({user, act:pmsActs.EDIT_PRODUCT, form:[row]});
+      if(!perms.permit) return notify("error", perms.msg);
 
-    handleClickRow({el, products, setFormInput, setShowBlind, setInfoMsg, dispatchProducts, setDeleteRow, deleteRow, setSelectedProduct, 
-      setAlertBlind, user});
+      handleClickRow({el, products, setFormInput, setShowBlind, setInfoMsg, dispatchProducts, setDeleteRow, deleteRow, setSelectedProduct, 
+        setAlertBlind, user});
+    }
   };
   const handleConfirmation =(event)=>{
     if(event === "CANCEL"){

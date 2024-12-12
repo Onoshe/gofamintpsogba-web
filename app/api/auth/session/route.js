@@ -6,7 +6,8 @@ import jwt from "jsonwebtoken";
 
 
   // JWT secret
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
+const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "supersecretkey";
+//console.log(JWT_SECRET);
 
   export const GET = async (req, res) => {
     const cookieHeader = req.headers.get('Cookie');

@@ -76,15 +76,20 @@ const ChartOfAccount = ({ssUser}) => {
     }
 
   const handleClickRowFunction = async (el)=>{
-    const {key, row} = el;
-    //return console.log(row, key);
-    if(row.createdBy === "DEMO") return;
-    if(row.typeCode == controlAcctsCode.retainedEarnings && key === "delete") return;
+    const editDeleteLock = settings?.data?.find((dt)=> dt.slug === "transaction-edit-delete-lock");
+    if(editDeleteLock?.smallText === "ON"){
+      notify('error', "Transaction Edit or Delete has been locked!. Please, contact the Admin to unlock");
+    }else{
+      const {key, row} = el;
+      //return console.log(row, key);
+      if(row.createdBy === "DEMO") return;
+      if(row.typeCode == controlAcctsCode.retainedEarnings && key === "delete") return;
 
-    const perms = await getPermissions({user, act:pmsActs.EDIT_COA, form:[row]});
-    if(!perms.permit) return notify("error", perms.msg);
+      const perms = await getPermissions({user, act:pmsActs.EDIT_COA, form:[row]});
+      if(!perms.permit) return notify("error", perms.msg);
 
-     handleClickRow({el, user, setFormInput, setShowBlind, setInfoMsg, setShowConfirm, handleSubmitFunction, chartOfAccounts, dispatchChartOfAccounts, setSelectedOpt, coaStructure})
+      handleClickRow({el, user, setFormInput, setShowBlind, setInfoMsg, setShowConfirm, handleSubmitFunction, chartOfAccounts, dispatchChartOfAccounts, setSelectedOpt, coaStructure})
+    }
   };
   const coaStructureWithoutRetEarnings = coaStructure?.filter((dt)=> dt.name.toLowerCase() !== "retainedearnings");
   const coaAcct = mapChartOfAccountForDisplay(chartOfAccounts, coaStructure);

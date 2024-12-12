@@ -97,13 +97,14 @@ const PostContainerTwoEntryByUpload = ({postError,setUploading, setPostError, ch
               onClick={()=>getUploadSampleFile()}>
               <MdDownload size={22} className=''/> Sample File
             </div>
-            
-            <div className='hover:tooltip-open tooltip tooltip-top -mr-2' data-tip="Select 2-Entries Journal">
-                <input type="checkbox" checked={checkedSelect} className='checkbox checkbox-sm checkbox-error'
-                onChange={handleUploadSelector}/>
-            </div>
-            <div>
-               <p className='text-blue-700'>Select Upload: <span className={`${checkedSelect? 'text-red-500 font-bold': ''}`}>{checkedSelect? 'Journal':'Transactions (Default)'}</span></p>
+            <div className="hidden">
+                <div className='hover:tooltip-open tooltip tooltip-top -mr-2' data-tip="Select 2-Entries Journal">
+                    <input type="checkbox" checked={checkedSelect} className='checkbox checkbox-sm checkbox-error'
+                    onChange={handleUploadSelector}/>
+                </div>
+                <div>
+                  <p className='text-blue-700'>Select Upload: <span className={`${checkedSelect? 'text-red-500 font-bold': ''}`}>{checkedSelect? 'Journal':'Transactions (Default)'}</span></p>
+                </div>
             </div>
         </div>
         <div className='p-3'>
