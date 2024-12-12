@@ -85,7 +85,7 @@ const UpperDashboard = ({base64Image, setBase64Image, coyLogo, notify, user, dis
             </div>
             <div className='w-full flex flex-col shadow-lg  max-w-[350px] rounded-md  bg-white py-3 px-5'>
                 <TextTitle title="Contact Person Name" name={clientAccount?.contactPersonTitle +" "+clientAccount?.contactPersonFirstName +" "+clientAccount?.contactPersonLastName}/>
-                <TextTitle title="Contact Phone No" name={clientAccount?.contactPersonPhoneNo}/>
+                <TextTitle title="Contact Person Phone No" name={clientAccount?.contactPersonPhoneNo}/>
                 <TextTitle title="Email" name={clientAccount?.email}/>
                 <TextTitle title="Registered date" name={new Date(clientAccount?.registeredDate).toDateString()}/>
             </div>

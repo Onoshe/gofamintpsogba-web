@@ -12,6 +12,7 @@ import { initStatePostTwoTrans, reducerPostTwoTrans } from '../../reducers/reduc
 import { validateTransactions } from '@/lib/validation/validateTransaction';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
 import { getUploadSampleFile } from '../utils/getUploadSampleFile';
+import DragAndDropFileUpload from '@/components/forms/DragAndDropFileUpload';
 
 
 const PostContainerTwoEntryByUpload = ({postError,setUploading, setPostError, chartOfAccounts, personalAcctsList, controlAcctsCode, postBtn, setPostBtn, setTransSheets, 
@@ -20,7 +21,7 @@ const PostContainerTwoEntryByUpload = ({postError,setUploading, setPostError, ch
     const {isDropped, isDragging, selected, uploadedData, resetFileUploadCount, file, infoMsg, table} = statePostTwoTrans;
     const transSheets = table?.rows;
     
-
+   
     const handleDispatchPost =(type, payload)=>{
       dispatchPost({type, payload});
     };

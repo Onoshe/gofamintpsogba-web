@@ -35,7 +35,7 @@ const headerTitleSum = keysValuationSum.map((key)=> headerTitleSumArr.find((dt)=
 
 
 export const getProductsValuation =({reportName,  transProcessor,  dateForm, products, viewTransId})=>{
-    const valuationSummary = getValuationSummary({transProcessor, products});
+    const valuationSummary = getValuationSummary({transProcessor, products, dateForm});
     let product = {};
     if(viewTransId){
         product = products.find(e=> e.productCode == viewTransId);
@@ -78,8 +78,8 @@ export const getProductsValuation =({reportName,  transProcessor,  dateForm, pro
     return result
  };
 
-function getValuationSummary({transProcessor, products}){
-    const productLedgersObj = transProcessor.processTransactions().productsLedger;
+function getValuationSummary({transProcessor, products, dateForm}){
+    const productLedgersObj = transProcessor.processTransactions(dateForm.startDate, dateForm.endDate).productsLedger;
     const valuation = [];
     let valuationTotal = 0;
     //console.log(productLedgersObj)

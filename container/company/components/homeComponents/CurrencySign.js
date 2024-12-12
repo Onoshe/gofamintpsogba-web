@@ -53,7 +53,7 @@ const handleOnChangeCurrencySymbol =(e)=>{
         <div>
             <p className='text-red-800 font-[500] my-4'>Current Symbol: <span className={`bg-white ml-3 py-1 px-3 border border-blue-300 font-bold text-blue-500`}>
                 {currentSymbol}</span></p>
-            <p className='italic pb-3'>Enter the currency symbol to be displayed on your report</p>
+            <p className='italic pb-3'>Change the currency symbol to be displayed on your report</p>
             <form  className={`flex flex-row gap-3 items-center`} onSubmit={handleSave}>
                 <label className='font-bold'>Change Symbol</label>
                 <input

@@ -147,6 +147,7 @@ export class LedgersManager {
             subLedger[accountCodeSub] = {
               name: accountName,
               group,
+              accountCodeSub,
               openingBal: 0,
               closingBal: 0,
               openingBalDr: 0,

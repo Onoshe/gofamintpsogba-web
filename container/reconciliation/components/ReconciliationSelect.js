@@ -48,12 +48,17 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
         }
      }
 
-     const handleResetRecon = ()=>{
+     const handleResetReconTable = ()=>{
         setSelAcctCode("");
         setReconLedger([]);
         setReconAccount({coa:{}, ledger:[], openingBalRow:{}});
+     }
+     const handleResetRecon = ()=>{
+        handleResetReconTable();
         setForm({dateFrom:'', dateTo:'', stmtClosingBalance:''});
      }
+     
+
      const handleOnChangeSelectAcct =(e)=>{
         setSelAcctCode(e.target.value)
      }
@@ -69,7 +74,7 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
     const handleSavedReports = ()=>{
         setReportCont({...reportCont, show:!reportCont.show});
     }
-
+    //console.log(selAcctCode)
     React.useEffect(() => {
         if (selAcctCode) {
           const coa = chartOfAccounts?.find(dt => dt.accountCode === selAcctCode);
@@ -80,7 +85,13 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
             setReconOthers({...reconOthers, diff:parseFloat(errorAdj), add:0, less:0});
             setFormOthers({new:{description:'', amount:''}, forms:[]});
           }
-        if (form.dateFrom && form.dateTo && ledger.length) {
+          if(!form.dateFrom || !form.dateTo){
+            //Reset when there's no form.dateFrom or form.dateTo
+            setReconLedger([]);
+            setReconOthers({...reconOthers, diff:parseFloat(errorAdj), add:0, less:0});
+            setFormOthers({new:{description:'', amount:''}, forms:[]});
+          }
+          if(form.dateFrom && form.dateTo && ledger.length) {
             let openingBalRow = ledger?.find(dt => dt.description.toLowerCase().includes("opening balance"));
             setReconAccount({...reconAccount, openingBalRow:openingBalRow || {}});
             //Remove opening balance
@@ -92,6 +103,9 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
             setReconOthers({...reconOthers, diff:parseFloat(errorAdj), add:0, less:0});
             setFormOthers({new:{description:'', amount:''}, forms:[]});
           }
+        }else{
+            //Reset when no Bank Ledger is selected
+            handleResetRecon();
         }
       }, [selAcctCode, form.dateFrom, form.dateTo]);
     
@@ -103,7 +117,8 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
                 if(daysDiff > 91){
                   notify("error", "Reconciliation period cannot be more than 91 days!");
                   const dateToPlus91 = addDaysToDate(form.dateFrom, 91)
-                  setForm({...form, dateTo:dateToPlus91});   
+                  setForm({...form, dateTo:dateToPlus91});
+                  handleResetRecon();   
                 }
             }else{ setForm({...form, dateTo:form.dateFrom});} 
         }
@@ -121,30 +136,31 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
    const errorAdjReport =  formOthers.forms.length? `${reconOthers?.diff? formatToCurrency(reconOthers.diff) : '0.00'}`:`${errorAdj? formatToCurrency(errorAdj) : '0.00'}`;
    const isErrorAdjReport = parseInt(errorAdjReport.toString().replace("-", ""));
 
+   //console.log(reconAccount, reconLedger)
   return (
-    <div className='w-full flex md:justify-center items-center overflow-auto'>   
+    <div className='w-full flex md:justify-center items-center overflow-auto '>   
         <div className='w-full bg-gray-100 shadow-lg'>
-            <div className='flex flex-col-reverse md:flex-row items-end  md:justify-between bg-blue-200 p-3'>
-                <SelectionMainAccount
-                    title="Select Account" 
-                    classNameCont={`${'flex-shrink-0'}`} 
-                    classNameTitle={`hidden`} 
-                    options={chartOfAcctsForRecon}
-                    classNameContSel={`w-full max-w-[250px]`}
-                    classNameBLine={''}
-                    name="selAcct"
-                    onChange={handleOnChangeSelectAcct}
-                    value={selAcctCode || '--- Select Bank ----'}
-                />
-                <div className='relative flex flex-col items-end mb-3'>
-                    <div className="flex flex-row justify-between w-full">
-                        <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Save Reports'}>
-                            <BsList size={24} className='text-[navy] hover:bg-blue-100 shadow-md rounded-lg tooltip-open tooltip-top tooltip cursor-pointer hover:text-blue-500 active:text-blue-300 rotate-180' 
+            <div className='relative flex flex-col-reverse md:flex-row items-end  md:justify-between bg-blue-200 p-3'>
+                    <div className="absolute top-2 left-3 flex flex-row gap-2 justify-between">
+                        <div className='hover:tooltip-open tooltip tooltip-right' data-tip={'Save Reports'}>
+                            <BsList size={24} className='text-[navy] hover:bg-teal-100 bg-blue-100 shadow-md rounded-lg tooltip-open tooltip-top tooltip cursor-pointer hover:text-blue-500 active:text-blue-300 rotate-180' 
                             onClick={handleSavedReports}
                             />
                         </div>
                         <p className='text-blue-800 font-[600]'>Account Reconciliation</p>
                     </div>
+                    <SelectionMainAccount
+                        title="Select Account" 
+                        classNameCont={`${'flex-shrink-0'}`} 
+                        classNameTitle={`hidden`} 
+                        options={chartOfAcctsForRecon}
+                        classNameContSel={`w-full max-w-[250px]`}
+                        classNameBLine={''}
+                        name="selAcct"
+                        onChange={handleOnChangeSelectAcct}
+                        value={selAcctCode || '--- Select Bank ----'}
+                    />
+                <div className='relative flex flex-col items-end my-3'>
                     <div className='flex flex-row flex-wrap items-center gap-2 mt-4 text-gray-700'>
                         <div className='flex flex-row items-center gap-1'>
                             <p>From</p>
@@ -167,23 +183,23 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
             <div className='flex flex-col gap-1 md:flex-row justify-between bg-white md:m-2 text-blue-800 py-3'>
                 <div className='px-3 flex flex-col gap-1 text-[13px]'>
                     <div className='flex flex-row'>
-                        <p className='w-[150px] text-right mr-1 text-amber-950'>Account to Reconcile:</p>
+                        <p className='w-[150px] sm:text-right mr-1 text-amber-950'>Account to Reconcile:</p>
                        {!reconAccount.coa?.accountCode?<p>Select Account</p>:<p>{reconAccount.coa?.accountCode+": "+reconAccount.coa?.accountName}</p>}
                     </div>
                     <div className='flex flex-row'>
-                        <p className='w-[150px] text-right mr-1 text-amber-950'>Ending Book balance:</p>
+                        <p className='w-[150px] sm:text-right mr-1 text-amber-950'>Ending Book balance:</p>
                         <p>{closingCBBal? formatToCurrency(closingCBBal): '0.00'}</p>
                     </div>
                 </div>
                 <div className='px-3 flex flex-col gap-1 text-[13px]'>
                     
                     <div className='flex flex-row'>
-                        <p className='w-[150px] text-right mr-1 text-amber-950'>Statement Date:</p>
+                        <p className='w-[150px] sm:text-right mr-1 text-amber-950'>Statement Date:</p>
                         <p>{form.dateTo && new Date(form.dateTo).toDateString()}</p>
                     </div>
                     <div  className='flex flex-row flex-wrap'>
-                        <p className='w-[150px] text-right mr-1 text-amber-950'>Ending Statement bal:</p>
-                        <input className='w-[100px] lg:w-[150px] bg-white py-[2px] px-2 border border-gray-400 rounded-sm' name="stmtClosingBalance" value={form.stmtClosingBalance} onChange={handleOnChange}/>
+                        <p className='w-[150px] sm:text-right mr-1 text-amber-950'>Ending Statement bal:</p>
+                        <input className='w-[150px] lg:w-[180px] bg-white py-[2px] px-2 border border-gray-400 rounded-sm' name="stmtClosingBalance" value={form.stmtClosingBalance} onChange={handleOnChange}/>
                     </div>
                 </div>
             </div>

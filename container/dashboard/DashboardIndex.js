@@ -64,7 +64,7 @@ const DashboardIndex = ({ssUser}) => {
     }
 
  //const dateFormQuery = {startDate:'2024-01-01', endDate:'2024-05-30'}
- 
+ //console.log(prodSumData, prodSumLabel)
   const handleSelAccount =(acct)=>{
     //console.log(acct);
     //setListOfAccounts(false)

@@ -62,8 +62,11 @@ export function generateBSData(transProcessor, coaStructure, dateFormQuery) {
   //Products
   const highest7Prods =  getObjects(productsLedgers, 7);
   highest7Prods.forEach(prod => {
+    const prodCode = prod?.accountCodeSub;
     chartData.prodSumData.push(prod.closingBal);
-    const nameFmt =  prod.name?.split(" ")[0]+"- "+(prod.closingBal/1000000)?.toFixed(3)+"m"
+    let nameFmt =  prod?.name;
+    const nameFmtSht = nameFmt?.length >13? nameFmt.slice(0,12)+'...' :nameFmt;
+    nameFmt = prodCode? prodCode+': '+nameFmtSht : nameFmt;
     chartData.prodSumLabel.push(nameFmt);
   });
 

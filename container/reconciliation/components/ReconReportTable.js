@@ -25,7 +25,6 @@ const ReconReportTable = ({
                 onClick={handleCloseReport}/>
         </div>
         <div className="flex flex-col w-full max-w-[350px]">
-            <p>Report Name</p>
             {!savedReportView?.show?
                 <div className="flex flex-row items-center gap-2">
                 <input className='min-w-[100px] flex-1 bg-white py-[4px] px-2 border border-blue-400'
@@ -38,7 +37,7 @@ const ReconReportTable = ({
                 </div>
             </div>
             :<div>
-                <p className="text-teal-600 font-[600]">{savedReportView.reportRaw.name}</p>
+                <p className="text-teal-800 font-[600]">{savedReportView.reportRaw.name}</p>
             </div>
             }
         </div>

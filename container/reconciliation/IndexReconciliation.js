@@ -23,6 +23,7 @@ import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import { getLinkFetchTable } from '@/lib/apiRequest/urlLinks';
 import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
 import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
+import { getCompanyLogo } from '../company/components/utils/getSubscriptionHistory';
 
 
 const keys = ['transactionDate', 'description', 'transactionNo', 'debit', 'credit'];
@@ -57,13 +58,14 @@ const IndexReconciliation = ({ssUser}) => {
     const tableUrl = getLinkFetchTable({table:domain+"_reconciliation", domain});
      const {data, mutate} = useSWRFetcher(tableUrl); 
 
+    // console.log(data, domain, tableUrl)
     const [selAcctCode, setSelAcctCode] = React.useState("");
     const [resetOthers, setResetOthers] = React.useState(0);
     const [showConfirm, setShowConfirm] = React.useState({show:false}); 
     const [savedReportView, setSavedReportView] = React.useState({show:false}); 
     const ledgerAccts = processedLedgers[selAcctCode];
     const ledger = ledgerAccts?.trans || [];
-    
+    const companyLogoFile = getCompanyLogo(settings);
 
     let reportDetails = {};
     if(form.dateFrom && form.dateTo && ledgerAccts?.name){
@@ -73,7 +75,7 @@ const IndexReconciliation = ({ssUser}) => {
       };
     }
     reportDetails = savedReportView.show? savedReportView.report.reportDetails : reportDetails;
-    //console.log(reportDetails, form)
+    //console.log(companyLogoFile, settings)
 
     let reportData = {};
     if(user?.lastname){
@@ -132,6 +134,7 @@ const IndexReconciliation = ({ssUser}) => {
             reportRows:data, 
             reportHeader:rowsHeader, 
             pdfHeader:docHeader, 
+            companyLogoFile,
             pdfData:{reportRowKeys:tableRowKeys, reportRowsStyle,headerFSize:[16,14,14,14]},
           };
           //handleExcelExport(excelData);
@@ -228,7 +231,7 @@ const IndexReconciliation = ({ssUser}) => {
               setSavedReportView={setSavedReportView}
               pinRow
             />
-        <div className={`${displayReport.show? 'hidden' :''} px-4 pb-2 pt-1`}>
+        <div className={`${displayReport.show? 'hidden' :''} px-1 pb-2 pt-1`}>
           <ReconciliationSelect
             form={form}
             setForm={setForm}

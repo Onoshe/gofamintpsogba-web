@@ -83,8 +83,6 @@ export function DoughnutChart({name, hideChart, dataArr, titleChart, titleTotal,
         fontSize: 12,
         //padding: 10 // Adjust spacing between legends
     },
-    
-    
       fullWidth: false,
       toggleDatasetVisibility: false,
       onClick: null,

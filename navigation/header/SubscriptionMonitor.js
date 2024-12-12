@@ -1,12 +1,13 @@
 'use client'
 import useStoreHeader from '@/context/storeHeader';
 import { getRequest } from '@/lib/apiRequest/getRequest';
-import { getLinkFetchTableWithConds } from '@/lib/apiRequest/urlLinks';
+import { getLinkFetchTableWithConds, getLinksAdmin } from '@/lib/apiRequest/urlLinks';
 import { addDaysToDate, getDaysBetweenDates, getDaysDifference } from '@/lib/date/getDaysBetweenDates';
 import { sortArrayByDate } from '@/lib/sort/sortArrayByDate';
 import React, {useState} from 'react';
 import { MdClose, MdShoppingCart } from "react-icons/md";
 import { usePathname, useRouter } from 'next/navigation';
+import { getUserRegDate } from './utils/getUserRegDate';
 
 const SubscriptionMonitor = ({user}) => {
   const {dispatchShowNotificationBar, subscriptions, expiration, generalSettings, dispatchExpiration, expirationMsg, dispatchExpirationMsg} = useStoreHeader((state) => state);
@@ -15,19 +16,29 @@ const SubscriptionMonitor = ({user}) => {
   const companyId = user?.companyId?.toUpperCase();
   const companyIdLc = user?.companyId?.toLowerCase();
   const trialPeriod = generalSettings?.find((dt)=> dt.slug === "trial-version-expiration-days")?.number1;
-  const regDate = user?.registeredDate; //For Demo User
+  const [regDate, setRegDate] = React.useState({date:user?.registeredDate, def:true}); // //For Demo User
   let daysToExpire = 20; //Default to hide the bar on mount
   let lastSub = {};
   const router = useRouter();
   const pathname = usePathname();
+  
+  //console.log(regDate)
+  async function getRegDate(){
+    await getUserRegDate({user, secDate:user?.registeredDate}).then((res)=> setRegDate({date:res, def:false}))
+  };
 
-  //console.log(expiration, subscriptions)
+  React.useEffect(()=>{
+     if(regDate.def){
+        getRegDate();
+     }
+  },[user, regDate.def]);
 
   let version = "Trial Version";  //For Demo account
   if(companyId === "DEMO"){
     const today = new Date().toISOString().split("T")[0];
-    const stDate = addDaysToDate(regDate?.split("T")[0], trialPeriod);
+    const stDate = addDaysToDate(regDate.date?.split("T")[0], trialPeriod);
     daysToExpire = getDaysDifference(stDate, today); //(start, end): start-end
+    //console.log(daysToExpire, regDate, trialPeriod)
   }else{
     if(subscriptions?.length){
       if(subscriptions?.length){
@@ -45,7 +56,7 @@ const SubscriptionMonitor = ({user}) => {
 
   React.useEffect(()=>{
     if(user){
-      dispatchExpiration({expired, demoRegDate:regDate, daysToExpire, demoTrialPeriod:trialPeriod, lastSub});
+      dispatchExpiration({expired, demoRegDate:regDate.date, daysToExpire, demoTrialPeriod:trialPeriod, lastSub});
       if(daysToExpire){
         dispatchShowNotificationBar(showNotificationBar)
       }
@@ -53,11 +64,11 @@ const SubscriptionMonitor = ({user}) => {
   },[user, expired, showNotificationBar]);
 
   
-
+  let daysInfo = parseInt(daysToExpire)>= 2? 'days' : 'day';
   let expiredMsg =  `Your ${version} has expired!`;
-  let notExpiredMsg =  `Your ${version} will expire in ${daysToExpire} days`;
+  let notExpiredMsg =  `Your ${version} will expire in ${daysToExpire} ${daysInfo}`;
   let expiredMsgMini = 'Expired!';
-  let notExpiredMsgMini =  `Expires in ${daysToExpire} days`;
+  let notExpiredMsgMini =  `Expires in ${daysToExpire} ${daysInfo}`;
   
   React.useEffect(()=>{
     dispatchExpirationMsg({expiredMsg, notExpiredMsg, expiredMsgMini, notExpiredMsgMini, showNotificationBar, expired});

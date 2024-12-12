@@ -4,20 +4,25 @@ import DashboardCard from '../reusableComponents/DashboardCard';
 import ReportTable from '../reusableComponents/ReportTable';
 import { sortArrayByDate } from '@/lib/sort/sortArrayByDate';
 import { formatToCurrency } from '@/lib/currency';
+import { getDaysBetweenDates, getDaysDifference } from '@/lib/date/getDaysBetweenDates';
 
-const SubscriptionsHistory = ({subscriptions, client_Admin, clientData, generalSettings, quickRecordsLogo, handleExportReceipt, handleExportStatement}) => {
-
+const SubscriptionsHistory = ({subscriptions, client_Admin, clientData, generalSettings, quickRecordsLogo, 
+    handleExportReceipt,currencySymbol, handleExportStatement}) => {
 
 let subHistory = [...subscriptions];
 sortArrayByDate(subHistory, 'subscriptionDate', 'ASC');
 if(subHistory?.length){
     subHistory = subHistory.map((dt)=>{
         let expired = new Date(dt.expiredDate).getTime() < new Date().getTime();
-        return {...dt, status:expired? "Expired" : "Active", export:'Export', classNameTD:`${expired? 'text-red-800' : 'text-green-600'}`, exportClassName}
+        const today = new Date().toISOString().split("T")[0];
+        let daysToDueDate = getDaysDifference(dt.expiredDate, today);
+        daysToDueDate = daysToDueDate < 0? 0 : daysToDueDate;
+        return {...dt, daysToDueDate, subscriptionAmount:currencySymbol+formatToCurrency(parseInt(dt.subscriptionAmount)), status:expired? "Expired" : "Active", export:'Export', classNameTD:`${expired? 'text-red-800' : 'text-green-600'}`, exportClassName}
     })
 }
 
 //console.log(client_Admin)
+//console.log(subHistory)
 const pdfData = {};
   if(clientData?.companyName && client_Admin?.companyName){
     pdfData.invoiceName = clientData.companyName;
@@ -41,9 +46,9 @@ const pdfData = {};
         pdfData.date = sub.subscriptionDate;
         pdfData.itemDesc1 = sub.subDescription1;
         pdfData.itemDesc2 = sub.subDescription2;
-        pdfData.itemAmount2 = "N"+formatToCurrency(parseFloat(sub.subscriptionAmount));
-        pdfData.itemSubTotal = "N"+formatToCurrency(parseFloat(sub.subscriptionAmount));
-        pdfData.itemTotal = "N"+formatToCurrency(parseFloat(sub.subscriptionAmount));
+        pdfData.itemAmount2 = currencySymbol+formatToCurrency(parseFloat(sub.subscriptionAmount));
+        pdfData.itemSubTotal = currencySymbol+formatToCurrency(parseFloat(sub.subscriptionAmount));
+        pdfData.itemTotal = currencySymbol+formatToCurrency(parseFloat(sub.subscriptionAmount));
 
     handleExportReceipt({quickRecordsLogo, paid:sub.subPaymentStatus, pdfData});
    }
@@ -56,7 +61,7 @@ const pdfData = {};
             <div className='flex flex-col self-start px-3 bg-white p-3 max-h-[60vh] overflow-auto'>
                 {subHistory?.length? 
                 <ReportTable
-                    rowKeys={["subscriptionDate", "paymentRef", "subscriptionType", "description", "expiredDate", "status", "subPaymentStatus", "subscriptionAmount",  "export"]}
+                    rowKeys={["subscriptionDate", "paymentRef", "subscriptionType", "description", "expiredDate", "daysToDueDate", "status", "subPaymentStatus", "subscriptionAmount",  "export"]}
                     header={headers}
                     rows={subHistory}
                     onClickRowCell={handleClickRowCell}
@@ -72,9 +77,9 @@ const pdfData = {};
 export default SubscriptionsHistory;
 
 var exportClassName = "shadow-lg active:bg-cyan-100 cursor-pointer bg-[#a3f8f6] hover:bg-[#6af9f6] p-1 px-2 rounded";
-var headers = [{name:"subscriptionDate", title:"Date"}, {name:"paymentRef", title:"Payment Ref"}, {name:"description", title:"Description"}, {name:"expiredDate", title:"Expiration date"},
-    {name:"subscriptionAmount", title:"Amount"}, {name:"subscriptionType", title:"Plan"}, {name:"export", title:"Export Pdf"}, {name:"status", title:"Status"},
-    {name:"subPaymentStatus", title:"Payment"}];
+var headers = [{name:"subscriptionDate", title:"Subscription date"}, {name:"paymentRef", title:"Payment Ref"}, {name:"description", title:"Description"}, {name:"expiredDate", title:"Expiration date"},
+    {name:"daysToDueDate", title:"Days Remaining"}, {name:"subscriptionAmount", title:"Amount"}, {name:"subscriptionType", title:"Plan"}, {name:"export", title:"Export Pdf"}, {name:"status", title:"Status"},
+    {name:"subPaymentStatus", title:"Payment"},];
 
 /********** SET EXPIRATION DATE
  * if(subHistory?.length){

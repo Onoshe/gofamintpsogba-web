@@ -65,7 +65,8 @@ const IndexReports = ({ssUser}) => {
   const windowDimen = useWindowDimensions();  
   
   //console.log(transProcessor.getTransactions());
-   // console.log(chartOfAccounts)
+  //let productLg = transProcessor.getPersonalAccounts('productsLedger');
+  //  console.log(productLg)
 
   const handleReport =(report)=>{
       //console.log(report);
@@ -151,8 +152,10 @@ const IndexReports = ({ssUser}) => {
     }
 
     const handleSelectedLedger =(ledgerCode)=>{
+      const productLdgs = transProcessor.getPersonalAccounts('productsLedger');
       let ldg = ledgerCode?.slice(0,2);
-      ldg = ldg === "C-"? "customers" : ldg === "V-"? "vendors" : "general";
+      //console.log(ledgerCode, ldg, productLdgs[ledgerCode])
+      ldg = ldg === "C-"? "customers" : ldg === "V-"? "vendors" : productLdgs[ledgerCode]?.name? "products" : "general";
       const ledgerAcct = {
         general:"gl",
         customers:"customers",

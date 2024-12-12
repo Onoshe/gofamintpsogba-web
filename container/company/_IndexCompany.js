@@ -74,6 +74,9 @@ const IndexCompany = ({ssUser}) => {
     <div className=''>
         <HeaderTab tabs={tabs} setTabs={setTabs}/>
         <br/><br/>
+        <p className={`font-[600] px-2 py-4 text-center text-red-800 ${lockPosting? '' : 'hidden'}`}>
+            {"Only the Admin can change or update the company's settings"}
+        </p>
         <div className='p-4 flex flex-col items-center z-0'>
             {tabs.activeTab.name === "home" && <>
                 <BackgroundCard style={''} childContStyle title={clientAccount?.companyName}>
@@ -104,7 +107,9 @@ const IndexCompany = ({ssUser}) => {
                     
                     </div>
                 </BackgroundCard>
+                
                 <div className='relative flex w-full flex-col lg:flex-row mt-10 p-5 border border-[dodgerblue]'>
+                <div name="PeusdoCover" className={`${lockPosting? 'absolute z-20' : 'hidden'} top-0 bottom-0 w-full bg-blue-200/10`}></div>
                     <CurrencySign
                         title="Currency Sign"
                         dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
@@ -115,8 +120,7 @@ const IndexCompany = ({ssUser}) => {
                     />
                 </div>
                 <div className='relative flex w-full flex-col lg:flex-row mt-10 pt-5 border border-[maroon] bg-red-50'>
-                    <p className={`font-[600] px-2 pb-10 text-center text-red-800 ${lockPosting? '' : 'hidden'}`}>
-                        Posting can only be Locked or Unlocked by the Admin</p>
+                    
                     <div name="PeusdoCover" className={`${lockPosting? 'absolute z-20' : 'hidden'} top-0 bottom-0 w-full bg-blue-200/10`}></div>
                     <div className='w-full flex-wrap flex flex-row gap-5 justify-around items-center'>
                         <AuditedYearLock
@@ -134,14 +138,16 @@ const IndexCompany = ({ssUser}) => {
                     </div>
                 </div>
             </>}
-            {tabs.activeTab.name === "subscriptions" && <SubscriptionsHistory
-                subscriptions={subscriptions}
-                handleExportReceipt={handleExportReceipt}
-                generalSettings={generalSettings}
-                client_Admin={client_Admin}
-                clientData={clientData}
-                quickRecordsLogo={`data:image/png;base64,${appB64Image}`}
-            />}
+            {tabs.activeTab.name === "subscriptions" && 
+                <SubscriptionsHistory
+                    subscriptions={subscriptions}
+                    handleExportReceipt={handleExportReceipt}
+                    generalSettings={generalSettings}
+                    client_Admin={client_Admin}
+                    clientData={clientData}
+                    quickRecordsLogo={`data:image/png;base64,${appB64Image}`}
+                    currencySymbol={currencySymbol}
+                />}
             <ToastContainer 
             position="top-right"
             autoClose={5000}

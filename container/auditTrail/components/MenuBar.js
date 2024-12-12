@@ -90,7 +90,7 @@ const handleCustomDate =()=>{
              </div>
             </div>
             <div className='flex flex-row gap-2 items-center'>   
-                  <div className='flex flex-row gap-2 border border-gray-300 px-2 py-[2px]'>  
+                  <div className={`flex flex-row gap-2 border border-gray-300 px-2 py-[2px] ${viewTransId? '' : 'bg-teal-100'}`}>  
                     {!viewTransId && <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Export All Transactions'}>
                         <ExcelIcon className={'fill-green-700  h-5 w-5 cursor-pointer hover:fill-green-500 active:fill-green-800'}
                         onClick={handleExportAllToExcel}/>
@@ -101,7 +101,7 @@ const handleCustomDate =()=>{
                         />
                     </div>
                 </div>
-                <div className='hover:tooltip-open tooltip tooltip-left mx-2' data-tip={'Activities'}>
+                <div className={`hover:tooltip-open tooltip tooltip-left mx-2 border border-gray-300 px-2 py-[2px] ${viewTransId? 'bg-teal-100' : ''}`} data-tip={'Activities'}>
                     <AiOutlineHistory className='text-[22px] text-red-900 cursor-pointer hover:text-red-600 active:text-red-700'
                         onClick={()=>handleActivityToggle("ACT")}
                     />

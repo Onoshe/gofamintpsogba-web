@@ -9,7 +9,7 @@ const ProductAdjustmentSelection = ({adjustProductChecked, handleAdjustProductBy
             <RadioButtonsPair
                 classNameCont={'m-3'}
                 btn1Name="BYQTY"
-                btn1Title="Quanity"
+                btn1Title="Quantity"
                 btn2Name="BYCOST"
                 btn2Title="Cost"
                 checkedBtn={adjustProductChecked}

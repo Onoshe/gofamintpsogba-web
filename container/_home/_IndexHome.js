@@ -309,7 +309,7 @@ const IndexHome = ({ssUser}) => {
                             }
                     </section>
                 </div>
-
+                
                 <IndexDisplaySessions
                     currentIndex={currentIndex}
                     isSliding={isSliding}

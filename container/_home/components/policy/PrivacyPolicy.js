@@ -124,7 +124,7 @@ const PrivacyPolicy = () => {
             <div className=''>Email: <a href={`mailto:ozitechstudio@gmail.com`}
               className='text-blue-500 hover:text-blue-700'>Send Email</a></div>
             <div className=''>Phone: <a className='text-blue-500 hover:text-blue-700' 
-              href={`tel:+2348064205333`}>Contact Us</a></div>
+              href={`tel:+2348064205333`}>Call Us</a></div>
             
             <div className=''>
               This Privacy Policy is an integral part of the QuickRecords Terms of Use found at

@@ -15,7 +15,7 @@ const SavedReports = ({ reportCont, setReportCont, savedReportView, setSavedRepo
     const [selectedRep, setSelectedRep] = React.useState({el:{}, i:0, act:""}); 
     const [showConfirm, setShowConfirm] = React.useState({show:false}); 
     const savedData = data?.data.filter((dt)=> dt.createdBy == user.userId);
-    //console.log(savedData, user)
+    //console.log(savedData, user, data)
    
    const handleSelected = async ( act, el, i)=>{
 
