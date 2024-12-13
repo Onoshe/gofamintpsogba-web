@@ -136,7 +136,7 @@ const IndexHome = ({ssUser}) => {
     dispatchResetForm(); //Reset form on page change
    },[pathname]);
 
-   //console.log(user, form);
+  //console.log(ssUser);
 
    const handleLogin = async(e)=>{
     e.preventDefault();

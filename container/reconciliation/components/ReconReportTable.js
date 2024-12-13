@@ -19,39 +19,53 @@ const ReconReportTable = ({
     <div className={`${displayReport.show? '' :'hidden'} w-full flex-col justify-center items-center pt-0 text-gray-600
         `}>
     <div className="fixed lg:w-[calc(100vw-225px)] w-full bg-gray-200 z-10 mr-10 py-1 px-3 text-blue-800 text-sm flex flex-row flex-wrap items-center justify-between">
-        <div className="absolute top-1 flex w-full justify-end pr-8 group">
-            <p className="bg-gray-500 mr-2 text-white px-2 py-[2px] rounded-md hidden group-hover:block">Close report</p>
-            <GrClose className="text-[18px] cursor-pointer text-red-600 hover:text-red-700 active:text-red-500"
-                onClick={handleCloseReport}/>
-        </div>
-        <div className="flex flex-col w-full max-w-[350px]">
-            {!savedReportView?.show?
-                <div className="flex flex-row items-center gap-2">
-                <input className='min-w-[100px] flex-1 bg-white py-[4px] px-2 border border-blue-400'
-                                name="reportName"  placeholder='Report name' value={displayReport.name}  onChange={handleOnChange} required/>
+        <div className="absolute top-1 flex w-full justify-end pr-10">
+            <div className='hover:tooltip-open tooltip tooltip-left -mr-[80px]' data-tip={'Close report'}>
+                    <GrClose className='text-[18px]  cursor-pointer text-red-600  hover:text-red-700 active:text-red-500'
+                         onClick={handleCloseReport}/>
+            </div>
 
-                <div className='hover:tooltip-open tooltip tooltip-top' data-tip={'Save report'}>
-                    <BsSave2 className='text-[22px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
-                    onClick={()=>handleReconReport("SAVE")}
+            <div className="flex gap-4 mt-5">
+                <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Export to Excel'}>
+                    <ExcelIcon className={'fill-green-700  h-5 w-5 cursor-pointer hover:fill-green-500 active:fill-green-800'}
+                    onClick={()=>handleReconReport("EXCEL")}/>
+                </div>
+                <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Export to Pdf'}>
+                    <BsFileEarmarkPdf className='text-[22px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
+                    onClick={()=>handleReconReport("PDF")}
                     />
                 </div>
             </div>
+        </div>
+        <div className={`flex flex-col w-full h-12 ${!savedReportView?.show? 'max-w-[350px]' : '' }`}>
+            {!savedReportView?.show?
+                <div className="flex flex-row items-center gap-2 mr-[80px] smc:mr-0">
+                    <input className='min-w-[100px] z-10 flex-1 bg-white py-[4px] px-2 border border-blue-400'
+                                    name="reportName"  placeholder='Report name' value={displayReport.name}  onChange={handleOnChange} required/>
+
+                    <div className='hover:tooltip-open tooltip tooltip-right' data-tip={'Save report'}>
+                        <BsSave2 className='text-[22px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
+                        onClick={()=>handleReconReport("SAVE")}
+                        />
+                    </div>
+                </div>
             :<div>
-                <p className="text-teal-800 font-[600]">{savedReportView.reportRaw.name}</p>
+                <p className=" text-red-900 font-[600] -mt-[6px] underline">Report Name:</p>
+                <p className=" text-blue-800 font-[600]">{savedReportView.reportRaw.name}</p>
             </div>
             }
         </div>
-        <div className="flex gap-4 mt-7">
-            <div className='hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Excel'}>
-                <ExcelIcon className={'fill-green-700  h-5 w-5 cursor-pointer hover:fill-green-500 active:fill-green-800'}
-                onClick={()=>handleReconReport("EXCEL")}/>
+            <div className="gap-4 mt-7 bg-red-500 hidden">
+                <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Export to Excel'}>
+                    <ExcelIcon className={'fill-green-700  h-5 w-5 cursor-pointer hover:fill-green-500 active:fill-green-800'}
+                    onClick={()=>handleReconReport("EXCEL")}/>
+                </div>
+                <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Export to Pdf'}>
+                    <BsFileEarmarkPdf className='text-[22px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
+                    onClick={()=>handleReconReport("PDF")}
+                    />
+                </div>
             </div>
-            <div className='hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Pdf'}>
-                <BsFileEarmarkPdf className='text-[22px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
-                onClick={()=>handleReconReport("PDF")}
-                />
-            </div>
-        </div>
     </div>
     <div className="px-4 py-2 mt-12">
         <div className={`mb-3 font-[600]`}>

@@ -101,7 +101,7 @@ const DashboardIndex = ({ssUser}) => {
  // console.log(groupObj, groupData)
 
   return (
-    <div className={`text-gray-600 ${showNotificationBar? '' : ''}`}>
+    <div className={`text-gray-600 pb-10 ${showNotificationBar? '' : ''}`}>
         <div className='fixed w-full lg:w-[calc(100%_-_200px)] z-10'>
             <HeaderBar
                 chartOfAccounts={chartOfAccounts}
@@ -363,7 +363,7 @@ const DashboardIndex = ({ssUser}) => {
                     <ReChart 
                         name="PRODUCTS"
                         dataArr={prodSumData}
-                        titleChart={`Products balance`}
+                        titleChart={`Products Value`}
                         lebelArr={prodSumLabel}
                         titleTotal={"Total: "}
                         //titleAmount={cu+formatToCurrency(prodTotal)}

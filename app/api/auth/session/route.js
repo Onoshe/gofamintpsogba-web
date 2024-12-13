@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 
   // JWT secret
-const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "supersecretkey";
+const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET; // || "supersecretkey";
 //console.log(JWT_SECRET);
 
   export const GET = async (req, res) => {
@@ -21,6 +21,7 @@ const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "supersecretkey";
     try {
       // Verify the JWT and decode its content
       const decoded = jwt.verify(authToken, JWT_SECRET);
+      //console.log(authToken, decoded)
       //return res.status(200).json({ user: decoded });
       return new Response(JSON.stringify({ok:true, user: decoded}), { status: 200 })
     } catch (error) {

@@ -17,7 +17,7 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
     reconAccount, setReconAccount, reconLedger, setReconLedger, reconDataForDislay,handleShowReconOthersCont,
      selAcctCode, setSelAcctCode, ledger, formOthers, reportData,  keys, keyTitles,reconOthers,
      setFormOthers, setReconOthers,resetCalculation,displayReport,setDisplayReport, data,
-     savedReportView, setSavedReportView, user, mutate,
+     savedReportView, setSavedReportView, user, mutate,handleResetReconTable,handleResetRecon,
 }) => {
      
     //const ledger = getDummyLedger(form);
@@ -48,15 +48,7 @@ const ReconciliationSelect = ({form, setForm, controlAcctsCode, chartOfAccounts,
         }
      }
 
-     const handleResetReconTable = ()=>{
-        setSelAcctCode("");
-        setReconLedger([]);
-        setReconAccount({coa:{}, ledger:[], openingBalRow:{}});
-     }
-     const handleResetRecon = ()=>{
-        handleResetReconTable();
-        setForm({dateFrom:'', dateTo:'', stmtClosingBalance:''});
-     }
+    
      
 
      const handleOnChangeSelectAcct =(e)=>{

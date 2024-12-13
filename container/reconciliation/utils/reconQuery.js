@@ -46,7 +46,7 @@ export const insertQueryRecon =(form, name, reportSlug) =>{
   const vals = [ 
     name,
     reportSlug, 
-    title+" "+accountTitle+" "+asAt,
+    title+" "+accountTitle+" as at "+asAt,
     new Date().toISOString().split("T")[0],
     reportStr,
 

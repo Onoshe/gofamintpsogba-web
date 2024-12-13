@@ -11,11 +11,13 @@ import { capitalizeFirstCharOnly } from '@/lib/capitalize/capitalizeString';
 
 const SavedReports = ({ reportCont, setReportCont, savedReportView, setSavedReportView, 
     setReconOthers, data, displayReport, setDisplayReport, user, mutate, notify}) => {
-    const reconOthers = {};
     const [selectedRep, setSelectedRep] = React.useState({el:{}, i:0, act:""}); 
     const [showConfirm, setShowConfirm] = React.useState({show:false}); 
-    const savedData = data?.data.filter((dt)=> dt.createdBy == user.userId);
-    //console.log(savedData, user, data)
+    let savedData = data?.data;
+    if(user?.companyId?.toLowerCase() === "demo"){
+        savedData = data?.data.filter((dt)=> dt.createdBy == user.userId);
+    }
+    //console.log(savedData)
    
    const handleSelected = async ( act, el, i)=>{
 

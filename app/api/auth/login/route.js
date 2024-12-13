@@ -7,10 +7,11 @@ import { findUser } from "@/lib/authActions/findUser";
 //import { cookies } from 'next/headers';
 
 
-const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 1 week in seconds
+const SESSION_MAX_AGE = 60 * 60 * 24 * 7 * 1000; // 1 week in seconds
+const todayDate = new Date();
 
 // JWT secret and expiration settings
-const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "supersecretkey"; // Use environment variables in production
+const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET; // || "supersecretkey"; // Use environment variables in production
 const JWT_EXPIRATION = "7d"; // Token is valid for 7 days
 
 export const POST = async (req, res) => {
@@ -39,11 +40,12 @@ export const POST = async (req, res) => {
      // Create a JWT containing the user's ID and email
      const {secret, ...userWithoutSecret} = user;
      const userData = userWithoutSecret;
+     userData['ckAt'] = todayDate.toISOString(); //Cokies set at
+     userData['ckExp'] = new Date(todayDate.getTime() + SESSION_MAX_AGE).toISOString(); //Cokies expires at
      const sessionToken = jwt.sign(userData,
       JWT_SECRET,
       { expiresIn: JWT_EXPIRATION }
     );
-
     
     return new Response(JSON.stringify({ok:true, user: userData }), {
       status: 200,

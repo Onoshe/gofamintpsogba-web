@@ -58,7 +58,7 @@ const IndexReconciliation = ({ssUser}) => {
     const tableUrl = getLinkFetchTable({table:domain+"_reconciliation", domain});
      const {data, mutate} = useSWRFetcher(tableUrl); 
 
-    // console.log(data, domain, tableUrl)
+  
     const [selAcctCode, setSelAcctCode] = React.useState("");
     const [resetOthers, setResetOthers] = React.useState(0);
     const [showConfirm, setShowConfirm] = React.useState({show:false}); 
@@ -96,7 +96,7 @@ const IndexReconciliation = ({ssUser}) => {
       //transition: 'Bounce',
       });
     
-
+    //console.log(reportData, savedReportView)
   
     const handleReconReport = async (type)=>{
     if(reportData?.reportDetails){
@@ -123,9 +123,12 @@ const IndexReconciliation = ({ssUser}) => {
             notify("error", "Please, enter the report name")
           }else{
            const res = await handleSaveReport({form:reportData, name:displayReport.name, notify, dispatchRefreshSettingsCount});
-           if(res?.exist){handleConfirm("SHOW_CONFIRM"); }else{
-              mutate();
-           }
+           if(res?.exist){
+            handleConfirm("SHOW_CONFIRM"); 
+            }else{
+                mutate();
+                handleResetReconTable();
+            }
           }
         }else if(type=== "EXCEL"){
           handleExcelExport(excelData)
@@ -147,7 +150,11 @@ const IndexReconciliation = ({ssUser}) => {
     if(act === "SHOW_CONFIRM"){setShowConfirm({show:true});}
     if(act === "CANCEL"){setShowConfirm({show:false});}
     if(act === "CONTINUE"){
-      await handleSaveReport({form:reportData, name:displayReport.name, notify, dispatchRefreshSettingsCount, REPLACE:true, setShowConfirm});
+      await handleSaveReport({form:reportData, name:displayReport.name, notify, dispatchRefreshSettingsCount, REPLACE:true, setShowConfirm})
+      .then((res)=> {
+          mutate();
+          handleResetReconTable();
+      })
     }
 }
   //console.log(clientAccount, ledgerAccts)
@@ -211,6 +218,16 @@ const IndexReconciliation = ({ssUser}) => {
       resetCalculation();
     }setReconOthers({...reconOthers, show:true});
   }
+  const handleResetReconTable = ()=>{
+    setSelAcctCode("");
+    setReconLedger([]);
+    setDisplayReport({show:false, name:""});
+    setReconAccount({coa:{}, ledger:[], openingBalRow:{}});
+  }
+  const handleResetRecon = ()=>{
+      handleResetReconTable();
+      setForm({dateFrom:'', dateTo:'', stmtClosingBalance:''});
+  }
 
   return (
     <div className='flex  flex-col'>
@@ -265,6 +282,8 @@ const IndexReconciliation = ({ssUser}) => {
             setSavedReportView={setSavedReportView}
             user={user}
             mutate={mutate}
+            handleResetReconTable={handleResetReconTable}
+            handleResetRecon={handleResetRecon}
           />
             {reconOthers.show? <ReconOthersEntry
               formOthers={formOthers}

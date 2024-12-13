@@ -2,7 +2,7 @@
 import { formatToCurrency } from '@/lib/currency';
 import React from 'react'
 
-const ReconciliationTable = ({reconData, keys, keyTitles, ledgerArr, handleCheckedTran, toggleChecked, handleToggleCheck}) => {
+const ReconciliationTable = ({reconData, keys, keyTitles, ledgerArr, handleCheckedTran, toggleChecked=false, handleToggleCheck}) => {
     
     const keyArrs = keys?.map((key)=> keyTitles[key].title);
 
@@ -16,7 +16,7 @@ const ReconciliationTable = ({reconData, keys, keyTitles, ledgerArr, handleCheck
                    
                     <th>
                         <input type="checkbox" className="checkbox  border border-blue-500 bg-white"
-                                onChange={handleToggleCheck} checked={toggleChecked === true}/>
+                                onChange={handleToggleCheck} checked={toggleChecked}/>
                     </th>
                     {
                         keyArrs?.map((dt, i)=>{
