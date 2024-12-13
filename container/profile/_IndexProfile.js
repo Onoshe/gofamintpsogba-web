@@ -60,11 +60,14 @@ const IndexProfile = ({ssUser}) => {
   let userIdImg = userId?.replace(".", "_");
   const userPhoto = getImageLink(userIdImg);
   const imgCheckUrl = getImageCheckLink(userIdImg);
-  const showRegUsers = user?.role?.toLowerCase() === "admin";
+  let showRegUsers =  session?.user?.role?.toLowerCase() === "admin";
   const userPhotoCheck = useSWRFetcher(imgCheckUrl);
-
+  const domain = session?.user?.companyId?.toLowerCase();
+  if(domain === "demo"){
+    showRegUsers = false;
+  }
   //getRequest(userId).then((res)=>console.log(res));
-  //console.log(userPhotoCheck?.data)
+  //console.log(session, user)
 
 
   //userIdImg += ".jpg";

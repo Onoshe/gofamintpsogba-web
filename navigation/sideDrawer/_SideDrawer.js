@@ -19,7 +19,7 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 //import { generateGenLedger } from '../reportsModule/generalLedger/_IndexGenerateGenLedger';
 //import { GrResources } from "react-icons/gr";
 
-const SideDrawer = ({closeDrawer, ssUser, params}) => {
+const SideDrawer = ({closeDrawer, ssUser,notify, params}) => {
   const router = useRouter();
   const [localStorageValue, setLocalStorageValue] = useLocalStorage("FASTRECORD", {});
   const {activePage, dispatchActivePage, dispatchIsOpen, showSidebarTitle, coy,  dispatchCoy, expirationMsg, dispatchPageLoading} = useStoreHeader((state) => state);
@@ -31,7 +31,7 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
   //const currentActivePage = navs?.find((dt)=> "/"+coy+"/"+dt.name == pathname);
   const pathnameSplits = pathname.split('/');
   const domainAndPage = pathnameSplits.slice(1,3); //E.g ['demo', 'reports']
-  const showCompanyPage = user?.role?.toUpperCase() === "ADMIN" || "ACCOUNTANT" || "AUDITOR";
+  const showCompanyPage = coy?.toUpperCase() !== "DEMO";
 
   const currentActivePage = [...navs, nav_Coy]?.find((dt)=> "/"+coy+"/"+dt.name == "/"+coy+"/"+domainAndPage[1]);
   const isDashboardPage = "/"+coy === pathname;
@@ -53,13 +53,17 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
         router.push('/')}
   },[coy, pathname, router]);
   */
-
+  //console.log(coy)
   const handleNav =(navs)=>{
     //console.log(navs, currentActivePage)
     if(navs.name === activePage.name) return //to prevent error
-    dispatchPageLoading(true);  
-    dispatchActivePage(navs);
-    dispatchIsOpen(false)
+    if(navs.name === 'company' && coy?.toUpperCase() === "DEMO"){
+      notify('error', 'This page is disabled for demo account users')
+    }else{
+      dispatchPageLoading(true);  
+      dispatchActivePage(navs);
+      dispatchIsOpen(false)
+    }
   }
   
   /*React.useEffect(()=>{
@@ -111,14 +115,14 @@ const SideDrawer = ({closeDrawer, ssUser, params}) => {
                   )
                 })
               }
-              {showCompanyPage &&
-                <Link href={`/${coy}/company`} 
+              
+              <Link href={`${showCompanyPage? '/'+coy+'/company' : '#'}`} 
                 className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row hover:text-[blue] ${currentActivePage?.name==='company'? "bg-sky-300 text-[blue] " : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
                 data-tip={'Company'}
                 onClick={()=>handleNav({name:'company', title:'Company'})}>
                 {icons.company}
                 {showSidebarTitle && <span className='text-[12px]'>{'Company'}</span>}
-              </Link>}
+              </Link>
             </div>
             <div
               className={`${showSidebarTitle? 'w-[200px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-2 flex flex-row text-[#e2dddd] bg-[gray]   p-2 gap-1 items-center`}

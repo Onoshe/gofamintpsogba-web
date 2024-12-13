@@ -17,6 +17,8 @@ import PageFetchingData from '@/loadingPage/PageFetchingData';
 import PageLogOut from '@/loadingPage/PageLogOut';
 import NotificationHeaderBar from '../notificationHeaderBar/NotificationHeaderBar';
 import SubscriptionMonitor from './SubscriptionMonitor';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 //import { usePathname, useRouter } from 'next/navigation';
 /* eslint-disable @next/next/no-img-element */
 
@@ -33,12 +35,25 @@ const Header = ({ssUser}) => {
   const router = useRouter();
   const companyId = session?.user?.companyId?.toLowerCase();
   const isOnline = useOnline();
-  const [mounted, setMounted] = useOnScroll({ready:false});
+  //const [mounted, setMounted] = useOnScroll({ready:false});
   //const pathname = usePathname();
 
   let userInit = 'NA';
   //console.log(session)
-  
+  const notify = (type, msg) => toast[type](msg, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    theme: "colored",
+  //transition: 'Bounce',
+  });
+
+
   const handleDropdown =()=>{
     if(userDropdown) setUserDropdown(false)
   }
@@ -192,11 +207,23 @@ const Header = ({ssUser}) => {
         </div>
         
         <div className={`${isOpen? 'lg:hidden' : 'hidden'} z-50 animate-slide-In fixed h-full -top-16`}>
-         <SideDrawer closeDrawer={()=>dispatchIsOpen(!isOpen)} hasExpired={expired}/>
+         <SideDrawer closeDrawer={()=>dispatchIsOpen(!isOpen)} hasExpired={expired}
+            notify={notify}/>
         </div>
         <div className={`${isOpen? 'lg:hidden' : 'hidden'} w-full h-screen bg-[#ade0f438] fixed top-0 bottom-0`}
          onClick={()=>dispatchIsOpen(false)}>
         </div>
+        <ToastContainer 
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick={true}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
     </div>
   )
 }

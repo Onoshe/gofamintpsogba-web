@@ -54,7 +54,7 @@ const DashboardIndex = ({ssUser}) => {
   const {cashTotal, bankTotal, revTotal, payTotal, paySumLabel, paySumData, recSumLabel, recSumData, topBanks,
             cusGroup, vedGroup, prodTotal, groupObj, groupData, prodSumData, prodSumLabel} = generateBSData(transProcessor, coaStructure,  reportDateForm);
   const periodEndInit = new Date(reportDateAnal).toDateString().split(" ");
-  const periodEnd = `${periodEndInit[2]} ${periodEndInit[1]} ${periodEndInit[3]}`
+  const periodEnd = `${periodEndInit[2]} ${periodEndInit[1]} ${periodEndInit[3]}`;
   const cu = currencySymbol;
 
   let coyLogo = "";

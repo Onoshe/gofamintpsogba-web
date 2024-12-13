@@ -42,7 +42,8 @@ const  registerHandler = async (form, dispatchResetForm, alert, setAlert, setMod
                     password:loginDetails.password, 
                     emailMsg1:'Your account registration on QuickRecords was successful and your login details are:',
                     emailMsg2:'Go to the login page and login to change your one-time password.',
-                    loginPage:platformDomain});
+                    loginPage:platformDomain
+                   });
                     const sendMailLink = getLinkClientServer(domain).dev;
                     const mailBody = {
                         route:"SENDMAIL",
@@ -55,6 +56,7 @@ const  registerHandler = async (form, dispatchResetForm, alert, setAlert, setMod
                     };
 
                   const res = await postRequest(url, body);
+                  //console.log(res, url, body, loginDetails);
                   if(res.ok){
                     await postRequest(sendMailLink, mailBody)
                     .then(()=>{
@@ -82,3 +84,5 @@ const  registerHandler = async (form, dispatchResetForm, alert, setAlert, setMod
 
 
 export {registerHandler};
+
+

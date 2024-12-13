@@ -49,9 +49,9 @@ const ReconReportTable = ({
                         />
                     </div>
                 </div>
-            :<div>
+            :<div className="mr-20">
                 <p className=" text-red-900 font-[600] -mt-[6px] underline">Report Name:</p>
-                <p className=" text-blue-800 font-[600]">{savedReportView.reportRaw.name}</p>
+                <p className=" text-blue-800">{savedReportView.reportRaw.name}</p>
             </div>
             }
         </div>

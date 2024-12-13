@@ -17,6 +17,7 @@ import convertImageToBase64 from '@/lib/image/convertImageToBase64';
 import { HeaderTab } from './components/headerTab/HeaderTab';
 import CurrencySign from './components/homeComponents/CurrencySign';
 import EditDeleteLock from './components/homeComponents/EditDeleteLock';
+import { usePathname, useRouter } from 'next/navigation';
 //import { AccessCard } from './cards/DashboardAccess';
 
 
@@ -31,13 +32,15 @@ const IndexCompany = ({ssUser}) => {
     const [appB64Image, setAppBase64Image] = React.useState(''); 
     const subcriptionHistory = getSubscriptionHistory({subscriptions});
     const [tabs, setTabs] = React.useState({activeTab:{name:'home', title:'Home'}});
-    
+    const pathname = usePathname();
+    const router = useRouter();
+
     const lockPosting = user?.role?.toUpperCase() !== "ADMIN";
     let quickRecordsLogo = "";
     if(generalSettings?.length){
         quickRecordsLogo = generalSettings.find((dt)=>dt.slug === "quickrecords-logo")?.largeText1;
     }
-    //console.log(expirationMsg);
+    //console.log(pathname);
 
     useEffect(()=>{
         const imageUrl = 'https://media.istockphoto.com/id/1496615469/photo/serene-latin-woman-enjoy-sunset-with-gratitude.jpg?s=612x612&w=is&k=20&c=hrdwKW5CMjVXlB_k39AnXHb-_Bm4epQPXRRTxhCDQpc=';
@@ -49,7 +52,12 @@ const IndexCompany = ({ssUser}) => {
                 //console.error(error);
             });
     },[]);
-  
+    
+    useEffect(()=>{
+        if(pathname === "/demo/company"){
+            router.push("/demo");
+        }
+    },[pathname]);
 
     let coyLogo = "";
     if(settings?.data){

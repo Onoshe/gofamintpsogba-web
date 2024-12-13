@@ -11,7 +11,7 @@ const PageLogOut = () => {
     <div data-theme="light" className='h-screen w-full fixed z-50'>
         <HomeHeader/>
         
-        <div className="flex flex-col h-full w-full right-0 justify-center items-center bg-red-100">
+        <div className="flex flex-col h-full w-full right-0 justify-center items-center bg-red-50">
             <div className="flex p-4 text-red-500 flex-col justify-center items-center">
                 <FastRecordBox/> 
                 <br/>
