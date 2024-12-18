@@ -14,7 +14,7 @@ const PurchaseGuideContainer = ({showCard, toggleShowCard}) => {
     >
     <div className='flex flex-col'>
         <div>
-            <p><TextSS v="Example:"/>Purchased 50 units of article A at #5,000 per unit on 24 March, 2024 with purchase invoice number INV-005.</p>            
+            <p><TextSS v="Example:"/> Purchased 50 units of article A at #5,000 per unit on 24 March, 2024 with purchase invoice number INV-005.</p>            
             <Text v="Scenario 1: Purchased on cash"/>
             <p>Assuming the goods were paid for from Bank ABC account; Inventory Account code is <TextSE v="162000 Inventory Control"/>; Product account code (Sub account) is <TextSE v="ATC0001 Article A"/>
              and bank account code is <TextSE v="121000 Bank ABC"/>
@@ -80,8 +80,8 @@ const PurchaseGuideContainer = ({showCard, toggleShowCard}) => {
                 <div className='pt-2 flex gap-1'>
                     <Text s="text-red-600" v="Credit"/>
                     <TextSB v="222000 Payables Control" s=""/>
-                    <TextSB v="--No Sub Acct--"/>
-                    <TextSB v="V-000005 XYZ Ltd" s=""/>
+                    <TextSB v="V-000005 XYZ Ltd"/>
+                    <TextSB v="---" s="px-4"/>
                 </div>
             </div>
         </div>

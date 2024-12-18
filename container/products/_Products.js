@@ -8,8 +8,6 @@ import { handleClickRow, handleDeleteProduct } from './utils/handleTableActions'
 import { initStateCreateByUpload, reducerCreateByUpload } from './reducers/reducerCreateByUpload';
 import CreateProductByUpload from './component/CreateProductByUpload';
 import Header from './component/Header';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import ToolsBar from './component/ToolsBar';
 import { handleSubmitMultiple } from './utils/handleSubmitMultiple';
@@ -34,18 +32,10 @@ const Products = ({ssUser}) => {
   const companyLogoFile = getCompanyLogo(settings);
 
 
- const notify = (type, msg) => toast[type](msg, {
-  position: "top-right",
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  theme: "colored",
-//transition: 'Bounce',
-});
+
+  const notify =(type, msg)=>{
+    dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+  }
 
   const handleShowBlind =(act)=>{
         setShowBlind(act);
@@ -185,17 +175,7 @@ const Products = ({ssUser}) => {
             //handleInfoMsg={handleInfoMsg}
             //runDispatchClientDataCall={runDispatchClientDataCall}
           />
-          <ToastContainer 
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick={true}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
+          
       </div>
   )
 }

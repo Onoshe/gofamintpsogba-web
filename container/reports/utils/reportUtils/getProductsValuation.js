@@ -47,9 +47,24 @@ export const getProductsValuation =({reportName,  transProcessor,  dateForm, pro
     if(viewTransId){
         productLedgers = productLedgers.map((dt)=> {
             const isDr = dt.entryType === "DR";
-            const updatedRow = {...dt, descriptionClassName:"", transactionNoClassName:"", clickables:[], unitCost:dt?.prodBal?.avgCost, cost:isDr? dt.debit : dt?.credit? -dt.credit : ''};
+            const isAdj = dt.postingPlat === "PRODUCT-ADJ";
+            const isPRT = dt.postingPlat === "PRODUCT-PCH-RT";
+            const isSRT = dt.postingPlat === "PRODUCT-SAL-RT";
+
+            let description = "Product Sales";
+            if(isAdj){
+                description = "Product adjustment"
+            }else if(isPRT){
+                description = "Purchase Returns";
+            }else if(isSRT){
+                description = "Sales Returns";
+            }else if(isDr){
+                description = "Product Purchase";
+            }
+            const clickableCells = {descriptionClassName:'cursor-pointer hover:text-[blue] active:text-blue-400', transactionNoClassName:'cursor-pointer hover:text-[blue] active:text-blue-400'};
+            const updatedRow = {...dt, descriptionClassName:"", transactionNoClassName:"", clickables:[], unitCost:dt?.prodBal?.avgCost, cost:isDr? dt.debit : dt?.credit? -dt.credit : '', ...clickableCells};
             const row = !dt.transactionNo? {...updatedRow, transactionNo:dt.description, description:''} : 
-                {...updatedRow, description:isDr? "Purchase" : "Sale"};
+                {...updatedRow, description};
             return row
         });
         productLedgers = productLedgers.filter((dt)=> {return dt.cost && dt.balance});
@@ -74,7 +89,9 @@ export const getProductsValuation =({reportName,  transProcessor,  dateForm, pro
     const rows = viewTransId? productLedgers : valuationSummary;
     const rowHeaders = viewTransId? headerTitleVal : headerTitleSum;
     result = {name:reportName, title:viewTransId? product?.productName+" "+viewTransId+"- Valuation" : "Products Valuation", 
-        clickables:viewTransId? "" : ["productCode"], rowKeysShow, rowHeaders, rows, pdfData, col1WchInDigit:30}
+        clickables:viewTransId? ['transactionNo', 'description'] : ["productCode"], rowKeysShow, rowHeaders, rows, pdfData, col1WchInDigit:30}
+    
+    //console.log(result);
     return result
  };
 

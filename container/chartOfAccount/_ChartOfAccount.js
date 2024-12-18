@@ -10,7 +10,6 @@ import CreateChartOfAccountByUpload from './component/CreateChartOfAccountByUplo
 import { initStateCreateByUpload,  reducerCreateByUpload} from './reducers/reducerCreateByUpload';
 import { sortArrayByKey } from '@/lib/sort/sortArrayByKey';
 import { mapChartOfAccountForDisplay } from '@/lib/transactionsManager/mapChartOfAccountForDisplay';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import { handleDelete } from './utils/handleDelete';
@@ -33,7 +32,7 @@ const ChartOfAccount = ({ssUser}) => {
   const [infoMsg, setInfoMsg] = React.useState({msg:""});
   const [createType, setCreateType] = React.useState('MANUAL');
   const [showConfirm, setShowConfirm] = React.useState({show:false, cell:'', title:'', msg:'', titleRed:false, showInput:false});
-  const {settings} = useStoreHeader((state) => state);
+  const {settings, toastNotice, dispatchToastNotice} = useStoreHeader((state) => state);
   const companyLogoFile = getCompanyLogo(settings);
   sortArrayByKey(chartOfAccounts, 'accountCode');
 
@@ -41,18 +40,9 @@ const ChartOfAccount = ({ssUser}) => {
 
 
 
-  const notify = (type, msg) => toast[type](msg, {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-    theme: "colored",
-  //transition: 'Bounce',
-  });
+  const notify =(type, msg)=>{
+    dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+  }
 
   const handleShowBlind =(act)=>{
         setShowBlind(act);
@@ -189,17 +179,7 @@ const ChartOfAccount = ({ssUser}) => {
               pinRow
             />}
 
-      <ToastContainer 
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick={true}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+      
       </div>
   )
 }

@@ -4,7 +4,7 @@ import { ExcelIcon } from '@/components/icons/iconsSvg';
 import { handleExport2Excel } from '@/lib/exel/handleExport2Excel';
 import { tableHeaderFormater } from '@/lib/exel/tableHeaderFormater';
 import { BsFileEarmarkPdf } from 'react-icons/bs';
-import { BiRefresh } from 'react-icons/bi';
+import { BiPrinter, BiRefresh } from 'react-icons/bi';
 import { formatLabel, getHeadersTitle } from '@/container/reports/utils/ledgers/getHeaders';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 import { handleExport2Pdf } from '@/container/reports/utils/others/handleExport2Pdf';
@@ -29,9 +29,9 @@ const ToolsBar = ({excelData, runDispatchClientDataCall, notify, user, companyLo
     postActivity(user, activities.DOWNLOAD, "Chart of Account Excel report")
   }
 
-  const handlePdfExport =()=>{
+  const handlePdfExport =(act)=>{
     const {pdfData, reportHeader, rows} = data?.pdfForm;
-    const pdfForm =  {reportRows:rows, pdfHeader:excelDt.docHeader, reportHeader, pdfData, headerRowsColsArr:'', companyLogoFile};
+    const pdfForm =  {reportRows:rows, pdfHeader:excelDt.docHeader, reportHeader, pdfData, headerRowsColsArr:'', companyLogoFile, docMethod:act};
     handleExport2Pdf(pdfForm);
     postActivity(user, activities.DOWNLOAD, "Chart of Account Pdf report")
   }
@@ -52,6 +52,11 @@ const ToolsBar = ({excelData, runDispatchClientDataCall, notify, user, companyLo
           <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Export to Pdf'}>
               <BsFileEarmarkPdf className='text-[18px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
               onClick={handlePdfExport}
+              />
+          </div>
+          <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Print document'}>
+              <BiPrinter className='text-[22px] text-blue-500 cursor-pointer hover:text-blue-700 active:text-blue-500'
+              onClick={()=>handlePdfExport("PRINT")}
               />
           </div>
         </div>

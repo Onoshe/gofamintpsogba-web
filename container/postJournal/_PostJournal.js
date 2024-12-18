@@ -10,11 +10,10 @@ import useStoreRecordTransaction from '@/context/storeRecordTransaction';
 import { useRouter } from 'next/navigation';
 import ConfirmAlert from '@/components/confirmAlert/ConfirmAlert';
 import { handleDeleteTransaction } from '../postTransaction/components/utils/handleDeleteTransaction';
-import { ToastContainer } from 'react-toastify';
-import { toastNotify } from '@/container/postTransaction/components/utils/toastNotify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LedgersManager } from '../reports/utils/ledgers/ledgersManger';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import useStoreHeader from '@/context/storeHeader';
 
 
 const IndexPostJournal = ({ssUser}) => {
@@ -27,7 +26,7 @@ const IndexPostJournal = ({ssUser}) => {
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
   let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
   const processedLedgers = ledgers.processedLedgers;
-
+  const {toastNotice, dispatchToastNotice} =  useStoreHeader((state) => state);  
   //const [activeTab, setActiveTab] = React.useState('TWOENTRIES');
     
   const personalAccts =  mapPersonalAccounts(customers, vendors);
@@ -35,6 +34,9 @@ const IndexPostJournal = ({ssUser}) => {
   const productsList = mapProducts(products);
   //console.log(tranSheetJournals)
 
+  const notify =(type, msg)=>{
+    dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+  }
   const handleDeleteTran =()=>{
     setShowConfirm(true)
   }
@@ -75,24 +77,11 @@ const IndexPostJournal = ({ssUser}) => {
                   postError={postError}
                   setPostError={setPostError}
                   handleDeleteTran={handleDeleteTran}
-                  toastNotify={toastNotify}
+                  toastNotify={notify}
                   processedLedgers={processedLedgers}
                 />
               </>
-              <ToastContainer 
-                  position="top-right"
-                  autoClose={5000}
-                  hideProgressBar={true}
-                  newestOnTop={false}
-                  closeOnClick={true}
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="colored"
-                  bodyClassName={postError.color}
-                />
-    
+              
               <ConfirmAlert showBlind={showConfirm}
                   title={"Do you really want to delete transaction "+recordTransaction?.editDetails?.transactionNo+" ?"}
                   msg="Please note that all entries associated with this transaction will also be deleted."

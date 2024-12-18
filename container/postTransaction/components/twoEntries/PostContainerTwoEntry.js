@@ -7,8 +7,6 @@ import PostContainerTwoEntryByUpload from './PostContainerTwoEntryByUpload';
 import { getSubAccounts } from '../utils/getSubAccounts';
 import { validateTransactions } from '@/lib/validation/validateTransaction';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
-import { ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import TransactionsEntriesView from './TransactionsEntriesView';
 import { TabsComponent } from '@/components/forms/TabsComponent';
 import { handleSubmitTwoEntry } from '../utils/handleSubmitTwoEntry';
@@ -145,7 +143,7 @@ const handleTransView =(act)=>{
  
 
   return (
-    <div className='py-4 w-full'>
+    <div className={`py-4 w-full ${showBankBalances? 'relative' :'' }`}>
         <RadioButtonsPair
             classNameCont={'m-3 ml-5'}
             btn1Name="BYENTRY"
@@ -162,6 +160,14 @@ const handleTransView =(act)=>{
             {postError.msg}
           </p>
         </div>
+        <div className={`w-full absolute flex justify-center items-center ${showBankBalances? '' : 'hidden'}`}>
+            <CashAndBankBalances 
+                processedLedgers={processedLedgers}
+                chartOfAccounts={chartOfAccounts}
+                coaStructure={coaStructure}
+                handleCloseBankBal={handleOnChangeShowBankBal}
+                />
+         </div>
         {checkedBtn === "BYENTRY" && <>
            <div className={`flex-row flex gap-2 flex-wrap`}>
             <div className={`py-4 px-8 pb-0  flex-row gap-2 hidden sm:flex `}>
@@ -239,28 +245,8 @@ const handleTransView =(act)=>{
             setCheckedSelect={setCheckedSelect}
          />
         }
-         <div className={`w-full flex justify-center items-center ${showBankBalances? '' : 'hidden'}`}>
-            <CashAndBankBalances 
-                processedLedgers={processedLedgers}
-                chartOfAccounts={chartOfAccounts}
-                coaStructure={coaStructure}
-                handleCloseBankBal={handleOnChangeShowBankBal}
-                />
-         </div>
+         
         <div>
-          <ToastContainer 
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick={true}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-            //bodyClassName={postError.color}
-          />
         </div>
         <br/>
         <br/>

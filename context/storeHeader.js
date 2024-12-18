@@ -22,6 +22,7 @@ const useStoreHeader = create((set) => ({
     quickrecordsLogo:"http://localhost/quickrecords_backend/asset/quickrecords-logo.jpg",
     expiration:{demoRegDate:'', demoTrialPeriod:'', expired:false, expireDays:20, lastSub:{},  daysToExpire:''},
     expirationMsg:{expiredMsg:'', notExpiredMsg:'', expiredMsgMini:'', notExpiredMsgMini:''},
+    toastNotice:{count:0, type:'', msg:''},
 
     dispatchUsers: (act) => set((state) => ({
         users: act,
@@ -61,7 +62,7 @@ const useStoreHeader = create((set) => ({
         activityLog: act,
     })),
     dispatchFetchSettingsCall: (act) => set((state) => ({
-        fetchSettingsCall: state.fetchSettingsCall + 1,
+        fetchSettingsCall: state.fetchSettingsCall += 1,
     })),
     dispatchGeneralSettings: (act) => set((state) => ({
         generalSettings: act,
@@ -77,6 +78,9 @@ const useStoreHeader = create((set) => ({
     })),
     dispatchExpirationMsg: (act) => set((state) => ({
         expirationMsg: act,
+    })),
+    dispatchToastNotice: (act) => set((state) => ({
+        toastNotice: act,
     })),
    
 }));

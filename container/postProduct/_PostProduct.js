@@ -14,6 +14,7 @@ import { getStartAndEndDate } from '@/lib/dummyData/getStartAndEndDate';
 import { useRouter } from 'next/navigation';
 import CashAndBankBalances from '../postTransaction/components/balancesComponent/CashAndbankBalances';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import useStoreHeader from '@/context/storeHeader';
 
 
 
@@ -23,11 +24,11 @@ const IndexPostProduct = ({ssUser}) => {
   const dateForm = getStartAndEndDate();
   const {coaStructure,customers, vendors, chartOfAccounts, controlAcctsCode, products, transactions, transactionsDetails, runDispatchClientDataCall} = useStoreTransactions((state) => state);
   const {recordTransaction, tranSheetProducts, dispatchTranSheetProducts, productPageActiveTab, dispatchProductPageActiveTab, 
-     dispatchTranSheetProductsReset} = useStoreRecordTransaction((state) => state);  
+     dispatchTranSheetProductsReset, productReturns, dispatchProductReturns} = useStoreRecordTransaction((state) => state);  
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm});
   let ledgersAcct = transProcessor.processTransactions();
   const processedLedgers = ledgersAcct.processedLedgers;
-
+  const {toastNotice, dispatchToastNotice} =  useStoreHeader((state) => state);  
   const personalAccts =  mapPersonalAccounts(customers, vendors);
   const chartOfAccountSelection = (mapChartOfAccount(chartOfAccounts, coaStructure));
   const productsList = mapProducts(products);
@@ -37,7 +38,7 @@ const IndexPostProduct = ({ssUser}) => {
   const [showBankBalances, setShowBankBalances] = React.useState(false);
   
   
-  //console.log(personalAccts);
+  //console.log(tranSheetProducts, recordTransaction, productPageActiveTab);
   //const [activeTab, setActiveTab] = useState("TAB1");
   //const [transSheet, setTransSheet] = useState({date:"", description:'', reference:'', amount:'', accountCodeDr:'', subCodeDr:'', quantityDr:'',unitsDr:'',accountCodeCr:'', subCodeCr:'', quantityCr:'',unitsCr:'',accountCodeProduct:'', subCodeProduct:'', quantityProduct:'',unitsProduct:'', accountCodeCOS:'', quantityBal:''});
   
@@ -55,9 +56,11 @@ const IndexPostProduct = ({ssUser}) => {
     },{bal:0, price:0});
   }
 
-  //console.log(ledgersAcct.productsLedger, transSheet);
-
+  //console.log(transSheet);
   
+  const notify =(type, msg)=>{
+    dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+  }
 
   const transSheetReset =(tab)=>{
     const purchaseFlds = ({date:"", description:'', reference:'', amount:'', accountCodeDr:'', subCodeDr:'', quantityDr:'',unitsDr:'',accountCodeCr:'', subCodeCr:'', quantityCr:'',unitsCr:''});
@@ -109,6 +112,7 @@ const IndexPostProduct = ({ssUser}) => {
                   personalAccounts={{customers, vendors, products}}
                   user={user}
                   runDispatchClientDataCall={runDispatchClientDataCall}
+                  transactions={transactions}
                   transactionsDetails={transactionsDetails}
                   transSheet={transSheet}
                   setTransSheet={setTransSheet}
@@ -123,6 +127,9 @@ const IndexPostProduct = ({ssUser}) => {
                   handleCancelTran={handleCancelTran}
                   showBankBalances={showBankBalances}
                   setShowBankBalances={setShowBankBalances}
+                  productReturns={productReturns}
+                  dispatchProductReturns={dispatchProductReturns}
+                  toastNotify={notify}
                 />
             </div>
             

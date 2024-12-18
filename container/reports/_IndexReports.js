@@ -16,9 +16,6 @@ import MenuBarBar from './components/MenuBar';
 import Spinner from '@/components/misc/Spinner';
 import { getCurrentReportName, tabsDropdown, tabsDropdownsArr, } from './components/headerTab/getHeaders';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
-import { ToastContainer } from 'react-toastify';
-import { toastNotify } from '@/container/postTransaction/components/utils/toastNotify';
-import 'react-toastify/dist/ReactToastify.css';
 import { splitByFirstChar } from '@/lib/capitalize/splitString';
 import EditDeleteTransaction from './components/editDeleteTransaction/EditDeleteTransaction';
 import { handleClickCellNav } from './utils/others/handleClickCellNav';
@@ -46,8 +43,8 @@ const IndexReports = ({ssUser}) => {
   const { session, user, status} = useAuthCustom(ssUser); 
   const {recordTransaction, tranSheetTwoEntry,  tranSheetMultiEntry, tranSheetJournals, tranSheetProducts, 
     dispatchRecordTransaction, dispatchTranSheetTwoEntry, dispatchTranSheetMultiEntry, dispatchTranSheetJournals, dispatchTranSheetProducts,
-    dispatchProductPageActiveTab} = useStoreRecordTransaction((state) => state);  
-  const {settings} = useStoreHeader((state) => state);
+    dispatchProductPageActiveTab, dispatchProductReturns} = useStoreRecordTransaction((state) => state);  
+  const {settings, toastNotice, dispatchToastNotice} = useStoreHeader((state) => state);
   const {activeTab, headerTab, headerTabsArr, dispatchActiveTab, dispatchSelTab, selTab,  currentReport, dispatchCurrentReport, selectedTranFromList, dispatchSelectedTranFromList, allAccountCodesInitDb} = useStoreReports((state) => state);
   const [showLedgers, setShowLedgers] = useState(false);
   const [clickedHeader, setClickedHeader] = useState({name:'', title:'', clickable:true});
@@ -67,6 +64,10 @@ const IndexReports = ({ssUser}) => {
   //console.log(transProcessor.getTransactions());
   //let productLg = transProcessor.getPersonalAccounts('productsLedger');
   //  console.log(productLg)
+
+  const toastNotify =(type, msg)=>{
+    dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+  }
 
   const handleReport =(report)=>{
       //console.log(report);
@@ -139,7 +140,7 @@ const IndexReports = ({ssUser}) => {
           const cosTypeCode = controlAcctsCode.costOfSale;
           handleEditTranListing({name, cell, router, companyId, transactionsDetails, recordTransaction, pathname,
             dispatchRecordTransaction, dispatchTranSheetTwoEntry, dispatchTranSheetMultiEntry, dispatchTranSheetJournals, dispatchTranSheetProducts,
-            dispatchProductPageActiveTab, cosTypeCode, controlAcctsCode});
+            dispatchProductPageActiveTab, cosTypeCode, controlAcctsCode, dispatchProductReturns});
         }else if(cell.key === "view"){
           dispatchSelectedTranFromList(cell);
           router.push(`/${companyId}/reports/${reportName}?q=${cell.row.id}`); //http://localhost:3000/demo/reports/transactions-listing
@@ -332,17 +333,7 @@ const IndexReports = ({ssUser}) => {
             }
           
         </div>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick={true}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+       
     </div>
   )
 }

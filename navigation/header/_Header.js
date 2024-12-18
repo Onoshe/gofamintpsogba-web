@@ -17,14 +17,16 @@ import PageFetchingData from '@/loadingPage/PageFetchingData';
 import PageLogOut from '@/loadingPage/PageLogOut';
 import NotificationHeaderBar from '../notificationHeaderBar/NotificationHeaderBar';
 import SubscriptionMonitor from './SubscriptionMonitor';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 //import { usePathname, useRouter } from 'next/navigation';
 /* eslint-disable @next/next/no-img-element */
+import { toastNotify } from '@/container/postTransaction/components/utils/toastNotify';
 
 
 const Header = ({ssUser}) => {
-  const {pageIsOpen, activePage, isOpen, coy, dispatchCoy, dispatchActivePage, dispatchIsOpen, expiration, dynamicPage, expirationMsg, showLoadingNavPage, dispatchShowLoadingNavPage} = useStoreHeader((state) => state);
+  const {pageIsOpen, activePage, isOpen, coy, dispatchCoy, dispatchActivePage, dispatchIsOpen, expiration, dynamicPage, expirationMsg, showLoadingNavPage, dispatchShowLoadingNavPage,
+    toastNotice, dispatchToastNotice} = useStoreHeader((state) => state);
   const {transReady} = useStoreTransactions((state) => state);
   const { expired} = expirationMsg;
   //const { data: session, status } = useSession(); //{status:'', data:{session:''}}; //useSession();
@@ -39,21 +41,7 @@ const Header = ({ssUser}) => {
   //const pathname = usePathname();
 
   let userInit = 'NA';
-  //console.log(session)
-  const notify = (type, msg) => toast[type](msg, {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-    theme: "colored",
-  //transition: 'Bounce',
-  });
-
-
+  
   const handleDropdown =()=>{
     if(userDropdown) setUserDropdown(false)
   }
@@ -106,7 +94,6 @@ const Header = ({ssUser}) => {
     //console.log([coyId, coy])
   },[coy, session]);
 
-
   React.useEffect(()=>{
     //Return to Home if companyId on url is not the session.user.companyId or NOT in allowedPaths
     const companyIdUrl = pathname?.split("/")[1];
@@ -143,6 +130,12 @@ const Header = ({ssUser}) => {
     }
   },[]);
 
+  React.useEffect(()=>{
+    if(toastNotice.count){
+      toastNotify(toastNotice.type, toastNotice.msg);
+      setTimeout(()=>dispatchToastNotice({count:0, type:'', msg:''}), 1000); //To reset
+    }
+  },[toastNotice.count]);
   
   //console.log(expirationMsg)
   
@@ -188,7 +181,10 @@ const Header = ({ssUser}) => {
               <p className='text-[10px] text-[yellow] italic'>...simplifying your financial records</p>
             </div>
           </div>
-          <p className='font-bold hidden smc:block md:text-lg text-white -mt-3'>{activePage?.title}</p>
+          <p className='font-bold hidden smc:block md:text-lg text-white -mt-3'
+            >
+            {activePage?.title}
+          </p>
           <div className={`${session?.user? '' : 'hidden'} z-20 flex flex-row gap-2`}>
               {/*<HeaderNotification newNotice="New Message"/>*/}
               <User userInit={userInit}
@@ -208,7 +204,7 @@ const Header = ({ssUser}) => {
         
         <div className={`${isOpen? 'lg:hidden' : 'hidden'} z-50 animate-slide-In fixed h-full -top-16`}>
          <SideDrawer closeDrawer={()=>dispatchIsOpen(!isOpen)} hasExpired={expired}
-            notify={notify}/>
+           />
         </div>
         <div className={`${isOpen? 'lg:hidden' : 'hidden'} w-full h-screen bg-[#ade0f438] fixed top-0 bottom-0`}
          onClick={()=>dispatchIsOpen(false)}>
@@ -223,6 +219,8 @@ const Header = ({ssUser}) => {
           pauseOnFocusLoss
           draggable
           pauseOnHover
+          //theme="light"
+          //containerId="containerIndexHeader-"
         />
     </div>
   )

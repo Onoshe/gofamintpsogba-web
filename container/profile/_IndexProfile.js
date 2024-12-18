@@ -10,8 +10,6 @@ import HorizontalLine from '@/components/misc/HorizontalLine';
 import { AddUser } from './components/AddUser';
 import useStoreHeader from '@/context/storeHeader';
 import { handleUpdateUserProfile } from './utils/handleUpdateUserProfile';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 /* eslint-disable @next/next/no-img-element */
 import { handleUpdateUserPassword } from './utils/handleUpdateUserPassword';
 import { handleEditUserRole } from './utils/handleEditUserRole';
@@ -29,6 +27,7 @@ import Image from 'next/image';
 import { getUsers } from './utils/getUsers';
 import { useSWRFetcher } from '@/lib/hooks/useSWRFetcher';
 import { getRequest } from '@/lib/apiRequest/getRequest';
+import { getPackagePlans, getSubscriptionHistory } from '../company/components/utils/getSubscriptionHistory';
 
 
 
@@ -38,8 +37,10 @@ const updateFormAddUserDef ={firstname:"", lastname:"", title:"", email:"",
 const IndexProfile = ({ssUser}) => {
   const { session, signOut, status} = useAuthCustom(ssUser); 
   const headerStore = useStoreHeader((state) => state);
-  const {user, subscriptions, coy, dispatchCoy, client_Admin, clientData, generalSettings, quickrecordsLogo, dispatchFetchSettingsCall} = headerStore;
+  const {user, subscriptions, coy, dispatchCoy, client_Admin, clientData, generalSettings, quickrecordsLogo, 
+    dispatchFetchSettingsCall, dispatchRefreshSettingsCount, toastNotice, dispatchToastNotice} = headerStore;
   const usersAll = headerStore.users;
+  const clientSubscriptions = headerStore.subscriptions;
   const users =  getUsers(usersAll, generalSettings); // headerStore.filter((dt)=> );
   const {online,  dispatchUser} = {online:true, user:{}, dispatchUser:()=>console.log()};
   const [changePassword, setChangePassword] = React.useState(false);
@@ -63,11 +64,13 @@ const IndexProfile = ({ssUser}) => {
   let showRegUsers =  session?.user?.role?.toLowerCase() === "admin";
   const userPhotoCheck = useSWRFetcher(imgCheckUrl);
   const domain = session?.user?.companyId?.toLowerCase();
+  const subcriptionHistory = getSubscriptionHistory({subscriptions:clientSubscriptions});
+    const plans = getPackagePlans(generalSettings);
   if(domain === "demo"){
     showRegUsers = false;
   }
   //getRequest(userId).then((res)=>console.log(res));
-  //console.log(session, user)
+  //console.log(subcriptionHistory, plans)
 
 
   //userIdImg += ".jpg";
@@ -75,18 +78,9 @@ const IndexProfile = ({ssUser}) => {
   const rolesObj = generalSettings?.find((dt)=> dt.slug === "account-user-roles");
   const usersRoles = rolesObj?.slug? rolesObj?.smallText1?.split(',')?.slice(1) : [];
 
-  const notify = (type, msg) => toast[type](msg, {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-    //transition: 'Bounce',
-    });
-
+  const notify =(type, msg)=>{
+    dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+  }
 
   const handleUser =({key, row, i})=>{
     if(row?.firstname && row.role.toLowerCase() !== "admin"){
@@ -105,7 +99,7 @@ const IndexProfile = ({ssUser}) => {
       if(res.ok){
         setUpdateProfile(({profile:{}, update:false}))
         notify("success", "Profile update successful");
-        dispatchFetchSettingsCall();
+        dispatchRefreshSettingsCount();
       }else{notify("error", res.msg);}
     })
   }
@@ -129,7 +123,7 @@ const IndexProfile = ({ssUser}) => {
     if(res.ok){
       notify("success", "User updated successfully");
       setUpdateUser({password:{}, update:false});
-      dispatchFetchSettingsCall();
+      dispatchRefreshSettingsCount();
     }else{notify("error", res.msg);}
   })
 }
@@ -146,7 +140,8 @@ const handleAddUser =async (e, updateForm)=>{
         notify("success", "User updated successfully");
         setUpdateFormAddUser(updateFormAddUserDef);
         setAddUser({user:{}, add:false})
-        dispatchFetchSettingsCall();
+        dispatchRefreshSettingsCount();
+        dispatchRefreshSettingsCount
         setAddingUser(false)
       }else{
         notify("error", res.msg);
@@ -158,6 +153,8 @@ const handleAddUser =async (e, updateForm)=>{
     })
   }
 }
+//console.log(updateUserForm);
+
 const handleDeleteUserContinue= async ()=>{
   if(updateUserForm?.passwordDelete){
     //setUpdateFormAddUser(updateFormAddUser)
@@ -167,9 +164,9 @@ const handleDeleteUserContinue= async ()=>{
         notify("success", "User deleted successfully");
         setUpdateFormAddUser(updateFormAddUserDef);
         setDeleteUser(({user:{}, delete:false}));
-        setUpdateUserForm(({role:"", nonActive:"", password:"", passwordDelete:""}));
+        setUpdateUserForm(({role:"", nonActive:"", password:"", passwordDelete:"", passwordReset:""}));
         setUpdateUser({password:{}, update:false});
-        dispatchFetchSettingsCall();
+        dispatchRefreshSettingsCount();
       }else{
         notify("error", res.msg);
       }
@@ -186,7 +183,7 @@ const handleResetUserPwd =async (e)=>{
       notify("success", "Login details have been sent to user email");
       setUpdateUser(({userL:{}, update:false, reset:false}))
       setUpdateUserForm({role:"", nonActive:"", password:"", passwordDelete:"", passwordReset:""})
-      dispatchFetchSettingsCall();
+      dispatchRefreshSettingsCount();
     }else{ notify("error", res.msg);}
   })
 }
@@ -268,11 +265,15 @@ const handleResetUserPwd =async (e)=>{
         />
         <HorizontalLine widths={100} margTop={20} margBot={15} bColor={'dodgerblue'}/>
         {showRegUsers && 
-            <Users users={users} 
+            <Users 
+              usersAll={usersAll}
+              users={users} 
               handleClickCell={handleUser} 
               handleAddUser={()=>setAddUser({user:{}, add:true})}
               planLimit={planLimit}
               generalSettings={generalSettings}
+              subcriptionHistory={subcriptionHistory}
+              plans={plans}
             />
           }
         {updateUser.update && 
@@ -332,19 +333,7 @@ const handleResetUserPwd =async (e)=>{
         }
         {signingOut.show && <Modal />}
         <br/>
-        <ToastContainer 
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick={true}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-            //bodyClassName={postError.color}
-          />
+        
     </div>
   )
 }

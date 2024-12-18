@@ -32,6 +32,18 @@ export const getSubscriptionHistory =({subscriptions})=>{
     return {subHistory, lastSub}
 }
 
+export const getPackagePlans =(generalSettings)=>{
+    let varPlans = {};
+    if(generalSettings?.length){
+        const plansObj = generalSettings.find((dt)=>dt.slug === "no-of-package-users");
+        if(plansObj){
+           varPlans[plansObj[['smallText1']]] = plansObj['number1'];
+           varPlans[plansObj[['smallText2']]] = plansObj['number2'];
+           varPlans[plansObj[['smallText3']]] = plansObj['number3'];     
+        }
+    }
+    return varPlans
+}
 
 export const getCompanyLogo =(settings)=>{
     let companyLogo = {type:'', file:""};

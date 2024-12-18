@@ -3,7 +3,7 @@ import React from 'react';
 import { ExcelIcon } from '@/components/icons/iconsSvg';
 import { handleExport2Excel } from '@/lib/exel/handleExport2Excel';
 import { tableHeaderFormater } from '@/lib/exel/tableHeaderFormater';
-import { BiRefresh } from 'react-icons/bi';
+import { BiPrinter, BiRefresh } from 'react-icons/bi';
 import { BsFileEarmarkPdf } from 'react-icons/bs';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
 import { handleExport2Pdf } from '@/container/reports/utils/others/handleExport2Pdf';
@@ -29,9 +29,9 @@ const ToolsBar = ({excelData, notify, runDispatchClientDataCall,user, companyLog
   const handleExportToExcel =()=>{
     handleExport2Excel(excelForm);
   }
-  const handlePdfExport =()=>{
+  const handlePdfExport =(act)=>{
     const {pdfData, reportHeader, rows} = data?.pdfForm;
-    const pdfForm =  {reportRows:rows, pdfHeader:excelForm.docHeader, reportHeader, pdfData, headerRowsColsArr:'', companyLogoFile};
+    const pdfForm =  {reportRows:rows, pdfHeader:excelForm.docHeader, reportHeader, pdfData, headerRowsColsArr:'', companyLogoFile, docMethod:act};
     handleExport2Pdf(pdfForm);
     postActivity(user, activities.DOWNLOAD, "Products List Pdf report")
   }
@@ -55,6 +55,11 @@ const ToolsBar = ({excelData, notify, runDispatchClientDataCall,user, companyLog
           <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Export to Pdf'}>
               <BsFileEarmarkPdf className='text-[18px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
               onClick={handlePdfExport}
+              />
+          </div>
+          <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Print document'}>
+              <BiPrinter className='text-[22px] text-blue-500 cursor-pointer hover:text-blue-700 active:text-blue-500'
+              onClick={()=>handlePdfExport("PRINT")}
               />
           </div>
         </div>

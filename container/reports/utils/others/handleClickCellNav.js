@@ -25,8 +25,15 @@ export const handleClickCellNav =({cell, reportName, companyId, router, transact
         }
       }
     }else if(reportName.includes("products-valuation")){
+      //console.log(cell);
       if(cell.row.productCode){
         router.push(`/${companyId}/reports/products-valuation?q=${cell.row.productCode}`);
+      }else if(cell.key === "transactionNo" || cell.key === "description"){
+        const tran = transactions.find((dt)=> dt.id == cell.row.transId);
+        if(tran?.id){
+          dispatchSelectedTranFromList({...cell, row:tran});
+          router.push(`/${companyId}/reports/transaction-view?q=${cell.row.transId}`);
+        }
       }
     }else {
       //return console.log(cell, customers, products, reportName)

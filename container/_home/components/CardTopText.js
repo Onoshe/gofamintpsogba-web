@@ -3,8 +3,8 @@ import React from 'react';
 const CardTopText = () => {
   return (
         <div className='relative flex flex-col justify-center items-center gap-7 px-4'
-         >  
-            <p className='text-2xl md:text-4xl z-10 tracking-wide leading-loose font-bold p-5 text-center'
+         >
+            <p className='text-3xl md:text-4xl z-10 tracking-wide leading-loose font-bold p-5 text-center'
               >
                 QuickRecords Bookkeeping & Accounting
             </p>

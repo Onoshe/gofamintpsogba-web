@@ -9,7 +9,7 @@ import { MdCancel, MdClear } from 'react-icons/md';
 
 
 const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, clickables, handleClickCell,  reportDate, viewTransId, subTitle, transactionsDetails,
-   toastNotify, clickedHeader, setClickedHeader }) => {
+    clickedHeader, setClickedHeader }) => {
   const [searchValue, setSearchValue] = React.useState(""); 
   let rowsForDisplay = rows;
   

@@ -13,6 +13,7 @@ import { handleDeleteTransaction } from './components/utils/handleDeleteTransact
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
+import useStoreHeader from '@/context/storeHeader';
 
 
 const IndexPostTransaction = ({ssUser}) => {
@@ -23,25 +24,16 @@ const IndexPostTransaction = ({ssUser}) => {
     dispatchRecordTransaction, dispatchTranSheetTwoEntryReset,   dispatchTranSheetMultiEntryReset} = useStoreRecordTransaction((state) => state);  
   const {activeTab, createByEntry} = recordTransaction;
   const [showConfirm, setShowConfirm] = React.useState(false);
+  const {toastNotice, dispatchToastNotice} =  useStoreHeader((state) => state);  
 
   const personalAccts =  mapPersonalAccounts(customers, vendors);
   const chartOfAccountSelection = mapChartOfAccount(chartOfAccounts, coaStructure);
   const productsList = mapProducts(products);
   const processedLedgers = []; //ledgers.processedLedgers;
-
   
-  const notify = (type, msg) => toast[type](msg, {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-    //transition: 'Bounce',
-    });
-
+  const notify =(type, msg)=>{
+    dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+  }
 
   function controlAcctChecker(transSheet, entryAcct, contAct, idx){
     //entryType = debit || credit; entryAcct = debitAccount || creditAccount; contAcct = receivables || payables || inventrolControl, 
@@ -140,6 +132,9 @@ const IndexPostTransaction = ({ssUser}) => {
                   setTransSheet={dispatchTranSheetMultiEntry}
                   recordTransaction={recordTransaction}
                   dispatchTranSheetMultiEntryReset={ dispatchTranSheetMultiEntryReset}
+                  toastNotice={toastNotice}
+                  dispatchToastNotice={dispatchToastNotice}
+                  toastNotify={notify}
                 />
                 }
                 

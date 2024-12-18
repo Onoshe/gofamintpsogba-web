@@ -15,7 +15,7 @@ const Login = ({viewPwd, handleViewPwd, form,loading, handleOnChange, handleLogi
      <div className='w-full flex justify-center'>
         <Card
             title="Login"
-            details="Use your credentials to login into account"
+            details="Use your credentials to login"
         >  
          <form className='flex flex-col gap-3 w-full' onSubmit={handleLogin}>
                 <InputLabel

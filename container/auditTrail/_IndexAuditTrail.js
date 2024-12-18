@@ -9,8 +9,6 @@ import { handleExcelExport } from '@/container/reports/utils/others/handleExcelE
 import MenuBarBar from './components/MenuBar';
 import Spinner from '@/components/misc/Spinner';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
-import { ToastContainer } from 'react-toastify';
-import { toastNotify } from '@/container/postTransaction/components/utils/toastNotify';
 import 'react-toastify/dist/ReactToastify.css';
 import { splitByFirstChar } from '@/lib/capitalize/splitString';
 import useStoreHeader from '@/context/storeHeader';
@@ -32,7 +30,7 @@ const IndexAuditTrail = ({ssUser}) => {
   const processedLedgers = ledgers.processedLedgers;
   //const { data: session, status } = useSession(); //{user:{companyId:'', email:''}}; 
   const { session, user,  status} = useAuthCustom(ssUser);
-  const {settings, generalSettings, activityLog} = useStoreHeader((state) => state);
+  const {settings, generalSettings, activityLog, toastNotice, dispatchToastNotice} = useStoreHeader((state) => state);
   const {  dispatchSelectedTranFromList,} = useStoreReports((state) => state);
    let [emptyPath, domainNm, reports, reportName] = pathname?.split("/");
    if(reportName?.includes("=")){ const reportNameSplit = splitByFirstChar(reportName, '='); reportName = reportNameSplit[0]; }
@@ -45,6 +43,11 @@ const IndexAuditTrail = ({ssUser}) => {
   //console.log(viewTransId, transactionsDetails, user,)
   //console.log(activityLog);
 
+
+    const toastNotify =(type, msg)=>{
+      dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+    }
+  
   const setDateFormHandler =(dt)=>{
     dispatchReportDate({...dt, defaultDate:false});
   }
@@ -152,17 +155,7 @@ const IndexAuditTrail = ({ssUser}) => {
             </Suspense>
           
         </div>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick={true}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+        
     </div>
   )
 }

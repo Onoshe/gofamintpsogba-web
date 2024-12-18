@@ -6,13 +6,13 @@ import React from 'react';
 
 
 
-const Users = ({users, handleClickCell, handleAddUser, planLimit}) => {
+const Users = ({users, usersAll, handleClickCell, handleAddUser, planLimit, subcriptionHistory, plans}) => {
     let headers, rows, rowKeys = []; 
     const updateClassName = "bg-blue-400 text-white py-1 px-2 rounded-sm cursor-pointer active:bg-blue-300 hover:bg-blue-500";
     const adminClass = "bg-gray-200 text-black py-1 px-2 rounded-sm";
     const resetClassName = "bg-red-400 text-white py-1 px-2 rounded-sm cursor-pointer active:bg-red-300 hover:bg-red-500";
 
-    //console.log(users, planLimit)
+    //console.log(subcriptionHistory, plans, planLimit)
     let disableAddBtn = false;
     let showAddBtn = false;
     if(users?.length){  
@@ -36,13 +36,21 @@ const Users = ({users, handleClickCell, handleAddUser, planLimit}) => {
             update:'Edit', delete:'Delete', reset:'Reset', updateClassName, resetClassName, status:parseInt(u.nonActive)? 'Non-active': 'Active', statusClassName:parseInt(u.nonActive)? 'text-red-600' :'text-green-500', ...u} :
           {update:'Edit', delete:'Delete', reset:'Reset', updateClassName:adminClass, resetClassName:adminClass, status:parseInt(u.nonActive)? 'Non-active': 'Active', statusClassName:parseInt(u.nonActive)? 'text-red-600' :'text-green-500', ...u}
         });
-    }
-   // console.log(rows)
-//console.log(headers, rows, rowKeys)
+       const adminUser = users.find((u)=> u.role.toLowerCase() === "admin");
+       if(adminUser){
 
+       } 
+    }
+    //console.log(users, rows)
+//console.log(headers, rows, rowKeys)
+    const acctLimit = plans[subcriptionHistory?.lastSub?.subscriptionType?.toUpperCase()];
   return (
     <div>
-        <p className='py-2 font-[700] text-blue-800'>Registered Users</p>
+        <p className='py-2 font-[700] text-blue-800'>Registered Users: 
+          <span className={`pl-2 ${rows?.length >= acctLimit? 'text-red-700' : 'text-teal-800'}`}>
+            (Plan Limit- {acctLimit})
+            </span>
+        </p>
         <Table
             header={headers} 
             rows={rows}

@@ -7,7 +7,7 @@ import { BsFileEarmarkPdf } from 'react-icons/bs';
 import { handleExport2Pdf } from '@/container/reports/utils/others/handleExport2Pdf';
 import { getHeadersTitle } from '@/container/reports/utils/ledgers/getHeaders';
 import { activities, postActivity } from '@/lib/apiRequest/postActivity';
-import { BiRefresh } from 'react-icons/bi';
+import { BiPrinter, BiRefresh } from 'react-icons/bi';
 
 
   
@@ -25,9 +25,9 @@ const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctTy
     postActivity(user, activities.DOWNLOAD, "All "+personalAcctType+" Excel report")
   }
 
-  const handlePdfExport =()=>{
+  const handlePdfExport =(act)=>{
     const {pdfData, reportHeader, rows} = data?.pdfForm;
-    const pdfForm =  {reportRows:rows, pdfHeader:docHeader, reportHeader, pdfData, headerRowsColsArr:'', companyLogoFile};
+    const pdfForm =  {reportRows:rows, pdfHeader:docHeader, reportHeader, pdfData, headerRowsColsArr:'', companyLogoFile, docMethod:act};
     //console.log(data);
     handleExport2Pdf(pdfForm);
     postActivity(user, activities.DOWNLOAD, "All_"+personalAcctType+"_Pdf_report")
@@ -53,6 +53,11 @@ const ToolsBar = ({personalAccounts, showAllRows, setShowAllRows, personalAcctTy
             <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Export to Pdf'}>
                 <BsFileEarmarkPdf className='text-[18px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
                 onClick={handlePdfExport}
+                />
+            </div>
+             <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Print document'}>
+                <BiPrinter className='text-[22px] text-blue-500 cursor-pointer hover:text-blue-700 active:text-blue-500'
+                onClick={()=>handlePdfExport("PRINT")}
                 />
             </div>
         </div>

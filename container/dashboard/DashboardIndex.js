@@ -24,6 +24,7 @@ import useContainerDimension from '@/lib/hooks/useContainerDimension';
 
 
 
+
 const DashboardIndex = ({ssUser}) => {
   const reportDate = getStartAndEndDate();
   const router = useRouter();
@@ -123,6 +124,7 @@ const DashboardIndex = ({ssUser}) => {
             />
         </div>
         {/*<br/><br/><br/> */}
+        
         <div className="smc:pt-[50px]">
             <div className='mt-20 hidden'>
                 <GenerateFDummyData chartOfAccounts={chartOfAccounts} customers={customers} vendors={vendors}/>
@@ -131,6 +133,7 @@ const DashboardIndex = ({ssUser}) => {
                     <button className='btn btn-accent btn-sm' onClick={()=>handlePrint(2)}>Print Statement</button>
                 </div>
             </div>
+           
             <div className='w-full'>
                 <div className='flex flex-col mt-3 gap-5 p-3'>
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-5 pt-[30px]'>

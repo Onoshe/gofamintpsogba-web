@@ -10,7 +10,6 @@ import {BiLogOutCircle, BiMailSend, BiShoppingBag,} from 'react-icons/bi';
 import {MdOutlineAccountTree, MdInventory, MdSettings, MdAccountTree} from 'react-icons/md';
 import {GrMoney, GrResources} from 'react-icons/gr';
 import { BsGraphUpArrow, BsJournalPlus, BsFillPersonVcardFill, BsGearFill, BsCart} from 'react-icons/bs';
-import useStoreCompany from '@/context/storeCompany';
 import useLocalStorage from '@/lib/hooks/useLocalStorage';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 //import ZEffectFetchData from './ZEffectFetchData';
@@ -19,10 +18,10 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 //import { generateGenLedger } from '../reportsModule/generalLedger/_IndexGenerateGenLedger';
 //import { GrResources } from "react-icons/gr";
 
-const SideDrawer = ({closeDrawer, ssUser,notify, params}) => {
+const SideDrawer = ({closeDrawer, ssUser}) => {
   const router = useRouter();
   const [localStorageValue, setLocalStorageValue] = useLocalStorage("FASTRECORD", {});
-  const {activePage, dispatchActivePage, dispatchIsOpen, showSidebarTitle, coy,  dispatchCoy, expirationMsg, dispatchPageLoading} = useStoreHeader((state) => state);
+  const {activePage, dispatchActivePage, isOpen, dispatchIsOpen, showSidebarTitle, coy, dispatchCoy, expirationMsg, dispatchPageLoading} = useStoreHeader((state) => state);
   const { expired} = expirationMsg;
   const pathname = usePathname();
   const {signOut, session, user, userRendering, status} = useAuthCustom(ssUser);
@@ -35,6 +34,9 @@ const SideDrawer = ({closeDrawer, ssUser,notify, params}) => {
 
   const currentActivePage = [...navs, nav_Coy]?.find((dt)=> "/"+coy+"/"+dt.name == "/"+coy+"/"+domainAndPage[1]);
   const isDashboardPage = "/"+coy === pathname;
+
+
+  
 
   const handleLogout =()=>{
     dispatchActivePage({name:"", title:'Dashboard'});
@@ -57,14 +59,11 @@ const SideDrawer = ({closeDrawer, ssUser,notify, params}) => {
   const handleNav =(navs)=>{
     //console.log(navs, currentActivePage)
     if(navs.name === activePage.name) return //to prevent error
-    if(navs.name === 'company' && coy?.toUpperCase() === "DEMO"){
-      notify('error', 'This page is disabled for demo account users')
-    }else{
       dispatchPageLoading(true);  
       dispatchActivePage(navs);
       dispatchIsOpen(false)
-    }
   }
+
   
   /*React.useEffect(()=>{
     //This graps the current path and dispatch it as Active Page in order to align the active current tab agree with the current page
@@ -116,13 +115,21 @@ const SideDrawer = ({closeDrawer, ssUser,notify, params}) => {
                 })
               }
               
-              <Link href={`${showCompanyPage? '/'+coy+'/company' : '#'}`} 
+              {showCompanyPage? 
+              <Link href={`${'/'+coy+'/company'}`} 
                 className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row hover:text-[blue] ${currentActivePage?.name==='company'? "bg-sky-300 text-[blue] " : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
                 data-tip={'Company'}
                 onClick={()=>handleNav({name:'company', title:'Company'})}>
                 {icons.company}
                 {showSidebarTitle && <span className='text-[12px]'>{'Company'}</span>}
               </Link>
+              :<div  
+                className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row  bg-gray-200 text-gray-700 rounded-md p-2 gap-1 items-center`}
+                data-tip={'Company'}
+                >
+                {icons.company}
+                {showSidebarTitle && <span className='text-[12px]'>{'Company'}</span>}
+              </div>}
             </div>
             <div
               className={`${showSidebarTitle? 'w-[200px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-2 flex flex-row text-[#e2dddd] bg-[gray]   p-2 gap-1 items-center`}
@@ -132,6 +139,7 @@ const SideDrawer = ({closeDrawer, ssUser,notify, params}) => {
               {showSidebarTitle && <span className=" cursor-pointer">Logout</span>}
             </div> 
         </div>
+          
     </div>
   )
 }

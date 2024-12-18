@@ -15,6 +15,7 @@ const transDetailsFields = [
     "dueDate",
     //"unitPrice",
     "voucher",
+    "tranNoRef",
     "createdBy",
     "createdAt",
     "updatedBy",
@@ -33,6 +34,7 @@ const transDetailsTypes = [
     "VARCHAR",
     "INT",
 
+    "VARCHAR",
     "VARCHAR",
     "VARCHAR",
     "VARCHAR",
@@ -76,6 +78,15 @@ export function prepareQueryTrans({transSheet, user, chartOfAccounts, postingPla
 
         const debitAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeDr);
         const creditAcctChart = chartOfAccounts.find((dt)=> dt.accountCode == accountCodeCr);
+        
+        //For Purchase return PRODUCT-PCH-RT, reverse is the case, ie, accountCodeDr in transSht is the creditedAcct, while accountCodeCr is the debitedAcct
+        let accountDr = debitAcctChart.id; 
+        let accountCr = creditAcctChart.id; 
+        if(postingPlat === "PRODUCT-PCH-RT"){       
+            accountDr = creditAcctChart.id;
+            accountCr = debitAcctChart.id;
+            //For PRODUCT-SAL-RT, swapping of accountDr and accountCr is not required. The User can select account to debit or credit from the platform
+        }
 
         const transactions = [
             date,
@@ -84,8 +95,8 @@ export function prepareQueryTrans({transSheet, user, chartOfAccounts, postingPla
             2,              //entries count
             postingPlat,
             amount,
-            debitAcctChart.id,
-            creditAcctChart.id,
+            accountDr,
+            accountCr,
 
             user.userId,
             dateFmtISO(), 
@@ -104,27 +115,38 @@ export function prepareQueryTrans({transSheet, user, chartOfAccounts, postingPla
     return {body, url}
 }
 
-export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr, doubleEntryIdArr}) {
+export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr, doubleEntryIdArr, postingPlat}) {
     const url =  getLinkPostAndRetrieve(user.companyId);
     const {receivables, payables, inventoryControl, inventoryAdj} = controlAcctsCode;
     
     const transactionsDetails = [];
     for (let i = 0; i < transSheetArr.length; i++) {
         const transSheet = transSheetArr[i];
-    
+        const isRtns = postingPlat === "PRODUCT-PCH-RT";
         let {
             date,
             description,
             reference,
-            accountCodeDr,
-            accountCodeCr,
-            subCodeDr,
-            subCodeCr,
+            //accountCodeDr,
+            //accountCodeCr,
+            //subCodeDr,
+            //subCodeCr,
             quantityDr,
             quantityCr,
             amount,
             quantityProduct,
             } =  transSheet;
+            let accountCodeDr = transSheet.accountCodeDr;
+            let subCodeDr = transSheet.subCodeDr;
+            let accountCodeCr = transSheet.accountCodeCr;
+            let subCodeCr = transSheet.subCodeCr;
+            
+            if(isRtns){
+                accountCodeDr = transSheet.accountCodeCr;
+                subCodeDr = transSheet.subCodeCr;
+                accountCodeCr = transSheet.accountCodeDr;
+                subCodeCr = transSheet.subCodeDr;
+            }
 
         const insertedTran = insertedTransArr[i];
         const doubleEntryId = doubleEntryIdArr[i]; //Error?
@@ -148,6 +170,8 @@ export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, contro
             const creditSubAcctChart = personalAcctType[creditSubs].acct?.find((dt)=> dt[personalAcctType[creditSubs].acctCode] == subCodeCr);
 
             const qtyDr = parseInt(quantityDr)? quantityDr : parseInt(quantityProduct)? quantityProduct : "";
+            const qtyCr = parseInt(quantityCr)? quantityCr : parseInt(quantityProduct)? quantityProduct : "";
+            const tranNoRef = transSheet?.tranNoRef;
             const transDetailsFieldsDr = [
                 insertedTran.id,
                 "DR",
@@ -156,11 +180,12 @@ export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, contro
                 debitSubAcctChart?.id? debitSubAcctChart?.id : "",
                 debitSubAcctChart?.id? debitSubs.toUpperCase() : 'COA',
                 amount,
-                qtyDr,
+                isRtns? qtyCr : qtyDr,
                 doubleEntryId,
                 debitAcctChart?.dueDate && debitAcctChart?.dueDateType === "REC"? debitAcctChart.dueDate : "",
 
                 "Payment",
+                tranNoRef,
                 user.userId,
                 dateFmtISO(), 
                 user.userId,
@@ -168,7 +193,6 @@ export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, contro
             ];
             transactionsDetails.push(transDetailsFieldsDr);
             
-            const qtyCr = parseInt(quantityCr)? quantityCr : parseInt(quantityProduct)? quantityProduct : "";
             const transDetailsFieldsCr = [
                 insertedTran.id,
                 "CR",
@@ -177,11 +201,12 @@ export function prepareQueryTransDetails({transSheetArr, chartOfAccounts, contro
                 creditSubAcctChart?.id? creditSubAcctChart?.id : "",
                 creditSubAcctChart?.id?  creditSubs.toUpperCase() : 'COA',
                 amount,
-                qtyCr,
+                isRtns? qtyDr : qtyCr,
                 doubleEntryId,
                 creditAcctChart?.dueDate && creditAcctChart?.dueDateType === "REC"? creditAcctChart.dueDate : "",
 
                 "Payment",
+                tranNoRef,
                 user.userId,
                 dateFmtISO(), 
                 user.userId,

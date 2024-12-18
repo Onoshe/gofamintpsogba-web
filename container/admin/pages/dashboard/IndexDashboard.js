@@ -18,10 +18,9 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import { ClientsDatabase } from './cards/DashboardCards_More';
 import { sortArrayByKey } from '@/lib/sort/sortArrayByKey';
 import { getRequest } from '@/lib/apiRequest/getRequest';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import DashboardCard from '../../components/reusableComponents/DashboardCard';
 import { MdClose } from 'react-icons/md';
+import useStoreHeader from '@/context/storeHeader';
 
 
 
@@ -38,6 +37,7 @@ const IndexDashboard = ({ssUser}) => {
     //const dbSettings = useSWRFetcher(settingsUrl);
     const access = useSWRFetcher(accessUrl);
     const {tabsArrHome, activeTabHome, dispatchActiveTabHome} = useStoreHome((state) => state);
+    const {toastNotice, dispatchToastNotice} = useStoreHeader((state)=> state);
 
    const clientsDataFmt = clientsData?.data?.data || [];
    const accessDataFmt = accessData?.data?.data || [];
@@ -68,19 +68,10 @@ const IndexDashboard = ({ssUser}) => {
         }
       };
 
+      const notify =(type, msg)=>{
+        dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+      }
 
-      const notify = (type, msg) => toast[type](msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        theme: "colored",
-      //transition: 'Bounce',
-      });
 
    const handleRevalidate = (table) => {
         switch (table) {
@@ -187,17 +178,7 @@ const IndexDashboard = ({ssUser}) => {
                     clientsData={accessDataFmt}
                     handleRevalidate={handleRevalidate}
                 />
-                <ToastContainer 
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar={true}
-                    newestOnTop={false}
-                    closeOnClick={true}
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                />
+                
             </div>
         </div>
     </div>

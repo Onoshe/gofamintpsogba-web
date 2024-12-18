@@ -15,7 +15,6 @@ export const keysTranDetails = ['particulars', 'debit', 'credit'];
 export const keysPersonalBalances =  ['accountCode', 'name', 'group', 'openingBal', 'forThePeriod', 'closingBal'];
 
 
-
 export const getLedgersAndPersonalAcctsForDisplay =({reportName,  transProcessor, customers, vendors, products, viewTransId, transactionsDetails, user, dateForm, clickedHeader})=>{
         let result = {};
         let moreDocHeader = [];

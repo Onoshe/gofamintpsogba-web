@@ -58,26 +58,49 @@ const convertTransRowToTransSheet = (transRow)=>{
     }
     return res
 }
-const convertTransRowToTransSheetProductTwo = (transRow)=>{
+const convertTransRowToTransSheetProductTwo = (transRow, postingPlat)=>{
+    //console.log(transRow, postingPlat)
     const tab1AndTab3Sheet = {date:"", description:'', reference:'', amount:'', accountCodeDr:'', subCodeDr:'', quantityDr:'',unitsDr:'',accountCodeCr:'', subCodeCr:'', quantityCr:'',unitsCr:'',};
     const tab2SheetExtra = {accountCodeProduct:'', subCodeProduct:'', quantityProduct:'',unitsProduct:'', accountCodeCOS:'', quantityBal:''};
     //return console.log(transRow):  entry1Sel:1, entry2Sel:2,adjustProductChecked:"BYQTY"
-    const tranRowDr = transRow.find((dt)=> dt.entryType === "DR");
-    const tranRowCr = transRow.find((dt)=> dt.entryType === "CR");
-    const {transactionDate, description, reference, amount} = tranRowDr;
+    let tranRowDr = transRow.find((dt)=> dt.entryType === "DR");
+    let tranRowCr = transRow.find((dt)=> dt.entryType === "CR");
+    
+    const {transactionDate, description, reference, amount} = (postingPlat === "PRODUCT-PCH-RT"? tranRowCr : tranRowDr);
+        let accountCodeDr =tranRowDr.accountCode;
+        let accountCodeCr=tranRowCr.accountCode;
+        let subCodeDr =tranRowDr?.accountCodeSub? tranRowDr.accountCodeSub : ''; //tranRowDr?.accountCodeSub? getSubAcct(tranRowDr.accountCodeSub, tranRowDr.accountCodeSubName) : '';
+        let subCodeCr =tranRowCr?.accountCodeSub? tranRowCr.accountCodeSub : ''; //tranRowCr?.accountCodeSub? getSubAcct(tranRowCr.accountCodeSub, tranRowCr.accountCodeSubName) : '';
+
+        let quantityDr = parseFloat(Math.abs(tranRowDr?.quantity))? Math.abs(tranRowDr?.quantity) : '';
+        let quantityCr = parseFloat(Math.abs(tranRowCr?.quantity))? Math.abs(tranRowCr?.quantity) : '';
+        let unitsDr = Math.abs(tranRowCr?.units);
+        let unitsCr = Math.abs(tranRowCr?.units);
+        
+        if(postingPlat === "PRODUCT-PCH-RT"){
+            accountCodeDr = tranRowCr.accountCode;
+            accountCodeCr = tranRowDr.accountCode;
+            subCodeDr = subCodeCr;
+            subCodeCr = subCodeDr;
+            quantityDr = quantityCr;
+            quantityCr = quantityDr;
+            unitsDr = unitsCr;
+            unitsCr = unitsDr;
+        }
         let transSheet = {
             date:transactionDate,
             description,
             reference,
-            amount:parseFloat(amount),
-            accountCodeDr:tranRowDr.accountCode,
-            accountCodeCr:tranRowCr.accountCode,
-            subCodeDr:tranRowDr?.accountCodeSub? getSubAcct(tranRowDr.accountCodeSub, tranRowDr.accountCodeSubName) : '',
-            subCodeCr:tranRowCr?.accountCodeSub? getSubAcct(tranRowCr.accountCodeSub, tranRowCr.accountCodeSubName) : '',
-            quantityDr:parseFloat(tranRowDr?.quantity)? tranRowDr?.quantity : '',
-            quantityCr:parseFloat(Math.abs(tranRowCr?.quantity))? Math.abs(tranRowCr?.quantity) : '',
-            unitsDr:tranRowDr?.units,
-            unitsCr:tranRowCr?.units
+            amount:parseFloat(Math.abs(amount)),
+            accountCodeDr,
+            accountCodeCr,
+            subCodeDr,
+            subCodeCr,
+            quantityDr,
+            quantityCr,
+            unitsDr,
+            unitsCr,
+            tranNoRef:tranRowDr.tranNoRef
         };
     //return console.log(transSheet)
     return transSheet
@@ -118,7 +141,8 @@ const convertTransRowToTransSheetProductTwo = (transRow)=>{
     return transSheet
  }
 
- const convertTransRowToTransSheetProductMulti = (transRow, cosTypeCode)=>{ //For Product Sale
+ const convertTransRowToTransSheetProductMulti = (transRow, cosTypeCode)=>{ 
+    //For Product Sale or Sale Returns: PRODUCT-SAL || PRODUCT-SAL-RT
     /*transRow has four entries: [{accountCode:'Bank or Receivable Acct, doube entry for Sales', entryType:'Dr', doubleEntryId:0001}, {accountCode:'Sales Account', entryType:'Cr', doubleEntryId:0001}, 
     {accountCode:'Cost of Sale', entryType:'Dr', doubleEntryId:0002}, {accountCode:'Product Acct', entryType:'Cr', doubleEntryId:0002}]
     */
@@ -155,6 +179,8 @@ const convertTransRowToTransSheetProductTwo = (transRow)=>{
             unitsDr:tranRowDr?.units,
             unitsCr:tranRowCr?.units,
 
+            tranNoRef:entryTwoProductCrAcct?.tranNoRef,
+
             accountCodeProduct:entryTwoProductCrAcct.accountCode, 
             subCodeProduct:entryTwoProductCrAcct?.accountCodeSub? entryTwoProductCrAcct.accountCodeSub : '', 
             quantityProduct:Math.abs(entryTwoProductCrAcct.quantity),
@@ -166,10 +192,11 @@ const convertTransRowToTransSheetProductTwo = (transRow)=>{
     return transSheet
  }
 
+
 export const handleEditTranListing =({name, cell, router, companyId, transactionsDetails, recordTransaction, pathname, 
     dispatchRecordTransaction, dispatchTranSheetTwoEntry, dispatchTranSheetMultiEntry, dispatchTranSheetJournals, dispatchTranSheetProducts,
-    dispatchProductPageActiveTab, cosTypeCode, controlAcctsCode})=>{
-      //  return console.log(name, cell?.row?.postingPlat)
+    dispatchProductPageActiveTab, cosTypeCode, controlAcctsCode, dispatchProductReturns})=>{
+     //   return console.log(name, cell?.row?.postingPlat)
      if(name === "trial-balance"){
         const {row} = cell;
         router.push(`/${companyId}/reports/gl-${row.trans[0].accountCode}`);
@@ -193,24 +220,40 @@ export const handleEditTranListing =({name, cell, router, companyId, transaction
                 }else{dispatchTranSheetJournals(convertedMulti);}
                 break;
             case "PRODUCT-PCH":
+            case "PRODUCT-PCH-RT":
             case "PRODUCT-ADJ":
             case "PRODUCT-SAL":
+            case "PRODUCT-SAL-RT":
                     platforms.page = 'record-product';
                     platforms.sheet = 'transSheetProducts'; 
-                    platforms.productTab = postingPlat === "PRODUCT-PCH"? "TAB1" : postingPlat === "PRODUCT-SAL"? "TAB2" : "TAB3";
+                    //platforms.productTab = postingPlat === "PRODUCT-PCH"? "TAB1" : postingPlat === "PRODUCT-SAL"? "TAB2" : "TAB3";
+                    if(postingPlat === "PRODUCT-PCH" || postingPlat === "PRODUCT-PCH-RT"){
+                        platforms.productTab = "TAB1"
+                    }else if(postingPlat === "PRODUCT-SAL" || postingPlat === "PRODUCT-SAL-RT"){
+                        platforms.productTab = "TAB2"
+                    }else{
+                        platforms.productTab = "TAB3"   
+                    }
+
                     let convertedProduct = {}; 
-                    if(postingPlat === "PRODUCT-SAL"){
+                    if(postingPlat === "PRODUCT-SAL" || postingPlat === "PRODUCT-SAL-RT"){
                       convertedProduct  = convertTransRowToTransSheetProductMulti(transSheet, cosTypeCode);
-                      //console.log(convertedProduct);
+                      //console.log(convertedProduct, platforms);
                     }else if(postingPlat === "PRODUCT-ADJ"){
                         const prodTypeCode = controlAcctsCode.inventoryControl;
                         convertedProduct = convertTransRowToTransSheetProductAdj(transSheet, prodTypeCode);
-                        //console.log(convertedProduct, prodTypeCode, transSheet)
+                        //console.log(convertedProduct, platforms);
                     }else{
-                        convertedProduct = convertTransRowToTransSheetProductTwo(transSheet);
+                        convertedProduct = convertTransRowToTransSheetProductTwo(transSheet, postingPlat);
+                        //console.log(convertedProduct, platforms);
                     }
                     dispatchTranSheetProducts(convertedProduct);
                     dispatchProductPageActiveTab(platforms.productTab);
+                    if(postingPlat==="PRODUCT-PCH-RT" || postingPlat==="PRODUCT-SAL-RT"){
+                        dispatchProductReturns(true);
+                    }else{
+                        dispatchProductReturns(false);
+                    }
                     break;
             default: 
                 const convertedTwo = convertTransRowToTransSheet(transSheet);
@@ -225,8 +268,10 @@ export const handleEditTranListing =({name, cell, router, companyId, transaction
 }
 
 
-const transactionRow =['transactionDate', 'description','reference', 'amount', 'entryType', 'accountCode', 'accountCodeSub','accountCodeId',];
 
+
+
+const transactionRow =['transactionDate', 'description','reference', 'amount', 'entryType', 'accountCode', 'accountCodeSub','accountCodeId',];
 const twoEntryRow = ['date', 'description', 'reference', 'amount', 'debitAccount', 'debitSub', 'creditAccount', 'creditSub',]
 const multiEntryRow = [
     ['date', 'description', 'reference', 'amount', 'accountCode','debitCredit', 'subCode'],

@@ -35,108 +35,98 @@ const TermsAndCondition = () => {
             <Header1
                 text="ACCEPTANCE OF TERMS."
             />
-            <p className=''>
-                <span className='font-bold mr-1'>{company}</span>
-                owns and operates this app – QuickRecords Accounting Bookkeeping and their related sites, services and technology that are made available.
-            </p>
-            <p>
-              These terms of service govern your access to and use of the Service (“Terms of Service”). The Terms of Service shall be deemed to include all other operating rules, policies and procedures that are referred to herein or that may otherwise be published by <span className='font-bold'>{company}</span> from time to time, including without limitation, the following: For purposes of these Terms of Service “User” shall mean either you as an individual or the entity on whose behalf you are accepting these Terms of Service and who is afforded all rights and bound by all terms hereunder. User represents that he/she/it is authorized to accept these Terms of Service.
-            </p>
-            <Text1 text={tmc.b1} style={'pt-8 pb-5 font-[600] text-red-900'}/>
-            <Header1 text="CHANGES" />
-            <Text1 text={tmc.c2} style={''}/>
+              <p className=''>
+                  <span className='font-bold mr-1'>{company}</span>
+                  owns and operates this app, 
+                  <span className='font-bold mx-1'>QuickRecords Accounting Bookkeeping</span>
+                  , along with its related websites, services, and technology. By accessing or using this service, you agree to comply with these Terms of Service. These terms include all policies, operating rules, and procedures referenced herein or published by OziTech Studio.
+              </p>
+              <p>
+                The term <span className='font-bold mr-1'>“User”</span>refers to either:
+              </p>
+              <p className="py-1">•  You as an individual, or</p>
+              <p className="py-1">•  The entity you represent, for which you are authorized to accept these Terms of Service.</p>
+              <p className="pt-4"><span className='font-bold mx-1 text-red-900'>If you do not agree to these Terms of Service or are not authorized to accept them, do not download, use, or access any part of the service.</span>
+                By using the service, you acknowledge that you accept these terms and agree to be legally bound by them without modification.
+              </p>
+            <Header1 text="CHANGES TO THE TERMS OF SERVICE" />
+              <p>
+              <span className='font-bold mr-1'>{company}</span> reserves the right to modify or replace these Terms of Service, in whole or part, at its sole discretion. Changes will become effective upon publication. Continued use of the service after modifications constitutes acceptance of the updated terms.
+              </p>
             <Header1 text="ELIGIBILITY" />
-            <p className=''>
-                <span className='font-bold mr-1'>{company}</span>
-                may refuse to offer or continue offering the Service to any person and may change its eligibility criteria from time to time.
+              <p>
+              <span className='font-bold mr-1'>{company}</span> reserves the right to refuse service to any person and may modify eligibility criteria at any time.
+              </p>
+            <Header1 text="REGISTRATION" />
+              <p>
+              While registration is optional, some features or value-added services may require you to create an account. If you choose to register, you are responsible for maintaining the confidentiality of your account information.
+              </p>
+            <Header1 text="PRIVACY POLICY" />
+            <p>
+              {"QuickRecords Bookkeeping's Privacy Policy, available at "} 
+              <Link href={'/privacy-policy'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> http://quick-records.vercel.app/privacy-policy</Link>
+              governs how we collect, use, and protect your data. By using the service, you consent to the practices described in this policy. OziTech Studio reserves the right to update the Privacy Policy from time to time.
             </p>
-            <Header1 text={tmc.e1} />
-            <Text1 text={tmc.e2} style={''}/>
-            <Header1 text={tmc.f1} />
-            <div className=''>
-            QuickRecords Bookkeeping’s current Privacy Policy is available at
-                <Link href={'/privacy-policy'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> www.quick-records.vercel.app/privacy-policy</Link>
-                which shall apply to any use of the Service, and which may be modified by OziTech Studio in its discretion from time to time pursuant to the procedures set forth therein
-                <Link href={'/privacy-policy'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> www.quick-records.vercel.app/privacy-policy</Link>
-                which shall apply to any use of the Service, and which may be modified by 
-                <span className='font-bold mx-1'>{company}</span>
-                in its discretion from time to time pursuant to the procedures set forth therein.    
-            </div>
             <Header1 text="USER CONDUCT" />
             <Text1 text={tmc.g2} style={''}/>
-            <Text1 text={tmc.g3} style={''}/>
-            <Text1 text={tmc.g4} style={''}/>
-            <Text1 text={tmc.g5} style={''}/>
-            <Text1 text={tmc.g6} style={''}/>
-            <Text1 text={tmc.g7} style={''}/>
-            <Text1 text={tmc.g8} style={''}/>
-            <Text1 text={tmc.g9} style={''}/> 
-            <p className=''>
-            • Contains software viruses or any other computer codes, files, or programs that are designed or intended to disrupt, damage, limit or interfere with the proper function of any software, hardware, or network system or to damage or obtain unauthorized access to any system, data, or other information of 
-            <span className='font-bold mx-1'>{company}</span>
-             or any third party.
-            </p>
-            <Text1 text={tmc.g11} style={''}/>
-            <Text1 text={tmc.g12} style={''}/>
-            <p className=''> 
-            <span className='font-bold mx-1'>{company}</span>
-             may, at its sole discretion, immediately suspend or terminate any User’s access to the Service should its conduct fail (or appear to fail) to strictly conform to any provision of these Terms of Service.
-            </p>
-            <p className='pt-5'> 
-            <span className='font-bold mx-1'>{company}</span>
-             may, at any time, monitor, review, remove, retain, or disclose any information as necessary to satisfy any applicable law, regulation, legal process or governmental request or investigation (including law enforcement).
-             <span className='font-bold mx-1'>{company}</span>
-              is not responsible for any failure or delay in removing any such content.
-            </p>
-            <p className='py-6'> 
-            <span className='font-bold mx-1'>{company}</span>
-             is not responsible for any failure or delay in removing any such content.
-            </p>
+            <Text1 text={tmc.g3} style={'py-1'}/>
+            <Text1 text={tmc.g4} style={'py-1'}/>
+            <Text1 text={tmc.g5} style={'py-1'}/>
+            <Text1 text={tmc.g6} style={'py-1'}/>
+            <Text1 text={tmc.g7} style={'py-1'}/>
+            <Text1 text={tmc.g8} style={'py-1'}/>
+            <Text1 text={tmc.g9} style={'py-1'}/>
 
-            
             <Header1 text="PROPRIETARY RIGHTS" />
             <Text1 text={tmc.h2} style={''}/>
-            <Text1 text={tmc.h3} style={''}/>
-            <Text1 text={tmc.h4} style={''}/>
+            <Text1 text={tmc.h3} style={'py-1'}/>
+            <Text1 text={tmc.h4} style={'py-1'}/>
+            <Text1 text={tmc.h5} style={'py-1'}/>
+
+            <Header1 text="TERMINATION" />     
+            <p>
+              <span className='font-bold mr-1'>{company}</span>
+              may terminate your access to the service at any time, with or without cause or notice. Upon termination, you must stop using the service immediately. Obligations or liabilities incurred before termination and certain provisions (e.g., intellectual property rights, indemnification) will survive termination.
+            </p>
 
 
-            <Header1 text="TERMINATION" />
-            <p className=''> 
-              <span className='font-bold mx-1'>{company}</span>
-              may terminate any User’s access to all or any part of the Service, with or without cause, with or without notice, effective at any time.
-            </p>            
-            <Text1 text={tmc.i3} style={''}/>
 
-            <Header1 text="DISCLAIMER OF ALL WARRANTIES" />
+            <Header1 text="DISCLAIMER OF WARRANTIES" />
             <p className=''> 
               The service is provided  
               <span className='font-bold mx-1'>“AS IS”</span>
               and 
-              <span className='font-bold mx-1'>“AS AVAILABLE”.</span>
-              The service is provided  
-              <span className='font-bold mx-1'>WITHOUT WARRANTY</span>
-              of any kind, express or implied, including, but not limited to, the implied warranties of title, non-infringement, integration, merchantability and fitness for a particular purpose, and any warranties implied by any course of performance or usage of trade, all of which are expressly disclaimed. 
-              <span className='font-bold mx-1'>{company}</span>
-               and its affiliates, licensors and suppliers 
-               <span className='font-bold mx-1'>DO NOT </span>
-               warrant that:
+              <span className='font-bold mx-1'>“AS AVAILABLE”,</span>
+              without any warranties, express or implied, including but not limited to:
             </p>
-            <p>{tmc.j3}</p>
-            <p>{tmc.j4}</p>
-            <p>{tmc.j5}</p>
-            <p>{tmc.j6}</p>
-            <p>{tmc.j7}</p>
+            <p className="py-1">{tmc.j3}</p>
+            <p className="py-1">{tmc.j4}</p>
+            <p className="py-1">{tmc.j5}</p>
+            <p className="py-1"><span className='font-bold mr-1'>{company}</span> does not guarantee that:</p>
+            <p className="py-1">{tmc.j6}</p>
+            <p className="py-1">{tmc.j7}</p>
+            <p className="py-1">{tmc.j8}</p>
+            <p className="py-1">{tmc.j9}</p>
+            <p className="py-1">{tmc.j10}</p>
 
             <Header1 text="LIMITATION OF LIABILITY" />
-            <Text1 text={tmc.k2} style={''}/>
-            <Text1 text={tmc.k3} style={''}/>
-            <Text1 text={tmc.k4} style={''}/>
-            <Text1 text={tmc.k5} style={''}/>
-            <Text1 text={tmc.k6} style={''}/>
+            <p><span className='font-bold mr-1'>{company}</span> is not liable for:</p>
+            <Text1 text={tmc.k3} style={'py-1'}/>
+            <Text1 text={tmc.k4} style={'py-1'}/>
+            <Text1 text={tmc.k5} style={'py-1'}/>
+            <Text1 text={tmc.k6} style={'py-1'}/>
 
 
             <Header1 text="INDEMNIFICATION" />
-            <Text1 text={tmc.l2} style={''}/>
+            <Text1 text={tmc.l2} style={'py-1'}/>
+            <Text1 text={tmc.l3} style={'py-1'}/>
+            <p className={'py-1'}>{tmc.l4}</p>
+            <Text1 text={tmc.l5} style={'py-1'}/>
+            <p className={'py-2'}><span className='font-bold mr-1'>{company}</span>{tmc.l6}</p>
+
+            <Header1 text={tmc.m1} />
+            <Text1 text={tmc.m2} style={'py-1'}/>
+            <Text1 text={tmc.m3} style={'py-1'}/>
         </div>
         <Footer/>
     </div>

@@ -60,7 +60,7 @@ const Dropdown =({tabItem, handleSelReport, index, tabsLen})=>{
             <BiCaretUp className="absolute -top-[14px] text-blue-600 text-[22px]"/>
             <div className="text-[12px] md:text-base border border-blue-600 rounded-md bg-blue-50 shadow-lg w-fit">
                 <p className="bg-blue-400 text-center text-white py-[4px] font-bold">{tabItem.tabName}</p>
-                <div className="flex flex-col p-3">
+                <div className="flex flex-col p-3 text-[12px] md:text-[13px]">
                     {tabsDropdown[tabItem.tabName.toLowerCase()].map((dt, i)=>{
                         return(
                             <div key={`${i}key`}

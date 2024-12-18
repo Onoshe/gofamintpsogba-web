@@ -2,8 +2,6 @@
 import React, {useEffect, useState} from 'react';
 import TransactionRow from './TransactionRow';
 import TransactionsEntriesView from './TransactionsEntriesView';
-import { ToastContainer } from 'react-toastify';
-import { toastNotify } from '../utils/toastNotify';
 import { TabsComponent } from '../multiEntries/TabsComponent';
 import 'react-toastify/dist/ReactToastify.css';
 import { submitHandler } from '../utils/submitHandler';
@@ -15,18 +13,22 @@ import { payableControlAcctChecker } from '@/container/postTransaction/component
 import CashAndBankBalances from '@/container/postTransaction/components/balancesComponent/CashAndbankBalances';
 import ProductAdjustmentSelection from './ProductAdjustmentSelection';
 import PostProductByUpload from '../postByUpload/PostProductByUpload';
+import ProductAdjustmentGuideContainer from '../postingGuides/ProductAdjustmentGuideContainer';
+import { MdInfoOutline } from 'react-icons/md';
+import ProductReturnsGuide from '../postingGuides/ProductReturnsGuide';
 
 
-const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, personalAcctsList, personalAccts, transactionsDetails,
+const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, personalAcctsList, personalAccts, transactions, transactionsDetails,
   productsList, controlAcctsCode, user, personalAccounts, runDispatchClientDataCall, transSheet, setTransSheet, transSheetReset,
    productBalance,activeTab, setActiveTab, recordTransaction, handleCancelTran, handleDeleteTran, coaStructure, processedLedgers,
-   showBankBalances, setShowBankBalances}) => {
+   showBankBalances, setShowBankBalances, productReturns, dispatchProductReturns, toastNotify}) => {
   const router = useRouter();
   const [netAmount, setNetAmount] = useState('Total');
   const [showTransView, setShowTransView] = useState(true);
   const [postError, setPostError] = useState({msg:'', error:false, color:'text-gray-600'});
   const [componentReady, setComponentReady] = useState(false);
   const [showCard, toggleShowCard] = React.useState(false);
+  const [showProdReturnsCard, toggleShowProdReturnsCard] = React.useState(false);
   const [selectedDueDate, setSelectedDueDate] = React.useState({value:30, label:'Select'});
   const [productBy, setProductBy] = React.useState({manual:true, });
   const [uploadError, setUploadError] = useState({msg:'', error:false, uploadTable:[]});
@@ -39,26 +41,31 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
  }
  
   const handleSubmit = async ()=>{
+    //return console.log([transSheet], productReturns)
     setRecordingProduct(true);
     if(productBy.manual){
-      //return console.log([transSheet])
+            //setRecordingProduct(false);
+            //return console.log([transSheet], productReturns)
       submitHandler({transSheet:[transSheet], controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
-        runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:false, setRecordingProduct,})
+        runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:false, 
+        setRecordingProduct, productReturns, transactions, transactionsdetails:transactionsDetails})
     }else{
+      //POSTING BY UPLOAD
       if(!uploadError.error && uploadError.uploadTable.length){
         //For TAB2 (Product Sale), post transaction one after the other. Posting at once is giving error.
+        //Product return is disabled for upload
         if(activeTab === "TAB2"){
           for (let index = 0; index < uploadError.uploadTable.length; index++) {
             const transSht = uploadError.uploadTable[index];
             const saleLastRow = uploadError.uploadTable.length === index+1;
             await submitHandler({transSheet:[transSht], controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
                runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:true, setRecordingProduct,
-               resetCall, setResetCall, saleLastRow})
+               resetCall, setResetCall, saleLastRow, productReturns:false})
           };
         }else{
           submitHandler({transSheet:uploadError.uploadTable, controlAcctsCode, activeTab, chartOfAccounts,user, personalAccounts, 
             runDispatchClientDataCall, setPostError, toastNotify, transSheetReset, recordTransaction, router, postByUpload:true, setRecordingProduct,
-            resetCall, setResetCall})
+            resetCall, setResetCall, productReturns:false})
         }
       }else{toastNotify("error", "Please, upload data.");}
     }
@@ -117,9 +124,12 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
  
  React.useEffect(()=>{
   //Reset on mount
-  transSheetReset("TAB1");
-  transSheetReset("TAB2");
-  transSheetReset("TAB3");
+  //console.log(recordTransaction)
+  if(!recordTransaction.editTran){
+    transSheetReset("TAB1");
+    transSheetReset("TAB2");
+    transSheetReset("TAB3");
+  }
  },[]);
  
   const handleToggle =()=>{
@@ -134,27 +144,42 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
       showRecordBtn = true;
     }
  }
-  return (
+ let recordProduct = "Adjustment"; // activeTab==="TAB1"? "Purchase" : activeTab==="TAB2"? "Sale" : "Adjustment";
+ if(activeTab==="TAB1"){
+    recordProduct = productReturns? "Purchase Returns" : "Purchase";
+ }else if(activeTab === "TAB2"){
+  recordProduct = productReturns? "Sales Returns" : "Sales";
+ } 
+ 
+ return (
     <>
     <div className='w-full bg-gray-300 py-3 mt-0 text-blue-900 px-8 font-bold flex flex-row justify-between'>
-      <p>Record Product <span className='text-blue-500'> {activeTab==="TAB1"? "Purchase" : activeTab==="TAB2"? "Sale" : "Adjustment"}</span></p>
+      <p>Record Product <span className='text-blue-500'> {recordProduct}</span></p>
         <div className='hidden sm:block cursor-pointer tooltip tooltip-left w-fit hover:tooltip-open' data-tip={'Posting guide'}
           onClick={()=>toggleShowCard(true)}>
           <BsInfoCircle size={20}/>
         </div>    
       
     </div>
-    <div className={`flex flex-row items-baseline mt-1 xl:ml-10 gap-2 flex-wrap`}>
-      <TabsComponent
-        activeTab={activeTab} setActiveTab={setActiveTab} transSheetReset={transSheetReset}/>
-      <div className='hidden sm:flex flex-row items-center justify-center w-fit ml-3  gap-2 hover:tooltip-open tooltip tooltip-right' data-tip={showBankBalances? 'Check to hide Cashbook balances':'Check to show Cashbook balances'}>
-        <input type='checkbox' className='bg-white size-4 checkbox border border-blue-600' checked={showBankBalances} onChange={()=>setShowBankBalances(!showBankBalances)}/>
-        <BsBank2 size={20} color='dodgerblue'/>
+     <div className={`flex flex-col mt-1 xl:ml-10 gap-2`}>
+      <div className={`flex flex-row items-baseline gap-2 flex-wrap`}>
+        <TabsComponent
+          activeTab={activeTab} setActiveTab={setActiveTab} transSheetReset={transSheetReset}/>
+        <div className='hidden sm:flex flex-row items-center justify-center w-fit ml-3  gap-2 hover:tooltip-open tooltip tooltip-right' data-tip={showBankBalances? 'Check to hide Cashbook balances':'Check to show Cashbook balances'}>
+          <input type='checkbox' className='bg-white size-4 checkbox border border-blue-600' checked={showBankBalances} onChange={()=>setShowBankBalances(!showBankBalances)}/>
+          <BsBank2 size={20} color='dodgerblue'/>
+        </div>
+        <div className='hidden flex-row justify-self-end ml-10 text-blue-800 items-center gap-2'>
+          <input type='checkbox' className='checkbox checkbox-error checkbox-xs'
+            checked={productBy.manual} onChange={handleToggle}/>
+          <label>Record by {productBy.manual? 'Manual' : 'Upload'}</label>
+        </div>
       </div>
-      <div className='hidden flex-row justify-self-end ml-10 text-blue-800 items-center gap-2'>
-        <input type='checkbox' className='checkbox checkbox-error checkbox-xs'
-          checked={productBy.manual} onChange={handleToggle}/>
-        <label>Record by {productBy.manual? 'Manual' : 'Upload'}</label>
+      <div className={`${activeTab==="TAB3"? 'hidden' : ''} flex flex-row  smc:text-sm smc:mx-8 items-center justify-center w-fit  gap-2 hover:tooltip-open tooltip tooltip-right`} data-tip={showBankBalances? 'Check to hide Cashbook balances':'Check to show Cashbook balances'}>
+          <input type='checkbox' className='bg-white size-[18px] checkbox border border-blue-600' checked={productReturns} onChange={()=>dispatchProductReturns(!productReturns)}/>
+          <p className={`text-red-900 text-base font-[600]`}> {activeTab==="TAB1"? "Purchase " : "Sales "} Return</p>
+          <MdInfoOutline className='text-blue-500 cursor-pointer active:text-blue-500 hover:text-blue-700 text-[18px]'
+            onClick={()=>toggleShowProdReturnsCard(true)}/>
       </div>
     </div>
 
@@ -205,6 +230,7 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
                         setSelectedDueDate={setSelectedDueDate}
                         showDueDate={showDueDate}
                         adjustProductChecked={transSheet.adjustProductChecked}
+                        productReturns={productReturns}
                       />
                   </>
               </>
@@ -241,28 +267,27 @@ const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, pers
       />
       
     </div>
-    <ToastContainer 
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick={true}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-        bodyClassName={postError.color}
-      />
+    
       {activeTab === "TAB1"? 
         <PurchaseGuideContainer
           showCard={showCard}
           toggleShowCard={toggleShowCard}
         />
-        : <SalesGuideContainer
-          showCard={showCard}
-          toggleShowCard={toggleShowCard}
-        />}
+        : activeTab === "TAB2"? 
+          <SalesGuideContainer
+            showCard={showCard}
+            toggleShowCard={toggleShowCard}
+          />
+        :  <ProductAdjustmentGuideContainer
+            showCard={showCard}
+            toggleShowCard={toggleShowCard}
+          />
+        }
+        <ProductReturnsGuide
+          activeTab={activeTab}
+          showCard={showProdReturnsCard}
+          toggleShowCard={toggleShowProdReturnsCard}
+        />
     <br/>
     <br/>
       

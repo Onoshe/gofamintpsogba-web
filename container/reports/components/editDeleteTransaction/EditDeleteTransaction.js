@@ -26,6 +26,7 @@ const EditDeleteTransaction = ({reportName, viewTransId,  selectedTranFromList, 
     }
 
     const handleTransaction =(act)=>{
+        //console.log(selectedTranFromList, act)
         if(editDeleteLock?.smallText === "ON"){
           notify('error', "Transaction Edit or Delete has been locked!. Please, contact the Admin to unlock");
         }else{

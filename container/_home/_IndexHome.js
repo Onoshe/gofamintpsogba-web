@@ -30,6 +30,8 @@ import ContactUs from './components/contactUs/ContactUs';
 import Footer from './components/Footer';
 import { getRequest } from '@/lib/apiRequest/getRequest';
 import { getLinkFetchTable } from '@/lib/apiRequest/urlLinks';
+import NetworkError from '@/components/Errors/NetworkError';
+import { isProduction } from '@/lib/apiRequest/urlLinks';
 
 const IndexHome = ({ssUser}) => {
     const pathname = usePathname();
@@ -170,6 +172,7 @@ const IndexHome = ({ssUser}) => {
     });
   }
 
+  //console.log(isOnline, isProduction);
 
   useEffect(()=>{
     if(!settings?.length){
@@ -181,14 +184,15 @@ const IndexHome = ({ssUser}) => {
   const handleCarousel =(act)=>{
     console.log(act)
   }
-  
 
+
+  //return <NetworkError/>
   return (
     <>
         <div data-theme="light" className='bg-white'>
                 <HomeHeader session={session} signOut={signOut}/>
                 <PageLoading/>
-                
+                {isProduction && !isOnline && <NetworkError/>}
                 <div className="lg:mt-[60px] relative flex flex-1 overflow-y-auto p-5 pb-8 lg:py-16 flex-col lg:flex-row gap-16"
                     style={{
                         backgroundImage: `url('/bigCity.jpg')`,

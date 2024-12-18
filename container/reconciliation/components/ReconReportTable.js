@@ -2,6 +2,7 @@ import { formatToCurrency } from "@/lib/currency";
 import { ExcelIcon } from '@/components/icons/iconsSvg';
 import { BsFileEarmarkPdf, BsSave2 } from "react-icons/bs";
 import { GrClose } from "react-icons/gr";
+import { BiPrinter } from "react-icons/bi";
 
 const ReconReportTable = ({
     header=[], rows=[], rowKeys=[], pinRow, pinCol, reportDetails,
@@ -26,15 +27,21 @@ const ReconReportTable = ({
             </div>
 
             <div className="flex gap-4 mt-5">
-                <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Export to Excel'}>
-                    <ExcelIcon className={'fill-green-700  h-5 w-5 cursor-pointer hover:fill-green-500 active:fill-green-800'}
-                    onClick={()=>handleReconReport("EXCEL")}/>
-                </div>
                 <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Export to Pdf'}>
                     <BsFileEarmarkPdf className='text-[22px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
                     onClick={()=>handleReconReport("PDF")}
                     />
                 </div>
+                <div className='hover:tooltip-open tooltip tooltip-bottom ml-2' data-tip={'Print document'}>
+                    <BiPrinter className='text-[22px] text-blue-500 cursor-pointer hover:text-blue-700 active:text-blue-500'
+                    onClick={()=>handleReconReport("PDF", "PRINT")}
+                    />
+                </div>
+                <div className='hover:tooltip-open tooltip tooltip-left' data-tip={'Export to Excel'}>
+                    <ExcelIcon className={'fill-green-700  h-5 w-5 cursor-pointer hover:fill-green-500 active:fill-green-800'}
+                    onClick={()=>handleReconReport("EXCEL")}/>
+                </div>
+                
             </div>
         </div>
         <div className={`flex flex-col w-full h-12 ${!savedReportView?.show? 'max-w-[350px]' : '' }`}>

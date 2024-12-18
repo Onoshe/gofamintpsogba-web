@@ -15,7 +15,7 @@ import autoTable from 'jspdf-autotable';
    const footerArr = pdfData?.footerArr || [footer1, footer2]
 */
 
-export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, companyLogoFile})=>{
+export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, companyLogoFile, docMethod})=>{
    const reportRowKeys = pdfData?.reportRowKeys; //["accountCode", "accountName", "description"]
    const noFmtCols= pdfData?.noFmtCols || []; 
    const headerFSize = pdfData?.headerFSize || []; 
@@ -87,7 +87,16 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
         }, 
       });
 
-      doc.save(reportName+".pdf");
+      //doc.save(reportName+".pdf");
+      if(docMethod === "PRINT"){
+          'use client'
+          var blob = doc.output("blob");
+          window.open(URL.createObjectURL(blob));
+        }else if(docMethod === "STRING"){
+          return doc.output("datauristring");  //arraybuffer for Email 
+        }else{
+          doc.save(reportName+".pdf");
+      }
  };
 
  function formatCurrencyCols(arrs, keys, styleRows) {

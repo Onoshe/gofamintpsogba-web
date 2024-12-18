@@ -26,7 +26,7 @@ import useStoreHeader from '@/context/storeHeader';
 const Vendors = ({ssUser}) => {
   const { session, user,  status} = useAuthCustom(ssUser);
   const {vendors, dispatchVendors, runDispatchClientDataCall} = useStoreTransactions((state) => state);
-  const {settings} = useStoreHeader((state) => state);
+  const {settings, toastNotice, dispatchToastNotice} = useStoreHeader((state) => state);
   //const {data, mutate} = useSWRFetcher(getPersonalAcctUrl(user, 'vendors'));
   //const vendors = data.data;
   const [activeTab, setActiveTab] = React.useState('DISPLAY');
@@ -47,7 +47,7 @@ const Vendors = ({ssUser}) => {
       return {...dt, accountCode:dt.accountCode?.includes("V-")? dt.accountCode : "V-"+dt.accountCode}});
   }
  
-  const notify = (type, msg) => toast[type](msg, {
+  const notify99 = (type, msg) => toast[type](msg, {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -60,6 +60,10 @@ const Vendors = ({ssUser}) => {
     //transition: 'Bounce',
     });
 
+
+const notify =(type, msg)=>{
+  dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+}
     let accountGroups = []; 
   if(vendors?.length){
     vendors.forEach(el => {
@@ -228,7 +232,7 @@ const handleConfirm = (act)=>{
              setShowConfirm={setShowConfirm}
              showConfirm={showConfirm}
            />
-     <ToastContainer 
+     {/*<ToastContainer 
           position="top-right"
           autoClose={5000}
           hideProgressBar={true}
@@ -238,9 +242,10 @@ const handleConfirm = (act)=>{
           pauseOnFocusLoss
           draggable
           pauseOnHover
+          containerId="containerIndexVendors"
           //theme="light"
           //bodyClassName={postError.color}
-        />
+        />*/}
     </TabWrapper>
   )
 }

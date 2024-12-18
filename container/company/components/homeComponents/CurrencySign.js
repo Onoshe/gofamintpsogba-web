@@ -31,6 +31,8 @@ const handleUpdate =  (act)=>{
     postOrUpdateSettings({slugName:postingLockSlug, postDetails, postFields, postValues, user, notify, 
         dispatchRefreshSettingsCount, setShowSpinner});
 }
+
+
 const handleSave = async (e)=>{
     e.preventDefault();
     setShowSpinner(true);
@@ -43,6 +45,7 @@ const handleSave = async (e)=>{
     }
 }
 
+
 const handleOnChangeCurrencySymbol =(e)=>{
     setNewCurrencySymbol(e.target.value)
 }
@@ -54,17 +57,19 @@ const handleOnChangeCurrencySymbol =(e)=>{
             <p className='text-red-800 font-[500] my-4'>Current Symbol: <span className={`bg-white ml-3 py-1 px-3 border border-blue-300 font-bold text-blue-500`}>
                 {currentSymbol}</span></p>
             <p className='italic pb-3'>Change the currency symbol to be displayed on your report</p>
-            <form  className={`flex flex-row gap-3 items-center`} onSubmit={handleSave}>
-                <label className='font-bold'>Change Symbol</label>
-                <input
-                    required
-                    data-theme='winter'
-                    text="text"
-                    value={newCurrencySymbol}
-                    onChange={handleOnChangeCurrencySymbol}
-                    className={`border border-blue-400 outline-none py-1 px-2 rounded-[3px] active:bg-blue-50 focus:bg-blue-50`} 
-                />
-                <button className='inline-flex mx-2 btn btn-accent btn-sm px-5'
+            <form  className={`flex flex-wrap flex-row gap-3 items-center`} onSubmit={handleSave}>
+                <div className='flex flex-row flex-wrap'>
+                    <label className='font-bold mr-2'>Change Symbol</label>
+                    <input
+                        required
+                        data-theme='winter'
+                        text="text"
+                        value={newCurrencySymbol}
+                        onChange={handleOnChangeCurrencySymbol}
+                        className={`border border-blue-400  outline-none py-1 px-2  mr-3 rounded-[3px] active:bg-blue-50 focus:bg-blue-50`} 
+                    />
+                </div>
+                <button className='inline-flex btn btn-accent btn-sm px-5'
                  type='submit' disabled={newCurrencySymbol? '' : 'disabled'}>Save</button>
             <Spinner 
                 showSpinner={showSpinner} 

@@ -1,8 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import useStoreTransactions from '@/context/storeTransactions';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import useStoreHeader from '@/context/storeHeader';
 import ReconciliationSelect from './components/ReconciliationSelect';
 import { mapChartOfAccount } from '@/lib/transactionsManager/mapChartOfAccount';
@@ -44,7 +42,7 @@ const IndexReconciliation = ({ssUser}) => {
      const cbOpeningBal = reconAccount.openingBalRow?.balance || 0;
      const reconDataForDislay = getReconDataForDisplay([...reconLedger], stmtClosingBal, cbOpeningBal);
 
-    const {coy, settings, dispatchRefreshSettingsCount} = useStoreHeader((state) => state); 
+    const {coy, settings, dispatchRefreshSettingsCount, toastNotice, dispatchToastNotice} = useStoreHeader((state) => state); 
     const {clientAccount, coaStructure,customers, vendors, chartOfAccounts, transactions, transactionsDetails, controlAcctsCode, products, runDispatchClientDataCall} = useStoreTransactions((state) => state);
    
     let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
@@ -83,22 +81,13 @@ const IndexReconciliation = ({ssUser}) => {
     }
     reportData = savedReportView.show? savedReportView.report : reportData; 
     
-    const notify = (type, msg) => toast[type](msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        theme: "colored",
-      //transition: 'Bounce',
-      });
-    
+    const notify =(type, msg)=>{
+      dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+    }
+
     //console.log(reportData, savedReportView)
   
-    const handleReconReport = async (type)=>{
+    const handleReconReport = async (type, act)=>{
     if(reportData?.reportDetails){
         const {title, ledgerName, ledgerCode, accountTitle, asAt, companyName} = reportData.reportDetails;
         let data =  reportData.rows.map(obj => reportData.reportKeys.map(key => obj[key] || "" ));
@@ -139,6 +128,7 @@ const IndexReconciliation = ({ssUser}) => {
             pdfHeader:docHeader, 
             companyLogoFile,
             pdfData:{reportRowKeys:tableRowKeys, reportRowsStyle,headerFSize:[16,14,14,14]},
+            docMethod:act
           };
           //handleExcelExport(excelData);
           handleExport2Pdf(data4Pdf)
@@ -293,17 +283,7 @@ const IndexReconciliation = ({ssUser}) => {
               reconDataForDislay={reconDataForDislay}
             /> : <></>}
         </div>
-          <ToastContainer 
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick={true}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
+          
           <ConfirmAlert showBlind={showConfirm.show}
              title={"You already have Reconciliation Saved with the same Name"}
              msg="Do you want to replace it?"

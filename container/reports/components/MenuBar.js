@@ -1,6 +1,6 @@
 import { ExcelIcon } from '@/components/icons/iconsSvg';
 import React from 'react'
-import { BiArrowBack, BiArrowToRight, BiCaretUp, BiDetail, BiRightArrow } from 'react-icons/bi';
+import { BiArrowBack, BiArrowToRight, BiCaretUp, BiDetail, BiPrinter, BiRightArrow } from 'react-icons/bi';
 import { MdClose, MdDateRange, MdOutlineFeaturedPlayList, MdRefresh } from 'react-icons/md';
 import { handleExport2Pdf } from '../utils/others/handleExport2Pdf';
 import { BsFileEarmarkPdf } from 'react-icons/bs';
@@ -27,9 +27,9 @@ const handleSelDate = (date)=>{
     //console.log(date, res)
     setDateForm(res);
 }
-const handlePdfExport =()=>{
+const handlePdfExport =(act)=>{
     //console.log({reportRows, reportHeader, pdfHeader, pdfData, headerRowsColsArr, companyLogoFile})
-    handleExport2Pdf({reportRows, reportHeader, pdfHeader, pdfData, headerRowsColsArr, companyLogoFile});
+    handleExport2Pdf({reportRows, reportHeader, pdfHeader, pdfData, headerRowsColsArr, companyLogoFile, docMethod:act});
     postActivity(user, activities.DOWNLOAD, pdfHeader[1][0]+" pdf report")
 }
 
@@ -90,6 +90,11 @@ const handleCustomDate =(e)=>{
                 <div className='hover:tooltip-open tooltip tooltip-top' data-tip={'Export to Pdf'}>
                     <BsFileEarmarkPdf className='text-[16px] text-red-500 cursor-pointer hover:text-red-400 active:text-red-700'
                     onClick={handlePdfExport}
+                    />
+                </div>
+                <div className='hover:tooltip-open tooltip tooltip-top ml-2' data-tip={'Print document'}>
+                    <BiPrinter className='text-[22px] text-blue-500 cursor-pointer hover:text-blue-700 active:text-blue-500'
+                    onClick={()=>handlePdfExport("PRINT")}
                     />
                 </div>
                 <DateComp handleSelDate={handleSelDate}

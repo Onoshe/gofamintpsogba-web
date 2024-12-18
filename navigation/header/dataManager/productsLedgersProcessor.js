@@ -16,7 +16,7 @@ export const productsLedgerProcessor =({coaStructure, transactionsDetails,  prod
     const invContTypeCode = coaStructure.find((dt)=> dt.name.toLowerCase() === "inventorycontrol")?.code;
 
     //Use the invControlTypeCode to get transId for all Inventory related transactions from transactionsDetails: All transactionsDetails having invControlTypeCode
-    //Our goal is to get all inventory entries or trans. All inventory entries include Purchase of inventory (two entries), sales (4 entries) 
+    //Our goal is to get all inventory entries or trans. All inventory entries include Purchase of inventory (two entries), sales (4 entries) and adjustment (two entries)
     const invtRelatedTransId = [];
     for (const tran of transactionsDetails) {
        if(tran.typeCode == invContTypeCode){
@@ -51,9 +51,8 @@ export const productsLedgerProcessor =({coaStructure, transactionsDetails,  prod
       const productsLedgersWithBalances = getProductBalances(productsLedgers, "prodBal");
       //console.log(inventoryTrans, productsLedgersWithBalances);
 
-      //Credit on Inventory is a reduction majorly arising from sale.
-      //Hence, get all the products with credit entries
-      
+      //Credit on Inventory is a reduction majorly arising from sale or Purchase Returns.But our focus is on Sale
+      //Hence, get all the products with credit entries and Sales Return. Note that the Sales Return, though debit on Product also affected COS and COS has not been set.
       const creditProductsTransEntry = []; 
       if(productsLedgersWithBalances){
         const ledgersArr = Object.values(productsLedgersWithBalances);
@@ -62,7 +61,7 @@ export const productsLedgerProcessor =({coaStructure, transactionsDetails,  prod
           for (let j = 0; j < trans?.length; j++) {
             const tran = trans[j];
             if(tran.postingPlat !== "PRODUCT-ADJ"){
-              if(tran.entryType === "CR"){
+              if(tran.entryType === "CR" || tran.postingPlat === "PRODUCT-SAL-RT"){
                 creditProductsTransEntry.push(tran)
               }
             }else{

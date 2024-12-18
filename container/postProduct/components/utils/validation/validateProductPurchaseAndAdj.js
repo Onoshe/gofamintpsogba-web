@@ -6,7 +6,7 @@ import { validateMainAndSubAcct } from "@/lib/validation/validateMainAndSubAcct"
 
 
 
-export const  validateProductPurchaseAndAdj = async (forms, controlAcctsCode, activeTab, user)=> {
+export const  validateProductPurchaseAndAdj = async (forms, controlAcctsCode, activeTab, user, productReturns, transactionsdetails)=> {
    const {receivables, payables, inventoryControl, inventoryAdj} = controlAcctsCode;
    const controlAcctsArr = [parseInt(receivables), parseInt(payables), parseInt(inventoryControl)];
    
@@ -144,9 +144,46 @@ export const  validateProductPurchaseAndAdj = async (forms, controlAcctsCode, ac
               info:''
             };  
           }
+
+           //Purchases Return
+           if(productReturns){
+            if(!form?.tranNoRef){
+              return {
+                error: true,
+                errorType: 'USE_MSG',
+                rowIndex: i,
+                key:"tranNoRef",
+                title:'Please, enter the transaction number of the goods being returned',
+                info:''
+              };  
+            }
+            const tranNoObj = transactionsdetails?.find((dt)=> {
+              return parseInt(dt.transId) === parseInt(form?.tranNoRef) && dt.postingPlat === "PRODUCT-PCH" && dt.accountCodeSub == subCodeDr;
+            });
+              if(!tranNoObj){
+                return {
+                  error: true,
+                  errorType: 'USE_MSG',
+                  rowIndex: i,
+                  key:"tranNoRef",
+                  title:'The transaction number you entered is not recognised',
+                  info:''
+                };
+              };
+              if(new Date(date).getTime() < new Date(tranNoObj.transactionDate).getTime()){
+                return {
+                  error: true,
+                  errorType: 'USE_MSG',
+                  rowIndex: i,
+                  key:"tranNoRef",
+                  title:'Product returned date cannot be earlier than the original date of purchase',
+                  info:''
+                };  
+              }  
+          }
         }
 
-        //Product Adjustment
+        //------------------Product Adjustment: TAB3--------------
         if(activeTab === "TAB3") {
 
           //Validate subCode if accountCode is a control account
@@ -216,8 +253,6 @@ export const  validateProductPurchaseAndAdj = async (forms, controlAcctsCode, ac
               info:''
             };  
           }
-
-
           //......................... TAB 3 .................................
         }  
 

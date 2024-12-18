@@ -3,11 +3,9 @@ import React, { useEffect, useState } from 'react'
 import BackgroundCard from './components/reusableComponents/BackgroundCard';
 import Image from 'next/image';
 import useStoreTransactions from '@/context/storeTransactions';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import useStoreHeader from '@/context/storeHeader';
 import UpperDashboard from './components/homeComponents/UpperDashboard';
-import { getSubscriptionHistory } from './components/utils/getSubscriptionHistory';
+import { getPackagePlans, getSubscriptionHistory } from './components/utils/getSubscriptionHistory';
 import AuditedYearLock from './components/homeComponents/AuditedYearLock';
 import PostingLock from './components/homeComponents/PostingLock';
 import SubscriptionsHistory from './components/homeComponents/SubscriptionsHistory';
@@ -26,11 +24,12 @@ import { usePathname, useRouter } from 'next/navigation';
 const IndexCompany = ({ssUser}) => {
     const { session, user,  status} = useAuthCustom(ssUser);
     const {settings, dispatchRefreshSettingsCount,  subscriptions,  dispatchSubscriptions,
-        client_Admin, clientData, generalSettings, expirationMsg, quickrecordsLogo,} = useStoreHeader((state) => state);
+        client_Admin, clientData, generalSettings, expirationMsg, toastNotice, dispatchToastNotice, quickrecordsLogo,} = useStoreHeader((state) => state);
     const {clientAccount, currencySymbol} = useStoreTransactions((state) => state);    
     const [base64Image, setBase64Image] = React.useState('');
     const [appB64Image, setAppBase64Image] = React.useState(''); 
     const subcriptionHistory = getSubscriptionHistory({subscriptions});
+    const plans = getPackagePlans(generalSettings);
     const [tabs, setTabs] = React.useState({activeTab:{name:'home', title:'Home'}});
     const pathname = usePathname();
     const router = useRouter();
@@ -40,7 +39,8 @@ const IndexCompany = ({ssUser}) => {
     if(generalSettings?.length){
         quickRecordsLogo = generalSettings.find((dt)=>dt.slug === "quickrecords-logo")?.largeText1;
     }
-    //console.log(pathname);
+
+    //console.log(plans, subcriptionHistory);
 
     useEffect(()=>{
         const imageUrl = 'https://media.istockphoto.com/id/1496615469/photo/serene-latin-woman-enjoy-sunset-with-gratitude.jpg?s=612x612&w=is&k=20&c=hrdwKW5CMjVXlB_k39AnXHb-_Bm4epQPXRRTxhCDQpc=';
@@ -65,19 +65,9 @@ const IndexCompany = ({ssUser}) => {
         if(coyLogoFound?.largeText){coyLogo = {type:'base64', file:coyLogoFound.largeText}}
     }
 
-
-    const notify = (type, msg) => toast[type](msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        theme: "colored",
-      //transition: 'Bounce',
-      });
+    const notify =(type, msg)=>{
+        dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+      }
 
   return (
     <div className=''>
@@ -91,7 +81,7 @@ const IndexCompany = ({ssUser}) => {
                 <BackgroundCard style={''} childContStyle title={clientAccount?.companyName}>
                     <div className='w-full pb-4'>
                         <div className={`p-[2px] px-3 w-full flex flex-row justify-between ${!expirationMsg?.expired?'bg-[lime] text-[seagreen]':'bg-red-500 text-gray-700'}`}>
-                        <p className=''><span className='font-bold'>{!expirationMsg?.expired?'ACTIVE':'EXPIRED'} <span>({subcriptionHistory?.lastSub?.subscriptionType})</span></span></p> 
+                        <p className=''><span className='font-bold'>{!expirationMsg?.expired?'ACTIVE':'EXPIRED'} <span>({subcriptionHistory?.lastSub?.subscriptionType?.toUpperCase()})</span></span></p> 
                         <p>Due date: {expirationMsg?.dueDate}</p>
                         </div>
                         <Image
@@ -128,7 +118,7 @@ const IndexCompany = ({ssUser}) => {
                         settings={settings}
                     />
                 </div>
-                <div className='relative flex w-full flex-col lg:flex-row mt-10 pt-5 border border-[maroon] bg-red-50'>
+                <div className='relative flex w-full flex-col lg:flex-row mt-10 p-5 border border-[maroon] bg-red-50'>
                     
                     <div name="PeusdoCover" className={`${lockPosting? 'absolute z-20' : 'hidden'} top-0 bottom-0 w-full bg-blue-200/10`}></div>
                     <div className='w-full flex-wrap flex flex-row gap-5 justify-around items-center'>
@@ -163,17 +153,7 @@ const IndexCompany = ({ssUser}) => {
                     quickRecordsLogo={`data:image/png;base64,${appB64Image}`}
                     currencySymbol={currencySymbol}
                 />}
-            <ToastContainer 
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick={true}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            />
+            
         </div>
     </div>
   )

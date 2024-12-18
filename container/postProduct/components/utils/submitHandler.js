@@ -13,15 +13,15 @@ import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
 
 export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, chartOfAccounts, setPostError, 
     toastNotify, user, personalAccounts, runDispatchClientDataCall, transSheetReset, recordTransaction, router, 
-    postByUpload, setRecordingProduct, resetCall, setResetCall, saleLastRow})=>{
+    postByUpload, setRecordingProduct, resetCall, setResetCall, saleLastRow, productReturns,  transactionsdetails})=>{
     const {customers, vendors, products} = personalAccounts;
     let validateRes = {};
     if(activeTab === "TAB1"){
-         validateRes = await validateProductPurchaseAndAdj(transSheet, controlAcctsCode, activeTab, user);
+         validateRes = await validateProductPurchaseAndAdj(transSheet, controlAcctsCode, activeTab, user, productReturns, transactionsdetails);
     }else if(activeTab === "TAB2"){
-        validateRes = await validateProductSale(transSheet, controlAcctsCode, activeTab, user);
+        validateRes = await validateProductSale(transSheet, controlAcctsCode, activeTab, user,  transactionsdetails, productReturns);
     }else if(activeTab === "TAB3"){
-        validateRes = await validateProductPurchaseAndAdj(transSheet, controlAcctsCode, activeTab, user);
+        validateRes = await validateProductPurchaseAndAdj(transSheet, controlAcctsCode, activeTab, user, productReturns, transactionsdetails);
     }
     
     const perms = await getPermissions({user, act:pmsActs.POST_TRAN, form:transSheet});
@@ -40,13 +40,13 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
         postActivity(user, activities[tranType], postingNote);
 
         if(activeTab === "TAB1"){
-            /************ FOR PRODUCT PURCHASE**************** */
+            /************ FOR PRODUCT PURCHASE*****************/
             processTransForPosting({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-                transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, setRecordingProduct, resetCall, setResetCall});
+                transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, setRecordingProduct, resetCall, setResetCall, productReturns});
         }else if(activeTab === "TAB2"){
             if(recordTransaction?.editTran){
                 processUpdateSalesTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-                    transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, resetCall, setResetCall, setRecordingProduct});
+                    transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, resetCall, setResetCall, setRecordingProduct, productReturns});
             }else{
                 /******************************
                         For Product Sale; two entries will be posted: Main Entry (Entry 1) & COS Entry (Entry 2)
@@ -58,7 +58,7 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
                 */
                     //For Main Entry
                     const res = await processTransForPosting({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-                        transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, setRecordingProduct, resetCall, setResetCall});
+                        transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, setRecordingProduct, resetCall, setResetCall, productReturns});
                     
                     //For COS Entry
                     const transSheetArr = [];
@@ -76,7 +76,7 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
                             } = tranSht;
 
                             //Format params to align with prepareQuerySaleTransDetails function arguments
-                            const transSheetFmt = {
+                            /*const transSheetFmt = {
                                 amount,
                                 accountCodeDr:accountCodeCOS,
                                 subCodeDr:"",
@@ -84,6 +84,16 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
                                 accountCodeCr:accountCodeProduct,
                                 subCodeCr:subCodeProduct,
                                 quantityCr:quantityProduct
+                            }*/
+                            const transSheetFmt = {
+                                amount,
+                                accountCodeDr:productReturns? accountCodeProduct : accountCodeCOS, //Product account is debited for Sales return & COS credited
+                                subCodeDr:productReturns? subCodeProduct : "",
+                                quantityDr:productReturns? quantityProduct : "",
+                                accountCodeCr:productReturns? accountCodeCOS : accountCodeProduct,
+                                subCodeCr:productReturns? "" : subCodeProduct,
+                                quantityCr:productReturns? "" : quantityProduct,
+                                tranNoRef:tranSht?.tranNoRef,
                             }
                             let doubleEntryId = generateUniqueDigits('string', 100567039004701);
                             const insertedTrans = {id:res.data[j].transactionID}; 
@@ -154,21 +164,22 @@ export const submitHandler = async ({transSheet, controlAcctsCode, activeTab, ch
 
 
 
-async function postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body}){
+async function postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body, postingPlat}){
     //const {url, body} = prepareQueryTrans({transSheet, user, chartOfAccounts, postingPlat});
     const transRes = await postRequest(url, body);
     if(transRes?.data?.length){
      const insertedTransArr = transRes.data;
      const doubleEntryIdArr = [...transRes.data]?.map(()=> generateUniqueDigits('string', 100567039004701)); //generateUniqueDigits('string');
-     const {url, body} = prepareQueryTransDetails({transSheetArr:transSheet, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr, doubleEntryIdArr});
+     const {url, body} = prepareQueryTransDetails({transSheetArr:transSheet, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr, 
+        doubleEntryIdArr, postingPlat});
      //console.log([body, transSheet])
      return await postRequest(url, body);
     }
 }
 async function postTransAndNotify({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body,
-    TAB, transSheetReset, runDispatchClientDataCall, toastNotify, postByUpload, resetCall, setResetCall, setRecordingProduct}){
+    TAB, transSheetReset, runDispatchClientDataCall, toastNotify, postByUpload, resetCall, setResetCall, setRecordingProduct, postingPlat}){
 
-    await postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body
+    await postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body,postingPlat
     }).then((res)=>{
         if(res?.ok){
             //const postingNote = `Product ${TAB=="TAB1"? 'PURCHASE': TAB=="TAB2"? 'SALE': 'ADJUSTMENT '} transaction with reference ${transSheet.reference}`;
@@ -189,9 +200,9 @@ async function postTransAndNotify({transSheet, user, chartOfAccounts, controlAcc
 
 //Insert entries on transactionsdetails table. This is done after transaction table insertion.
 async function updateTransDetails({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, insertedTrans,
-    transListingPage, transSheetReset, runDispatchClientDataCall, toastNotify, router, TAB, setRecordingProduct }){
+    transListingPage, transSheetReset, runDispatchClientDataCall, toastNotify, router, TAB, setRecordingProduct, postingPlat }){
      const doubleEntryIdArr = [...transSheet]?.map(()=> generateUniqueDigits('string', 100567039004701));
-     const {url, body} = prepareQueryTransDetails({transSheetArr:transSheet, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr:insertedTrans, doubleEntryIdArr});
+     const {url, body} = prepareQueryTransDetails({transSheetArr:transSheet, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr:insertedTrans, doubleEntryIdArr, postingPlat});
      postRequest(url, body)
      .then((res)=>{
         if(res?.ok){
@@ -214,9 +225,10 @@ async function updateTransDetails({transSheet, user, chartOfAccounts, controlAcc
 
 //Product Sale Update
 async function processUpdateSalesTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-    transSheetReset, runDispatchClientDataCall, toastNotify,setRecordingProduct, TAB, router}){
+    transSheetReset, runDispatchClientDataCall, toastNotify,setRecordingProduct, TAB, router, productReturns}){
      //For Main Entry 
-    const {url, body} = prepareQueryTrans({transSheet, user, chartOfAccounts, postingPlat:'PRODUCT-SAL'});
+     const postingPlat = productReturns? 'PRODUCT-SAL-RT':'PRODUCT-SAL';
+    const {url, body} = prepareQueryTrans({transSheet, user, chartOfAccounts, postingPlat});
     
     if(recordTransaction?.editTran){
         const transListingPage = recordTransaction.transListingPage;
@@ -250,28 +262,30 @@ async function processUpdateSalesTrans({transSheet, user, chartOfAccounts, contr
                 //Dont use updateTransDetails Function to insert. It creates problem
                 const insertedTransArr = [{id:transId}];
                 const doubleEntryId = generateUniqueDigits('string', 100567039004701);
-                const {url, body} = prepareQueryTransDetails({transSheetArr:transSheet, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr, doubleEntryIdArr:[doubleEntryId]});
+                const {url, body} = prepareQueryTransDetails({transSheetArr:transSheet, chartOfAccounts, controlAcctsCode, user, vendors, customers, products, insertedTransArr, doubleEntryIdArr:[doubleEntryId], postingPlat});
                 await postRequest(url, body)
                 .then((res)=>{
-                     //For COS Entry
+                     //For COS Entry: Entries for COS and Product Account
                     if(res?.ok){
                             const {
                                 accountCodeProduct,
                                 subCodeProduct,
                                 quantityProduct,
                                 amount,
-                                accountCodeCOS
+                                accountCodeCOS,
+                                tranNoRef
                             } = transSheet[0];
 
                             //Format params to align with prepareQuerySaleTransDetails function arguments
                             const transSheetFmt = {
                                 amount,
-                                accountCodeDr:accountCodeCOS,
-                                subCodeDr:"",
-                                quantityDr:'',
-                                accountCodeCr:accountCodeProduct,
-                                subCodeCr:subCodeProduct,
-                                quantityCr:quantityProduct
+                                accountCodeDr:productReturns? accountCodeProduct : accountCodeCOS, //Product account is debited for Sales return & COS credited
+                                subCodeDr:productReturns? subCodeProduct : "",
+                                quantityDr:productReturns? quantityProduct : "",
+                                accountCodeCr:productReturns? accountCodeCOS : accountCodeProduct,
+                                subCodeCr:productReturns? "" : subCodeProduct,
+                                quantityCr:productReturns? "" : quantityProduct,
+                                tranNoRef,
                             }
                             let doubleEntryId = generateUniqueDigits('string', 10000000001);
                             const insertedTransArr = [{id:res.data[0].transactionID}];
@@ -302,9 +316,19 @@ async function processUpdateSalesTrans({transSheet, user, chartOfAccounts, contr
 
 async function processTransForPosting({
     transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, recordTransaction,
-    transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, resetCall, setResetCall, setRecordingProduct }){
+    transSheetReset, runDispatchClientDataCall, toastNotify, TAB, router, postByUpload, resetCall, setResetCall, setRecordingProduct,
+    productReturns }){
     
-    const {url, body} = prepareQueryTrans({transSheet, user, chartOfAccounts, postingPlat:TAB === "TAB1"? 'PRODUCT-PCH' : TAB === "TAB2"? 'PRODUCT-SAL' : 'PRODUCT-ADJ'});
+    let postingPlat = ""; //= TAB === "TAB1"? 'PRODUCT-PCH' : TAB === "TAB2"? 'PRODUCT-SAL' : 'PRODUCT-ADJ';
+    if(TAB === "TAB1"){
+        postingPlat = productReturns? 'PRODUCT-PCH-RT' : 'PRODUCT-PCH';
+    }else if(TAB === "TAB2"){
+        postingPlat =  productReturns? 'PRODUCT-SAL-RT' : 'PRODUCT-SAL';
+    }else{
+        postingPlat = 'PRODUCT-ADJ';
+    }
+    
+    const {url, body} = prepareQueryTrans({transSheet, user, chartOfAccounts, postingPlat});
     //return console.log(url, body)
     if(recordTransaction?.editTran){
         const transListingPage = recordTransaction.transListingPage;
@@ -338,15 +362,16 @@ async function processTransForPosting({
                 //Insert updated data in transactiondetails table
                 const insertedTrans = [{id:transId}];
                 updateTransDetails({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, insertedTrans,
-                    transListingPage, transSheetReset, runDispatchClientDataCall, toastNotify, setRecordingProduct, router, TAB });
+                    transListingPage, transSheetReset, runDispatchClientDataCall, toastNotify, setRecordingProduct, router, TAB, postingPlat });
             }
         }
     }else{
         if(TAB === "TAB2"){
-            return await postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body})
+            return await postTrans({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body, postingPlat})
         }else{
             postTransAndNotify({transSheet, user, chartOfAccounts, controlAcctsCode, vendors, customers, products, url, body,
-                TAB, transSheetReset, runDispatchClientDataCall, toastNotify, postByUpload, resetCall, setResetCall, setRecordingProduct});
+                TAB, transSheetReset, runDispatchClientDataCall, toastNotify, postByUpload, resetCall, setResetCall, setRecordingProduct,
+                postingPlat});
         }
     }
 };

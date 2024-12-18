@@ -4,8 +4,6 @@ import TransactionRow from './TransactionRow';
 import { validateTransactionsMulti } from '@/lib/validation/validateTransactionMulti';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
 import TransactionsEntriesView from './TransactionsEntriesView';
-import { ToastContainer } from 'react-toastify';
-import { toastNotify } from '../utils/toastNotify';
 import { TabsComponent } from '@/components/forms/TabsComponent';
 import 'react-toastify/dist/ReactToastify.css';
 import { handleSubmitMultiEntry } from '../utils/handleSubmitMultiEntry';
@@ -17,7 +15,7 @@ import { getVoucherMod } from '../utils/prepareQueryMultiEntry';
 
 const PostContainerMultiEntry = ({chartOfAccounts, chartOfAccountSelection, personalAcctsList, personalAccts, 
   productsList, controlAcctsCode, runDispatchClientDataCall, user, vendors, customers, transSheet, 
-  setTransSheet, recordTransaction, handleDeleteTran, dispatchTranSheetMultiEntryReset}) => {
+  setTransSheet, recordTransaction, handleDeleteTran, dispatchTranSheetMultiEntryReset, toastNotify}) => {
   //const [transSheet, setTransSheet] = useState([{debitCredit:1, date:"", reference:''}, {debitCredit:2}]);
   //const [netAmount, setNetAmount] = useState('Total');
   const [showTransView, setShowTransView] = useState(true);
@@ -191,7 +189,7 @@ const handleAddRemoveRow =(dt, i)=>{
       />
       
     </div>
-    <ToastContainer 
+    {/*<ToastContainer 
         position="top-right"
         autoClose={5000}
         hideProgressBar={true}
@@ -203,7 +201,8 @@ const handleAddRemoveRow =(dt, i)=>{
         pauseOnHover
         theme="colored"
         bodyClassName={postError.color}
-      />
+        containerId="containerPostContMulti2"
+      />*/}
     <br/>
     <br/>
     <div className='px-5 py-3 fixed bottom-0 bg-gray-200 w-full mt-10'>

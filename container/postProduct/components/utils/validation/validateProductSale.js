@@ -5,8 +5,7 @@ import { getRequest } from "@/lib/apiRequest/getRequest";
 import { capitalizeFirstChar } from "@/lib/capitalize/capitalizeString";
 
 
-
-export const validateProductSale = async (forms, controlAcctsCode, activeTab, user)=> {
+export const validateProductSale = async (forms, controlAcctsCode, activeTab, user,  transactionsdetails, productReturns)=> {
    const {receivables, payables, inventoryControl, inventoryAdj} = controlAcctsCode;
    const controlAcctsArr = [parseInt(receivables), parseInt(payables), parseInt(inventoryControl)];
   
@@ -143,6 +142,45 @@ export const validateProductSale = async (forms, controlAcctsCode, activeTab, us
               info:''
             };  
           }
+        }
+
+        //Check if tranNoRef is not empty for Sales Return 
+        if(productReturns && !form?.tranNoRef){
+          return {
+            error: true,
+            errorType: 'USE_MSG',
+            rowIndex: i,
+            key:"tranNoRef",
+            title:'Please, enter the transaction number of the goods being returned',
+            info:''
+          };  
+        }
+
+        //Check if tranNoRef exist for Sales Return
+        if(productReturns){
+          const tranNoObj = transactionsdetails?.find((dt)=> {
+            return parseInt(dt.transId) === parseInt(form?.tranNoRef) && dt.postingPlat === "PRODUCT-SAL" && dt.accountCodeSub == subCodeProduct;
+          });
+            if(!tranNoObj){
+              return {
+                error: true,
+                errorType: 'USE_MSG',
+                rowIndex: i,
+                key:"tranNoRef",
+                title:'The transaction number you entered is not recognised',
+                info:''
+              };
+            };
+            if(new Date(date).getTime() < new Date(tranNoObj.transactionDate).getTime()){
+              return {
+                error: true,
+                errorType: 'USE_MSG',
+                rowIndex: i,
+                key:"tranNoRef",
+                title:'Product returned date cannot be earlier than the original date of Sale',
+                info:''
+              };  
+            }  
         }
 
           //Validate subCode

@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const ToastCont = ({postErrorColor, type, msg, handleNotify}) => {
   //notify('success', 'Posting successfull');
-  console.log(handleNotify)
+  //console.log(handleNotify)
   const notify = (type, msg) => toast[type](msg, {
     position: "top-right",
     autoClose: 5000,

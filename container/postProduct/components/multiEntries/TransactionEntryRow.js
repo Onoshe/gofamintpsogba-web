@@ -7,12 +7,13 @@ import DropdownComponent from '@/components/forms/DropdownComponent';
 
 
 
-const TransactionEntryRow = ({ hideTitle, hideText,mainAcctTitle, subAcctTitle,quantityTitle,hideSubAcct,cosTitleStyle,
+const TransactionEntryRow = ({activeTab, hideTitle, hideText,mainAcctTitle, subAcctTitle,quantityTitle,hideSubAcct,cosTitleStyle,
     handleOnChange,  classNameBLine, classNameCont, classNameContSel, classNameContSelSub, classNameContUnits, 
     classNameContQuant,  chartOfAccountSelection, personalAcctsSel, isQuantity, selectProduct, quantityValue, selectProductMB,
     accountCodeValue, subCodeValue, accountCodeName, subCodeName, quantityName, unitsName, drCr, quantStyle, 
     unitsStyle, unitsValue, classNameContQuantBal, quantityBalName, quantityBal,  tab2ShowDueDate, 
-    showDueDate, selectedDueDate, setSelectedDueDate, classNameContDrCr, showDrCrSelection, entryValue, entryName}) => {
+    showDueDate, selectedDueDate, setSelectedDueDate, classNameContDrCr, showDrCrSelection, entryValue, entryName, isSalesReturn, 
+    tranNoRef, showTranNoRef, tranNoRefValue}) => {
     
 
     const value = drCr || "Debit"; //transSheet[index]['debitCredit'] ==1? 'Debit': transSheet[index]['debitCredit'] == 2? 'Credit' :'Select';
@@ -37,8 +38,9 @@ const TransactionEntryRow = ({ hideTitle, hideText,mainAcctTitle, subAcctTitle,q
                     value={selectProduct || value}/>
                 }
             </div>
-            {hideSubAcct && <span className={cosTitleStyle}>Charge Cost of Sale (COS) to:</span>}
-            {showDrCrSelection && <SelectionMainAccount
+            {hideSubAcct && <span className={cosTitleStyle}>{isSalesReturn? 'Reverse' : 'Charge'} Cost of Sale (COS) to:</span>}
+            {showDrCrSelection && 
+                <SelectionMainAccount
                     title="Select Dr/Cr" 
                     classNameCont={classNameCont} 
                     classNameTitle={`${hideTitle? 'hidden' :''}`} 
@@ -62,8 +64,28 @@ const TransactionEntryRow = ({ hideTitle, hideText,mainAcctTitle, subAcctTitle,q
                     value={accountCodeValue}
                 />
                 
-                {hideSubAcct && 
-                      <div className='flex-row ml-[30px] bg-gray-100 p-2'>
+                
+                {hideSubAcct && isSalesReturn && 
+                    <div className='flex-row ml-[30px]'>
+                         <div  className={``}>
+                            <p className={`${quantStyle} text-[navy]`}>Transaction number ref</p>
+                            <input
+                                data-theme="winter"
+                                type='number'
+                                className={`border  py-2 px-2 rounded-md border-gray-400 w-full bg-white`} 
+                                name="tranNoRef"
+                                placeholder={'Unit Cost'}
+                                min="0"
+                                //readOnly={'readOnly'}
+                                onChange={handleOnChange}
+                                value={tranNoRef}
+                            />
+                        </div>
+                        
+                    </div>
+                }
+                {hideSubAcct && !isSalesReturn &&
+                    <div className='flex-row ml-[30px] bg-gray-100 p-2'>
                         <div  className={`${classNameContQuantBal} ${classNameCont}`}>
                             <p className={`${quantStyle} text-[navy]`}>Quantity left</p>
                             <input
@@ -132,7 +154,8 @@ const TransactionEntryRow = ({ hideTitle, hideText,mainAcctTitle, subAcctTitle,q
                 </div>   
                 {hideSubAcct? <></> 
                  :<>
-                    <div  className={`${classNameContQuant} ${classNameCont}`}>
+                    {/* For TAB1 Only? */}
+                    <div  className={`${classNameContQuant} ${classNameCont} ${activeTab==="TAB1" && showTranNoRef? 'hidden' : ''}`}>
                         <p className={`${hideTitle? 'hidden' :''} ${quantStyle} `}>{quantityTitle}</p>
                         <p className={`${classNameBLine}`}></p>
                         <input
@@ -147,8 +170,8 @@ const TransactionEntryRow = ({ hideTitle, hideText,mainAcctTitle, subAcctTitle,q
                             value={quantityValue}
                         />
                     </div>
-                    <div  className={`${classNameContUnits} ${classNameCont}`}>
-                        <p className={`${hideTitle? 'hidden' :''} ${unitsStyle}`}>Unit price</p>
+                    <div  className={`${classNameContUnits} ${classNameCont} ${activeTab==="TAB1" && showTranNoRef? 'hidden' : ''}`}>
+                        <p className={`${hideTitle? 'hidden' :''} ${unitsStyle}`}>{activeTab==="TAB1"? "Unit cost" : "Unit price"}</p>
                         <p className={`${classNameBLine}`}></p>
                         <input
                             data-theme="winter"
@@ -157,9 +180,22 @@ const TransactionEntryRow = ({ hideTitle, hideText,mainAcctTitle, subAcctTitle,q
                             name={unitsName}
                             placeholder='Unit price'
                             readOnly={'readOnly'}
-                            //min="0"
                             //onChange={handleOnChange}
                             value={unitsValue}
+                            />
+                    </div>
+                    {/* TAB1 Product Return Ref */}
+                    <div  className={` ${activeTab==="TAB1" && showTranNoRef? '' : 'hidden'}`}>
+                        <p className={` `}>Transaction No Ref</p>
+                        <p className={`${classNameBLine}`}></p>
+                        <input
+                            data-theme="winter"
+                            type=''
+                            className={`border py-2 px-2 rounded-md border-gray-400 w-full`} 
+                            name={"tranNoRef"}
+                            placeholder='Transaction no ref'
+                            onChange={handleOnChange}
+                            value={tranNoRefValue}
                             />
                     </div>
                 </>}

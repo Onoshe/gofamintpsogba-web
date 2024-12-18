@@ -26,52 +26,59 @@ f1:"PRIVACY",
 f2:"QuickRecords Bookkeeping’s current Privacy Policy is available at www.simpleaccountsmanager.com/privacy-policy which shall apply to any use of the Service, and which may be modified by OziTech Studio in its discretion from time to time pursuant to the procedures set forth therein.",
 
 g1:"USER CONDUCT",
-g2:"User may only use the Service for his/her personal or commercial use, or as part of an evaluation of the Service with regard to potential commercial use thereof.",
-g3:"User will comply with all applicable laws, regulations, and rules in connection with the Service. Without limiting the foregoing, Users shall not use the Service for the purpose of money laundering, bid rigging, price fixing or other unlawful collusion, price signalling or exchange of competitively sensitive data or information.",
-g4:"User may not use the Service in violation of these Terms of Service",
-g5:"User agrees not to take any action using any aspect of the Service, in any manner, that:",
-g6:"• Is unlawful, deceptive, misleading, fraudulent, threatening, abusive, harassing, libellous, invasive of another’s privacy, tortious, obscene, profane or which otherwise violates the Terms of Service.",
-g7:"• Infringes any patent, trademark, trade secret, copyright, right of publicity, privacy right or other right of any party",
-g8:"• Constitutes unauthorized or unsolicited advertising, junk, or bulk e-mail (“spamming”), chain letters or any form of lottery or gambling.",
-g9:"• Imposes an unreasonable or disproportionately large load on OziTech Systems’ computing, storage, or communications infrastructure, or attempts to gain unauthorized access to the Service, other accounts, computer systems or networks connected to the Service, through password mining or otherwise.",
-g10:"• Contains software viruses or any other computer codes, files, or programs that are designed or intended to disrupt, damage, limit or interfere with the proper function of any software, hardware, or network system or to damage or obtain unauthorized access to any system, data, or other information of OziTech Studio or any third party.",
-g11:"• Harvests, scrapes, or collects any information from the Site.",
-g12:"• Impersonates any person or entity, including any employee or representative of OziTech Systems.",
-g13:"OziTech Studio may, at its sole discretion, immediately suspend or terminate any User’s access to the Service should its conduct fail (or appear to fail) to strictly conform to any provision of these Terms of Service.",
-
-g14:"OziTech Studio may, at any time, monitor, review, remove, retain, or disclose any information as necessary to satisfy any applicable law, regulation, legal process or governmental request or investigation (including law enforcement). OziTech Studio is not responsible for any failure or delay in removing any such content.",
-g15:"OziTech Studio is not responsible for any failure or delay in removing any such content.",
+g2:"When using the service, you agree to:",
+g3:"• Use the service only for lawful purposes, whether personal or commercial.",
+g4:"• Comply with all applicable laws, regulations, and these Terms of Service.",
+g5:"You must not:",
+g6:"• Engage in fraudulent, deceptive, or unlawful activities.",
+g7:"• Infringe on the intellectual property, privacy, or other rights of others.",
+g8:"• Spread viruses, malware, or other harmful content.",
+g9:"• Attempt unauthorized access to the service or related systems.",
+g10:"• Impersonate another person or entity.",
+g11:"• Engage in spamming, bulk emails, or unauthorized advertising.",
+g12:"Violation of these terms may result in suspension or termination of access to the service without prior notice.",
 
 
 h1:"PROPRIETARY RIGHTS",
-h2:"User acknowledges and agrees that the Service and all content and materials created by or for OziTech Studio and made available on or via the Service are protected by copyrights, trademarks, service marks, patents, trade secrets or other proprietary rights and laws, and OziTech Studio (and its licensors) shall own and retain all rights, title and interests (including all intellectual property and proprietary rights) therein and thereto.",
-h3:"User may not to sell, license, reverse engineer, rent, modify, distribute, copy, reproduce, transmit, publicly display, publicly perform, publish, adapt, edit, or create derivative works of the Service or its content and materials.",
-h4:"Systematic retrieval of data or other content from the Site by any User to create or compile, directly or indirectly, a collection, database or directory is strictly prohibited.",
+h2:"All content, materials, and intellectual property related to the service are owned by OziTech Studio or its licensors. Users may not:",
+h3:"• Copy, distribute, modify, or create derivative works based on the service or its content.",
+h4:"• Reverse-engineer, decompile, or otherwise attempt to extract source code.",
+h5:"• Use data or content from the service for creating databases or directories without explicit permission.",
 
 
 i1:"TERMINATION",
-i2:"OziTech Studio may terminate any User’s access to all or any part of the Service, with or without cause, with or without notice, effective at any time.",
-i3:"Upon any termination, User shall immediately cease using the Service, except that (a) all obligations that accrued prior to the effective date of termination and all remedies for breach of the Terms of Service shall survive and (b) Sections 9 – 16 shall survive.",
+i2:"may terminate your access to the service at any time, with or without cause or notice. Upon termination, you must stop using the service immediately. Obligations or liabilities incurred before termination and certain provisions (e.g., intellectual property rights, indemnification) will survive termination.",
 
 
 j1:"DISCLAIMER OF ALL WARRANTIES",
 j2:"The service is provided “AS IS” and “AS AVAILABLE”. The service is provided WITHOUT WARRANTY of any kind, express or implied, including, but not limited to, the implied warranties of title, non-infringement, integration, merchantability and fitness for a particular purpose, and any warranties implied by any course of performance or usage of trade, all of which are expressly disclaimed. OziTech Studio and its affiliates, licensors and suppliers DO NOT warrant that:",
-j3:"• Any information will be timely, accurate, reliable, or correct.",
+j3:"• Fitness for a particular purpose, merchantability, or non-infringement.",
 j4:"• The service will be secure or available at any particular time or place.",
-j5:"• Any defects or errors will be corrected.",
-j6:"• The service will be free of viruses or other harmful components.",
-j7:"• Any result or outcome can be achieved. User’s use of the service is solely at its own risk.",
+j5:"• Accuracy, reliability, or timeliness of information.",
+j6:"• Availability or security of the service.",
+j7:"• Errors or defects will be corrected.",
+j8:"• The service will be virus-free or free of harmful components.",
+j9:"• Any specific outcomes will result from using the service.",
+j10:"Your use of the service is entirely at your own risk.",
 
 
 k1:"LIMITATION OF LIABILITY",
-k2:"User agrees that OziTech Studio shall not be responsible or liable for any material or data sent or received or not sent or received through the Service. User agrees that OziTech Studio is not responsible or liable for any threatening, defamatory, obscene, offensive, illegal, or other content or conduct of any third party or any infringement of another’s rights, including intellectual property rights.",
-
-k3:"User agrees, in connection with any use of the Service: (a) to release OziTech Studio (and its licensors and suppliers) from any and all claims, demands, damages and liabilities, of any type and nature, known and unknown, suspected and unsuspected, disclosed and undisclosed, arising out of or in any way connected with use of the Service by such User (including any disputes with other Users using the Service); and (b) to attempt to settle any disputes directly with such other User or other third party.",
-
-k4:"In no event shall OziTech Studio (or its affiliates, licensors and suppliers) be liable concerning any subject matter related to the service regardless of the form of claim or action (whether in contract, negligence, strict liability or otherwise), for any (a) matter beyond its reasonable control, (b) loss or inaccuracy of data, loss or interruption of use, or cost of procuring substitute technology, goods or services, (c) indirect, punitive, incidental, reliance, special, exemplary or consequential damages including, but not limited to, loss of business, revenues, profits or goodwill, or (d) damages, in the aggregate, in excess of amounts paid to OziTech Studio by user (and retained by OziTech Studio hereunder during the previous 12-month period), even if OziTech Studio has been advised of the possibility of such damages. These limitations are independent from all other provisions of this agreement and shall apply notwithstanding the failure of any remedy provided herein.",
-k5:"Some states and other jurisdictions do not allow the exclusion or limitation of liability for incidental or consequential damages, so the above limitations and exclusions may not apply to you.",
+k3:"• Data loss, service interruptions, or inaccuracies.",
+k4:"• Indirect, incidental, punitive, or consequential damages, including lost profits or goodwill.",
+k5:"• Damages exceeding the amount paid to OziTech Studio in the 12 months prior to the claim.",
+k6:"These limitations apply even if OziTech Studio has been advised of potential damages. Some jurisdictions do not allow exclusions or limitations of liability, so these limitations may not apply to you.",
 
 
 l1:"INDEMNIFICATION",
-l2:"User agrees to (a) defend OziTech Studio and its employees, contractors, officers, directors and representatives against any action or suit by a third party that arises out of any transaction with OziTech Studio or another User in which User is involved, User’s use or misuse of the Service, or User’s breach of any of its representations, warranties or covenants under this Agreement and (b) indemnify OziTech Studio for settlement amounts or damages, liabilities, costs and expenses (including reasonable attorneys’ fees) awarded and arising out of such a claim. OziTech Studio reserves the right to assume the exclusive defence and control of any matter otherwise subject to indemnification by User, in which event User will assist and cooperate with OziTech Studio in asserting any available defences.",
+l2:"You agree to indemnify and hold harmless OziTech Studio, its employees, affiliates, and representatives from any claims, damages, or liabilities arising from:",
+l3:"• Your use or misuse of the service.",
+l4:"• Your violation of these Terms of Service.",
+l5:"• Disputes with other users or third parties.",
+l6:"reserves the right to assume exclusive defense in such cases, and you agree to cooperate as needed.",
+
+m1:"GOVERNING LAW",
+m2:"These Terms of Service are governed by the laws of the jurisdiction where OziTech Studio operates, without regard to conflict-of-law principles.",
+m3:"By accessing or using the service, you agree to abide by these Terms of Service in their entirety. For further inquiries, please contact ozitechstudio@gmail.com",
+
+
 }

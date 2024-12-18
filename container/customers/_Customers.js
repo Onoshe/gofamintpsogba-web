@@ -10,7 +10,6 @@ import { handleSubmit } from './utils/handleSubmit';
 import { handleClickRow } from './utils/handleTableActions';
 import { validateAndFormatPersonalAcct } from '@/lib/validation/validatePersonalAcctUpload';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { handleSubmitMultiAccts } from './utils/handleSubmitMultiAccts';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
@@ -25,7 +24,7 @@ import { getDeleteAffectedTransactions } from '../chartOfAccount/utils/handleDel
 const Customers = ({ssUser}) => {
   const { session, user,  status} = useAuthCustom(ssUser);
   const {customers, dispatchCustomers, runDispatchClientDataCall} = useStoreTransactions((state) => state);
-  const {settings} = useStoreHeader((state) => state);
+  const {settings, toastNotice, dispatchToastNotice} = useStoreHeader((state) => state);
   const [activeTab, setActiveTab] = React.useState('DISPLAY');
   const [editForm, setEditForm] = React.useState(false);
   const [formInput, setFormInput] = React.useState({});
@@ -43,20 +42,11 @@ const Customers = ({ssUser}) => {
     uploadedForm.rows = uploadedForm.rows.map((dt)=> {
       return {...dt, accountCode:dt.accountCode?.includes("C-")? dt.accountCode : "C-"+dt.accountCode}});
   }
-  //console.log(uploadInfo)
-  const notify = (type, msg) => toast[type](msg, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      theme: "colored",
-    //transition: 'Bounce',
-    });
-  
+ 
+
+  const notify =(type, msg)=>{
+    dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
+  }
   let accountGroups = []; 
   if(customers?.length){
     customers.forEach(el => {
@@ -224,19 +214,7 @@ const Customers = ({ssUser}) => {
              setShowConfirm={setShowConfirm}
              showConfirm={showConfirm}
            />
-      <ToastContainer 
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick={true}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          //theme="light"
-          //bodyClassName={postError.color}
-        />    
+        
     </TabWrapper>
   )
 }

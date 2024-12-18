@@ -37,7 +37,7 @@ const PrivacyPolicy = () => {
         <div className='py-10 px-5 sm:px-10 md:px-20 lg:px-[10rem] text-gray-800'>
             <Text1 text={privPol.b1} style={'font-bold pt-8 pb-5'}/>
             <Text1 text={privPol.b2} style={''}/>
-            <Text1 text={privPol.b3} style={''}/>
+            <Text1 text={privPol.b3} style={'pt-2'}/>
 
             <Header1 text="Information We Collect"/>
             <Text1 text={privPol.c2} style={''}/>
@@ -116,10 +116,13 @@ const PrivacyPolicy = () => {
 
             <Header1 text="Changes to This Privacy Policy"/>
             <Text1 text={privPol.o2} style={'pb-2'}/>
+            <p className="">•  Update the “Effective Date” at the top of this policy.</p>
+            <p className="pt-1">•  Notify you through the App or other appropriate means.</p>
+            <p className="pt-1">•  We encourage you to review this policy regularly to stay informed about how we protect your information.</p>
 
             <Header1 text="Contact Us"/>
-            <Text1 text={privPol.p2} style={'pb-2'}/>
-            
+            <Text1 text={privPol.p2} style={'pb-1'}/>
+
             <Header1 text="QuickRecords Bookkeeping & Accounting"/>
             <div className=''>Email: <a href={`mailto:ozitechstudio@gmail.com`}
               className='text-blue-500 hover:text-blue-700'>Send Email</a></div>
@@ -127,9 +130,9 @@ const PrivacyPolicy = () => {
               href={`tel:+2348064205333`}>Call Us</a></div>
             
             <div className=''>
-              This Privacy Policy is an integral part of the QuickRecords Terms of Use found at
+            This Privacy Policy forms an integral part of the QuickRecords Terms of Use, available at 
                 <Link href={'/terms-and-conditions'} className='text-blue-500 active:text-blue-500 mx-1 cursor-pointer hover:text-blue-700'> www.quick-records.vercel.app/terms-and-conditions.</Link>
-                 By using the App, you agree to both documents.    
+                By using the App, you agree to both the Terms of Use and this Privacy Policy.
             </div>
         </div>
         <Footer/>

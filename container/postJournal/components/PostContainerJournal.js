@@ -4,8 +4,6 @@ import TransactionRow from '@/container/postTransaction/components/multiEntries/
 import { validateTransactionsMulti } from '@/lib/validation/validateTransactionMulti';
 import { getErrorMessage } from '@/lib/validation/getErrorMessage';
 import TransactionsEntriesView from '@/container/postProduct/components/multiEntries/TransactionsEntriesView';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { handleSubmit } from '../utils/handleSubmit';
 import { controlAcctChecker } from '@/container/postTransaction/components/utils/controlAccountChecker';
 import CashAndBankBalances from '@/container/postTransaction/components/balancesComponent/CashAndbankBalances';
@@ -199,19 +197,7 @@ const PostContainerJournal = ({chartOfAccounts, coaStructure, chartOfAccountSele
       />
       
     </div>
-    <ToastContainer 
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick={true}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-        bodyClassName={postError.color}
-      />
+   
       
     <br/>
     <br/>
