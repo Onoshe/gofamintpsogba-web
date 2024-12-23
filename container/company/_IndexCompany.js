@@ -16,6 +16,8 @@ import { HeaderTab } from './components/headerTab/HeaderTab';
 import CurrencySign from './components/homeComponents/CurrencySign';
 import EditDeleteLock from './components/homeComponents/EditDeleteLock';
 import { usePathname, useRouter } from 'next/navigation';
+import BookALoanControl from './components/homeComponents/BookALoan';
+import useStoreRecordTransaction from '@/context/storeRecordTransaction';
 //import { AccessCard } from './cards/DashboardAccess';
 
 
@@ -25,7 +27,8 @@ const IndexCompany = ({ssUser}) => {
     const { session, user,  status} = useAuthCustom(ssUser);
     const {settings, dispatchRefreshSettingsCount,  subscriptions,  dispatchSubscriptions,
         client_Admin, clientData, generalSettings, expirationMsg, toastNotice, dispatchToastNotice, quickrecordsLogo,} = useStoreHeader((state) => state);
-    const {clientAccount, currencySymbol} = useStoreTransactions((state) => state);    
+    const {clientAccount, currencySymbol} = useStoreTransactions((state) => state); 
+    const {bookLoanCheckbox, dispatchBookLoanCheckbox} = useStoreRecordTransaction((state) => state);   
     const [base64Image, setBase64Image] = React.useState('');
     const [appB64Image, setAppBase64Image] = React.useState(''); 
     const subcriptionHistory = getSubscriptionHistory({subscriptions});
@@ -107,7 +110,7 @@ const IndexCompany = ({ssUser}) => {
                     </div>
                 </BackgroundCard>
                 
-                <div className='relative flex w-full flex-col lg:flex-row mt-10 p-5 border border-[dodgerblue]'>
+                <div className='relative gap-3 flex w-full flex-col lg:flex-row mt-10 p-5 border border-[dodgerblue]'>
                  <div name="PeusdoCover" className={`${lockPosting? 'absolute z-20' : 'hidden'} top-0 bottom-0 w-full bg-blue-200/10`}></div>
                     <CurrencySign
                         title="Change Currency Sign"
@@ -116,6 +119,16 @@ const IndexCompany = ({ssUser}) => {
                         user={user}
                         currentSymbol={currencySymbol}
                         settings={settings}
+                    />
+                    <BookALoanControl
+                        title="Book A Loan Control"
+                        dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
+                        notify={notify} 
+                        user={user}
+                        currentSymbol={currencySymbol}
+                        settings={settings}
+                        bookLoanCheckbox={bookLoanCheckbox}
+                        dispatchBookLoanCheckbox={dispatchBookLoanCheckbox}
                     />
                 </div>
                 <div className='relative flex w-full flex-col lg:flex-row mt-10 p-5 border border-[maroon] bg-red-50'>

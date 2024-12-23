@@ -61,12 +61,12 @@ export const getProductBalances = (productsLedgerObj, objName) => {
                         
                         totalCost += cost;
                         totalQty += qty;
-                    
+                        avgCost = totalCost/totalQty; //Added
                     resultObj.cost = cost;
                     resultObj.qty = qty;
                     resultObj.totalQty = totalQty;
                     resultObj.totalCost = totalCost;
-                    resultObj.avgCost = originSalEntry? totalCost/totalQty : avgCostMd;
+                    resultObj.avgCost = avgCost;
                  }
             }else{  //For PROD-ADJ
                     //entryType === "CR": For Inventory Credit Entry being reduction in total Inventory
@@ -76,6 +76,7 @@ export const getProductBalances = (productsLedgerObj, objName) => {
                         // *** Awaiting implementation
                         const qtyAbs = parseInt(Math.abs(tran.quantity));
                         if(qtyAbs > 0){ //BYQTY
+                            //console.log(avgCost+'-byQTY');
                             const cost = avgCost * qty;
                             totalCost += cost;
                             totalQty += qty;
@@ -95,7 +96,7 @@ export const getProductBalances = (productsLedgerObj, objName) => {
                             totalCost += cost;
                             totalQty += 0; // totalQty += derivedQty;     
                             avgCost = totalCost / totalQty; // *** Update avgCost
-                            
+
                             resultObj.cost = cost;
                             resultObj.qty = 0;  //*** resultObj.qty = derivedQty;   
                             resultObj.totalQty = totalQty;

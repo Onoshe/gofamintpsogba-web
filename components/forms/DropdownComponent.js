@@ -20,6 +20,7 @@ const DropdownComponent = ({selectedOption, setSelectedOption, contStyle, hideCo
   };
 
   const options = [
+    { value: 0, label: '--Select--' },
     { value: 30, label: '30 Days' },
     { value: 61, label: '61 Days' },
     { value: 121, label: '121 Days' },
@@ -81,7 +82,7 @@ const DropdownComponent = ({selectedOption, setSelectedOption, contStyle, hideCo
                 {options.map((option) => (
                     <li
                     key={option.value}
-                    className="px-4 py-1 hover:bg-gray-100 cursor-pointer text-[12px]"
+                    className="px-4 py-[2px] hover:bg-gray-100 cursor-pointer text-[12px]"
                     onClick={() => handleOptionClick(option)}
                     >
                     {option.label}

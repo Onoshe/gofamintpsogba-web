@@ -12,11 +12,14 @@ const convertTransRowToTransSheet = (transRow)=>{
         amount:parseFloat(amount),
         debitAccount:tranRowDr.accountCode,
         creditAccount:tranRowCr.accountCode,
-        debitSub:tranRowDr?.accountCodeSub? getSubAcct(tranRowDr.accountCodeSub, tranRowDr.accountCodeSubName) : '',
-        creditSub:tranRowCr?.accountCodeSub? getSubAcct(tranRowCr.accountCodeSub, tranRowCr.accountCodeSubName) : '',
+        //debitSub:tranRowDr?.accountCodeSub? getSubAcct(tranRowDr.accountCodeSub, tranRowDr.accountCodeSubName) : '',
+        //creditSub:tranRowCr?.accountCodeSub? getSubAcct(tranRowCr.accountCodeSub, tranRowCr.accountCodeSubName) : '',
+        debitSub:tranRowDr?.accountCodeSub,
+        creditSub:tranRowCr?.accountCodeSub,
         idDr:tranRowDr.transDetailsId,
         idCr:tranRowCr.transDetailsId,
-        dueDate:parseInt(tranRowDr?.dueDate)? tranRowDr?.dueDate : parseInt(tranRowCr?.dueDate)? tranRowCr?.dueDate : ""
+        //dueDate:parseInt(tranRowDr?.dueDate)? tranRowDr?.dueDate : parseInt(tranRowCr?.dueDate)? tranRowCr?.dueDate : ""
+        dueDate:parseInt(tranRowDr?.dueDate) || ""
     };
     return [transSheet]
  }
@@ -195,7 +198,7 @@ const convertTransRowToTransSheetProductTwo = (transRow, postingPlat)=>{
 
 export const handleEditTranListing =({name, cell, router, companyId, transactionsDetails, recordTransaction, pathname, 
     dispatchRecordTransaction, dispatchTranSheetTwoEntry, dispatchTranSheetMultiEntry, dispatchTranSheetJournals, dispatchTranSheetProducts,
-    dispatchProductPageActiveTab, cosTypeCode, controlAcctsCode, dispatchProductReturns})=>{
+    dispatchProductPageActiveTab, cosTypeCode, controlAcctsCode, dispatchProductReturns, dispatchBookLoan, dispatchBookLoanCheckbox})=>{
      //   return console.log(name, cell?.row?.postingPlat)
      if(name === "trial-balance"){
         const {row} = cell;
@@ -257,8 +260,14 @@ export const handleEditTranListing =({name, cell, router, companyId, transaction
                     break;
             default: 
                 const convertedTwo = convertTransRowToTransSheet(transSheet);
-                //return console.log(transSheet, convertedTwo)
                 dispatchTranSheetTwoEntry(convertedTwo);
+                
+                //For Loan booking
+                const tranRowDr = transSheet?.find((dt)=> dt.entryType === "DR");
+                if(parseInt(tranRowDr?.dueDate)){
+                    dispatchBookLoan(true);
+                    dispatchBookLoanCheckbox({show:true});
+                }
                 break;
         }
         //return

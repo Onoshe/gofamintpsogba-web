@@ -52,6 +52,7 @@ const Backup = ({backupUrl, notify, backupUrlBase}) => {
     }
     await postRequest(backupUrlBase, data).then((result)=>{
       setBackupInfo(result);
+      //console.log(result);
       if(result.ok){getFiles(backupUrlBase);}
       });
   }
@@ -82,7 +83,7 @@ const Backup = ({backupUrl, notify, backupUrlBase}) => {
                       <div className='flex flex-row flex-wrap gap-2 justify-around'>
                           <div className='flex flex-col gap-2'>
                             <button className='btn btn-accent btn-sm'
-                              onClick={()=>handleBackup("MYSQL")}>Backup Data- MYSQL</button>
+                              onClick={()=>handleBackup("SQL")}>Backup Data- MYSQL</button>
                             <button className='btn btn-accent btn-sm'
                               onClick={()=>handleBackup("CSV")}>Backup Data- CSV</button>
                             </div>

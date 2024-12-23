@@ -8,7 +8,7 @@ const SelectionSubAccount = ({title,selValue, selName, classNameCont, classNameT
         <p className={`${classNameTitle}`}>{title}</p>
         <p className={`${classNameBLine}`}></p>
         <div className='flex flex-col'>
-            <span className={`text-blue-800 pr-2 pl-1 font-bold ${titleDrCrStyle}`}>{titleDrCr}</span>
+            <span className={`text-blue-800 pr-2 pl-1 ${titleDrCrStyle}`}>{titleDrCr}</span>
             <select
                 data-theme="winter"
                 type='date' 

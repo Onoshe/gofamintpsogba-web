@@ -43,7 +43,7 @@ const IndexReports = ({ssUser}) => {
   const { session, user, status} = useAuthCustom(ssUser); 
   const {recordTransaction, tranSheetTwoEntry,  tranSheetMultiEntry, tranSheetJournals, tranSheetProducts, 
     dispatchRecordTransaction, dispatchTranSheetTwoEntry, dispatchTranSheetMultiEntry, dispatchTranSheetJournals, dispatchTranSheetProducts,
-    dispatchProductPageActiveTab, dispatchProductReturns} = useStoreRecordTransaction((state) => state);  
+    dispatchProductPageActiveTab, dispatchProductReturns, dispatchBookLoan, dispatchBookLoanCheckbox} = useStoreRecordTransaction((state) => state);  
   const {settings, toastNotice, dispatchToastNotice} = useStoreHeader((state) => state);
   const {activeTab, headerTab, headerTabsArr, dispatchActiveTab, dispatchSelTab, selTab,  currentReport, dispatchCurrentReport, selectedTranFromList, dispatchSelectedTranFromList, allAccountCodesInitDb} = useStoreReports((state) => state);
   const [showLedgers, setShowLedgers] = useState(false);
@@ -140,7 +140,7 @@ const IndexReports = ({ssUser}) => {
           const cosTypeCode = controlAcctsCode.costOfSale;
           handleEditTranListing({name, cell, router, companyId, transactionsDetails, recordTransaction, pathname,
             dispatchRecordTransaction, dispatchTranSheetTwoEntry, dispatchTranSheetMultiEntry, dispatchTranSheetJournals, dispatchTranSheetProducts,
-            dispatchProductPageActiveTab, cosTypeCode, controlAcctsCode, dispatchProductReturns});
+            dispatchProductPageActiveTab, cosTypeCode, controlAcctsCode, dispatchProductReturns, dispatchBookLoan, dispatchBookLoanCheckbox});
         }else if(cell.key === "view"){
           dispatchSelectedTranFromList(cell);
           router.push(`/${companyId}/reports/${reportName}?q=${cell.row.id}`); //http://localhost:3000/demo/reports/transactions-listing

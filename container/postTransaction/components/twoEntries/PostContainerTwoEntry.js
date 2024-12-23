@@ -15,12 +15,14 @@ import CashAndBankBalances from '../balancesComponent/CashAndbankBalances';
 import { LedgersManager } from '@/container/reports/utils/ledgers/ledgersManger';
 import { getLedgerCodesForAcctClass } from '../../utils/getLedgerCodesForAcctClass';
 import { getPermissions, pmsActs } from '@/lib/permissions/permissions';
+import { MdInfoOutline } from 'react-icons/md';
+import Draggable from 'react-draggable';
 
 
 const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaStructure, chartOfAccountSelection, personalAccts, products,
   personalAcctsList, controlAcctsCode, user, vendors, customers, clientsDataCall,  runDispatchClientDataCall, transSheet, 
   setTransSheet, recordTransaction, handleCancelTran, dispatchTranSheetTwoEntryReset, controlAcctChecker, 
-  transactions, transactionsDetails, reportDate, notify}) => {
+  transactions, transactionsDetails, reportDate, notify, bookLoan, setBookLoan, bookLoanCheckbox}) => {
   //const [transSheet, setTransSheet] = useState([{date:'', description:'', debitAccount:'', creditAccount:'', debitSub:'', creditSub:'', reference:'', amount:''}]);
   const router = useRouter();
   const [showTransView, setShowTransView] = useState(false);
@@ -35,7 +37,8 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
   let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
   const processedLedgers = ledgers.processedLedgers;
   const [checkedSelect, setCheckedSelect] = React.useState(false);
-  
+  //const [bookLoan, setBookLoan] = React.useState(false);
+
   const handleSubmit = async ()=>{
     setUploading(true);
      const perms = await getPermissions({user, act:pmsActs.POST_TRAN, form:checkedBtn === "BYENTRY"? transSheet: transSheets});
@@ -57,7 +60,8 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
           };
           return form
         });
-      const validateRes = validateTransactions(transSheetForm, chartOfAccounts, personalAcctsList, controlAcctsCode)
+      const validateRes = validateTransactions(transSheetForm, chartOfAccounts, personalAcctsList, controlAcctsCode, 'formType', bookLoan)
+      //return console.log(validateRes, bookLoan)
       if(validateRes?.error){
         const errorMsg = getErrorMessage(validateRes?.errorType, validateRes?.key, validateRes?.rowIndex, validateRes?.title);
         setPostError({msg:errorMsg, error:validateRes?.error, color:'text-red-600'});
@@ -66,7 +70,7 @@ const PostContainerTwoEntry = ({checkedBtn, setCheckedBtn, chartOfAccounts, coaS
       }else{
         //console.log(transSheet); setUploading(false); return;
        await handleSubmitTwoEntry({transSheetForm, chartOfAccounts, user, vendors, customers,  setTransSheet, runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, 
-          router, notify, resetUploadTableCall, setResetUploadTableCall})
+          router, notify, resetUploadTableCall, setResetUploadTableCall, bookLoan})
           .then(()=>{
             setUploading(false);
             setPostError({msg:'Posting successfull', error:false, color:'text-green-600'});
@@ -140,6 +144,15 @@ const handleTransView =(act)=>{
    }
  },[transSheet]);
 
+ //console.log(transSheet, bookLoan)
+ React.useEffect(()=>{
+    if(!bookLoan){
+      const updatedRows = transSheet.map((row, idx) => {
+        return { ...row, dueDate:''};
+      });
+      setTransSheet(updatedRows);
+    }
+ },[bookLoan]);
  
 
   return (
@@ -169,12 +182,25 @@ const handleTransView =(act)=>{
                 />
          </div>
         {checkedBtn === "BYENTRY" && <>
-           <div className={`flex-row flex gap-2 flex-wrap`}>
-            <div className={`py-4 px-8 pb-0  flex-row gap-2 hidden sm:flex `}>
+           <div className={`flex-row flex gap-2 flex-wrap pt-3`}>
+            <div className={` px-8 pb-0  flex-row gap-2 flex`}>
                 <input type='checkbox' className='size-4 cursor-pointer checkbox checkbox-success' checked={showBankBalances} onChange={handleOnChangeShowBankBal}/>
                 <p className='text-blue-800'>Show Bank balances</p>
             </div>
-            <div className={`py-4 px-8 pb-0  flex-row gap-2 flex ${showRecordEntries? '' : 'invisible'}`}>
+            <div className={`${bookLoanCheckbox?.show? 'flex' : 'hidden'} pb-0 items-center  flex-row gap-2 bg-gray-100 py-1 px-2`}>
+                <input type='checkbox' className='size-4 cursor-pointer checkbox checkbox-success' checked={bookLoan} onChange={()=>setBookLoan(!bookLoan)}/>
+                <p className='text-blue-800'>Book a Loan</p>
+                <div className='flex flex-row  text-blue-600 relative'>
+                  <MdInfoOutline className='peer text-blue-500 cursor-pointer active:text-blue-500 hover:text-blue-700 text-[18px]'
+                      />
+                    <div className={`absolute hidden peer-hover:block w-[220px] text-white bg-slate-700/90 left-5 px-2 py-1 text-sm border border-blue-400 rounded-md z-50`}>
+                         <p className='font-bold'>Loan from the Company</p>
+                         If transaction is a staff loan or other loan from the company, check this box to book it. 
+                        <p>The loan due days field will show which will enable you to enter the due date for the loan.</p>
+                    </div>
+                </div>
+            </div>
+            <div className={`px-8 pb-0  flex-row gap-2 flex ${showRecordEntries? '' : 'invisible'}`}>
                 <input type='checkbox' className='size-4 cursor-pointer checkbox checkbox-success' checked={showTransView} onChange={handleOnChangeShowRecord}/>
                 <p className='text-blue-800'>Show Record Entries</p>
             </div>
@@ -198,8 +224,10 @@ const handleTransView =(act)=>{
                 const personalAcctsSelCr =  getSubAccounts(dt.creditAccount, chartOfAccounts, personalAccts);
                 //console.log(personalAcctsSelDr, personalAcctsSelCr)
                 return(
-                    <TransactionRow hideTitle={i > 0} key={`${i}row`}
-                        classNameRowCont={`${i%2==0? '' : 'bg-[#fff]'} pb-6`}
+                   <div key={`${i}row`} className='relative'>
+                    <p className='absolute left-2 font-bold top-0 text-blue-700'>{i+1}.</p>
+                    <TransactionRow hideTitle={i > 0}
+                        classNameRowCont={`${i%2==0? '' : 'bg-[#fff]'} ${i===0 && 'pt-5'} pb-6`}
                         handleAddRemoveRow={()=>handleAddRemoveRow(dt, i)}
                         index={i}
                         handleOnChange={(e)=>handleOnChange(e, i)}
@@ -213,20 +241,24 @@ const handleTransView =(act)=>{
                         recordTransaction={recordTransaction}
                         controlAcctChecker={controlAcctChecker}
                         setTransSheet={setTransSheet}
+                        bookLoan={bookLoan}
                     />
+                  </div>
                 )
                 })
             }
             </div>
              <div className='pl-5 pr-20 xlc:px-2  xlc:block items-center justify-center mb-10 lg:mb-0'>
-              <TransactionsEntriesView 
-                transSheet={transSheet}
-                chartOfAccounts={chartOfAccounts}
-                personalAccts={personalAccts}
-                personalAcctsList={personalAcctsList}
-                showTransView={showTransView}
-                closeTransView={()=>handleTransView(false)}
-                />
+                
+                  <TransactionsEntriesView 
+                    transSheet={transSheet}
+                    chartOfAccounts={chartOfAccounts}
+                    personalAccts={personalAccts}
+                    personalAcctsList={personalAcctsList}
+                    showTransView={showTransView}
+                    closeTransView={()=>handleTransView(false)}
+                    />
+                
                 
              </div>
           </div>

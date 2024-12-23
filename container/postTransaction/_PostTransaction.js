@@ -21,7 +21,7 @@ const IndexPostTransaction = ({ssUser}) => {
   const router = useRouter();
   const {coaStructure,customers, vendors, chartOfAccounts, transactions, transactionsDetails, reportDate, controlAcctsCode, products, runDispatchClientDataCall} = useStoreTransactions((state) => state);
   const {recordTransaction, tranSheetTwoEntry, dispatchTranSheetTwoEntry, tranSheetMultiEntry, dispatchTranSheetMultiEntry, 
-    dispatchRecordTransaction, dispatchTranSheetTwoEntryReset,   dispatchTranSheetMultiEntryReset} = useStoreRecordTransaction((state) => state);  
+    dispatchRecordTransaction, dispatchTranSheetTwoEntryReset,   dispatchTranSheetMultiEntryReset, bookLoan, dispatchBookLoan, bookLoanCheckbox} = useStoreRecordTransaction((state) => state);  
   const {activeTab, createByEntry} = recordTransaction;
   const [showConfirm, setShowConfirm] = React.useState(false);
   const {toastNotice, dispatchToastNotice} =  useStoreHeader((state) => state);  
@@ -45,7 +45,7 @@ const IndexPostTransaction = ({ssUser}) => {
    }
    return isControlAcct
   }
- //console.log(tra);
+  //console.log(tranSheetTwoEntry);
 
   const setActiveTab =(act)=>{
     dispatchRecordTransaction({...recordTransaction, activeTab:act})
@@ -64,7 +64,10 @@ const IndexPostTransaction = ({ssUser}) => {
     const transListingPage = recordTransaction.transListingPage;
     router.push(transListingPage);
   }
-  
+  const setBookLoan =(act)=>{
+    dispatchBookLoan(act)
+  }
+
   const handleConfirm = (act)=>{
     if(act === "CANCEL"){setShowConfirm(false); }
     if(act === "CONTINUE"){
@@ -116,6 +119,9 @@ const IndexPostTransaction = ({ssUser}) => {
                   transactions={transactions}
                   transactionsDetails={transactionsDetails}
                   reportDate={reportDate}
+                  bookLoan={bookLoan}
+                  setBookLoan={setBookLoan}
+                  bookLoanCheckbox={bookLoanCheckbox}
                 />
                 :<PostContainerMultiEntry
                   chartOfAccounts={chartOfAccounts}

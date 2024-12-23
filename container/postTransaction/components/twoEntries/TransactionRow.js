@@ -8,9 +8,9 @@ import DropdownComponent from '@/components/forms/DropdownComponent';
 
 
 const TransactionRow = ({styleTitle, hideTitle, handleAddRemoveRow, transSheet, handleOnChange,index, chartOfAccounts,chartOfAccountSelection, 
-    personalAcctsSelDr, personalAcctsSelCr, controlAcctsCode, classNameRowCont, recordTransaction, controlAcctChecker, setTransSheet,}) => {
+    personalAcctsSelDr, personalAcctsSelCr, controlAcctsCode, classNameRowCont, recordTransaction, controlAcctChecker, setTransSheet, bookLoan}) => {
     const [isMounted, setIsMounted] = React.useState(false);
-    const [selectedDueDate, setSelectedDueDate] = React.useState({value:30, label:'30 Days'});
+    const [selectedDueDate, setSelectedDueDate] = React.useState({value:0, label:'--Select--'}); //{value:30, label:'30 Days'}
     
     //console.log(transSheet)
     const classNameTitle = `text-blue-900 border-y border-blue-600 font-bold bg-blue-100 whitespace-nowrap -mr-2 p-3 mb-2 ${hideTitle? 'hidden' :''} ${styleTitle}`;
@@ -99,13 +99,22 @@ const TransactionRow = ({styleTitle, hideTitle, handleAddRemoveRow, transSheet, 
                         
                     </div>
                 </div>
-                <div className={`flex-row hidden`}>
-                   <p className='text-red-950 font-bold text-right'>Select {isRecControl? 'Receivable' : 'Payable'} due date</p>
+                <div className={`${bookLoan? 'flex' : 'hidden'} flex-row gap-2 bg-[#efecec] rounded-md mt-1 mr-2`}>
+                   <p className='text-red-950 text-right pl-2'>Loan due in days</p>
                     <DropdownComponent 
                         selectedOption={selectedDueDate} 
                         setSelectedOption={setSelectedDueDate}
-                        contStyle={'w-[60%]'}
+                        contStyle={'w-[140px] hidden'}
                     />
+                    <input
+                        data-theme="winter"
+                        type='number'
+                        min={0}
+                        className={`border  py-2 px-2 rounded-md border-gray-400 w-[120px] bg-white `} 
+                        name="dueDate"
+                        placeholder='Due date'
+                        onChange={handleOnChange}
+                        value={transSheet[index]['dueDate']}/>
                 </div>
             </div>
             <div className='flex flex-col gap-2'>
@@ -146,7 +155,7 @@ const TransactionRow = ({styleTitle, hideTitle, handleAddRemoveRow, transSheet, 
                     name="debitSub"
                     onChange={handleOnChange}
                     value={transSheet[index]['debitSub']}
-                    titleDrCr="Debit"
+                    titleDrCr="Debit sub"
                 />
                 
                 <SelectionSubAccount
@@ -159,7 +168,7 @@ const TransactionRow = ({styleTitle, hideTitle, handleAddRemoveRow, transSheet, 
                     name="creditSub"
                     onChange={handleOnChange}
                     value={transSheet[index]['creditSub']}
-                    titleDrCr="Credit"
+                    titleDrCr="Credit sub"
                 />
             </div>
             <div className='flex flex-col gap-2'>
@@ -167,7 +176,7 @@ const TransactionRow = ({styleTitle, hideTitle, handleAddRemoveRow, transSheet, 
                     <p className={`${classNameTitle}`}>Reference</p>
                     <p className={`${classNameBLine}`}></p>
                     <div className='flex flex-col'>
-                        <span className={`text-blue-800 pr-2 font-bold pl-1`}>Reference</span>
+                        <span className={`text-blue-800 pr-2  pl-1`}>Reference</span>
                         <input
                             data-theme="winter"
                             type='text'
@@ -182,7 +191,7 @@ const TransactionRow = ({styleTitle, hideTitle, handleAddRemoveRow, transSheet, 
                     <p className={`${classNameTitle} hidden`}>Amount</p>
                     <p className={`hidden`}></p>
                     <div className='flex flex-col'>
-                        <span className={`text-blue-800 pr-2 font-bold pl-1`}>Amount</span>
+                        <span className={`text-blue-800 pr-2  pl-1`}>Amount</span>
                         <input
                             data-theme="winter"
                             type='number'

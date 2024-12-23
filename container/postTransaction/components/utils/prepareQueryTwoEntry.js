@@ -137,7 +137,7 @@ export function prepareQueryTwoEntryTrans({transSheetForm, user, postingFrom, ch
 }
 
     
-export function prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans, jVoucher=''}) {
+export function prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans, jVoucher='', bookLoan}) {
     const url =  getLinkPostAndRetrieve(user.companyId);
 
 
@@ -165,7 +165,7 @@ export function prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccount
             debitSubAcctChart?.id? debitSubAcctChart?.id : "",
             debitSubAcctChart?.id? debitSub?.includes("C")? "CUSTOMERS" : debitSub?.includes("V")? "VENDORS" : "PRODUCT" : "COA",
             amount,
-            tranSheet?.dueDate && tranSheet?.dueDateType === "REC"? parseInt(tranSheet.dueDate) : null,
+            bookLoan? tranSheet?.dueDate : '',
             voucher,
             user.userId,
             dateFmtISO(), 
@@ -182,7 +182,7 @@ export function prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccount
             creditSubAcctChart?.id? creditSubAcctChart?.id : "",
             creditSubAcctChart?.id? creditSub?.includes("C")? "CUSTOMERS" : creditSub?.includes("V")? "VENDORS" : "PRODUCT" : "COA",
             amount,
-            tranSheet?.dueDate && tranSheet?.dueDateType === "PAY"? parseInt(tranSheet.dueDate) : null,
+            null, //bookLoan? tranSheet?.dueDate : '',
             voucher,
             user.userId,
             dateFmtISO(), 

@@ -7,7 +7,8 @@ import { activities, postActivity } from "@/lib/apiRequest/postActivity";
 
 
 export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, user, vendors, customers,  setTransSheet, 
-    runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, router, notify, resetUploadTableCall, setResetUploadTableCall, jVoucher}) {
+    runDispatchClientDataCall, recordTransaction, dispatchTranSheetTwoEntryReset, router, notify, resetUploadTableCall, setResetUploadTableCall, 
+    jVoucher, bookLoan}) {
    const {url, body} =  prepareQueryTwoEntryTrans({transSheetForm, user, chartOfAccounts, postingFrom: jVoucher === "JOURNAL"? jVoucher :"TWOENTRY"});
    //return console.log(body, transSheetForm, recordTransaction) 
 
@@ -25,7 +26,7 @@ export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, use
       const transRes = await patchRequest(url, updatedBody)
       if(transRes?.data?.length){ 
         const insertedTrans = [{id:transId}];
-        const {body} = prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans, jVoucher});
+        const {body} = prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans, jVoucher, bookLoan});
         runUpdate({url, body, transSheetForm, notify, setTransSheet, runDispatchClientDataCall, 
           dispatchTranSheetTwoEntryReset, router, transListingPage, user});
       }
@@ -34,7 +35,7 @@ export async function handleSubmitTwoEntry({transSheetForm, chartOfAccounts, use
       const transRes = await postRequest(url, body);
       if(transRes?.data?.length){
         const insertedTrans = transRes.data;
-        const {url, body} = prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans});
+        const {url, body} = prepareQueryTwoEntryTransDetails({transSheetForm, chartOfAccounts, user, vendors, customers, insertedTrans, bookLoan});
           await postRequest(url, body)
           .then((res)=> {
               if(res?.ok){
