@@ -8,6 +8,7 @@ import { getAgingReport } from "./others/generateAging";
 import { getProductsValuation } from "./reportUtils/getProductsValuation";
 import { getReceiptsAndPaymentsForDisplay } from "./reportUtils/getReceiptsAndPaymentsForDisplay";
 import { getJournalEntries } from "./reportUtils/getJournalEntries";
+import { loanReportIndex } from "../components/loans/loanReportIndex";
 
 
 export const getDisplayReport =({reportName, pathname, transProcessor, customers, vendors, products, coaStructure, viewTransId, transactionsDetails, ledgerCode, monthlyQuery, 
@@ -49,6 +50,9 @@ export const getDisplayReport =({reportName, pathname, transProcessor, customers
         //console.log(result)
     }else if(reportName === "journals"){
         result = getJournalEntries({dateForm, reportName,  transProcessor, query:'', clickedHeader})
+        //console.log(result)loanReportIndex
+    }else if(reportName === "customers-loan"){
+        result = loanReportIndex({dateForm, reportName,  transProcessor, query:'', clickedHeader})
         //console.log(result)
     }else{
         result = getLedgersAndPersonalAcctsForDisplay({reportName,  transProcessor, customers, vendors, products, dateForm, transactionsDetails, viewTransId, user, clickedHeader});
@@ -57,6 +61,7 @@ export const getDisplayReport =({reportName, pathname, transProcessor, customers
     
     if(!result?.date){result.date = date}
     if(!result.moreDocHeader?.length){result.moreDocHeader = []};
+    if(!result.acctStmt){result.acctStmt = {}}
 
     if(result?.noData){
         const rowHeaders = [{name:"name", title:"Name"}, {name:"account", title:"Account"}];

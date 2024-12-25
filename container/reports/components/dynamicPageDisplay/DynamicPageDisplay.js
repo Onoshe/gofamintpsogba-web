@@ -34,7 +34,7 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
     <div className=' flex w-full flex-col text-sm smc:text-base justify-center items-center p-3 pt-0  mx-4 text-gray-600'>
       <div className={`mb-3 text-[13px]`}>
         <p className='text-center hidden'>{companyName}</p>
-        <p className='text-center'>{currentReportTitle}</p>
+        <p className='text-center font-bold'>{currentReportTitle}</p>
          <p className='text-center'>{reportDateDisplay}</p>
          <p className='text-center'>{subTitle}</p>
       </div>

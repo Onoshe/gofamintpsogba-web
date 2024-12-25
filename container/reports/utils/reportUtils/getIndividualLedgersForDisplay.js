@@ -34,7 +34,8 @@ export const keysMonthlySum = ["month", "debit", "credit", "balance"];
     const pdfData = monthlyQuery? pdfDataMonthlySum : pdfDataFullData;
     let rowKeysShow = monthlyQuery? keysMonthlySum : keysGLProducts;
     const clickables = ['accountCode', 'name'];
-   
+    let acctStmt = {};
+    
     switch (subReports[0]){
         case 'gl':
             const monthlySum = getLedgerMonthlySummary(rows, dateForm);
@@ -50,20 +51,21 @@ export const keysMonthlySum = ["month", "debit", "credit", "balance"];
             break;
         case 'customers':
             let rowsCus = transProcessor.getPersonalAccounts('customersLedger', dateForm)[selLedgerCode]?.trans || [];
-            //console.log(rowsCus, )
+            acctStmt = {rows:rowsCus}; 
             let cusLedgerName = rowsCus?.find(dt=> dt.accountCodeSubName)?.accountCodeSubName;
             cusLedgerName = cusLedgerName? cusLedgerName : rowsCus?.find(dt=> dt.accountName)?.accountName;
             const titleCus = `Customer Ledger: ${selLedgerCode} ${cusLedgerName}`;
             rowsCus = monthlyQuery? getLedgerMonthlySummary(rowsCus, dateForm) : rowsCus;
-            result = {name:subReports[0], title:titleCus, rowKeysShow, rowHeaders:getHeadersTitle(rowKeysShow), rows:rowsCus, subTitle,moreDocHeader, clickables,clickables:"ALL", pdfData}
+            result = {name:subReports[0], title:titleCus, rowKeysShow, rowHeaders:getHeadersTitle(rowKeysShow), rows:rowsCus, subTitle,moreDocHeader, clickables,clickables:"ALL", pdfData, acctStmt}
             break;
         case 'vendors':
             let rowsVed = transProcessor.getPersonalAccounts('vendorsLedger', dateForm)[selLedgerCode]?.trans || [];
+            acctStmt = {rows:rowsVed};
             let vedLedgerName = rowsVed?.find(dt=> dt.accountCodeSubName)?.accountCodeSubName;
             vedLedgerName = vedLedgerName? vedLedgerName : rowsVed?.find(dt=> dt.accountName)?.accountName;
             const titleVed = `Vandor Ledger: ${selLedgerCode} ${vedLedgerName}`;
             rowsVed = monthlyQuery? getLedgerMonthlySummary(rowsVed, dateForm) : rowsVed;
-            result = {name:subReports[0], title:titleVed, rowKeysShow, rowHeaders:getHeadersTitle(rowKeysShow), rows:rowsVed, subTitle,moreDocHeader, clickables,clickables:"ALL", pdfData}
+            result = {name:subReports[0], title:titleVed, rowKeysShow, rowHeaders:getHeadersTitle(rowKeysShow), rows:rowsVed, subTitle,moreDocHeader, clickables,clickables:"ALL", pdfData, acctStmt}
             break;
         case 'products':
             let rowsPro = transProcessor.getPersonalAccounts('productsLedger', dateForm)[selLedgerCode]?.trans || [];

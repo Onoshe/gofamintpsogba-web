@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import {IoMdClose, IoMdMenu} from 'react-icons/io';
-import SideDrawer, { nav_Coy, navs } from '../sideDrawer/_SideDrawer';
+import SideDrawer, { nav_auditTrail, nav_Coy, nav_profile, navs } from '../sideDrawer/_SideDrawer';
 import FastRecordLogo from '@/appLogo/FastRecord';
 import useStoreHeader from '@/context/storeHeader';
 import useOnScroll from '@/lib/hooks/useOnScroll';
@@ -117,9 +117,9 @@ const Header = ({ssUser}) => {
     //This graps the current path and dispatch it as Active Page in order to align the active current tab agree with the current page
     if(pathname){
         const path = pathname.split("/")[2];
-        //console.log(pathname, path);
         if(path){
-          const nav = [...navs, nav_Coy]?.find((dt)=> dt?.name == path);
+          const pagesArr = [...navs, nav_auditTrail, nav_profile, nav_Coy];
+          const nav = pagesArr?.find((dt)=> dt?.name == path);
           if(nav){
             const {name, title} = nav;
             dispatchActivePage({name, title});

@@ -23,6 +23,8 @@ import useStoreHeader from '@/context/storeHeader';
 import { getCompanyLogo } from '../company/components/utils/getSubscriptionHistory';
 import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import useWindowDimensions from '@/lib/hooks/useWindowDimensions';
+import { handleExportStatement } from './utils/others/handleExportStatement';
+import { getAccountStatement } from './utils/ledgers/getAccountStatement';
 
 
 
@@ -36,7 +38,7 @@ const IndexReports = ({ssUser}) => {
   const monthlyQuery = searchParams.get('m');
   const router = useRouter();
   const {coaStructure, transactions, transactionsDetails,controlAcctsCode, chartOfAccounts, customers, vendors, products, clientAccount, reportDate, 
-          dispatchReportDate, runDispatchClientDataCall} = useStoreTransactions((state) => state);
+          dispatchReportDate, runDispatchClientDataCall, currencySymbol} = useStoreTransactions((state) => state);
   let transProcessor = new LedgersManager({trans:transactions, transactions:transactionsDetails, chartOfAccounts, customers, vendors, products, controlAcctsCode, coaStructure, dateForm:reportDate});
   let ledgers = transProcessor.processTransactions(reportDate?.startDate, reportDate?.endDate);
   const processedLedgers = ledgers.processedLedgers;
@@ -44,14 +46,14 @@ const IndexReports = ({ssUser}) => {
   const {recordTransaction, tranSheetTwoEntry,  tranSheetMultiEntry, tranSheetJournals, tranSheetProducts, 
     dispatchRecordTransaction, dispatchTranSheetTwoEntry, dispatchTranSheetMultiEntry, dispatchTranSheetJournals, dispatchTranSheetProducts,
     dispatchProductPageActiveTab, dispatchProductReturns, dispatchBookLoan, dispatchBookLoanCheckbox} = useStoreRecordTransaction((state) => state);  
-  const {settings, toastNotice, dispatchToastNotice} = useStoreHeader((state) => state);
+  const {settings, toastNotice, dispatchToastNotice, clientData} = useStoreHeader((state) => state);
   const {activeTab, headerTab, headerTabsArr, dispatchActiveTab, dispatchSelTab, selTab,  currentReport, dispatchCurrentReport, selectedTranFromList, dispatchSelectedTranFromList, allAccountCodesInitDb} = useStoreReports((state) => state);
   const [showLedgers, setShowLedgers] = useState(false);
   const [clickedHeader, setClickedHeader] = useState({name:'', title:'', clickable:true});
   let [emptyPath, domainNm, reports, reportName] = pathname?.split("/");
    if(reportName?.includes("=")){ const reportNameSplit = splitByFirstChar(reportName, '='); reportName = reportNameSplit[0]; }
   const companyId = session?.user?.companyId;
-  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr} = getDisplayReport({reportName, pathname, transProcessor, customers, vendors, products, viewTransId, ledgerCode, monthlyQuery, coaStructure, transactionsDetails, user, chartOfAccounts, dateForm:reportDate, clickedHeader});
+  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr, acctStmt} = getDisplayReport({reportName, pathname, transProcessor, customers, vendors, products, viewTransId, ledgerCode, monthlyQuery, coaStructure, transactionsDetails, user, chartOfAccounts, dateForm:reportDate, clickedHeader});
   const ledgerAcctsDisplay = ["general-ledger-accounts", "customers-ledger-accounts", "vendors-ledger-accounts", "products-ledger-accounts"];
   const isReportPage = !reportName || ledgerAcctsDisplay.includes(reportName) || (pathname === `/${user?.companyId?.toLowerCase()}/reports` || pathname === `/${user?.companyId?.toLowerCase()}/reports/`); 
   //const genLedgerCodes = Object.keys(processedLedgers);
@@ -63,7 +65,7 @@ const IndexReports = ({ssUser}) => {
   
   //console.log(transProcessor.getTransactions());
   //let productLg = transProcessor.getPersonalAccounts('productsLedger');
-  //  console.log(productLg)
+  //console.log(currencySymbol)
 
   const toastNotify =(type, msg)=>{
     dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
@@ -205,6 +207,19 @@ const IndexReports = ({ssUser}) => {
         router.push(`${pathname}?l=${ledgerCode}&m=monthly`);
       }
   }
+  const downloadAccountStatement =()=>{
+      let personalAccts = null;
+      if(reportName === 'customers'){
+        personalAccts = customers;
+      }else if(reportName === 'vendors'){
+        personalAccts = vendors;
+      }
+      const personalAcct = personalAccts?.find(dt=> dt.accountCode == ledgerCode);
+      const {pdfData, reportData} = getAccountStatement({name, personalAcct, rows:acctStmt?.rows, reportDate, clientData, accountType:reportName, currencySymbol});
+      //console.log(acctStmt, personalAcct, ledgerCode)
+     handleExportStatement({imgObj:companyLogoFile, pdfData, data:reportData})
+     //console.log([name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr])
+  }
   //console.log(currentReport)
   useEffect(()=>{
     // Get and dispatch current report on refresh or on mount
@@ -267,6 +282,7 @@ const IndexReports = ({ssUser}) => {
               companyLogoFile={companyLogoFile}
               handleRefresh={handleRefresh}
               currentReportTab={currentReportTab}
+              downloadAccountStatement={downloadAccountStatement}
             />
         </Suspense>
         <div className={`flex justify-center items-center h-[50vh] ${showReport? 'hidden' : ''}`}>

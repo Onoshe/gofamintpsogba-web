@@ -28,8 +28,8 @@ const NotificationHeaderBar = ({user, expirationMsg}) => {
              onClick={handleCloseExpiration}/>
         </div>
         <div className='text-white flex flex-row justify-center items-center'>
-          <p className='hidden xsmc:block'>{expired? expiredMsg : notExpiredMsg}</p>
-          <p className='xsmc:hidden'>{expired? expiredMsgMini: notExpiredMsgMini}</p>
+          <p className='hidden smc:block'>{expired? expiredMsg : notExpiredMsg}</p>
+          <p className='smc:hidden'>{expired? expiredMsgMini: notExpiredMsgMini}</p>
           <div className='bg-white hover:bg-green-100 active:bg-white hover:border-[red] border px-3 ml-4 flex cursor-pointer gap-2 flex-row justify-center items-center rounded-md'
             onClick={handleBuySubscription}>
             <MdShoppingCart className=' text-[#f56b6b]'/>

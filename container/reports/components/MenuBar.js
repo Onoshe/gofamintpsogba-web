@@ -1,6 +1,6 @@
 import { ExcelIcon } from '@/components/icons/iconsSvg';
 import React from 'react'
-import { BiArrowBack, BiArrowToRight, BiCaretUp, BiDetail, BiPrinter, BiRightArrow } from 'react-icons/bi';
+import { BiArrowBack, BiArrowToRight, BiCaretUp, BiDetail, BiPrinter, BiRightArrow, BiSolidReceipt, BiSolidReport } from 'react-icons/bi';
 import { MdClose, MdDateRange, MdOutlineFeaturedPlayList, MdRefresh } from 'react-icons/md';
 import { handleExport2Pdf } from '../utils/others/handleExport2Pdf';
 import { BsFileEarmarkPdf } from 'react-icons/bs';
@@ -12,7 +12,8 @@ import { datesDiffGreaterThan365, monthsDiffMoreThan12 } from '@/lib/date/datesD
 
 const MenuBarBar = ({handleReportNav, handleExportToExcel, handleDetailReport, reportName, reportRows, reportRowKeys, 
     reportHeader, showBar, pdfData, pdfHeader, user, toastNotify, dateForm, setDateForm, ledgerCode,  monthlyQuery, 
-    handleMonthlySummaryToggle, headerRowsColsArr, companyLogoFile, viewTransId, handleRefresh, currentReportTab}) => {
+    handleMonthlySummaryToggle, headerRowsColsArr, companyLogoFile, viewTransId, handleRefresh, currentReportTab,
+    downloadAccountStatement}) => {
     const [showDate, setShowDate] = React.useState(false);
     const [customDate, setCustomDate] = React.useState({startDate:{min:'', max:''}, endDate:{min:'', max:''}});
     const [dateFormPrelim, setDateFormPrelim] = React.useState("");
@@ -38,6 +39,8 @@ const handleOnChangeDate =(e)=>{
     setDateFormPrelim({...dateFormPrelim, [name]:value})
     //setDateForm({...dateForm, [name]:value})
 }
+
+
 const handleCustomDate =(e)=>{
     e.preventDefault();
     if(dateFormPrelim?.startDate || dateFormPrelim?.endDate){
@@ -72,12 +75,12 @@ const handleCustomDate =(e)=>{
   return (
     <div className={`z-20 px-3 flex-row shadow-md border-b-2 border-t-2 w-full justify-between items-center bg-sky-50 h-8 ${showBar? 'flex' : 'hidden'}`}>
         <div className={`flex flex-row gap-3 items-center`}>
-            <div className='hover:tooltip-open tooltip tooltip-right' data-tip={'Back'}>
+            <div className='hover:tooltip-open tooltip tooltip-right hidden smc:block' data-tip={'Back'}>
                 <BiArrowBack size={18} className='text-[navy] hover:bg-blue-100 shadow-md rounded-lg cursor-pointer hover:text-blue-500 active:text-blue-300' 
                 onClick={()=>handleReportNav('PREV')}
                 />
             </div>
-            <div className='hover:tooltip-open tooltip tooltip-right' data-tip={'Next'}>
+            <div className='hover:tooltip-open tooltip tooltip-right hidden smc:block' data-tip={'Next'}>
                 <BiArrowBack size={18} className='text-[navy] hover:bg-blue-100 shadow-md rounded-lg tooltip-open tooltip-top tooltip cursor-pointer hover:text-blue-500 active:text-blue-300 rotate-180' 
                 onClick={()=>handleReportNav('NEXT')}
                 />
@@ -128,10 +131,14 @@ const handleCustomDate =(e)=>{
                 </div>
             </div>
         </div>
-        <p className='px-3 pt-1 text-[12px] sm:text-[13px] text-blue-700 flex'>{currentReportTab}</p>
-        <div className=' flex'>
+        <p className='px-3 pt-1 hidden smc:flex  text-[13px] smc:font-bold sm:text-base text-blue-700'>{currentReportTab}</p>
+        <div className='flex gap-3'>
+            <div className={`hover:tooltip-open tooltip tooltip-left items-center justify-between ${reportName === "customers" || reportName === "vendors"? "flex" : "hidden"}`} data-tip={'Download Account Statement'}>
+                    <BiSolidReport className='text-[20px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
+                    onClick={downloadAccountStatement}/>
+            </div>
             <div className={`hover:tooltip-open tooltip tooltip-left flex items-center justify-between`} data-tip={'Refresh data'}>
-                    <MdRefresh className='text-[16px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
+                    <MdRefresh className='text-[20px] text-blue-700 cursor-pointer hover:text-blue-400 active:text-blue-700'
                     onClick={handleRefresh}/>
             </div>
         </div>

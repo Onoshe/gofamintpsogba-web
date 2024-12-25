@@ -32,7 +32,7 @@ const SideDrawer = ({closeDrawer, ssUser}) => {
   const domainAndPage = pathnameSplits.slice(1,3); //E.g ['demo', 'reports']
   const showCompanyPage = coy?.toUpperCase() !== "DEMO";
 
-  const currentActivePage = [...navs, nav_Coy]?.find((dt)=> "/"+coy+"/"+dt.name == "/"+coy+"/"+domainAndPage[1]);
+  const currentActivePage = [...navs, nav_auditTrail, nav_profile, nav_Coy]?.find((dt)=> "/"+coy+"/"+dt.name == "/"+coy+"/"+domainAndPage[1]);
   const isDashboardPage = "/"+coy === pathname;
 
 
@@ -78,6 +78,7 @@ const SideDrawer = ({closeDrawer, ssUser}) => {
 
   //<div className={`h-full z-50 min-h-screen mt-[60px] ${showSidebarTitle? 'w-[220px]': 'w-[70px]'} transition-width duration-500 bg-[aliceblue] lg:bg-[#c5dcf0] shadow-[gray_1px_0px_8px_0px]`}>
 
+  //console.log(currentActivePage)
   return (
     <div className={`h-full relative z-50 min-h-screen mt-[55px] ${showSidebarTitle? 'w-[200px]': 'w-[70px]'} transition-width duration-500 bg-[aliceblue] lg:bg-[#c5dcf0] shadow-[gray_1px_0px_8px_0px]`}>
           <div className={`absolute top-0 bottom-0 w-full bg-red-100/60 ${hasExpired? '' : 'hidden'}`}></div>
@@ -114,22 +115,45 @@ const SideDrawer = ({closeDrawer, ssUser}) => {
                   )
                 })
               }
-              
               {showCompanyPage? 
-              <Link href={`${'/'+coy+'/company'}`} 
-                className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row hover:text-[blue] ${currentActivePage?.name==='company'? "bg-sky-300 text-[blue] " : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
-                data-tip={'Company'}
-                onClick={()=>handleNav({name:'company', title:'Company'})}>
-                {icons.company}
-                {showSidebarTitle && <span className='text-[12px]'>{'Company'}</span>}
-              </Link>
-              :<div  
-                className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row  bg-gray-200 text-gray-700 rounded-md p-2 gap-1 items-center`}
-                data-tip={'Company'}
-                >
-                {icons.company}
-                {showSidebarTitle && <span className='text-[12px]'>{'Company'}</span>}
-              </div>}
+                <Link href={`${'/'+coy+'/audit-trail'}`} 
+                  className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row hover:text-[blue] ${currentActivePage?.name==='audit-trail'? "bg-sky-300 text-[blue] " : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
+                  data-tip={'Audit Trail'}
+                  onClick={()=>handleNav({name:'audit-trail', title:'Audit Trail'})}>
+                  {icons.auditTrail}
+                  {showSidebarTitle && <span className='text-[12px]'>{'Audit Trail'}</span>}
+                </Link>
+                :<div  
+                  className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row  bg-gray-200 text-gray-700 rounded-md p-2 gap-1 items-center`}
+                  data-tip={'Audit Trail'}
+                  >
+                  {icons.auditTrail}
+                  {showSidebarTitle && <span className='text-[12px]'>{'Audit Trail'}</span>}
+                </div>
+              }
+              <Link href={`${'/'+coy+'/profile'}`} 
+                  className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row hover:text-[blue] ${currentActivePage?.name==='profile'? "bg-sky-300 text-[blue] " : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
+                  data-tip={'Profile'}
+                  onClick={()=>handleNav({name:'profile', title:'Profile'})}>
+                  {icons.profile}
+                  {showSidebarTitle && <span className='text-[12px]'>{'Profile'}</span>}
+                </Link>
+              {showCompanyPage? 
+                <Link href={`${'/'+coy+'/company'}`} 
+                  className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row hover:text-[blue] ${currentActivePage?.name==='company'? "bg-sky-300 text-[blue] " : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
+                  data-tip={'Company'}
+                  onClick={()=>handleNav({name:'company', title:'Company'})}>
+                  {icons.company}
+                  {showSidebarTitle && <span className='text-[12px]'>{'Company'}</span>}
+                </Link>
+                :<div  
+                  className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row  bg-gray-200 text-gray-700 rounded-md p-2 gap-1 items-center`}
+                  data-tip={'Company'}
+                  >
+                  {icons.company}
+                  {showSidebarTitle && <span className='text-[12px]'>{'Company'}</span>}
+                </div>
+              }
             </div>
             <div
               className={`${showSidebarTitle? 'w-[200px] tooltip': 'w-[70px]'} fixed bottom-0 z-50 hover:text-white tooltip-right py-2 flex flex-row text-[#e2dddd] bg-[gray]   p-2 gap-1 items-center`}
@@ -174,10 +198,12 @@ export var navs = [
   {name:'reports', title:"Reports", icon:icons.reports},
   {name:'chart-of-account', title:"Chart of Account", icon:icons.chartOfAccount},
   {name:'reconciliation', title:"Reconciliation", icon:icons.reconciliation},
-  {name:'audit-trail', title:"Audit Trail", icon:icons.auditTrail},
+  //{name:'audit-trail', title:"Audit Trail", icon:icons.auditTrail},
   //{name:'guide', title:"Guide", icon:icons.guide},
-  {name:'profile', title:"Profile", icon:icons.profile},
+  //{name:'profile', title:"Profile", icon:icons.profile},
   //{name:'company', title:"Company", icon:icons.company}
 ];
 
+export var nav_auditTrail = {name:'audit-trail', title:"Audit Trail", icon:icons.auditTrail};
+export var nav_profile =  {name:'profile', title:"Profile", icon:icons.profile};
 export var nav_Coy = {name:'company', title:"Company", icon:icons.company};

@@ -44,7 +44,8 @@ const customers =[
   {name:'personal-ledgers-customers', title:'Customers Ledgers', mainReport:'CUSTOMERSLEDGERS', reportGroup:'Customers'},
   {name:'customers-ledger-accounts', title:'Customers Ledger Accounts', mainReport:'CUSTOMERS', reportGroup:'Customers'},
   {name:'personal-ledgers-customers-balances', title:'Customers Balances', mainReport:'CUSTOMERSBALANCES', reportGroup:'Customers'},
-  {name:'customers-aging', title:'Customers Aging', mainReport:'CUSTOMERSAGING', reportGroup:'Customers'}
+  {name:'customers-aging', title:'Customers Aging', mainReport:'CUSTOMERSAGING', reportGroup:'Customers'},
+  {name:'customers-loan', title:'Customers Loan', mainReport:'CUSTOMERSLOAN', reportGroup:'Customers'}
 ];
 const vendors =[
   {name:'account-list-vendors', title:'Vendors List', mainReport:'VENDORSACCOUNTS', reportGroup:'Vendors'},
