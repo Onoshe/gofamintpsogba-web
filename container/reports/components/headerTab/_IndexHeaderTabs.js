@@ -13,7 +13,6 @@ const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,
         setSelTab({open:true, idx});
     }
     //console.log(user, domainNm)
-    const showCustomersLoan = user?.companyId?.toLowerCase() === "kosofe"; 
 
   return (
     <div className={`flex flex-row bg-[#373c46] relative`}>
@@ -40,7 +39,7 @@ const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,
                                 index={i}
                                 tabsLen={headersArr.length}
                                 setSelTab={setSelTab}
-                                showCustomersLoan={showCustomersLoan}
+                                domainNm={domainNm}
                             />
                         </div>
                     )
@@ -54,8 +53,9 @@ const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,
 
 //right-0 sm:right-auto w-[100%] sm:w-auto
 
-const Dropdown =({tabItem, handleSelReport, index, tabsLen, showCustomersLoan})=>{
-    
+const Dropdown =({tabItem, handleSelReport, index, tabsLen, domainNm})=>{
+    const showCustomersLoan = domainNm?.toLowerCase() === "kosofe"; 
+
     let tabsDropdowns = tabsDropdown;
     if(!showCustomersLoan){
       const customersArr = [...tabsDropdown.customers];
