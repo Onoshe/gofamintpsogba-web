@@ -22,12 +22,7 @@ const DynamicPageDisplay = ({ rowHeaders, rowKeysShow, rows,currentReport, click
     //console.log(currentReport, rows);
   }
   let reportDateDisplay = reportDate;
-  // const reportDateExcl = ["account-list-customers", "account-list-vendors", "account-list-products"];
-  // if(reportDateExcl.includes(reportName)){
-  //   reportDateDisplay = "";
-  // }
-  // console.log(reportDateExcl);
-
+ 
 
 //w-[calc(100% - 200px)]
   return (

@@ -10,7 +10,8 @@ const Backup = ({backupUrl, notify, backupUrlBase}) => {
   const [refreshData, setRefreshData] = useState(0);
   const [backupInfo, setBackupInfo] = useState({ok:'', msg:''});
   
-  //console.log(backupSQLFiles)
+  //console.log(backupSQLFiles, backupUrl, backupUrlBase);
+
   const handleSelected =(db, bkFolder)=>{
     const sel = backupCSVFiles.res[bkFolder][db];
     setSelectedCSVDb(sel);
@@ -43,7 +44,7 @@ const Backup = ({backupUrl, notify, backupUrlBase}) => {
   }
 
   const handleBackup = async (type)=>{
-    //return console.log(type, backupUrlBase)
+    //return console.log(type, backupUrl)
     const data = {
       "desc":"For backup, type = MYSQL || CSV. To fetch csv backups: type = GETFILES",
       "act": "BACKUP_DB",
@@ -82,14 +83,14 @@ const Backup = ({backupUrl, notify, backupUrlBase}) => {
                       <p className='text-center font-bold pb-3'>Backup</p>
                       <div className='flex flex-row flex-wrap gap-2 justify-around'>
                           <div className='flex flex-col gap-2'>
-                            <button className='btn btn-accent btn-sm'
+                            <button className='btn btn-accent btn-sm' disabled
                               onClick={()=>handleBackup("SQL")}>Backup Data- MYSQL</button>
                             <button className='btn btn-accent btn-sm'
                               onClick={()=>handleBackup("CSV")}>Backup Data- CSV</button>
                             </div>
                             
                             <button className='btn btn-info btn-sm w-full max-w-[160px] lg:mt-[80px]'
-                            onClick={()=>getFiles(backupUrl)}>Refresh</button>
+                            onClick={()=>getFiles(backupUrlBase)}>Refresh</button>
                       </div>
                       <p className={`${backupInfo.ok? 'text-green-600' : 'text-red-500'}`}>{backupInfo.msg}</p>
                     </div>
@@ -98,9 +99,10 @@ const Backup = ({backupUrl, notify, backupUrlBase}) => {
                         <div className='bg-white p-2 mb-2 w-full'>
                           <p className='font-bold'>My SQL Files</p>
                           <div>
+                            <p className='text-red-500'>Terminal disabled on cpanel server probably why it is no longer working</p>
                             {backupSQLFiles?.folders?.map((databases, i)=>{
                               return(
-                                <dviv key={`${i}key`}>
+                                <div key={`${i}key`}>
                                   <p className='text-[12px] md:text-base break-words'>
                                     {i+1}. {databases}
                                   </p>
@@ -113,7 +115,7 @@ const Backup = ({backupUrl, notify, backupUrlBase}) => {
                                       </p>
                                     )
                                   })}
-                                </dviv>
+                                </div>
                               )
                             })}
                           </div>

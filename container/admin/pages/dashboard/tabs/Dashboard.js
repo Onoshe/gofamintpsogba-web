@@ -50,7 +50,7 @@ const Dashboard = ({databases_clients, clientsDataFmt, selectedClient, setSelect
                         <p className='text-blue-700 font-[600] text-base'>Existing Databases</p>
                             {databases?.map((database, i)=>{
                               return(
-                                <dviv key={`${i}key`}>
+                                <div key={`${i}key`}>
                                   <p className='text-sm break-words text-[maroon]'>
                                     {i+1}. {database} <span className='text-[12px] text-gray-600'>{`Tables - ${databases_clients[database]?.length}`}</span>
                                   </p>
@@ -72,7 +72,7 @@ const Dashboard = ({databases_clients, clientsDataFmt, selectedClient, setSelect
                                       </p>
                                     )
                                   })*/}
-                                </dviv>
+                                </div>
                               )
                             })}
                       </div>

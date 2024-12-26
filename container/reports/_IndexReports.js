@@ -25,6 +25,7 @@ import { useAuthCustom } from '@/lib/hooks/useAuthCustom';
 import useWindowDimensions from '@/lib/hooks/useWindowDimensions';
 import { handleExportStatement } from './utils/others/handleExportStatement';
 import { getAccountStatement } from './utils/ledgers/getAccountStatement';
+import DynamicPageDisplayCustom from './components/dynamicPageDisplay/DynamicDisplayPageCustom';
 
 
 
@@ -59,13 +60,13 @@ const IndexReports = ({ssUser}) => {
   //const genLedgerCodes = Object.keys(processedLedgers);
   const {ledgerCodes, ledgerAccts, ledgerTitle} = getDisplayPersonalLedgers(transProcessor, currentReport, reportDate);
   const docHeader = moreDocHeader?.length? [[clientAccount?.companyName], [title], [date],  ...moreDocHeader] : [[clientAccount?.companyName], [title], [date], ['']];
-  const currentReportTab = getCurrentReportName(reportName);
+  const currentReportTab = getCurrentReportName(reportName, user);
   const companyLogoFile = getCompanyLogo(settings);
   const windowDimen = useWindowDimensions();  
   
   //console.log(transProcessor.getTransactions());
   //let productLg = transProcessor.getPersonalAccounts('productsLedger');
-  //console.log(currencySymbol)
+  //console.log(user)
 
   const toastNotify =(type, msg)=>{
     dispatchToastNotice({type, msg, count:parseInt(toastNotice.count)+1})
@@ -235,13 +236,15 @@ const IndexReports = ({ssUser}) => {
 
   useEffect(()=>{
     const sortables = ['personal-ledgers-customers-balances', 'personal-ledgers-vendors-balances',
-      'personal-ledgers-products-balances','account-list-customers','account-list-vendors','account-list-products'
+      'personal-ledgers-products-balances','account-list-customers','account-list-vendors','account-list-products',
+      'customers-loan'
     ];
     if(sortables.includes(reportName)){
       setClickedHeader({name:'', title:'', clickable:true})
     }else{setClickedHeader({name:'', title:'', clickable:false})}
   },[reportName]);
 
+  //console.log(clickedHeader)
   const showReport = typeof rows === "object" || rows?.length ? true : false;
   //  console.log(rows)
   return (
@@ -257,6 +260,8 @@ const IndexReports = ({ssUser}) => {
             selTab={selTab}
             setSelTab={dispatchSelTab}
             currentReport={currentReport}
+            user={user}
+            reportName={reportName}
           />
           <Suspense>   
             <MenuBarBar
@@ -309,7 +314,8 @@ const IndexReports = ({ssUser}) => {
           />
           :<Suspense>
             
-            <DynamicPageDisplay
+            {reportName === "customers-loan"?
+              <DynamicPageDisplayCustom
               pathname={pathname}
               processedLedgers={processedLedgers}
               transProcessor={transProcessor}
@@ -330,6 +336,27 @@ const IndexReports = ({ssUser}) => {
               clickedHeader={clickedHeader}
               setClickedHeader={setClickedHeader}
             />
+            :<DynamicPageDisplay
+              pathname={pathname}
+              processedLedgers={processedLedgers}
+              transProcessor={transProcessor}
+              rowHeaders={rowHeaders}
+              currentReport={{name, title}}
+              rowKeysShow={rowKeysShow}
+              rows={rows}
+              reportName={reportName}
+              handleClickCell={handleClickCell}
+              clickables={clickables}
+              companyName={clientAccount?.companyName}
+              reportDate={date}
+              toastNotify={toastNotify}
+              viewTransId={viewTransId}
+              transactionsDetails={transactionsDetails}
+              subTitle={subTitle}
+              windowDimen={windowDimen}
+              clickedHeader={clickedHeader}
+              setClickedHeader={setClickedHeader}
+            />}
               <EditDeleteTransaction 
                 selectedTranFromList={selectedTranFromList}
                 reportName={reportName}

@@ -5,14 +5,14 @@ import { tabsDropdown } from "./getHeaders";
 
 
 
-const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,currentReport,  companyId, selTab, setSelTab}) => {
-    
-    //console.log(selTab)
+const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,currentReport,  companyId, selTab, setSelTab, reportName, user}) => {
+
+
     const selectedTabHandler =(tab, idx)=>{
         setSelectedTab(tab);
         setSelTab({open:true, idx});
     }
-    
+    const showCustomersLoan = user?.companyId?.toLowerCase() === "kosofe"; 
 
   return (
     <div className={`flex flex-row bg-[#373c46] relative`}>
@@ -39,6 +39,7 @@ const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,
                                 index={i}
                                 tabsLen={headersArr.length}
                                 setSelTab={setSelTab}
+                                showCustomersLoan={showCustomersLoan}
                             />
                         </div>
                     )
@@ -52,8 +53,12 @@ const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,
 
 //right-0 sm:right-auto w-[100%] sm:w-auto
 
-const Dropdown =({tabItem, handleSelReport, index, tabsLen})=>{
-
+const Dropdown =({tabItem, handleSelReport, index, tabsLen, showCustomersLoan})=>{
+    
+    let tabsDropdowns = tabsDropdown;
+    if(!showCustomersLoan){
+        tabsDropdowns.customers.filter((dt)=> dt.name !== "customers-loan");
+    }
     return(
         <div className={`absolute  z-50 top-[40px] min-w-[150px] flex-col items-center hidden  hover:flex group-hover:flex ${index==0? 'left-0 smc:left-auto' : index== tabsLen-1? 'right-0 smc:right-auto' : ''}`}
             >
@@ -61,7 +66,7 @@ const Dropdown =({tabItem, handleSelReport, index, tabsLen})=>{
             <div className="text-[12px] md:text-base border border-blue-600 rounded-md bg-blue-50 shadow-lg w-fit">
                 <p className="bg-blue-400 text-center text-white py-[4px] font-bold">{tabItem.tabName}</p>
                 <div className="flex flex-col p-3 text-[12px] md:text-[13px]">
-                    {tabsDropdown[tabItem.tabName.toLowerCase()].map((dt, i)=>{
+                    {tabsDropdowns[tabItem.tabName.toLowerCase()].map((dt, i)=>{
                         return(
                             <div key={`${i}key`}
                                 className={`text-gray-600 pt-1 hover:text-blue-600 cursor-pointer active:text-blue-400`}

@@ -5,10 +5,6 @@ import { getDaysDifference } from "@/lib/date/getDaysBetweenDates";
 import { getStartAndEndDate } from "@/lib/dummyData/getStartAndEndDate";
 import { sortArrayByKey } from "@/lib/sort/sortArrayByKey";
 
-////recordedTransArr
-
-const keysRecordTrans = ["date", "account", "accountSub","description",  "transactionNo","voucher",  "reference", "debit", "credit", "balance"];
-
 
 
  export const loanReportIndex =({dateForm, reportName,  transProcessor, clickedHeader})=>{
@@ -22,45 +18,82 @@ const keysRecordTrans = ["date", "account", "accountSub","description",  "transa
 
     const startDateFmt = new Date(dateFormFmt?.startDate).toDateString();
     const endDateFmt = new Date(dateFormFmt?.endDate).toDateString();
-    const date = 'Loan summary report from '+startDateFmt+" to "+endDateFmt;
+    const date = 'Loan Summary Report As At '+endDateFmt;
 
-    //return {}
     let result = {};
-    const pdfDataFullData = {
-        reportRowKeys:keysRecordTrans,
-        noFmtCols:[8,9], // Number format columns 1234567 => 1,234,567
-        headerFSize:[13],
-        tableColsWch:[15, 35, "", "", "", "", "", "", "", ""], //Empty is auto
-        tableColsFSize:6,
-        tablePlain:[],
-        footerArr:[],
-        tableHeaderFSize:11,
-    }
-    const pdfData =  pdfDataFullData;
-    let rowKeysShow = keysRecordTrans; 
-    sortArrayByKey(rowsRes, 'transId', 'ASC');
-    const rows = rowsRes.reduce((rowsFmt, row, i) => {
-        const prevRow = rowsRes[i - 1];
-        
-        if (i > 0 && prevRow.transId !== row.transId) {
-          // Add a separator (empty object) and the current row
-          rowsFmt = [...rowsFmt, {}, row];
-        } else {
-          // Just add the current row
-          rowsFmt = [...rowsFmt, row];
-        }
-        return rowsFmt; // Return the updated array
-      }, []);   
-    //  console.log(rows)
+    const pdfData =  {};
+    /*
+    //sortArrayByKey(rowsRes, 'transId', 'ASC');
     let rowsDt = customersLedgersArr[0]?.trans; //clickedHeader.name? sortTableData([...rows], clickedHeader.name) : rows;
     let bal = 0;
     rowsDt = rowsDt?.map((dt)=> {
       bal += parseFloat(dt.amount); 
       return {...dt, balance: bal}
-    })
+    })*/
+
     const loanDetails = getLoanDetailsFunction(customersLedgersArr);
-    const loanRows = Object.values(loanDetails);
-    result =  {date, name:reportName, title:"Loan Summary Report", clickables:"", rowKeysShow:loanKeys, rowHeaders:getHeadersTitle(loanKeys), rows:loanRows, pdfData}
+    let loanRows = Object.values(loanDetails);
+    sortArrayByKey(loanRows, 'accountCode', 'DSC');
+
+    loanRows.forEach(row => {
+      if(row.loanBalance <1){
+        row.runningLoanStatus = "PAID"
+      }else{
+        if(row.runningLoanDaysPastDue < 0){
+          row.runningLoanStatus = "DUE";
+          row['classNameTD'] = "text-red-500";
+        }else{
+          row.runningLoanStatus = "UNDUE";
+          row['classNameTD'] = "text-red-950";
+        }
+      }
+    });
+    loanRows = clickedHeader.name? sortTableData([...loanRows], clickedHeader.name) : loanRows;
+    
+    
+    let lastRow = {
+          accountCode:"",
+          accountName:"Total",
+          lastLoanPrin:0,
+          lastLoanInt:0,
+          lastLoanPrinAndInt:0,
+          loanBalance:0,
+          runningLoanPrin:0,
+          runningLoanInt:0,
+          runningLoanPrinAndInt:0,
+          runningLoanLastRepaymentAmount:0,
+          runningLoanTotalRepaid:0,
+          totalInterest:0,
+          totalLoanPrin:0,
+          totalLoanPrinAndInt:0,
+          loanCounts:0
+        };
+      loanRows.forEach(row => {
+        lastRow.lastLoanPrin +=row.lastLoanPrin;
+        lastRow.lastLoanInt +=row.lastLoanInt;
+        lastRow.lastLoanPrinAndInt +=row.lastLoanPrinAndInt;
+        lastRow.loanBalance +=row.loanBalance;
+        lastRow.runningLoanPrin +=row.runningLoanPrin;
+        lastRow.runningLoanInt +=row.runningLoanInt;
+        lastRow.runningLoanPrinAndInt +=row.runningLoanPrinAndInt;
+        lastRow.runningLoanLastRepaymentAmount +=row.runningLoanLastRepaymentAmount;
+        lastRow.runningLoanTotalRepaid +=row.runningLoanTotalRepaid;
+        lastRow.totalLoanPrin +=row.totalLoanPrin;
+        lastRow.totalInterest +=row.totalInterest;
+        lastRow.totalLoanPrinAndInt +=row.totalLoanPrinAndInt;
+        lastRow.loanCounts +=row.loanCounts;
+        lastRow['classNameTD'] = "font-bold";
+    });
+
+    loanRows.push(lastRow);
+    const rowHeaders = getHeadersTitle(loanKeys);
+    const rowHeadersFmt = rowHeaders.map((dt)=> {
+      let title = dt.title.replace("Loan Prin", "Loan Principal");
+      title = title.replace("Loan Int", "Loan Interest");
+      return {...dt, title}
+    });
+
+    result =  {date, name:reportName, title:"Loan Summary Report", clickables:"", rowKeysShow:loanKeys, rowHeaders:rowHeadersFmt, rows:loanRows, pdfData}
 
 return result
 }
@@ -78,7 +111,7 @@ function  getLoanDetailsFunction(customersLedgersArr){
           const customerTrans = customer.trans;
           if(!loanDetails[customer.accountCodeSub]){ //Initialize
             loanDetails[customer.accountCodeSub] = {
-              accountCodeSub:customer.accountCodeSub,
+              accountCode:customer.accountCodeSub,
               accountName:customer.name,
               accountGroup:customer.group,
               totalLoanPrin:0,     //Total loan principal collected

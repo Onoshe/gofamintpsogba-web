@@ -20,7 +20,8 @@ const MenuBarBar = ({handleReportNav, handleExportToExcel, handleDetailReport, r
  
  const showDetailReport = reportName?.includes('fs-balance-sheet') || reportName?.includes('fs-income-statement');
  const showMonthlyReport = ledgerCode;
- const hideBtns = !reportName? true : false;
+ const hideBtnsReportName = ['customers-loan'];
+ const hideBtns = !reportName || hideBtnsReportName.includes(reportName)? true : false;
 
 const handleSelDate = (date)=>{
     setShowDate(false)

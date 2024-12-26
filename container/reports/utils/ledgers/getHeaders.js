@@ -61,7 +61,11 @@ export const keysList = {
     sn:{name:'sn', title:'SN'},
 
     acctType:{name:'acctType', title:'Group'},
+    totalInterest:{name:'totalInterest', title:'Total Cummulative Interest'},
+    totalLoanPrin:{name:'totalInterest', title:'Total Cummulative Loan Prin'},
+    loanBalance:{name:'loanBalance', title:'Running Loan Balance'},
 }
+
 
 
 export const getHeadersTitle = (keys, report)=>{
