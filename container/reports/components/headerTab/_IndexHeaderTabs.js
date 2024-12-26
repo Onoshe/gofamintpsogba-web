@@ -5,13 +5,14 @@ import { tabsDropdown } from "./getHeaders";
 
 
 
-const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,currentReport,  companyId, selTab, setSelTab, reportName, user}) => {
+const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,currentReport,  companyId, selTab, setSelTab, reportName, domainNm, user}) => {
 
 
     const selectedTabHandler =(tab, idx)=>{
         setSelectedTab(tab);
         setSelTab({open:true, idx});
     }
+    //console.log(user, domainNm)
     const showCustomersLoan = user?.companyId?.toLowerCase() === "kosofe"; 
 
   return (
@@ -57,8 +58,11 @@ const Dropdown =({tabItem, handleSelReport, index, tabsLen, showCustomersLoan})=
     
     let tabsDropdowns = tabsDropdown;
     if(!showCustomersLoan){
-        tabsDropdowns.customers.filter((dt)=> dt.name !== "customers-loan");
+      const customersArr = [...tabsDropdown.customers];
+      const customers = customersArr.filter((dt)=> dt.name !== "customers-loan");
+      tabsDropdowns.customers = customers;
     }
+    //console.log(showCustomersLoan, tabsDropdowns)
     return(
         <div className={`absolute  z-50 top-[40px] min-w-[150px] flex-col items-center hidden  hover:flex group-hover:flex ${index==0? 'left-0 smc:left-auto' : index== tabsLen-1? 'right-0 smc:right-auto' : ''}`}
             >

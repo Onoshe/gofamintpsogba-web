@@ -262,6 +262,7 @@ const IndexReports = ({ssUser}) => {
             currentReport={currentReport}
             user={user}
             reportName={reportName}
+            domainNm={domainNm}
           />
           <Suspense>   
             <MenuBarBar
