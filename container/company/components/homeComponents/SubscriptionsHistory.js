@@ -4,7 +4,8 @@ import DashboardCard from '../reusableComponents/DashboardCard';
 import ReportTable from '../reusableComponents/ReportTable';
 import { sortArrayByDate } from '@/lib/sort/sortArrayByDate';
 import { formatToCurrency } from '@/lib/currency';
-import { getDaysBetweenDates, getDaysDifference } from '@/lib/date/getDaysBetweenDates';
+import { addDaysToDate, getDaysBetweenDates, getDaysDifference } from '@/lib/date/getDaysBetweenDates';
+import { addMonthsToDate } from '@/lib/date/addMonthsToDate';
 
 const SubscriptionsHistory = ({subscriptions, client_Admin, clientData, generalSettings, quickRecordsLogo, 
     handleExportReceipt,currencySymbol, handleExportStatement}) => {
@@ -21,8 +22,8 @@ if(subHistory?.length){
     })
 }
 
-//console.log(client_Admin)
-//console.log(subHistory)
+//console.log(client_Admin, clientData)
+//console.log(subscriptions)
 const pdfData = {};
   if(clientData?.companyName && client_Admin?.companyName){
     pdfData.invoiceName = clientData.companyName;
@@ -38,18 +39,35 @@ const pdfData = {};
         "Invoice generated on "+new Date().toString(),
     ];
   }
+  
  const handleClickRowCell =(key, row, i)=>{
    if(key==="export"){
      const sub = subscriptions.find((dt)=> dt.id == row.id);
+        //period covered
+        let proformaInvDate = "";
+        if(sub.periodCovered){
+            proformaInvDate = sub.periodCovered;
+        }else{
+            const today = new Date().toISOString().split("T")[0];
+            const startDate = addDaysToDate(today, 1);      
+            const endDate = addMonthsToDate(today, 12);
+            proformaInvDate = startDate+" to "+endDate;
+        }
+
+        pdfData.reportName = clientData?.companyDomain? clientData?.companyDomain.toUpperCase() +"_Subscription_Invoice" : "Subscription_Invoice";
         pdfData.invoiceNo = sub.invoiceNo;
         pdfData.paymentRef = sub.paymentRef;
-        pdfData.date = sub.subscriptionDate;
+        pdfData.date = proformaInvDate;
         pdfData.itemDesc1 = sub.subDescription1;
         pdfData.itemDesc2 = sub.subDescription2;
+        pdfData.credit = sub.discount;
         pdfData.itemAmount2 = currencySymbol+formatToCurrency(parseFloat(sub.subscriptionAmount));
         pdfData.itemSubTotal = currencySymbol+formatToCurrency(parseFloat(sub.subscriptionAmount));
-        pdfData.itemTotal = currencySymbol+formatToCurrency(parseFloat(sub.subscriptionAmount));
-
+        pdfData.creditAmount = sub.discountAmount? '-'+currencySymbol+formatToCurrency(parseFloat(Math.abs(sub.discountAmount))) : 0;
+        pdfData.itemVAT = sub.vatAmount? '-'+currencySymbol+formatToCurrency(parseFloat(Math.abs(sub.vatAmount))) : 0;
+        const total = parseFloat(sub.subscriptionAmount? sub.subscriptionAmount : 0) + parseFloat(sub.discountAmount? sub.discountAmount : 0) + parseFloat(sub.vatAmount? sub.vatAmount : 0);
+        pdfData.itemTotal = currencySymbol+formatToCurrency(total);
+        //console.log(total, itemTotal, pdfData.creditAmount)
     handleExportReceipt({quickRecordsLogo, paid:sub.subPaymentStatus, pdfData});
    }
  }

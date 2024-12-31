@@ -5,7 +5,7 @@ import autoTable from 'jspdf-autotable';
 
 export const handleExportReceipt =({quickRecordsLogo, paid='PAID', pdfData})=>{
   //const paid = "PAID"; //"PAID", "NOT PAID", "PRO FORMA";   
-  const reportName = "Payment Receipt";
+  const reportName = pdfData?.reportName || "Payment Receipt";
 
     const doc = new jsPDF({
       orientation: 'portrait', //Deafult is 'portrait' Other is 'landscape',
@@ -73,7 +73,7 @@ export const handleExportReceipt =({quickRecordsLogo, paid='PAID', pdfData})=>{
       theme: 'plain', 
       body: [
           [{ content: 'Invoice No: #'+pdfData.invoiceNo, styles: { halign: 'left', fillColor:'#ddd', fontStyle:'bold', cellPadding:2, fontSize:13  } }],
-          [{ content: 'Invoice Date: '+pdfData.date, styles: { halign: 'left', fillColor:'#ddd', cellPadding:2} },],
+          [{ content: 'Period Covered: '+pdfData.date, styles: { halign: 'left', fillColor:'#ddd', cellPadding:2} },],
           [{ content: 'Payment reference: '+pdfData.paymentRef, styles: { halign: 'left', fillColor:'#ddd', cellPadding:2} },]
       ],  
     });
@@ -100,6 +100,7 @@ export const handleExportReceipt =({quickRecordsLogo, paid='PAID', pdfData})=>{
     const headerStyle = {halign:"center", fillColor:'#eee', fontStyle:'bold', cellPadding:{top:4}};
     const alt1 = {halign:"left", fillColor:'#fcfcfc', cellPadding:{left:5, top:3}};
     const alt1b = {halign:"center", fillColor:'#fcfcfc', cellPadding:{left:5, top:3}};
+    const alt1c = {halign:"left", fillColor:'#fcfcfc', fontStyle:'bold', cellPadding:{left:5, top:3}};
     const alt2 = {halign:"right", fillColor:'#eee', fontStyle:'bold', cellPadding:{left:5, top:3}};
     const alt2b = {halign:"center", fillColor:'#eee', cellPadding:{left:5, top:3}};
     const alt2c = {halign:"center", fillColor:'#eee', fontStyle:"bold", cellPadding:{left:5, top:3, bottom:5}};
@@ -107,11 +108,12 @@ export const handleExportReceipt =({quickRecordsLogo, paid='PAID', pdfData})=>{
 
     
     const itemDesc1 = pdfData.itemDesc1; // "Plot 221, Ikeji Way";
+    const credit = pdfData.credit;
     const itemAmount1 = pdfData.itemAmount1; // "$2,980.45";
     const itemDesc2 = pdfData.itemDesc2; //"Choose the method that best fits your requirements, whether you need borders for the entire table, specific cells, or just parts like headers or body rows.";
     const itemAmount2 = pdfData.itemAmount2; //"$2,980.45";
     const itemSubTotal = pdfData.itemSubTotal; //"$2,980.45";
-    const itemCredit = pdfData.itemCredit; //"$2,980.45";
+    const creditAmount = pdfData.creditAmount; //"$2,980.45";
     const itemVAT = pdfData.itemVAT; //"$2,980.45";
     const itemTotal = pdfData.itemTotal; //"$2,980.45";
 
@@ -119,11 +121,11 @@ export const handleExportReceipt =({quickRecordsLogo, paid='PAID', pdfData})=>{
       theme: 'plain',
       body: [
           [{content: "Description", colSpan:9, styles:headerStyle}, {content: "Total", styles:headerStyle}],
-          [{content: itemDesc1, colSpan:9, styles:alt1}, {content: itemAmount1, styles:alt1b}],
+          [{content: itemDesc1, colSpan:9, styles:alt1c}, {content: itemAmount1, styles:alt1b}],
           [{content: itemDesc2, colSpan:9, styles:alt1}, {content: itemAmount2, styles:alt1b}],
           [{content: "", styles:alt1}, {content: "", styles:alt1}],
           [{content: "Sub total:", colSpan:9, styles:alt2}, {content: itemSubTotal, styles:alt2b}],
-          [{content: "Credit:", colSpan:9, styles:alt2}, {content: itemCredit, styles:alt2b}],
+          [{content: credit? credit+":" : "Credit:", colSpan:9, styles:alt2}, {content: creditAmount, styles:alt2b}],
           [{content: "VAT:", colSpan:9, styles:alt2}, {content: itemVAT, styles:alt2b}],
           [{content: "Total:", colSpan:9, styles:alt2d}, {content: itemTotal, styles:alt2c}],
       ],
