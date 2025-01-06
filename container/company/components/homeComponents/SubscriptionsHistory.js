@@ -39,7 +39,8 @@ const pdfData = {};
         "Invoice generated on "+new Date().toString(),
     ];
   }
-  
+
+  //console.log(subscriptions);
  const handleClickRowCell =(key, row, i)=>{
    if(key==="export"){
      const sub = subscriptions.find((dt)=> dt.id == row.id);

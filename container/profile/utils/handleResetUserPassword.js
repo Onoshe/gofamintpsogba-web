@@ -1,4 +1,4 @@
-import { getLinkClientServer, getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
+import { getCoyLogoPath, getLinkClientServer, getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
 
 import * as bcrypt from "bcryptjs";
 import { getRequest } from "@/lib/apiRequest/getRequest";
@@ -34,6 +34,7 @@ export const handleResetUserPassword= async(updateForm, fetchedUser, session)=>{
 }
 
   async function sendResetPasswordMail({userId, userName, email, defaultPassword}){
+    const domain = userId?.split('@')[0];
     const mailHtml = getRegisterUserEmailBody({
         name:'Dear: '+userName, 
         subject:"QuickRecords Password Reset", 
@@ -42,7 +43,8 @@ export const handleResetUserPassword= async(updateForm, fetchedUser, session)=>{
         password:defaultPassword, 
         emailMsg1:'Reset password was initiated on your account by the Admin. Your new default login details are as follows:',
         emailMsg2:'Go to the login page and login to change your one-time password.',
-        loginPage:'https://quick-records.vercel.app/login'});
+        loginPage:'https://quick-records.vercel.app',
+        logoUrl:getCoyLogoPath(domain)});
         const sendMailLink = getLinkClientServer().dev;
         const mailBody = {
             route:"SENDMAIL",

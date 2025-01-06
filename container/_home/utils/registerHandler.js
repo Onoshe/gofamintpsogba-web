@@ -2,12 +2,12 @@ import { postRequest } from "@/lib/apiRequest/postRequest";
 import { postQuery } from "./requests";
 import { validateInputs } from "./validateInputs";
 import { getRequest } from "@/lib/apiRequest/getRequest";
-import { getLinkClientServer, getLinkUserData, isProduction } from "@/lib/apiRequest/urlLinks";
+import { getCoyLogoPath, getLinkClientServer, getLinkUserData, isProduction } from "@/lib/apiRequest/urlLinks";
 import getRegisterUserEmailBody from "@/components/htmlEmail/registerUserEmail";
 import { generatePassword } from "@/lib/generator";
 
 
-export const platformDomain = 'https://quick-records.vercel.app/login'; //isProduction? 'https://quick-records.vercel.app/login':"http://localhost:3000/login";
+export const platformDomain = 'https://quick-records.vercel.app'; //isProduction? 'https://quick-records.vercel.app/login':"http://localhost:3000/login";
 
 //Register a demo account only.
 //User registration will be done by the client Admin 
@@ -42,14 +42,15 @@ const  registerHandler = async (form, dispatchResetForm, alert, setAlert, setMod
                     password:loginDetails.password, 
                     emailMsg1:'Your account registration on QuickRecords was successful and your login details are:',
                     emailMsg2:'Go to the login page and login to change your one-time password.',
-                    loginPage:platformDomain
+                    loginPage:platformDomain,
+                    logoUrl:getCoyLogoPath(domain)
                    });
                     const sendMailLink = getLinkClientServer(domain).dev;
                     const mailBody = {
                         route:"SENDMAIL",
                         mailObj:{
                             mailTo:form.email,
-                            mailFrom:"no-reply@quickrecords.gofamintpsogba.org",
+                            mailFrom:"no-reply@gofamintpsogba.org",
                             mailSubject:"QuickRecords Login Details",
                             mailBody:mailHtml
                         }

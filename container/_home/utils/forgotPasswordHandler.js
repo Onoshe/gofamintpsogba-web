@@ -5,7 +5,7 @@ import { postRequest } from "@/lib/apiRequest/postRequest";
 import { dateFmtISO } from "@/lib/date/dateFormats";
 import { getUniqueRandomNumbers } from "@/lib/radomNos/getRandomNumbers";
 import { getExpirationTime } from "@/lib/time/getTime";
-import { getLinkClientServer, getLinkForgotPassword, getLinkPostUser } from "@/lib/apiRequest/urlLinks";
+import { getCoyLogoPath, getLinkClientServer, getLinkForgotPassword, getLinkPostUser } from "@/lib/apiRequest/urlLinks";
 import getOTPEmailBody from "@/components/htmlEmail/otpEmail";
 
 
@@ -24,9 +24,12 @@ const  forgotPasswordHandler = async (form, setAlert, setModalAlert, setModalAle
                 if(user.data[0].email == form.email || user.data[0]?.recoveryEmail == form.email){
                     const {url, body, resetCode} = updateResetPassword(user.data[0], domain);
                     //return console.log(body)
-                    const mailHtml = getOTPEmailBody({OTP:resetCode, name:"Dear: "+form.userName, 
+                    const mailHtml = getOTPEmailBody({
+                        OTP:resetCode, 
+                        name:"Dear: "+form.userName, 
                         subject:"Password Reset Initiated on your Account",
-                        optMsg: "This OTP Is valid only for 15 mintues, If you haven't requested this OTP Contact us immediately!",
+                        optMsg: "This OTP Is valid only for 15 mintues, If you didn't request for this OTP, please contact us immediately!",
+                        logoUrl:getCoyLogoPath(domain)
                     });
                     const sendMailLink = getLinkClientServer(domain).dev;
                     const mailBody = {

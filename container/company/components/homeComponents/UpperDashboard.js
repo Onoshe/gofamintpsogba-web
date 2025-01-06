@@ -17,6 +17,8 @@ import { handleExportStatement } from '../utils/handleExportStatement';
 
 const UpperDashboard = ({base64Image, setBase64Image, coyLogo, notify, user, dispatchRefreshSettingsCount, clientAccount, subscriptions, coyLogoUrl, dispatchSubscriptions}) => {
     
+    //console.log(clientAccount);
+    
     let subHistory = [...subscriptions]; let subActive = false;
     if(subHistory?.length){
         subHistory.sort((a, b) => {

@@ -1,4 +1,4 @@
-import { getLinkClientServer, getLinkFetchTableWithConds, getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
+import { getCoyLogoPath, getLinkClientServer, getLinkFetchTableWithConds, getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
 
 import * as bcrypt from "bcryptjs";
 import { getRequest } from "@/lib/apiRequest/getRequest";
@@ -35,7 +35,6 @@ export const handleAddNewUser= async(updateForm, session)=>{
             result = await postRequest(url, body);
             if(result.ok){
               const addRes =  await postNewUserMail({domain, form:{firstname:updateForm.firstname, lastname:updateForm.lastname, email:updateForm.email}, loginDetails:{password:defaultSecret, userId}});
-              console.log(addRes);
               result = addRes;
             }
             //result = {ok:true}
@@ -116,7 +115,9 @@ const postNewUserMail = async ({domain, form, loginDetails})=>{
         password:loginDetails.password, 
         emailMsg1:'Your account registration on QuickRecords was successful and your login details are:',
         emailMsg2:'Go to the login page and login to change your one-time password.',
-        loginPage:platformDomain});
+        loginPage:platformDomain,
+        logoUrl:getCoyLogoPath(domain)});
+        
         const sendMailLink = getLinkClientServer(domain).dev;
         const mailBody = {
             route:"SENDMAIL",

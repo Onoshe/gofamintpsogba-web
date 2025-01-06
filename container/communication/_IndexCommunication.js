@@ -12,6 +12,7 @@ import { getCompanyLogo } from '../company/components/utils/getSubscriptionHisto
 import useStoreHeader from '@/context/storeHeader';
 import useStoreTransactions from '@/context/storeTransactions';
 import { LedgersManager } from '../reports/utils/ledgers/ledgersManger';
+import { getCoyLogoPath } from '@/lib/apiRequest/urlLinks';
 
 const headerTab = getHeaders();
 const today = new Date().toISOString().split("T")[0];
@@ -42,7 +43,7 @@ const IndexCommunication = ({ssUser}) => {
   const pathname = usePathname();
   const companyLogo = getCompanyLogo(settings);
   const companyDetails = {name:clientData?.companyName, address:clientData?.address};
-  const coyLogoUrl = `https://quickrecords.gofamintpsogba.org/image_server.php?image=${coyDomain?.toUpperCase()}@LOGO&isLogo=TRUE`;
+  const coyLogoUrl = getCoyLogoPath(coyDomain);
 
 
   const notify =(type, msg)=>{

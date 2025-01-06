@@ -1,4 +1,4 @@
-import { getLinkClientServer, getLinkPostTrans, getLinkPostUser } from "@/lib/apiRequest/urlLinks";
+import { getCoyLogoPath, getLinkClientServer, getLinkPostTrans, getLinkPostUser } from "@/lib/apiRequest/urlLinks";
 
 import * as bcrypt from "bcryptjs";
 import { getRequest } from "@/lib/apiRequest/getRequest";
@@ -24,7 +24,8 @@ import getOTPEmailBody from "@/components/htmlEmail/otpEmail";
 
         const mailHtml = getOTPEmailBody({OTP:resetCode, name:"Dear: "+userId, 
             subject:"Password Reset Initiated on your Account",
-            optMsg: "This OTP Is valid only for 15 mintues, If you haven't requested this OTP Contact us immediately!",
+            optMsg: "This OTP Is valid only for 15 mintues, If you didn't request for this OTP, please contact us immediately!",
+            logoUrl:getCoyLogoPath(domain)
         });
         const sendMailLink = getLinkClientServer(domain).dev;
         const mailBody = {
@@ -62,11 +63,12 @@ export function updateResetPassword(user, domain){
 }   
 
 export async function postOTPMail({resetCode, userId, email}){
+    let domain = userId.split("@")[0];
     const mailHtml = getOTPEmailBody({OTP:resetCode, name:"Dear: "+userId, 
         subject:"Password Reset Initiated on your Account",
-        optMsg: "This OTP Is valid only for 15 mintues, If you haven't requested this OTP Contact us immediately!",
+        optMsg: "This OTP Is valid only for 15 mintues, If you didn't request this OTP, please contact us immediately!",
+        logoUrl:getCoyLogoPath(domain)
     });
-    let domain = userId.split("@")[0];
     domain = domain.toLowerCase();
     const sendMailLink = getLinkClientServer(domain).dev;
     const mailBody = {

@@ -1,6 +1,6 @@
 import { getRequest } from "@/lib/apiRequest/getRequest";
 import { getDefaultCOA, getDefaultPersonalAcct, getDefaultProductList } from "./processDbData";
-import { getLinkClientData, getLinkUserData } from "@/lib/apiRequest/urlLinks";
+import { getLinkClientData, getLinkFetchTableWithConds, getLinkUserData } from "@/lib/apiRequest/urlLinks";
 import { productsLedgerProcessor } from "./productsLedgersProcessor";
 
 
@@ -38,8 +38,11 @@ export const  getClientData = async (domain, userId)=>{
 }
 
 export const  fetchAndDispatchClientAccount = async (domain, dispatchClientAccount)=>{
-   const {clientLink} = getLinkUserData({domain});
-   const client = await getRequest(clientLink).then((res)=> res);
+   console.log(domain);
+   const urlLink = getLinkFetchTableWithConds({table:'_clients', conds:'companyDomain', values:domain.toUpperCase()});
+   //const {clientLink} = getLinkUserData({domain});
+   const client = await getRequest(urlLink).then((res)=> res);
+   //console.log(client);
    if(client?.data?.length && dispatchClientAccount){
       dispatchClientAccount(client.data[0])
  }else{return {}}
