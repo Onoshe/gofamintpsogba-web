@@ -218,6 +218,8 @@ const handleResetUserPwd =async (e)=>{
     setUpdateForm({title:user.title, phoneNo:user.phoneNo, recoveryEmail:user.recoveryEmail, password:''})
   },[user]);
   
+  //<FileUploadCustom file={file} setFile={setFile} session={session} 
+  //                className={'hidden'} notify={notify} userId={userId} userPhotoCheck={userPhotoCheck} isLogo="CLIENTLOGO"/>
 
   const userPhotoRender = (userPhotoCheck?.data?.ok?
   <Image width={100} height={100} src={userPhoto} alt='photo' className='size-[100px]'/>

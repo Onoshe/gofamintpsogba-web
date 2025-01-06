@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import {IoMdClose, IoMdMenu} from 'react-icons/io';
-import SideDrawer, { nav_auditTrail, nav_Coy, nav_profile, navs } from '../sideDrawer/_SideDrawer';
+import SideDrawer, { nav_auditTrail, nav_communication, nav_Coy, nav_profile, navs } from '../sideDrawer/_SideDrawer';
 import FastRecordLogo from '@/appLogo/FastRecord';
 import useStoreHeader from '@/context/storeHeader';
 import useOnScroll from '@/lib/hooks/useOnScroll';
@@ -118,7 +118,7 @@ const Header = ({ssUser}) => {
     if(pathname){
         const path = pathname.split("/")[2];
         if(path){
-          const pagesArr = [...navs, nav_auditTrail, nav_profile, nav_Coy];
+          const pagesArr = [...navs, nav_auditTrail, nav_profile, nav_Coy, nav_communication];
           const nav = pagesArr?.find((dt)=> dt?.name == path);
           if(nav){
             const {name, title} = nav;

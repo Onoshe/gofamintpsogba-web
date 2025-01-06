@@ -217,7 +217,7 @@ const IndexReports = ({ssUser}) => {
       }
       const personalAcct = personalAccts?.find(dt=> dt.accountCode == ledgerCode);
       const {pdfData, reportData} = getAccountStatement({name, personalAcct, rows:acctStmt?.rows, reportDate, clientData, accountType:reportName, currencySymbol});
-      //console.log(acctStmt, personalAcct, ledgerCode)
+     // console.log([name, personalAcct, acctStmt?.rows, reportDate, clientData, reportName, currencySymbol])
      handleExportStatement({imgObj:companyLogoFile, pdfData, data:reportData})
      //console.log([name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr])
   }

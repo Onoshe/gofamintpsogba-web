@@ -7,9 +7,15 @@ import { TextInput, TextTitle } from '../../_IndexCompany';
 import { handleExportReceipt } from '../utils/handleExportReceipt';
 import { handleExportStatement } from '../utils/handleExportStatement';
 
+ //<FileUploadCustom file={file} setFile={setFile} session={session} 
+  //                className={'hidden'} notify={notify} userId={userId} userPhotoCheck={userPhotoCheck} isLogo="CLIENTLOGO"/>
+
+ // const userPhotoRender = (userPhotoCheck?.data?.ok?
+  //<Image width={100} height={100} src={userPhoto} alt='photo' className='size-[100px]'/>
+ // :<BsPerson color='seagreen' className='text-[100px] text-center'/>);
 
 
-const UpperDashboard = ({base64Image, setBase64Image, coyLogo, notify, user, dispatchRefreshSettingsCount, clientAccount, subscriptions, dispatchSubscriptions}) => {
+const UpperDashboard = ({base64Image, setBase64Image, coyLogo, notify, user, dispatchRefreshSettingsCount, clientAccount, subscriptions, coyLogoUrl, dispatchSubscriptions}) => {
     
     let subHistory = [...subscriptions]; let subActive = false;
     if(subHistory?.length){
@@ -38,14 +44,15 @@ const UpperDashboard = ({base64Image, setBase64Image, coyLogo, notify, user, dis
         }
         
     }
+    //console.log(coyLogoUrl);
 
     return (
     <div className='flex flex-row gap-3 flex-wrap justify-evenly p-3'>
             <div className='w-full flex flex-col pb-3 items-center shadow-lg max-w-[350px] max-h-[250px] rounded-md '>
                 <p className='w-full bg-blue-300 text-gray-600 text-center p-2 mb-2 font-bold rounded-t-lg'>Company Logo</p>
                 <Image
-                        //src={coyLogo}
-                        src={coyLogo.type==="base64"? `data:image/png;base64,${coyLogo.file}` : coyLogo.file}
+                        src={coyLogoUrl}
+                        //src={coyLogo.type==="base64"? `data:image/png;base64,${coyLogo.file}` : coyLogo.file}
                         width={100}
                         height={100}
                         alt='Company logo'
@@ -57,6 +64,17 @@ const UpperDashboard = ({base64Image, setBase64Image, coyLogo, notify, user, dis
                     notify={notify}
                     user={user}
                     dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}/>
+            </div>
+            <div className='hidden w-full flex-col pb-3 items-center shadow-lg max-w-[350px] max-h-[250px] rounded-md '>
+                <p className='w-full bg-blue-300 text-gray-600 text-center p-2 mb-2 font-bold rounded-t-lg'>Company Logo</p>
+                <Image
+                        src={coyLogoUrl}
+                        //src={coyLogo.type==="base64"? `data:image/png;base64,${coyLogo.file}` : coyLogo.file}
+                        width={100}
+                        height={100}
+                        alt='Company logo'
+                        className='flex flex-1 w-full bg-red-50 max-h-[100px] max-w-[150px] mb-5'
+                    />
             </div>
             <div className='w-full hidden flex-col pb-3 items-center shadow-lg max-w-[350px] max-h-[250px] rounded-md '>
                 <p className='w-full bg-blue-300 text-gray-600 text-center p-2 mb-2 font-bold rounded-t-lg'>Subscriptions History</p>

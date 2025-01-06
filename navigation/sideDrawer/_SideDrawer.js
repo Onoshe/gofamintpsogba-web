@@ -32,7 +32,7 @@ const SideDrawer = ({closeDrawer, ssUser}) => {
   const domainAndPage = pathnameSplits.slice(1,3); //E.g ['demo', 'reports']
   const showCompanyPage = coy?.toUpperCase() !== "DEMO";
 
-  const currentActivePage = [...navs, nav_auditTrail, nav_profile, nav_Coy]?.find((dt)=> "/"+coy+"/"+dt.name == "/"+coy+"/"+domainAndPage[1]);
+  const currentActivePage = [...navs, nav_auditTrail, nav_profile, nav_Coy, nav_communication]?.find((dt)=> "/"+coy+"/"+dt.name == "/"+coy+"/"+domainAndPage[1]);
   const isDashboardPage = "/"+coy === pathname;
 
 
@@ -131,6 +131,22 @@ const SideDrawer = ({closeDrawer, ssUser}) => {
                   {showSidebarTitle && <span className='text-[12px]'>{'Audit Trail'}</span>}
                 </div>
               }
+              {showCompanyPage? 
+                <Link href={`${'/'+coy+'/communication'}`} 
+                  className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row hover:text-[blue] ${currentActivePage?.name==='communication'? "bg-sky-300 text-[blue] " : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
+                  data-tip={'Communication'}
+                  onClick={()=>handleNav({name:'communication', title:'Communication'})}>
+                  {icons.communication}
+                  {showSidebarTitle && <span className='text-[12px]'>{'Communication'}</span>}
+                </Link>
+                :<div  
+                  className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row  bg-gray-200 text-gray-700 rounded-md p-2 gap-1 items-center`}
+                  data-tip={'Communication'}
+                  >
+                  {icons.communication}
+                  {showSidebarTitle && <span className='text-[12px]'>{'Communication'}</span>}
+                </div>
+              }
               <Link href={`${'/'+coy+'/profile'}`} 
                   className={`${!showSidebarTitle && 'tooltip'} z-50 tooltip-right mb-1 text-sm flex-nowrap flex flex-row hover:text-[blue] ${currentActivePage?.name==='profile'? "bg-sky-300 text-[blue] " : "text-gray-700"} hover:bg-[#97d9f4] rounded-md p-2 gap-1 items-center`}
                   data-tip={'Profile'}
@@ -184,6 +200,7 @@ export var icons = {
   auditTrail:<RiMenuSearchLine  size={18} className='mr-2'/>,
   guide:<GrResources  size={18} className='mr-2'/>,
   profile:<BsFillPersonVcardFill  className='text-[22px] mr-2'/>,
+  communication:<BiMailSend  className='text-[22px] mr-2'/>,
   company:<MdSettings  className='text-[18px] mr-2'/>,
   reconciliation:<MdAccountTree  className='text-[18px] mr-2'/>
 };
@@ -204,6 +221,7 @@ export var navs = [
   //{name:'company', title:"Company", icon:icons.company}
 ];
 
+export var nav_communication = {name:'communication', title:"Communication", icon:icons.communication};
 export var nav_auditTrail = {name:'audit-trail', title:"Audit Trail", icon:icons.auditTrail};
 export var nav_profile =  {name:'profile', title:"Profile", icon:icons.profile};
 export var nav_Coy = {name:'company', title:"Company", icon:icons.company};

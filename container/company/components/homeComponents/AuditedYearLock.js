@@ -4,15 +4,18 @@ import DashboardCard from '../reusableComponents/DashboardCard';
 import { TextTitle } from '../../_IndexCompany';
 import { postOrUpdateSettings } from '../utils/postOrUpdateSettings';
 
+
 const AuditedYearLock = ({dispatchRefreshSettingsCount, notify, user, settings}) => {
 const [date, setDate] = useState('');
 const tranLockSlug = "transaction-lock-date";
+
 
 let tranLockDate = 'Not set';
 if(settings?.data?.length){
     const lockTranFound = settings.data.find((dt)=> dt.slug === tranLockSlug);
     if(lockTranFound?.smallText){tranLockDate = lockTranFound.smallText}
-}   
+}
+   
 const handleUpdate =  (e)=>{
     e.preventDefault();
     if(!date) return

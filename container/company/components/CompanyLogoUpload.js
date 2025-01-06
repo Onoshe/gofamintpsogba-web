@@ -1,15 +1,18 @@
-import { postRequest } from '@/lib/apiRequest/postRequest';
+import { postRequest, postRequestFormData } from '@/lib/apiRequest/postRequest';
 import React, {useState, useEffect, useRef} from 'react'
 import { BiCloudUpload } from 'react-icons/bi';
 import { MdClose, MdUpload } from 'react-icons/md';
 import { prepareQuerySettings } from './utils/prepareQuerySettings';
 import { handleUploadLogo, handleUploadQuickRecordsLogo } from './utils/handleUploadLogo';
+import { getPostImageLink } from '@/lib/apiRequest/urlLinks';
+
 /* eslint-disable @next/next/no-img-element */
 
 
 export const CompanyLogoUpload = ({coyLogo, base64String, setBase64String,notify,user,dispatchRefreshSettingsCount, setInfoMsg, setIsDropped, }) => {
     const inputRef = useRef();
     const [file, setFile] = React.useState(null);
+    const postUrl = getPostImageLink();
     //const fileInputRefs = useRef(null);
     //const [base64String, setBase64String] = useState('');
     //const [fileName, setFileName] = useState('');
@@ -23,9 +26,11 @@ export const CompanyLogoUpload = ({coyLogo, base64String, setBase64String,notify
   //handleUploadLogo({base64String, user, notify, handleReset});
   
   const handleUploadOnline = async ()=>{
-    handleUploadLogo({base64String, user, notify, handleReset, dispatchRefreshSettingsCount});
+   handleUploadLogo({base64String, user, notify, handleReset, dispatchRefreshSettingsCount, file})
+   
     //handleUploadQuickRecordsLogo({base64String, notify, handleReset, dispatchRefreshSettingsCount})
   }
+  //console.log(file);
 
   const convertImageToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -79,7 +84,62 @@ export const CompanyLogoUpload = ({coyLogo, base64String, setBase64String,notify
     }
   }
 
-  //console.log(file);
+  //----------------------- UPLOAD AS A FIL- urlPath
+  
+    const handleSaveImage = async (file)=>{
+      //return console.log(userId)
+       try {
+        const formData = new FormData();
+        formData.append('image', file);
+        if(isLogo === "CLIENTLOGO"){
+          let newImageName = userId?.split("@");
+          newImageName = newImageName[0]+"@LOGO";
+          formData.append('newImageName', newImageName);
+          formData.append('CLIENTLOGO', 'CLIENTLOGO');
+        }else{
+          const newImageName = userId?.replace(".", "_");
+          formData.append('newImageName', newImageName);
+        }
+        await postRequestFormData(postUrl, formData)
+        .then((res)=>{
+          if(res.ok){
+            notify("success", res.msg);
+            //handleReset();
+          }else{
+            notify("error", res.msg || res.error);
+          }
+        });
+  
+      } catch (error) {
+        notify("error", "Error uploading file");
+        console.error('Error uploading file:', error);
+      }
+  
+    };
+  
+  const handleDeletePhoto = async ()=>{
+      try {
+        const formData = new FormData();
+        const userIdFmt = userId.replace('.', '_');
+        formData.append('imageDelete', userIdFmt);
+        await postRequestFormData(postUrl, formData)
+        .then((res)=>{
+          if(res.ok){
+            notify("success", res.msg);
+            //handleReset();
+          }else{
+            notify("error", res.msg || res.error);
+          }
+        });
+  
+      } catch (error) {
+        notify("error", "Error deleting file");
+        console.error('Error uploading file:', error);
+      }
+  }
+
+
+  //------------------------
 
   var fileThumbnail;  
   if(file){

@@ -9,11 +9,12 @@ import { MdClose, MdDelete } from "react-icons/md";
 /* eslint-disable @next/next/no-img-element */
 
 
-export const FileUploadCustom = ({file, setFile, session,userId, userPhotoCheck, className, notify}) => {
+export const FileUploadCustom = ({file, setFile, session,userId, userPhotoCheck, className, notify, isLogo}) => {
     const inputRef = React.useRef();
     const postUrl = getPostImageLink();
     //const [file, setFile] = React.useState(null);
    
+//console.log(file);
 
   const handleReset =()=>{
     setFile(null);
@@ -47,9 +48,16 @@ export const FileUploadCustom = ({file, setFile, session,userId, userPhotoCheck,
     //return console.log(userId)
      try {
       const formData = new FormData();
-      const newImageName = userId?.replace(".", "_");
       formData.append('image', file);
-      formData.append('newImageName', newImageName);
+      if(isLogo === "CLIENTLOGO"){
+        let newImageName = userId?.split("@");
+        newImageName = newImageName[0]+"@LOGO";
+        formData.append('newImageName', newImageName);
+        formData.append('CLIENTLOGO', 'CLIENTLOGO');
+      }else{
+        const newImageName = userId?.replace(".", "_");
+        formData.append('newImageName', newImageName);
+      }
       await postRequestFormData(postUrl, formData)
       .then((res)=>{
         if(res.ok){

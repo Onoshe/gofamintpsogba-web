@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-//import autoTable from 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 
 
@@ -9,7 +9,7 @@ import jsPDF from 'jspdf';
       dataDef.push([i+1+'.', new Date().toLocaleDateString(), "Data display in row " + (i + 1), 1000 * i, 1000 * i, 1000 * i]);
   }
 
-export const handleExportStatement = async ({imgObj, data=dataDef, pdfData= pdfDataDef}) => {
+export const handleExportStatement = async ({imgObj, data=dataDef, pdfData= pdfDataDef, docMethod}) => {
     let lineHeight = 1.1; //Line height for wrap text
     //Initialize the jsPDF object inside the function so that the previous report data will not persist in the current report
     var doc = new jsPDF({
@@ -171,7 +171,20 @@ export const handleExportStatement = async ({imgObj, data=dataDef, pdfData= pdfD
                     }
             });
   
-        doc.save(reportName+".pdf");  
+        //doc.save(reportName+".pdf");
+        if(docMethod === "PRINT"){
+            'use client'
+            var blob = doc.output("blob");
+            window.open(URL.createObjectURL(blob));
+        }else if(docMethod === "STRING"){
+            return doc.output("datauristring");  //arraybuffer for Email 
+        }else if(docMethod === "ASFILE"){
+            'use client'
+            var blob = doc.output("blob");
+            return blob;
+        }else{
+            doc.save(reportName+".pdf");
+        }  
 };
       
 

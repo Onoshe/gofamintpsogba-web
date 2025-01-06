@@ -18,6 +18,7 @@ import EditDeleteLock from './components/homeComponents/EditDeleteLock';
 import { usePathname, useRouter } from 'next/navigation';
 import BookALoanControl from './components/homeComponents/BookALoan';
 import useStoreRecordTransaction from '@/context/storeRecordTransaction';
+import { getImageLink } from '@/lib/apiRequest/urlLinks';
 //import { AccessCard } from './cards/DashboardAccess';
 
 
@@ -36,14 +37,19 @@ const IndexCompany = ({ssUser}) => {
     const [tabs, setTabs] = React.useState({activeTab:{name:'home', title:'Home'}});
     const pathname = usePathname();
     const router = useRouter();
+    const companyId = session?.user?.companyId || 'demo';
+    let companyLogo = companyId.toUpperCase()+'@LOGO';
+    const coyLogoUrl = getImageLink(companyLogo, 'isLogo');
 
     const lockPosting = user?.role?.toUpperCase() !== "ADMIN";
     let quickRecordsLogo = "";
     if(generalSettings?.length){
         quickRecordsLogo = generalSettings.find((dt)=>dt.slug === "quickrecords-logo")?.largeText1;
     }
+     
 
-    //console.log(plans, subcriptionHistory);
+
+    //console.log(coyLogoUrl);
 
     useEffect(()=>{
         const imageUrl = 'https://media.istockphoto.com/id/1496615469/photo/serene-latin-woman-enjoy-sunset-with-gratitude.jpg?s=612x612&w=is&k=20&c=hrdwKW5CMjVXlB_k39AnXHb-_Bm4epQPXRRTxhCDQpc=';
@@ -88,7 +94,7 @@ const IndexCompany = ({ssUser}) => {
                         <p>Due date: {expirationMsg?.dueDate}</p>
                         </div>
                         <Image
-                                //src={coyLogo}
+                                //src={coyLogoUrl}
                                 src={`data:image/png;base64,${appB64Image}`}
                                 width={100}
                                 height={100}
@@ -99,6 +105,7 @@ const IndexCompany = ({ssUser}) => {
                             base64Image={base64Image}
                             setBase64Image={setBase64Image}
                             coyLogo={coyLogo}
+                            coyLogoUrl={coyLogoUrl}
                             notify={notify}
                             user={user}
                             dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
