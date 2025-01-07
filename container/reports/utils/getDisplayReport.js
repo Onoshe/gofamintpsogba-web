@@ -12,7 +12,7 @@ import { loanReportIndex } from "../components/loans/loanReportIndex";
 
 
 export const getDisplayReport =({reportName, pathname, transProcessor, customers, vendors, products, coaStructure, viewTransId, transactionsDetails, ledgerCode, monthlyQuery, 
-    dateForm, user, chartOfAccounts, clickedHeader})=>{
+    dateForm, user, chartOfAccounts, clickedHeader, settings})=>{
     const startDateFmt = new Date(dateForm?.startDate).toDateString();
     const endDateFmt = new Date(dateForm?.endDate).toDateString();
     const date = 'Report from '+startDateFmt+" to "+endDateFmt;
@@ -43,7 +43,7 @@ export const getDisplayReport =({reportName, pathname, transProcessor, customers
         result = getRecordedTransactionsForDisplay(({dateForm, reportName,  transProcessor, query:viewTransId}));
         //console.log(result)
     }else if (reportName === "customers-aging" || reportName === "vendors-aging"){ 
-        result = getAgingReport({reportName,  transProcessor, dateForm});
+        result = getAgingReport({reportName,  transProcessor, dateForm, settings});
         //console.log(result)
     }else if(reportName === "products-valuation"){
         result = getProductsValuation({reportName,  transProcessor,  dateForm, products, viewTransId});

@@ -7,7 +7,15 @@ import { reduceAgingBalance, updateAging } from "./agingCalculation";
 
 
 
-export const getAgingReport = ({reportName,  transProcessor, dateForm})=>{
+export const getAgingReport = ({reportName,  transProcessor, dateForm, settings})=>{
+    const slug = "first-year-transactions-report";
+    
+    let firstYearRecord = "2022"; //Default
+    if(settings?.data?.length){
+        const firstYearRecordFound = settings.data.find((dt)=> dt.slug === slug);
+        if(firstYearRecordFound?.smallText){
+            firstYearRecord = firstYearRecordFound.smallText.split("-")[0]}
+    }
 
     const col1WchInDigit= 20;  //First column width in exported excel sheet  
     const pdfData = {
@@ -30,9 +38,12 @@ export const getAgingReport = ({reportName,  transProcessor, dateForm})=>{
         col1WchInDigit, 
         pdfData
     }
-    let ledgersAcct = transProcessor.processTransactions();
+    const endDate = new Date().toISOString().split("T")[0];
+    const startDate = `${firstYearRecord}-01-01`;
+    let ledgersAcct = transProcessor.processTransactions(startDate, endDate);
    
-    
+    //console.log(ledgersAcct);
+
     switch (reportName) {
         case 'vendors-aging':
             result.title = "Vendors Age Analysis";
@@ -54,7 +65,7 @@ export const getAgingReport = ({reportName,  transProcessor, dateForm})=>{
 export const generateAging =(personalAcctsObj, acctType)=>{
     //const personalAccts = Object.values(personalAcctsObj); 
     
-    //console.log(personalAcctsObj)
+    ///console.log(personalAcctsObj)
     const personalAcctsAging = [];
     for (const accountCode in personalAcctsObj) {
         const personalAcct = personalAcctsObj[accountCode];

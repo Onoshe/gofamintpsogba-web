@@ -30,7 +30,7 @@ const NetworkError = () => {
         <div className="flex bottom-0 w-full right-0 justify-center bg-white">
             <div className="flex p-4 text-red-500 flex-col justify-center items-center text-[100px] sm:text-[180px]">
                 <BiWifiOff />
-                <p className="text-base text-red-600 text-center">Ohhhhhhhhhhhhhhhhhhhhhhs!</p>
+                <p className="text-base text-red-600 text-center">Oh!</p>
                 <p className="text-base text-red-600 text-center">You seems to be offline. Please check your network</p>
                 <div className="text-[32px] mt-[30px]">{showLoader? '😀' : '😔'}</div>
                 

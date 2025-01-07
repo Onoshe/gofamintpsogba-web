@@ -54,7 +54,7 @@ const IndexReports = ({ssUser}) => {
   let [emptyPath, domainNm, reports, reportName] = pathname?.split("/");
    if(reportName?.includes("=")){ const reportNameSplit = splitByFirstChar(reportName, '='); reportName = reportNameSplit[0]; }
   const companyId = session?.user?.companyId;
-  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr, acctStmt} = getDisplayReport({reportName, pathname, transProcessor, customers, vendors, products, viewTransId, ledgerCode, monthlyQuery, coaStructure, transactionsDetails, user, chartOfAccounts, dateForm:reportDate, clickedHeader});
+  const {name, title, date, rowKeysShow, rowHeaders, rows, moreDocHeader, clickables, col1WchInDigit, pdfData, subTitle, headerRowsColsArr, acctStmt} = getDisplayReport({reportName, pathname, transProcessor, customers, vendors, products, viewTransId, ledgerCode, monthlyQuery, coaStructure, transactionsDetails, user, chartOfAccounts, dateForm:reportDate, clickedHeader, settings});
   const ledgerAcctsDisplay = ["general-ledger-accounts", "customers-ledger-accounts", "vendors-ledger-accounts", "products-ledger-accounts"];
   const isReportPage = !reportName || ledgerAcctsDisplay.includes(reportName) || (pathname === `/${user?.companyId?.toLowerCase()}/reports` || pathname === `/${user?.companyId?.toLowerCase()}/reports/`); 
   //const genLedgerCodes = Object.keys(processedLedgers);

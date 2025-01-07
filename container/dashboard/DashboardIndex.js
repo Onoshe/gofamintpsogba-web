@@ -137,7 +137,7 @@ const DashboardIndex = ({ssUser}) => {
             <div className='w-full'>
                 <div className='flex flex-col mt-3 gap-5 p-3'>
                 <div className='flex flex-row justify-around flex-wrap gap-5 p-3 mt-5 pt-[30px]'>
-                    <p className='text-teal-800 font-bold text-center'>Profit or Loss Summary Report for the period ending {periodEnd}</p>
+                    <p className='text-teal-800 font-bold text-center'>Profit or Loss Summary Report for {periodEndInit[3]? periodEndInit[3] : 'the'} period ending {periodEnd}</p>
                 </div>
                
                     <div className='flex flex-row justify-around flex-wrap gap-4' ref={contRef}>

@@ -23,7 +23,7 @@ export const handlePostMail = async ({emailContent, companyDetails, companyLogo,
           subject:emailContent.title,
           //fileName:"", //Set it as null if you want to send mail without attachment
           mailBody:`${html}`,
-          plainText:""
+          plainText:"We are preparing to send your statement"
         };
         if(fileName){ //For attachment
           postBody['fileName'] = fileName;

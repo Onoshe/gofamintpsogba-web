@@ -38,7 +38,7 @@ export const  getClientData = async (domain, userId)=>{
 }
 
 export const  fetchAndDispatchClientAccount = async (domain, dispatchClientAccount)=>{
-   console.log(domain);
+   //console.log(domain);
    const urlLink = getLinkFetchTableWithConds({table:'_clients', conds:'companyDomain', values:domain.toUpperCase()});
    //const {clientLink} = getLinkUserData({domain});
    const client = await getRequest(urlLink).then((res)=> res);

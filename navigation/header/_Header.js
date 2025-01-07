@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {IoMdClose, IoMdMenu} from 'react-icons/io';
 import SideDrawer, { nav_auditTrail, nav_communication, nav_Coy, nav_profile, navs } from '../sideDrawer/_SideDrawer';
 import FastRecordLogo from '@/appLogo/FastRecord';
@@ -37,8 +37,10 @@ const Header = ({ssUser}) => {
   const router = useRouter();
   const companyId = session?.user?.companyId?.toLowerCase();
   const isOnline = useOnline();
+  const [showNetworkPage, setShowNetworkPage] = useState(false);
   //const [mounted, setMounted] = useOnScroll({ready:false});
   //const pathname = usePathname();
+  //console.log(transReady, isOnline)
 
   let userInit = 'NA';
   
@@ -137,20 +139,28 @@ const Header = ({ssUser}) => {
     }
   },[toastNotice.count]);
   
-  //console.log(expirationMsg)
-  
-  //console.log(user)
 
-  //if(isProduction && !isOnline) return <NetworkError/>;
-  //console.log(transReady)
-  //return  <PageLogOut/>
+  useEffect(()=>{
+    //For Network error page to show upon page loading even when there's network is annoying.
+    //This code is to suspend the page for 500sec before showing if no network actually
+    if(transReady && isProduction){
+        if(isOnline){
+           setTimeout(()=>setShowNetworkPage(false))
+        }else{
+           setTimeout(()=>setShowNetworkPage(true), 500)
+        }
+    }
+  },[transReady, isProduction, isOnline]);
   
+  
+  const networkErrorPage = showNetworkPage? <NetworkError/> : <PageFetchingData/>;
+
   return (
     <div className={`fixed w-full z-50`} onClick={handleDropdown}>
         <EffectFetchData session={session}/>
         <SubscriptionMonitor user={user}/>
         {!transReady && <PageFetchingData/>}
-        {transReady && isProduction && !isOnline && <NetworkError/>}
+        {transReady && isProduction && !isOnline && networkErrorPage}
         {status === "logout" && <PageLogOut/>}
         
         <div className='absolute w-full  bottom-[20px]'>

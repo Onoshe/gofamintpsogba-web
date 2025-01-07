@@ -88,3 +88,43 @@ export function updateQueryCurrencySymbol({user, currencySymbol, id}) {
     return {body, url}
 }
 
+
+/**************   FISRT YEAR TRANS REPORT ************ 
+ This is use in the following report:
+ 1. Personal account aging computation 
+*/
+export function insertFisrtYearTransReport({user, firstYearTransRecord}) {
+    const postFieldsFmt = ["name", "description", "slug", "smallText", "createdBy", "createdAt"];
+    const postValuesFmt = ["First Year Transactions Record", "Use this to set the earlist period of your transactions. The earliest period should be the beginning month and year of your first transactions on the app.",  
+            "first-year-transactions-report", firstYearTransRecord,  user.userId, dateFmtISO()];
+    const url =  getLinkPostAndRetrieve(user.companyId);
+    const postTypes = postFieldsFmt.map((dt)=> "VARCHAR");
+    
+    let body = {
+        act:"INSERT",
+        table:user.companyId+"_settings",
+        fields:postFieldsFmt,
+        values:[postValuesFmt],
+        types:postTypes
+    }
+    return {body, url}
+}
+
+export function updateFisrtYearTransReport({user, firstYearTransRecord, id}) {
+    const postFieldsFmt = ["smallText", "createdBy", "createdAt"];
+    const postValuesFmt = [firstYearTransRecord,  user.userId, dateFmtISO()];
+    const url = getLinkPostTrans(user.companyId).patch;
+    const postTypes = postFieldsFmt.map((dt)=> "VARCHAR");
+    
+    let body = {
+        act: "UPDATE",
+        whereField:"id",
+        whereValue:id,
+        whereType: "INT",
+        table:user.companyId+"_settings",
+        fields:postFieldsFmt,
+        values :postValuesFmt,
+        types:postTypes
+      };
+    return {body, url}
+}

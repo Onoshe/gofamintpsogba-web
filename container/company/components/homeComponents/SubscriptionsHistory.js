@@ -17,8 +17,11 @@ if(subHistory?.length){
         let expired = new Date(dt.expiredDate).getTime() < new Date().getTime();
         const today = new Date().toISOString().split("T")[0];
         let daysToDueDate = getDaysDifference(dt.expiredDate, today);
-        daysToDueDate = daysToDueDate < 0? 0 : daysToDueDate;
-        return {...dt, daysToDueDate, subscriptionAmount:currencySymbol+formatToCurrency(parseInt(dt.subscriptionAmount)), status:expired? "Expired" : "Active", export:'Export', classNameTD:`${expired? 'text-red-800' : 'text-green-600'}`, exportClassName}
+            daysToDueDate = daysToDueDate < 0? 0 : daysToDueDate;
+        const  discountAmount ='-'+currencySymbol+formatToCurrency(parseInt(Math.abs(dt.discountAmount)));
+        const  paidAmount = currencySymbol+formatToCurrency(parseInt(dt.subscriptionAmount) + parseInt(dt.discountAmount));
+
+        return {...dt, daysToDueDate, discountAmount, paidAmount, subscriptionAmount:currencySymbol+formatToCurrency(parseInt(dt.subscriptionAmount)), status:expired? "Expired" : "Active", export:'Export', classNameTD:`${expired? 'text-red-800' : 'text-green-600'}`, exportClassName}
     })
 }
 
@@ -80,7 +83,7 @@ const pdfData = {};
             <div className='flex flex-col self-start px-3 bg-white p-3 max-h-[60vh] overflow-auto'>
                 {subHistory?.length? 
                 <ReportTable
-                    rowKeys={["subscriptionDate", "paymentRef", "subscriptionType", "description", "expiredDate", "daysToDueDate", "status", "subPaymentStatus", "subscriptionAmount",  "export"]}
+                    rowKeys={["subscriptionDate", "paymentRef", "subscriptionType", "description", "expiredDate", "daysToDueDate", "status", "subPaymentStatus", "subscriptionAmount", "discountAmount", "paidAmount",  "export"]}
                     header={headers}
                     rows={subHistory}
                     onClickRowCell={handleClickRowCell}
@@ -97,8 +100,8 @@ export default SubscriptionsHistory;
 
 var exportClassName = "shadow-lg active:bg-cyan-100 cursor-pointer bg-[#a3f8f6] hover:bg-[#6af9f6] p-1 px-2 rounded";
 var headers = [{name:"subscriptionDate", title:"Subscription date"}, {name:"paymentRef", title:"Payment Ref"}, {name:"description", title:"Description"}, {name:"expiredDate", title:"Expiration date"},
-    {name:"daysToDueDate", title:"Days Remaining"}, {name:"subscriptionAmount", title:"Amount"}, {name:"subscriptionType", title:"Plan"}, {name:"export", title:"Export Pdf"}, {name:"status", title:"Status"},
-    {name:"subPaymentStatus", title:"Payment"},];
+    {name:"daysToDueDate", title:"Days Remaining"}, {name:"subscriptionAmount", title:"Price"}, {name:"subscriptionType", title:"Plan"}, {name:"export", title:"Export Pdf"}, {name:"status", title:"Status"},
+    {name:"subPaymentStatus", title:"Payment"}, {name:"discountAmount", title:"Discount"}, {name:"paidAmount", title:"Amount Paid"},];
 
 /********** SET EXPIRATION DATE
  * if(subHistory?.length){

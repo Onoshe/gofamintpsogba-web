@@ -60,7 +60,7 @@ const useStoreTransactions = create((set) => ({
     dispatchCurrencySymbol: (act) => set((state) => ({
         currencySymbol: act,
     }))
-
+    
 }));
 
 

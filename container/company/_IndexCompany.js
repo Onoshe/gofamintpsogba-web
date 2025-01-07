@@ -19,6 +19,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import BookALoanControl from './components/homeComponents/BookALoan';
 import useStoreRecordTransaction from '@/context/storeRecordTransaction';
 import { getImageLink } from '@/lib/apiRequest/urlLinks';
+import FirstYearRecord from './components/homeComponents/FirstYearRecord';
 //import { AccessCard } from './cards/DashboardAccess';
 
 
@@ -119,6 +120,13 @@ const IndexCompany = ({ssUser}) => {
                 
                 <div className='relative gap-3 flex w-full flex-col lg:flex-row mt-10 p-5 border border-[dodgerblue]'>
                  <div name="PeusdoCover" className={`${lockPosting? 'absolute z-20' : 'hidden'} top-0 bottom-0 w-full bg-blue-200/10`}></div>
+                    <FirstYearRecord
+                        title="First Year Record"
+                        dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}
+                        notify={notify} 
+                        user={user}
+                        settings={settings}
+                    />
                     <CurrencySign
                         title="Change Currency Sign"
                         dispatchRefreshSettingsCount={dispatchRefreshSettingsCount}

@@ -74,7 +74,8 @@ const handleEmailContent =(e)=>{
   await handlePostMail({emailContent, file, setEmailContent, setEmailResponse, companyDetails, companyLogo, user, setContent, notify})
   .then(res=> {
      setSendingMail(false)
-    if(res.ok) {
+      //console.log(res)
+     if(res?.ok) {
       notify('success', 'Mail sent successfully');
       setEmailResponse({style:'text-[green]', msg:'Congratulations! Your mail was sent successfully'});
       setEmailContent({holder:'', title:'', body:'', email:'', copyMail:'', senderTeam:''});
