@@ -30,7 +30,7 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
 
     //const doc = new jsPDF();
     
-    //console.log(doc);
+    //console.log(reportRows);
     if(!reportRows?.length) return;
 
     let noOfColsDef = 2;
@@ -127,10 +127,11 @@ export const handleExport2Pdf =({ reportRows, reportHeader, pdfHeader, pdfData, 
     return arr.map(obj => {
        return keys.map((key, colNo) =>{
             let content = obj[key] || "";
+            const fontStyle =  obj?.classNameTD?.includes('bold') || obj?.description?.toLowerCase()?.includes('opening balance')? 'bold' :'normal';
             if(likelyCurrencyCol.includes(key.toLowerCase()) && parseFloat(content)){
               content =  formatToCurrency(parseFloat(content));
             }
-            const styles = fontSize? {fontStyle: obj?.classNameTD? 'bold' :'normal', fontSize} : {fontStyle: obj?.classNameTD? 'bold' :'normal'};
+            const styles = fontSize? {fontStyle, fontSize} : {fontStyle};
             return { content, styles}
         })
     });
@@ -159,7 +160,7 @@ function styleHeaderRows(arr, colSpan, fSizeArr){
     for (let i = 0; i < arr.length; i++) {
       const col = arr[i];
       const content = col[0] || "";
-      const fontSize = fSizeArr?.length? fSizeArr[i] || 10 : 10;
+      const fontSize = fSizeArr[i]? fSizeArr[i] : 10;
       let colFmt = content? {content,  colSpan, styles: {fontStyle:'bold', halign: 'center', fontSize}} : {content, colSpan}
        
       /*if(headerRowsCol?.length){

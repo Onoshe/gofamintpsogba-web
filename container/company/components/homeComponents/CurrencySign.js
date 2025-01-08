@@ -54,12 +54,12 @@ const handleOnChangeCurrencySymbol =(e)=>{
   return (
     <DashboardCard title={title} maxWidth="max-w-[450px]" style={``}>
         <div>
-            <p className='text-red-800 font-[500] my-4'>Current Symbol: <span className={`bg-white ml-3 py-1 px-3 border border-blue-300 font-bold text-blue-500`}>
+            <p className='text-red-800 font-[500] my-4'>Currency Sign: <span className={`bg-white ml-3 py-1 px-3 border border-blue-300 font-bold text-blue-500`}>
                 {currentSymbol}</span></p>
             <p className='italic pb-3'>Change the currency symbol to be displayed on your report</p>
             <form  className={`flex flex-wrap flex-row gap-3 items-center`} onSubmit={handleSave}>
                 <div className='flex flex-row flex-wrap'>
-                    <label className='font-bold mr-2'>Change Symbol</label>
+                    <label className='font-bold mr-2'>Change Sign</label>
                     <input
                         required
                         data-theme='winter'

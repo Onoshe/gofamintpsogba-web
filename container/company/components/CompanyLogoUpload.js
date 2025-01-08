@@ -2,7 +2,7 @@ import { postRequest, postRequestFormData } from '@/lib/apiRequest/postRequest';
 import React, {useState, useEffect, useRef} from 'react'
 import { BiCloudUpload } from 'react-icons/bi';
 import { MdClose, MdUpload } from 'react-icons/md';
-import { prepareQuerySettings } from './utils/prepareQuerySettings';
+//import { prepareQuerySettings } from './utils/prepareQuerySettings';
 import { handleUploadLogo, handleUploadQuickRecordsLogo } from './utils/handleUploadLogo';
 import { getPostImageLink } from '@/lib/apiRequest/urlLinks';
 

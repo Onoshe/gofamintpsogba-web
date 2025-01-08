@@ -19,17 +19,18 @@ export const keysMonthlySum = ["month", "debit", "credit", "balance"];
         reportRowKeys:keysGLProducts,
         noFmtCols:[10, 11, 12], // Number format columns 1234567 => 1,234,567
         headerFSize:[14],
-        tableColsWch:[15, 30, "", "", "", "", "", "", "", "","", ""], //Empty is auto
+        tableColsWch:[], //Empty is auto. [15, 40, "", "", "", "", "", "", "", "","", ""]
         tableColsFSize:6,
         tablePlain:[],
         footerArr:[],
-        tableHeaderFSize:11,
+        tableHeaderFSize:8,
     }
     const pdfDataMonthlySum = {
         reportRowKeys:keysMonthlySum,
         noFmtCols:[2, 3, 4],
         headerFSize:[14],
         tableColsWch:[], //Empty is auto
+        tableHeaderFSize:8,
     }
     const pdfData = monthlyQuery? pdfDataMonthlySum : pdfDataFullData;
     let rowKeysShow = monthlyQuery? keysMonthlySum : keysGLProducts;

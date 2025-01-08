@@ -63,7 +63,8 @@ const IndexReports = ({ssUser}) => {
   const currentReportTab = getCurrentReportName(reportName, user);
   const companyLogoFile = getCompanyLogo(settings);
   const windowDimen = useWindowDimensions();  
-  
+  const tabsDropdownObj = tabsDropdown;
+
   //console.log(transProcessor.getTransactions());
   //let productLg = transProcessor.getPersonalAccounts('productsLedger');
   //console.log(user)
@@ -263,6 +264,7 @@ const IndexReports = ({ssUser}) => {
             user={user}
             reportName={reportName}
             domainNm={domainNm}
+            tabsDropdownObj={tabsDropdownObj}
           />
           <Suspense>   
             <MenuBarBar

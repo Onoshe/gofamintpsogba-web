@@ -15,11 +15,14 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
 
     const personalAcctsUrl = getLinkFetchTableWithConds({table:user.companyId+'_'+personalAcct.toLowerCase(), conds:'deleted', values:'0'});
     let personalAcctsFecthed = await getRequest(personalAcctsUrl);
+
     //Auto assign accountCode if assignAcctCode is true. This is for Create-By-Entry NOT Create-By_Upload
+    let existingAcctCodeLen = 6;
     if(formInput?.assignAcctNo){
-      const acctCode = autoAssignAccountCode(personalAcctsFecthed?.data);
+      const {nextAcctCode, acctCodeLen} = autoAssignAccountCode(personalAcctsFecthed?.data);
       //console.log(formInput, acctCode)
-      formInput.accountCode = acctCode;
+      formInput.accountCode = nextAcctCode;
+      existingAcctCodeLen = acctCodeLen;
     }
     
    const validateFieldVal = validateInputs({type:'FIELDVALUE', form:formInput, test:{reqFields:['type', 'accountCode', 'firstname', 'lastname', 'title']}});
@@ -35,7 +38,7 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
       }
       // NO ERROR || FOUND ACCOUNT-ID IS EDITED ACCOUNT-ID: RUN UPDATE
       //const urlLink = getLinkPersoanlAcct({user, personalAcct, accountCodeNew:inputAcctCodeFmt});
-      const {url, body} = updatePAQuery(formInput, user, personalAcct);
+      const {url, body} = updatePAQuery(formInput, user, personalAcct, existingAcctCodeLen);
       await patchRequest(url, body).then((res)=> {
         if(res?.ok){
           setActiveTab('DISPLAY')
@@ -49,7 +52,7 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
       }})
     }else{ //Create User
       if(!validateAcctCode.error){
-        const {url, body} = preparePAQuery(formInput, user, personalAcct);
+        const {url, body} = preparePAQuery(formInput, user, personalAcct, existingAcctCodeLen);
         //return  console.log(body, formInput, personalAcct)
         await postRequest(url, body).then((res)=> {
           if(res?.ok){
@@ -99,5 +102,5 @@ const handleSubmit = async ({e, formInput, setInfoMsg, handleInfoMsg, personalAc
      let nextAcctNo = highest +1;
      //let accountCode = nextAcctNo.toString().padStart(acctCodelen, '0');
      //accountCode = `${acctPref}-${accountCode}`;
-     return nextAcctNo.toString(); //It will be padded to 
+     return {nextAcctCode: nextAcctNo.toString(), acctCodeLen}; //It will be padded to 
   }

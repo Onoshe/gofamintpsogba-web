@@ -6,7 +6,7 @@ const { postRequest } = require("@/lib/apiRequest/postRequest");
 const { prepareQuerySettings, updateQuerySettings } = require("./prepareQuerySettings");
 
 
-export const editDeleteTranHandler = async ({slugName, postFields, postValues, postDetails, user, notify, dispatchRefreshSettingsCount})=>{
+export const editDeleteTranHandler = async ({slugName, postFields, postValues, postDetails, user, notify, noNotify, dispatchRefreshSettingsCount})=>{
     const updateLink = `${user?.companyId+"_settings"}&c=slug&v=${slugName}`;
     const domain = user.companyId.toLowerCase();
 
@@ -18,17 +18,21 @@ export const editDeleteTranHandler = async ({slugName, postFields, postValues, p
              const {url, body} = updateQuerySettings({user, postFields, postValues, id});
             await patchRequest(url, body).then((res)=> {
                 if(res?.ok){
-                    notify("success", "Update successful");
+                    noNotify? "" : notify("success", "Update successful");
                     dispatchRefreshSettingsCount();
-                }else{notify("error", res?.error);}
+                }else{
+                    noNotify? "" : notify("error", res?.error);
+                }
             })
         }else{ //Fresh Post
             const {url, body} = prepareQuerySettings({user, postFields:[...postFields,'name', 'description', 'slug'], postValues:[...postValues, postDetails?.name, postDetails?.description, slugName]});
             await postRequest(url, body).then((res)=> {
                 if(res?.ok){
-                    notify("success", "Posting successful");
+                    noNotify? "" : notify("success", "Posting successful");
                     dispatchRefreshSettingsCount();
-                }else{notify("error", res?.error);}
+                }else{
+                    noNotify? "" : notify("error", res?.error);
+                }
            })
         }
 }

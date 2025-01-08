@@ -2,7 +2,7 @@ import { dateFmtISO } from "@/lib/date/dateFormats";
 import { getLinkPostTrans } from "@/lib/apiRequest/urlLinks";
 
 
-export const updatePAQuery =(form, user, personalAcct) =>{
+export const updatePAQuery =(form, user, personalAcct, existingAcctCodeLen) =>{
   const url = getLinkPostTrans(user.companyId).patch;
   const {id, 
     type, 
@@ -34,7 +34,7 @@ export const updatePAQuery =(form, user, personalAcct) =>{
     updatedBy, } = form;
 
 
-    let accountCodeNew = personalAcct==="vendors"? "V-"+parseInt(accountCode).toString().padStart(6,0) : "C-"+parseInt(accountCode).toString().padStart(6,0);
+    let accountCodeNew = personalAcct==="vendors"? "V-"+parseInt(accountCode).toString().padStart(existingAcctCodeLen|| 6,0) : "C-"+parseInt(accountCode).toString().padStart(existingAcctCodeLen || 6,0);
     let accountCodePaded = accountCode.toString().includes("V") || accountCode.toString().includes("C")? accountCode : accountCodeNew; 
 
   const fields = [

@@ -1,18 +1,18 @@
 'use client'
 import React, {useState, useEffect} from "react";
 import { BiCaretDown, BiCaretUp } from "react-icons/bi";
-import { tabsDropdown } from "./getHeaders";
 
 
 
-const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,currentReport,  companyId, selTab, setSelTab, reportName, domainNm, user}) => {
 
+const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,currentReport,  companyId, selTab, setSelTab, reportName, domainNm, user, tabsDropdownObj}) => {
+    //const tabsDropdownObj = tabsDropdown;
 
     const selectedTabHandler =(tab, idx)=>{
         setSelectedTab(tab);
         setSelTab({open:true, idx});
     }
-    //console.log(user, domainNm)
+    //console.log(tabsDropdownObj)
 
   return (
     <div className={`flex flex-row bg-[#373c46] relative`}>
@@ -40,6 +40,7 @@ const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,
                                 tabsLen={headersArr.length}
                                 setSelTab={setSelTab}
                                 domainNm={domainNm}
+                                tabsDropdownObj={tabsDropdownObj}
                             />
                         </div>
                     )
@@ -53,12 +54,12 @@ const IndexHeaderTabs = ({headersArr,headerTab, setSelectedTab, handleSelReport,
 
 //right-0 sm:right-auto w-[100%] sm:w-auto
 
-const Dropdown =({tabItem, handleSelReport, index, tabsLen, domainNm})=>{
+const Dropdown =({tabItem, handleSelReport, index, tabsLen, domainNm, tabsDropdownObj})=>{
     const showCustomersLoan = domainNm?.toLowerCase() === "kosofe"; 
 
-    let tabsDropdowns = tabsDropdown;
+    let tabsDropdowns = tabsDropdownObj;
     if(!showCustomersLoan){
-      const customersArr = [...tabsDropdown.customers];
+      const customersArr = [...tabsDropdownObj.customers];
       const customers = customersArr.filter((dt)=> dt.name !== "customers-loan");
       tabsDropdowns.customers = customers;
     }

@@ -147,7 +147,7 @@ const Header = ({ssUser}) => {
         if(isOnline){
            setTimeout(()=>setShowNetworkPage(false))
         }else{
-           setTimeout(()=>setShowNetworkPage(true), 500)
+           setTimeout(()=>setShowNetworkPage(true), 1500)
         }
     }
   },[transReady, isProduction, isOnline]);

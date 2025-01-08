@@ -3,7 +3,7 @@ import { dateFmtISO } from "@/lib/date/dateFormats";
 
 
 
-export const preparePAQuery =(form, user, personalAcct) =>{
+export const preparePAQuery =(form, user, personalAcct, existingAcctCodeLen) =>{
   const url = getLinkPostTrans(user.companyId).post;
   const {id, 
     type, 
@@ -37,7 +37,7 @@ export const preparePAQuery =(form, user, personalAcct) =>{
     updatedBy, } = form;
 
 
-    let accountCodeNew = personalAcct==="vendors"? "V-"+parseInt(accountCode).toString().padStart(6,0) : "C-"+parseInt(accountCode).toString().padStart(6,0);
+    let accountCodeNew = personalAcct==="vendors"? "V-"+parseInt(accountCode).toString().padStart(existingAcctCodeLen || 6,0) : "C-"+parseInt(accountCode).toString().padStart(existingAcctCodeLen || 6,0);
     let accountCodePaded = accountCode.toString().includes("V") || accountCode.toString().includes("C")? accountCode : accountCodeNew; 
 
   let body = {
