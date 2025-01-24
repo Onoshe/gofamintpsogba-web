@@ -1,0 +1,22 @@
+<svg
+    width="100%"
+    height="100%"
+    viewBox="0 0 476.24999 264.58334"
+    version="1.1"
+    id="svg5"
+    xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+        style="fill:#ffacac;
+            fill-opacity:0.993007;
+            stroke-width:0.335967;
+            opacity:0.5"
+        d="M 0,1.5000765 H 475.52426 V 225.01148 l -236.26205,40.50206 v 0 0 L 0,225.01148 Z"
+        />
+        <path
+        style="fill:#acacac;
+        fill-opacity:0.993007;
+        stroke-width:0.325298"
+        d="M 0,1.5000765 H 475.52426 V 211.04201 L 239.26221,249.0127 v 0 0 L 0,211.04201 Z"
+        />
+</svg>

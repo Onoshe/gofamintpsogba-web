@@ -17,6 +17,11 @@ const nextConfig = {
           hostname: 'quickrecords.gofamintpsogba.org',
           pathname: '**',
         },
+        {
+          protocol: 'https',
+          hostname: 'psogbaasset.gofamintpsogba.org',
+          pathname: '**',
+        },
       ],
       formats: ['image/avif', 'image/webp']
     },

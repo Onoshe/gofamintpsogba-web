@@ -96,3 +96,46 @@ const nextConfig = {
 }
 
 export default nextConfig;
+
+
+
+## .................... package.json ...........................
+Check the official nextjs customer server deployment process link below and the additional guide link for deployment:
+
+## https://nextjs.org/docs/pages/building-your-application/configuring/custom-server
+
+## https://medium.com/@geevadon/how-to-deploy-a-next-js-app-on-cpanel-efficiently-c00c5eb860de
+
+
+#  Before and after deployment
+
+Before deployment:
+"scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+
+
+  After:
+   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+     "start": "NODE_ENV=production node server.js",
+    "lint": "next lint"
+  },
+
+
+# After editing the start in the script as shown above,
+1. Run: npm run build
+2. Open the folder and select all the files in it except node_modeules and .gitignore and zip for upload in the cpanel
+3. I discovered that the zip file was very large. I then found out that it was as a result of cache folder in .next folder. I then deleted this cache folder before zipping.
+4. Then upload on the cpanel. 
+  Please note that if the zip file is uploaded on the public_html (which is where static build file is usually uploaded) folder in cpanel, error may occur when starting the server app in the node.js application setup. What I did was to create a sub domain, home.gofamintpsogba.org and upload the zip file in it. Then when creating the nodejs app (server app), I did the following settings:
+    Node.js version: (recommended version)
+    Application mode: production
+    Application root : home.gofamintpsogba.org
+    Application URL: gofamintpsogba.org
+    Application startup file : server.js
+

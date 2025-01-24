@@ -1,0 +1,57 @@
+
+const tabsSchema = {
+    record: {name: 'Record', tabs: ['Home','Register','View', 'Online Offering'],
+        titles:['RECORDABOUTHOME','RECORDREGISTER', 'RECORDVIEW', 'RECORDONLINEOFFERING']},
+    admin: {name:'ADMIN', tabs:['DASHBOARD', 'PastorCorner', 'Uploads', 'Account'],
+        titles:['ADMINDASHBOARD', 'ADMINPASTORCORNER', 'ADMINUPLOADS', 'ADMINACCOUNT']},
+    control: {name:"CONTROL", tabs:["Online Offering", 'Developer',"UserPageLogin", "Upload-Download"],
+        titles:['CONTROLONLINEOFFERING', 'CONTROLDEVELOPER','CONTROLUSERPAGELOGIN', 'CONTROLUPLOADDOWNLOAD',]},
+    guest: {name:"GUEST", tabs:["Account",],
+        titles:['GUESTACCOUNT']},
+        tabs:{
+        'RECORDABOUTHOME':'RECORDABOUTHOME',
+        'RECORDREGISTER':'RECORDREGISTER', 
+        'RECORDVIEW':'RECORDVIEW',
+        'RECORDONLINEOFFERING':'RECORDONLINEOFFERING',
+
+        'ADMINDASHBOARD':'ADMINDASHBOARD',
+        'ADMINMEMBERSDATA':'ADMINMEMBERSDATA',
+        'ADMINPASTORCORNER':'ADMINPASTORCORNER', 
+        'ADMINFEEDBACK':'ADMINFEEDBACK',
+        'ADMINUPLOADS':'ADMINUPLOADS',
+        'ADMINACCOUNT':'ADMINACCOUNT',        
+
+        'CONTROLONLINEOFFERING':'CONTROLONLINEOFFERING',
+        'CONTROLDEVELOPER':'CONTROLDEVELOPER',
+        'CONTROLUSERPAGELOGIN':'CONTROLUSERPAGELOGIN', 
+        'CONTROLUPLOADDOWNLOAD':'CONTROLUPLOADDOWNLOAD',
+
+        'GUESTACCOUNT':'GUESTACCOUNT',
+    }
+};
+
+const tabsNav = {
+    'RECORDABOUTHOME':[0,0,{name:'Home',title:'RECORDABOUTHOME'}],
+    'RECORDREGISTER':[0,1,{name:'Register',title:'RECORDREGISTER'}], 
+    'RECORDVIEW':[0,2,{name:'View',title:'RECORDVIEW'}],
+    'RECORDONLINEOFFERING':[0,3,{name:'Online Offering',title:'RECORDONLINEOFFERING'}],
+
+    'ADMINDASHBOARD':[1,0,{name:'ADMIN',title:'ADMINDASHBOARD'}],
+    //'ADMINMEMBERSDATA':[1,1,{name:'ADMIN',title:'ADMINMEMBERSDATA'}],
+    'ADMINPASTORCORNER':[1,2,{name:'ADMIN',title:'ADMINPASTORCORNER'}], 
+    //'ADMINFEEDBACK':[1,3,{name:'ADMIN',title:'ADMINFEEDBACK'}],
+    'ADMINUPLOADS':[1,4,{name:'ADMIN',title:'ADMINUPLOADS'}],
+    'ADMINACCOUNT':[1,5,{name:'ADMIN',title:'ADMINACCOUNT'}],
+
+    'CONTROLONLINEOFFERING':[2,0,{name:'CONTROL',title:'CONTROLONLINEOFFERING'}],
+    'CONTROLDEVELOPER':[2,1,{name:'CONTROL',title:'CONTROLDEVELOPER'}], 
+    'CONTROLUSERPAGELOGIN':[2,2,{name:'CONTROL',title:'CONTROLUSERPAGELOGIN'}], 
+    'CONTROLUPLOADDOWNLOAD':[2,3,{name:'CONTROL',title:'CONTROLUPLOADDOWNLOAD'}],
+
+    'GUESTACCOUNT':[3,0,{name:'GUEST',title:'GUESTACCOUNT'}],
+}
+
+
+export {tabsNav}
+export default tabsSchema
+

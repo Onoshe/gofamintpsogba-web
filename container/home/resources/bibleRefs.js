@@ -1,0 +1,60 @@
+
+const bibleRefs = {
+    a0:'For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life. John 3:16',
+    a1: 'for all have sinned and fall short of the glory of God. Romans 3:23',
+    a2: 'But the Scripture has confined all under sin, that the promise by faith in Jesus Christ might be given to those who believe. Galatians 3:22',
+    a3: 'being justified freely by His grace through the redemption that is in Christ Jesus, Romans 3:24',
+    a4:'For there is one God and one Mediator between God and men, the Man Christ Jesus. I Timothy 2:5',
+    a5:'For the wages of sin is death, but the gift of God is eternal life in Christ Jesus our Lord. Romans 6:23',
+    a6:'For God sent not his Son into the world to condemn the world; but that the world through him might be saved. John 3:17', 
+    a7:'He that believeth on him is not condemned: but he that believeth not is condemned already, because he hath not believed in the name of the only begotten Son of God. John 3:18',
+    a8:'Jesus answered, Verily, verily, I say unto thee, Except a man be born of water and of the Spirit, he cannot enter into the kingdom of God. John 3:3',
+    a9:'In the beginning was the Word, and the Word was with God, and the Word was God. John 1:1',
+    a10: 'But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name. John 10:10',
+    a11:'The thief cometh not, but for to steal, and to kill, and to destroy: I am come that they might have life, and that they might have it more abundantly. John 10:10',
+    a12:'Jesus saith unto him, I am the way, the truth, and the life: no man cometh unto the Father, but by me. John 14:6',
+    a13:'Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid. John 14:27',
+    
+    };
+    
+    
+    const bibleRefsArr = [
+        "But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name. John 10:10",
+        "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life. John 3:16",
+        "For all have sinned and fall short of the glory of God. Romans 3:23",
+        "But the Scripture has confined all under sin, that the promise by faith in Jesus Christ might be given to those who believe. Galatians 3:22",
+        "Being justified freely by His grace through the redemption that is in Christ Jesus, Romans 3:24",
+        "For there is one God and one Mediator between God and men, the Man Christ Jesus. I Timothy 2:5",
+        "For the wages of sin is death, but the gift of God is eternal life in Christ Jesus our Lord. Romans 6:23",
+        "For God sent not his Son into the world to condemn the world; but that the world through him might be saved. John 3:17",
+        "He that believeth on him is not condemned: but he that believeth not is condemned already, because he hath not believed in the name of the only begotten Son of God. John 3:18",
+        "Jesus answered, Verily, verily, I say unto thee, Except a man be born of water and of the Spirit, he cannot enter into the kingdom of God. John 3:3",
+        "The thief cometh not, but for to steal, and to kill, and to destroy: I am come that they might have life, and that they might have it more abundantly. John 10:10",
+        "Jesus saith unto him, I am the way, the truth, and the life: no man cometh unto the Father, but by me. John 14:6",
+        "Peace I leave with you, my peace I give unto you: not as the world giveth, give I unto you. Let not your heart be troubled, neither let it be afraid. John 14:27",
+        'Therefore repent and return, so that your sins may be wiped away, in order that times of refreshing may come from the presence of the Lord.  Acts 3:19',
+        'Repent, for the kingdom of heaven is at hand. Matthew 3:2',
+        'For I have no pleasure in the death of anyone who dies, declares the Lord God. Therefore, repent and live. Ezekiel 18:32',
+        'Draw nigh to God, and he will draw nigh to you. Cleanse your hands, ye sinners; and purify your hearts, ye double minded. James 4:8',
+        'If my people, which are called by my name, shall humble themselves, and pray, and seek my face, and turn from their wicked ways; then will I hear from heaven, and will forgive their sin, and will heal their land. II Chronicles 7:14',
+        'And the times of this ignorance God winked at; but now commandeth all men every where to repent. Acts 17:30',
+        'If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness. I John 1:9',
+        'And rend your heart, and not your garments, and turn unto the Lord your God: for he is gracious and merciful, slow to anger, and of great kindness, and repenteth him of the evil. Joel 2:13',
+        'I came not to call the righteous, but sinners to repentance. Luke 5:32',
+        'The Lord is not slack concerning his promise, as some men count slackness; but is longsuffering to us-ward, not willing that any should perish, but that all should come to repentance. II Peter 3:9',
+        'He that covereth his sins shall not prosper: but whoso confesseth and forsaketh them shall have mercy. Proverbs 28:13',
+        'Bring forth therefore fruits worthy of repentance, and begin not to say within yourselves, We have Abraham to our father: for I say unto you, That God is able of these stones to raise up children unto Abraham. Luke 3:8',
+        'If we say that we have no sin, we deceive ourselves, and the truth is not in us. If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness. I John 1:8-9',
+        'Him hath God exalted with his right hand to be a Prince and a Saviour, for to give repentance to Israel, and forgiveness of sins. Acts 5:31',
+        'Draw nigh to God, and he will draw nigh to you. Cleanse your hands, ye sinners; and purify your hearts, ye double minded. James 4:8',
+        'Let the wicked forsake his way, and the unrighteous man his thoughts: and let him return unto the Lord, and he will have mercy upon him; and to our God, for he will abundantly pardon. Isaiah 55:7',
+        'Come, and let us return unto the Lord: for he hath torn, and he will heal us; he hath smitten, and he will bind us up. Hosea 6:1',
+        'Seek ye the Lord while he may be found, call ye upon him while he is near. Isaiah 55:6',
+        'For he is our God; and we are the people of his pasture, and the sheep of his hand. To day if ye will hear his voice, Harden not your heart, as in the provocation, and as in the day of temptation in the wilderness. Psalm 95:7-8',
+        'Come unto me, all ye that labour and are heavy laden, and I will give you rest. Matthew 11:28',
+        'For whosoever shall call upon the name of the Lord shall be saved. Romans 10:13',
+        "In the beginning was the Word, and the Word was with God, and the Word was God. John 1:1",
+    ];
+    
+    export {bibleRefsArr}
+      

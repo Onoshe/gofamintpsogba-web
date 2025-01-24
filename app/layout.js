@@ -1,39 +1,77 @@
-import localFont from "next/font/local";
-import "./globals.css";
+import FooterIndex from '@/footer/_Index';
+import './globals.css';
+import { Inter } from 'next/font/google'
+import Sidebar from '@/sidebar/Sidebar';
+import HeaderContainer from '@/header/Container';
+import { getDataLink } from '@/lib/apis/urlLinks';
+import { getRequest } from '@/lib/apis/getRequest';
+import { getUserSession } from '@/lib/authActions/getUserSession';
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const inter = Inter({ subsets: ['latin'] })
+const gaId = process.env.NEXT_PUBLIC_GOOGLE_TAG;
+
 
 export const metadata = {
-  title: "QuickRecords Accounting Bookkeeping",
-  description: "QuickRecords Accounting Bookkeeping helps you to record all your transactions such as Sale, Purchase, Payments and Expenses in an extremely simple manner.",
-  keywordds:"QuickRecords, Accounting, Bookkeeping, Sale, Purchase, Payments, Expenses, Journals, Reports, Profit, Loss, Capital, Transaction, Inventory, Pdf, receipt, payments, Online, store, device, management",
-  author:"OziTech Studio",
-};
-
-
-export default function RootLayout({ children }) {
-
-  return (
-    <html lang="en">
-      <>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-         >
-          {children}
-        </body>
-      </>
-    </html>
-  );
-
+  title: 'Gofamint PS Official Website',
+  description: 'Official website for The Gospel Faith Mission Internationa, Pacesetters Assembly, Ogba District Headquarters, Ogba, Ikeja, Lagos',
 }
 
 
+export default async function RootLayout({ children }) {
+  const dataLink = getDataLink({table:'official_site_pastorcorner'});
+  const pastorCorners = await getRequest(dataLink);
+  const user = getUserSession();
+
+ // console.log(dataLink);
+
+  return (
+    <html  data-theme='light' lang="en">
+      <body className={inter.className}>
+          <main>
+            <HeaderContainer pastorCorners={pastorCorners} 
+              ssUser={user}/>
+            {children}
+            <GoogleAnalytics gaId={gaId} />      
+            <Sidebar />
+          </main>
+       <FooterIndex />
+      </body>
+    </html>
+  )
+}
+
+/*
+export default async function RootLayout({ children }) {
+  const dataLink = getDataLink({table:'official_site_pastorcorner'});
+  const pastorCorners = await getRequest(dataLink);
+  const user = getUserSession();
+
+  return (
+    <html  data-theme='light' lang="en">
+      <body className={inter.className}>
+          <main>
+            <HeaderContainer pastorCorners={pastorCorners} ssUser={user}/>
+            {children}
+            <GoogleAnalytics gaId={gaId} />      
+            <Sidebar />
+          </main>
+       <FooterIndex />
+      </body>
+    </html>
+  )
+}
+
+export default async function RootLayout({ children }) {  
+  return (
+    <html  data-theme='light' lang="en">
+      <body className={inter.className}>
+          <main>
+            {children}
+          </main>
+      </body>
+    </html>
+  )
+}
+*/
