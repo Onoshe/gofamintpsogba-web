@@ -39,6 +39,9 @@ const AlbumMain =({photos, loading, title,details, headerBCol})=>{
 
     if(!mounted) return <p className="text-red-500">Loading Photos</p>;
 
+    //console.log(photosArr, show, isBigScreen)
+    //console.log(show, showPhoneModal, photoIsClicked, isBigScreen);
+
     return(
         <div className="w-full flex justify-center flex-col items-center mb-5">
             <h1 className={`font-archivo w-[95%] p-1 py-2 text-sm md:text-2xl lg:text-3xl font-bold flex px-3 text-left rounded-t-lg
@@ -63,12 +66,17 @@ const AlbumMain =({photos, loading, title,details, headerBCol})=>{
                         handleSelectedPhoto={handleSelectedPhoto}
                         title={details}/>
                 </CustomizeModal>
-                :                
-                <PhotoViewerForPhone show={showPhoneModal} photosGal={photosArr}
-                    closeModal={()=>{setShowPhoneModal(false); setPhotoIsClicked(false)}}
+                : <PhotoViewerForPhone 
+                    show={showPhoneModal} 
+                    photosGal={photosArr}
+                    closeModal={()=>{setShowPhoneModal(false); 
+                    setPhotoIsClicked(false)}}
                     photoIsClicked={photoIsClicked}
-                    details={details}/>
-                    }
+                    details={details}
+                    showPhoneModal={showPhoneModal}
+                    setShowPhoneModal={setShowPhoneModal}
+                />
+                }
             </div>
         </div>
     );
@@ -76,3 +84,34 @@ const AlbumMain =({photos, loading, title,details, headerBCol})=>{
 //official_website/media_page/pastor_ogundare_installation_2018/InstallationOfPstOgundare2018-19.jpg
 
 export default AlbumMain;
+
+
+/*
+
+<PhotoViewerForPhone show={showPhoneModal} photosGal={photosArr}
+    closeModal={()=>{setShowPhoneModal(false); setPhotoIsClicked(false)}}
+    photoIsClicked={photoIsClicked}
+    details={details}
+    showPhoneModal, setShowPhoneModal,
+/>
+
+
+
+ {isBigScreen?
+    <CustomizeModal show={show}>
+        <EnlargeView closeModal={()=>{setShow(false); setPhotoIsClicked(false)}}  
+            photoSrc={photo?.imgPath} 
+            photosGal={photos} 
+            seltdIndex={seltdIndex}
+            handleSelectedPhoto={handleSelectedPhoto}
+            title={details}/>
+    </CustomizeModal>
+    :<PhotoViewerForPhone show={showPhoneModal} photosGal={photosArr}
+        closeModal={()=>{setShowPhoneModal(false); setPhotoIsClicked(false)}}
+        photoIsClicked={photoIsClicked}
+        details={details}
+    />
+    }
+    
+
+*/

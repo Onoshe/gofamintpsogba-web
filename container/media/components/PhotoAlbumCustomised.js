@@ -25,16 +25,18 @@ const AlbumPhotosCustomised = ({handleSelectedPhoto, photosGal}) => {
 
  const PhotoFrame = ({photoSrc, index, handleSelectedPhoto}) => {
     const isLoading = !photoSrc;
+    
+
         if(isLoading){
         return <CustomLoader loadingMsg="Loading Photo galleries, please wait!" color="blue" 
                     loading={photoSrc? true : false}/>
         }    
     return (
-       <div className={`flex overflow-hidden cursor-pointer`}
+       <div  className={`flex overflow-hidden cursor-pointer`}
             onClick={()=>handleSelectedPhoto(index)}>
-            <Image
+            <Image  
              src={photoSrc} 
-             alt="" 
+             alt="PS Ogba Album" 
              width={500} 
              height={500}
              className={`w-full hover:scale-[1.15] transition-all duration-500

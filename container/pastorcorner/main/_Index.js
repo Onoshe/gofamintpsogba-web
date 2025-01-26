@@ -52,11 +52,15 @@ const PastorCorner = (params) => {
       disPstCornerData([...initData, ...dataRes.data]);
     }
   }
-  sortArrayByKey(pastorCornerMsgs, 'date', 'ASC');
 
   React.useEffect(()=>{
     fetchDataHandler();
   },[]);
+
+  sortArrayByKey(pastorCornerMsgs, 'date', 'ASC');
+
+  //console.log(pastorCornerMsgs);
+  
   return (
       <div className="w-full text-gray-600 flex justify-center px-5 pt-0 flex-col relative"
         >

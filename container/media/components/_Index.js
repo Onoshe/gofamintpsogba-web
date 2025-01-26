@@ -2,11 +2,6 @@
 import React, {useEffect, useState} from "react";
 import AlbumMain from "./AlbumMain";
 import CustomLoader from "@/components/loader/CustomLoader";
-import { getPhotosGalArr } from "./photos";
-//import { client } from "@/lib/client";
-import { sortDatesByYrMn } from "@/lib/sortData";
-import { getQueryPhotos, processPhotos } from "./modules";
-import usePhotoGalleriesStore from "@/context/usePhotoGalleriesStore";
 import { groupBy } from "@/lib/group/groupBy";
 import { sortArrayByKey } from "@/lib/sortArrayByKey";
 

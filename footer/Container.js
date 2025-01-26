@@ -14,7 +14,7 @@ const Container = ({mapUrl, dataRes}) => {
     <footer className="text-center text-white bg-[#0a4275] mt-5">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <ColumnOne/>
-            <ColumnTwo mapUrl={mapUrl}/>
+            <ColumnTwo mapUrl={mapUrl} dataRes={dataRes}/>
         </div>
 
         <div className="text-center text-xs sm:text-base p-4 py-10" style={{backgroundColor:'rgba(0, 0, 0, 0.2)'}}>
