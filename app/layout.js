@@ -23,19 +23,19 @@ export const metadata = {
   twitter: {
     card:'summary_large_image'
   },
-  /*openGraph: {
+  openGraph: {
     title: 'Gofamint PS Ogba, Lagos',
     description: 'Fellowship with us at Gofamint PS Ogba and have a wonderful experience in the presence of God',
-    url: '/about', // Relative URL
+    url: '/', // Relative URL
     images: [
       {
-        url: '/gofamintPSLogo.png', // Relative URL
-        width: 750,
-        height: 580,
+        url: '/psOgbaBgPhoto.png', // Relative URL
+        width: 1200,
+        height: 630,
         alt: 'Gofamint PS Ogba logo',
       },
     ],
-  },*/
+  },
 }
 
 
