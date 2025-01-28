@@ -14,11 +14,16 @@ const gaId = process.env.NEXT_PUBLIC_GOOGLE_TAG;
 
 
 export const metadata = {
-  title: 'Gofamint PS Ogba, Lagos Official Website',
-  description: 'Official website for The Gospel Faith Mission International, Pacesetters Assembly, Ogba District Headquarters, Ogba, Ikeja, Lagos',
-  keywords: 'Gofamint, Pacesetters, Ogba, Ikeja, Lagos, Pastor Corner, Salvation, Five Star, Resources, Programs, Events, Gallery, Photos, Videos, Contact, About, Home',
+  title: {
+    default: 'Gofamint PS Ogba, Lagos',
+    template:"%s - Gofamint PS Ogba",
+  },
+  description: 'This is the Official website for The Gospel Faith Mission International, Pacesetters Assembly, Ogba District Headquarters, Ogba, Ikeja, Lagos',
   metadataBase: new URL('https://gofamintpsogba.org'),
-  openGraph: {
+  twitter: {
+    card:'summary_large_image'
+  },
+  /*openGraph: {
     title: 'Gofamint PS Ogba, Lagos',
     description: 'Fellowship with us at Gofamint PS Ogba and have a wonderful experience in the presence of God',
     url: '/about', // Relative URL
@@ -30,7 +35,7 @@ export const metadata = {
         alt: 'Gofamint PS Ogba logo',
       },
     ],
-  },
+  },*/
 }
 
 

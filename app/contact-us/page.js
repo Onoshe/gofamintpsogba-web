@@ -2,6 +2,9 @@ import ContactUsIndex from "@/container/contactus/ContactUsIndex";
 import { getRequest } from "@/lib/apis/getRequest";
 import { getDataLink, getExtractInfo } from "@/lib/apis/urlLinks";
 
+export const metadata = {
+  title: 'Contact Us'
+}
 
 export default async function ContactUs() {
     const dataLink = getDataLink();

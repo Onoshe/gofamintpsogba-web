@@ -39,27 +39,27 @@ const AboutPS =({backgroundImg, anchor, sequence, anchorBgImages,dataRes, latest
                 </h2>
               </div>
               
-              <div className='relative flex h-[40vh] justify-center items-center xl:flex-1'>
-              <p className="w-full text-center pt-3 text-4xl font-meriendOne font-bold text-[goldenrod] text-flicker-out-glow absolute top-0">
-                Year {latestAnchorAndFaith?.textShort1}
-              </p>
-              <img src={anchorBgImages} alt="Gofamint Anchor" className="hidden animista1 absolute w-auto h-[40vh] xl:mt-40" style={{opacity:0.3, zIndex:0}}/>
-              <div
-                  className="animista1 absolute w-full h-[40vh] xl:mt-40"
-                  style={{
-                    backgroundImage: `url(${anchorBgImages})`,
-                  }}
-                />
-                {dataRes?.anchorSequence?.length? 
-                  <Declaration
-                    sequence={sequence}
-                    anchorBgImages={anchorBgImages}
-                    anchorSequence={dataRes?.anchorSequence}
-                    latestAnchorAndFaith={latestAnchorAndFaith}
+              <div className='relative flex mt-16 h-[40vh] justify-center items-center xl:flex-1'>
+                <p className="w-full text-center pt-3 text-4xl font-meriendOne font-bold text-[goldenrod] text-flicker-out-glow absolute top-0">
+                  Year {latestAnchorAndFaith?.textShort1}
+                </p>
+                <img src={anchorBgImages} alt="Gofamint Anchor" className="hidden animista1 absolute w-auto h-[40vh] xl:mt-40" style={{opacity:0.3, zIndex:0}}/>
+                <div
+                    className="animista1 absolute w-full h-full mt-40"
+                    style={{
+                      backgroundImage: `url(${anchorBgImages})`,
+                    }}
                   />
-                :
-                <></>
-                }
+                  {dataRes?.anchorSequence?.length? 
+                    <Declaration
+                      sequence={sequence}
+                      anchorBgImages={anchorBgImages}
+                      anchorSequence={dataRes?.anchorSequence}
+                      latestAnchorAndFaith={latestAnchorAndFaith}
+                    />
+                  :
+                  <></>
+                  }
               </div>
             </div>
         </div>
