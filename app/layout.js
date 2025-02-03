@@ -26,17 +26,40 @@ export const metadata = {
   openGraph: {
     title: 'Gofamint PS Ogba, Lagos',
     description: 'Fellowship with us at Gofamint PS Ogba and have a wonderful experience in the presence of God',
-    url: '/', // Relative URL
+    url: 'https://gofamintpsogba.org', // Relative URL
+    type: 'website',
     images: [
       {
-        url: '/psOgbaBgPhoto.png', // Relative URL
+        url: 'https://psogbaasset.gofamintpsogba.org/official_website/home_images/psOgbaBgPhotoShare.png', // Relative URL
         width: 1200,
         height: 630,
-        alt: 'Gofamint PS Ogba logo',
+        alt: 'PS_Ogba_logo',
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://psogbaasset.gofamintpsogba.org/official_website/home_images/psOgbaBgPhotoShare.png'], // Same as OG image
+  },
 }
+
+/*export async function generateMetadata({ params,}, parent) {
+  // read route params
+  const id = (await params).id
+ 
+  // fetch data
+  const product = await fetch(`https://.../${id}`).then((res) => res.json())
+ 
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+ 
+  return {
+    title: product.title,
+    openGraph: {
+      images: ['/some-specific-page-image.jpg', ...previousImages],
+    },
+  }
+}*/
 
 
 export default async function RootLayout({ children }) {
