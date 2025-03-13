@@ -29,8 +29,10 @@ const ScrollToTopButton = () => {
     <div className='fixed bottom-5 right-5'>
      { showButton &&(
         <BsFillArrowUpCircleFill size={42} 
-        onClick={scrollToTop}    
-        color="gray"/>
+            onClick={scrollToTop}    
+            color="gray"
+            className='cursor-pointer'
+          />
       )}    
     </div>
   )

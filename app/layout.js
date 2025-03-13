@@ -20,9 +20,6 @@ export const metadata = {
   },
   description: 'This is the Official website for The Gospel Faith Mission International, Pacesetters Assembly, Ogba District Headquarters, Ogba, Ikeja, Lagos',
   metadataBase: new URL('https://gofamintpsogba.org'),
-  // twitter: {
-  //   card:'summary_large_image'
-  // },
   openGraph: {
     title: 'Gofamint PS Ogba, Lagos',
     description: 'Fellowship with us at Gofamint PS Ogba and have a wonderful experience in the presence of God',

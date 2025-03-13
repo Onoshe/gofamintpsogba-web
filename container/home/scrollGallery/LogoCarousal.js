@@ -37,7 +37,7 @@ const LogoCarousel = ({photos}) => {
           <div className="flex space-x-10 py-10 animate-loop-scroll group-hover:paused">
             {
               [...photos, ...photos, ...photos]?.map((el, i)=>{
-                const bounceNo = i%5;
+                const bounceNo = i%4;
                 return(
                   <img key={`key${i}`} loading="lazy" src={el} className={`max-w-none h-[60vh] animate-bounceCard${bounceNo} cursor-pointer hover:animate-scaleCard shadow-[0_0_10px_#a1f4de]`} alt={el.alt}/>
                 )

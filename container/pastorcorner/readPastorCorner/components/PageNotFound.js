@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Spinner from '@/assets/svg/Spinner';
 
+
+
 const PageNotFound = ({title}) => {
     const router = useRouter();
     const [mounted, setMounted] = React.useState(false);

@@ -20,7 +20,7 @@ const GalleryIndex =({mediaPhotos})=>{
         }
 
     return(
-        <div>
+        <div >
             {
                 photosGalArr?.map((item, i)=>{   
                     return(

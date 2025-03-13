@@ -15,9 +15,9 @@ const dataLink = getDataLink({table:'official_site_comments'});
 const likesLink = getDataLink({table:'official_site_likes'});
 
 const ContainerIndex = ({pastorCornerPhotos, pastorCornerSharePhotos, ssUser}) => {
-  let pathName = usePathname();
-  const lent = pathName?.split('/')?.length;
-    pathName = pathName?.split('/')[lent-1];
+  let pathNameRaw = usePathname();
+  const lent = pathNameRaw?.split('/')?.length;
+  let  pathName = pathNameRaw?.split('/')[lent-1];
   const selId = pathName?.split('=')[1];
   const {pstCornerData} = usePstCornerMsgStore((state)=>state);
   const [errorMsg, setErrorMsg] = React.useState({show:false, hideBtn:true, msg:'Please, login first'});
@@ -39,7 +39,8 @@ const ContainerIndex = ({pastorCornerPhotos, pastorCornerSharePhotos, ssUser}) =
         setRandomPhoto(randPhoto);
       }
     },[pastorCornerPhotos, randomPhoto]);
-    //console.log(likesData)
+    
+    //console.log(pathNameRaw)
 
     const selectedMsg = pstCornerData?.find((dt)=> dt.id == selId);  // pastorCornerMsgsObj[pathName];
     if(!selectedMsg) return <PageNotFound title={pathName}/>
@@ -86,6 +87,7 @@ const ContainerIndex = ({pastorCornerPhotos, pastorCornerSharePhotos, ssUser}) =
             pastorCornerPhotos={pastorCornerPhotos}
             pastorCornerSharePhotos={pastorCornerSharePhotos}
             randomPhoto={randomPhoto}
+            pathNameRaw={pathNameRaw}
         />
     </div>
   )

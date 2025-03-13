@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import Image from 'next/image';
 import {GoCalendar, GoPerson} from "react-icons/go";
@@ -9,13 +10,19 @@ import { useRouter } from 'next/navigation';
 import SocialMediaShare from './SocialMediaShare';
 import LeaveAComment from '@/components/forms/LeaveAComment';
 import { getRandomNumber } from '@/components/cards/pastorCorner/LastCard';
+import ShareButton from '@/components/icons/ShareButton';
+import handleSocialShare from './handleSocialShare';
+import Head from "next/head";
+import SnapshotComponent, { ImageDisplay } from './SnapShotComponent';
+import { encodeDecode } from '@/lib/cryptoJS/encodeDecode';
 /* eslint-disable @next/next/no-img-element */
 
 
+  
 const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHandler, postCommentHandler, 
-    commentSent, setCommentSent, commentsArr, pastorCornerPhotos,pastorCornerSharePhotos, randomPhoto,likesArr }) => {
+    commentSent, setCommentSent, commentsArr, pastorCornerPhotos,pastorCornerSharePhotos, randomPhoto,likesArr,pathNameRaw }) => {
     const router = useRouter();
-    const {sn,make, title,bibleRef, message, message_html, pray, msgID, comments, details} = selectedMsg;
+    const {sn, id, make, title,bibleRef, message, message_html, pray, msgID, comments, details} = selectedMsg;
     const goBackHandler =()=>{
         router.back();
     }
@@ -24,10 +31,33 @@ const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHand
       body =  message?.includes('|')? message?.split('|') : [message]; 
     }
 
-    const randNoSharePhoto = pastorCornerSharePhotos?.length >1? getRandomNumber(0, pastorCornerSharePhotos?.length -1) : 0;
-    const pastorCornerSharePhoto = pastorCornerSharePhotos[randNoSharePhoto];
     
-    //console.log(pastorCornerSharePhoto);
+    const convert = async ()=>{
+        //console.log(await encodeDecode(1, 'ENCODE'));
+    }
+    convert();
+
+    const randNoSharePhoto = pastorCornerSharePhotos?.length >1? getRandomNumber(0, pastorCornerSharePhotos?.length -1) : 0;
+    const pastorCornerShareImg = pastorCornerSharePhotos[randNoSharePhoto];
+    const titleFmt = title?.toLowerCase()?.replace(/' '/g, '-');
+    const currentURL = 'https://gofamintpsogba.org/'+titleFmt+'='+id;
+    const imageUrl = pastorCornerShareImg;
+
+
+    const handleOnClick = (networkName) => {
+        const urls = handleSocialShare({
+            url:currentURL,
+            title,
+            hashtag: '#PastorCorner',
+            //via: 'username',
+            summary:body,
+            source:'gofamintpsogba.org',
+            body
+          });
+          window.open(urls[networkName], '_blank');  // Opens Facebook share link
+         //   console.log(networkName)
+    }
+    console.log(imageUrl);
 
     const errorMsgNodes = (
         <div className={`${ errorMsg.show? 'flex' : 'hidden'} text-left flex-col flex-wrap  w-full text-red-600  pt-2`}>
@@ -63,6 +93,7 @@ const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHand
                     
                 </div>
                 <HorizontalLine bColor="gray" widths={100} margTop={2}/>
+                <ImageDisplay imageSrc={imageUrl}/>
                 <div className="text-justify text-[14px] sm:text-[15px]  md:text-[16px] text-[darkslategray]" 
                     >
                     <p className={`pt-5 pb-3 italic ${make==="HTML"? '' : ''} `}>{bibleRef}</p>
@@ -101,13 +132,39 @@ const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHand
                         <SocialMediaShare
                             topic={title}
                             body={body}
-                            sharePhoto={pastorCornerSharePhoto}
+                            sharePhoto={imageUrl}
+                            pathNameRaw={pathNameRaw}
                          />
+                         <br/>
+                         <ShareButton
+                            networkName={'facebook'}
+                            size={45}
+                            handleOnClick={handleOnClick}
+                          />
+                          <ShareButton
+                            networkName={'x'}
+                            size={45}
+                            handleOnClick={handleOnClick}
+                          />
+                          <ShareButton
+                            networkName={'telegram'}
+                            size={45}
+                            handleOnClick={handleOnClick}
+                          />
+                          <ShareButton
+                            networkName={'whatsapp'}
+                            size={45}
+                            handleOnClick={handleOnClick}
+                          />
+                          <ShareButton
+                            networkName={'linkedin'}
+                            size={45}
+                            handleOnClick={handleOnClick}
+                          />
                     </div>
             </div>
             </div>
         </div>
-        
         <ScrollToTopButton/>
         </div>
     );

@@ -1,11 +1,18 @@
-import React from 'react';
+'use client'
+import React, {useState} from 'react';
 import {BsCloudDownload, BsFillPinAngleFill} from 'react-icons/bs';
 import Image from 'next/image';
 
 
 
 const UpcomingPrograms = ({showFlyer, showVideoClip, videoClipUrl, bgImageUrl, muted, featured, inviteText,  flyerUrl }) => {
-
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+    let scaler = 1;
+    if(dimensions.width < 500){
+        scaler = 1.5;
+    }else if(dimensions.width > 1200){
+        scaler = 0.7;
+    }
   return (
         <div className='w-full h-full bg-gradient-to-r from-[mediumblue]/80 to-[red]/80 backdrop-blur-[2px]'>
           <div className={`my-3 ml-3 w-fit font-bold flex flex-row  pr-10  py-2 bg-slate-200 text-blue-700 text-center text-lg
@@ -18,10 +25,16 @@ const UpcomingPrograms = ({showFlyer, showVideoClip, videoClipUrl, bgImageUrl, m
               <div className={`${showFlyer? 'flex' : 'hidden'} flex-1 relative justify-center`}>
                   <Image 
                       src={flyerUrl} 
-                      width={500}
-                      height={500}
+                      //width={800}
+                      //height={500}
+                      width={dimensions.width ? dimensions.width * scaler : 750} // Scale while keeping aspect ratio
+                      height={dimensions.height ? dimensions.height * scaler : 600}
                       alt="Upcoming program flyer" 
-                      className='flex max-h-[80vh] md:max-h-[90vh]'/>
+                      //className='flex max-h-[80vh] md:max-h-[90vh]'
+                      onLoadingComplete={(img) => {
+                        setDimensions({ width: img.naturalWidth, height: img.naturalHeight });
+                      }}
+                      />
                   <div className='absolute hidden bottom-12 right-16 bg-gray-500 p-3 rounded-full active:bg-gray-200 hover:bg-blue-700'>
                       <a className='' 
                           href={`#`}
@@ -31,6 +44,7 @@ const UpcomingPrograms = ({showFlyer, showVideoClip, videoClipUrl, bgImageUrl, m
                               className='cursor-pointer'/>
                       </a>
                   </div>
+                  
               </div>
               <div className={`${showVideoClip? 'flex' : 'hidden'} flex-1 relative mt-3 md:mt-0 
                   bg-center bg-contain`}

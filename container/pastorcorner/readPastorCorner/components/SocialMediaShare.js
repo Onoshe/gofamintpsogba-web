@@ -19,9 +19,9 @@ import {
 
 
 
-const SocialMediaShare =({topic, body, sharePhoto})=> {
+const SocialMediaShare =({topic, body, sharePhoto, pathNameRaw})=> {
   
-    const shareUrl = "https://gofamintpsogba.org/pastor-corner";
+    const shareUrl = "https://gofamintpsogba.org"+pathNameRaw;
     const title = topic;
     const hashtag="#GofamintPsOgbaPastorCorner"
                                 
@@ -29,10 +29,10 @@ const SocialMediaShare =({topic, body, sharePhoto})=> {
     return (
       <div className="flex flex-row flex-wrap gap-3">
           <FacebookShareButton
-            url={shareUrl}
-            quote={title}
-            hashtag={hashtag}
-            className="hover:opacity-80"
+              url={shareUrl}
+              quote={title}
+              hashtag={hashtag}
+              className="hover:opacity-80"
           >
             <FacebookIcon size={40} round />
           </FacebookShareButton>
