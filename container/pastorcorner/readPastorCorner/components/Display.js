@@ -6,7 +6,7 @@ import {FaComment, FaFolder, FaHeart} from 'react-icons/fa';
 import{ FaThumbsUp} from 'react-icons/fa';
 import HorizontalLine from '@/components/horizontalLine/HorizontalLine';
 import ScrollToTopButton from '@/components/scrollToTop/ScrollToTopAuto';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import SocialMediaShare from './SocialMediaShare';
 import LeaveAComment from '@/components/forms/LeaveAComment';
 import { getRandomNumber } from '@/components/cards/pastorCorner/LastCard';
@@ -22,6 +22,7 @@ import { encodeDecode } from '@/lib/cryptoJS/encodeDecode';
 const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHandler, postCommentHandler, 
     commentSent, setCommentSent, commentsArr, pastorCornerPhotos,pastorCornerSharePhotos, randomPhoto,likesArr,pathNameRaw }) => {
     const router = useRouter();
+    const pathname = usePathname();
     const {sn, id, make, title,bibleRef, message, message_html, pray, msgID, comments, details} = selectedMsg;
     const goBackHandler =()=>{
         router.back();
@@ -35,29 +36,28 @@ const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHand
     const convert = async ()=>{
         //console.log(await encodeDecode(1, 'ENCODE'));
     }
-    convert();
 
     const randNoSharePhoto = pastorCornerSharePhotos?.length >1? getRandomNumber(0, pastorCornerSharePhotos?.length -1) : 0;
     const pastorCornerShareImg = pastorCornerSharePhotos[randNoSharePhoto];
     const titleFmt = title?.toLowerCase()?.replace(/' '/g, '-');
-    const currentURL = 'https://gofamintpsogba.org/'+titleFmt+'='+id;
+    const currentURL = 'https://gofamintpsogba.org'+pathname;
     const imageUrl = pastorCornerShareImg;
-
+    //console.log(currentURL);
 
     const handleOnClick = (networkName) => {
         const urls = handleSocialShare({
             url:currentURL,
             title,
-            hashtag: '#PastorCorner',
+            hashtag: '#GofamintPSOgba-PastorCorner',
             //via: 'username',
-            summary:body,
+            summary:'\n'+message,
             source:'gofamintpsogba.org',
-            body
+            body:'\n'+message,
           });
           window.open(urls[networkName], '_blank');  // Opens Facebook share link
          //   console.log(networkName)
     }
-    console.log(imageUrl);
+    //console.log(imageUrl);
 
     const errorMsgNodes = (
         <div className={`${ errorMsg.show? 'flex' : 'hidden'} text-left flex-col flex-wrap  w-full text-red-600  pt-2`}>
@@ -93,7 +93,7 @@ const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHand
                     
                 </div>
                 <HorizontalLine bColor="gray" widths={100} margTop={2}/>
-                <ImageDisplay imageSrc={imageUrl}/>
+                {/*<ImageDisplay imageSrc={imageUrl}/>*/}
                 <div className="text-justify text-[14px] sm:text-[15px]  md:text-[16px] text-[darkslategray]" 
                     >
                     <p className={`pt-5 pb-3 italic ${make==="HTML"? '' : ''} `}>{bibleRef}</p>
@@ -129,12 +129,12 @@ const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHand
                     </button>
                     <div className="gap-3 flex flex-row mt-3 flex-wrap">
                         <p className="fond-bold text-lg">Share </p>
-                        <SocialMediaShare
+                        {/*<SocialMediaShare
                             topic={title}
                             body={body}
                             sharePhoto={imageUrl}
                             pathNameRaw={pathNameRaw}
-                         />
+                         />*/}
                          <br/>
                          <ShareButton
                             networkName={'facebook'}
