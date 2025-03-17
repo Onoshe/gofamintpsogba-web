@@ -40,6 +40,7 @@ const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHand
     const randNoSharePhoto = pastorCornerSharePhotos?.length >1? getRandomNumber(0, pastorCornerSharePhotos?.length -1) : 0;
     const pastorCornerShareImg = pastorCornerSharePhotos[randNoSharePhoto];
     const titleFmt = title?.toLowerCase()?.replace(/' '/g, '-');
+    let titleFt = title?.toUpperCase();
     const currentURL = 'https://gofamintpsogba.org'+pathname;
     const imageUrl = pastorCornerShareImg;
     //console.log(currentURL);
@@ -47,12 +48,12 @@ const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHand
     const handleOnClick = (networkName) => {
         const urls = handleSocialShare({
             url:currentURL,
-            title,
+            title:networkName === 'whatsapp'? '*'+titleFt+'* \n' : titleFt,
             hashtag: '#GofamintPSOgba-PastorCorner',
             //via: 'username',
-            summary:'\n'+message,
+            summary:'\n'+message?.replace(/|/g, '-'),
             source:'gofamintpsogba.org',
-            body:'\n'+message,
+            body:'\n'+message?.replace(/|/g, '-'),
           });
           window.open(urls[networkName], '_blank');  // Opens Facebook share link
          //   console.log(networkName)

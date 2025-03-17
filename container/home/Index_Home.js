@@ -47,18 +47,26 @@ const salVideoUrl = salVideos[0];
         latestAnchorAndFaith={dataRes?.latestAnchorAndFaith}
       />
       <LogoCarousel photos={fiveStarsPhotos}/>
-      <UpcomingProgramsIndex 
-        upcomingProgSettings={dataRes?.upcomingProgSettings}
-        upcomingPrograme={upcomingPrograme}  
-      />
-      <br/><br/><br/>
-      <SalvationIndex salavtionPhotos={salvationPhotos} salVideoUrl={salVideoUrl}/>
-      <PCorner pastorCornerPhotos={pastorCornerPhotos} 
-        pstCornerCmments={pstCornerCmments?.data}
-        pstCornerLikes={pstCornerLikes?.data}
-        />
-      <ResourcesIndex siteResources={siteResources}/>
-      <FindMap mapUrl={mapUrl}/>
+      <div style={{
+        backgroundImage:`url(${'/bgImage.jpg'})`,
+        backgroundSize:'auto',
+        //backgroundSize: 200%; 
+        backgroundRepeat: 'round',
+        //opacity: 0.3
+      }}>
+          <UpcomingProgramsIndex 
+            upcomingProgSettings={dataRes?.upcomingProgSettings}
+            upcomingPrograme={upcomingPrograme}  
+          />
+          <br/><br/><br/>
+          <SalvationIndex salavtionPhotos={salvationPhotos} salVideoUrl={salVideoUrl}/>
+          <PCorner pastorCornerPhotos={pastorCornerPhotos} 
+            pstCornerCmments={pstCornerCmments?.data}
+            pstCornerLikes={pstCornerLikes?.data}
+            />
+          <ResourcesIndex siteResources={siteResources}/>
+          <FindMap mapUrl={mapUrl}/>
+      </div>
     </div>
   );
 }
