@@ -51,9 +51,9 @@ const Display = ({selectedMsg, loginHandler, errorMsg, liveLikes, likesClickHand
             title:networkName === 'whatsapp'? '*'+titleFt+'* \n' : titleFt,
             hashtag: '#GofamintPSOgba-PastorCorner',
             //via: 'username',
-            summary:'\n'+message?.replace(/\|/g, '\n'),
+            summary:message?.replace(/\|/g, '\n'),
             source:'gofamintpsogba.org',
-            body:'\n'+message?.replace(/\|/g, '\n'),
+            body:message?.replace(/\|/g, '\n'),
           });
           window.open(urls[networkName], '_blank');  // Opens Facebook share link
          //   console.log(networkName)
